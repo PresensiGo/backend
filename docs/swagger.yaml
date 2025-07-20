@@ -1,0 +1,77 @@
+definitions:
+  auth.LoginRequest:
+    properties:
+      email:
+        default: email@email.com
+        type: string
+      password:
+        type: string
+    type: object
+  auth.LoginResponse:
+    properties:
+      access_token:
+        type: string
+      token:
+        type: string
+    type: object
+  auth.RegisterRequest:
+    properties:
+      email:
+        default: email@email.com
+        type: string
+      name:
+        default: John Doe
+        type: string
+      password:
+        default: password
+        type: string
+    type: object
+  auth.RegisterResponse:
+    properties:
+      access_token:
+        type: string
+      token:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Presensi Sekolah API
+  version: "1.0"
+paths:
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.LoginResponse'
+      tags:
+      - auth
+  /api/v1/auth/register:
+    post:
+      parameters:
+      - description: Login request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+      tags:
+      - auth
+swagger: "2.0"
