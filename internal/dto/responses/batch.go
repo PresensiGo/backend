@@ -1,4 +1,4 @@
-package batch
+package responses
 
 type CreateBatchResponse struct {
 	Id   uint   `json:"id"`

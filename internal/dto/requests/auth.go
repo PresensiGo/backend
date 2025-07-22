@@ -1,4 +1,4 @@
-package auth
+package requests
 
 type LoginRequest struct {
 	Email    string `json:"email" default:"email@email.com"`

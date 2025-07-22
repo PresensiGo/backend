@@ -1,6 +1,7 @@
-package batch
+package services
 
 import (
+	"api/internal/dto/responses"
 	"api/internal/models"
 	"gorm.io/gorm"
 )
@@ -13,7 +14,7 @@ func NewService(db *gorm.DB) *Service {
 	return &Service{db}
 }
 
-func (s *Service) Create(name string) (*CreateBatchResponse, error) {
+func (s *Service) Create(name string) (*responses.CreateBatchResponse, error) {
 	batch := models.Batch{
 		Name: name,
 	}
@@ -22,7 +23,7 @@ func (s *Service) Create(name string) (*CreateBatchResponse, error) {
 		return nil, err
 	}
 
-	return &CreateBatchResponse{
+	return &responses.CreateBatchResponse{
 		Id:   batch.ID,
 		Name: batch.Name,
 	}, nil

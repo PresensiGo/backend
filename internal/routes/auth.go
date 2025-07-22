@@ -1,23 +1,19 @@
 package routes
 
 import (
-	"api/features/auth"
-	"api/handler"
+	"api/internal/injectors"
 	"api/pkg/middleware"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-func RegisterAuthRoutes(r *gin.RouterGroup, db *gorm.DB) {
+func RegisterAuthRoutes(r *gin.RouterGroup) {
 	group := r.Group("/auth")
+	handler := injectors.InitAuthHandler()
 
-	authService := auth.NewAuthService(db)
-	authHandler := handler.NewAuthHandler(authService)
-
-	group.POST("/login", authHandler.Login)
-	group.POST("/register", authHandler.Register)
-	group.POST("/refresh-token", authHandler.RefreshToken)
+	group.POST("/login", handler.Login)
+	group.POST("/register", handler.Register)
+	group.POST("/refresh-token", handler.RefreshToken)
 
 	group.Use(middleware.AuthMiddleware()).
-		GET("/logout", authHandler.Logout)
+		GET("/logout", handler.Logout)
 }

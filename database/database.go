@@ -6,11 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type databaseConfig struct {
-	DB *gorm.DB
-}
-
-func NewDatabaseConfig() *databaseConfig {
+func NewDatabase() *gorm.DB {
 	dsn := "host=localhost user=root dbname=presensi_sekolah port=5432 sslmode=disable TimeZone=Asia/Jakarta"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
@@ -27,7 +23,5 @@ func NewDatabaseConfig() *databaseConfig {
 		&models2.Student{},
 	)
 
-	return &databaseConfig{
-		DB: db,
-	}
+	return db
 }

@@ -1,17 +1,17 @@
-package handler
+package handlers
 
 import (
-	"api/features/excel"
+	"api/internal/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"path/filepath"
 )
 
 type ExcelHandler struct {
-	service *excel.Service
+	service *services.ExcelService
 }
 
-func NewExcelHandler(service *excel.Service) *ExcelHandler {
+func NewExcelHandler(service *services.ExcelService) *ExcelHandler {
 	return &ExcelHandler{service}
 }
 

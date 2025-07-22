@@ -1,4 +1,4 @@
-package excel
+package services
 
 import (
 	models2 "api/internal/models"
@@ -8,15 +8,15 @@ import (
 	"io"
 )
 
-type Service struct {
+type ExcelService struct {
 	db *gorm.DB
 }
 
-func NewService(db *gorm.DB) *Service {
-	return &Service{db}
+func NewExcelService(db *gorm.DB) *ExcelService {
+	return &ExcelService{db}
 }
 
-func (s *Service) Import(reader io.Reader) (any, error) {
+func (s *ExcelService) Import(reader io.Reader) (any, error) {
 	file, err := excelize.OpenReader(reader)
 	if err != nil {
 		return nil, err

@@ -1,36 +1,32 @@
-package handler
+package handlers
 
 import (
-	"api/features/auth"
+	"api/internal/dto/requests"
+	"api/internal/services"
 	"api/utils"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type AuthHandler struct {
-	service auth.AuthService
+	service *services.AuthService
 }
 
-func NewAuthHandler(service auth.AuthService) *AuthHandler {
-	return &AuthHandler{
-		service,
-	}
+func NewAuthHandler(service *services.AuthService) *AuthHandler {
+	return &AuthHandler{service}
 }
 
 // Login godoc
 //
+//	@Id			Login
 //	@Accept		json
 //	@Produce	json
 //	@Tags		auth
-//	@Param		body	body		auth.LoginRequest	true	"Login request"
-//	@Success	200		{object}	auth.LoginResponse
+//	@Param		body	body		requests.LoginRequest	true	"Login request"
+//	@Success	200		{object}	responses.LoginResponse
 //	@Router		/api/v1/auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
-	var request struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
+	var request requests.LoginRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
@@ -52,12 +48,13 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 // Register godoc
 //
+//	@Id			Register
 //	@Tags		auth
-//	@Param		body	body		auth.RegisterRequest	true	"Login request"
-//	@Success	200		{object}	auth.RegisterResponse
+//	@Param		body	body		requests.RegisterRequest	true	"Login request"
+//	@Success	200		{object}	responses.RegisterResponse
 //	@Router		/api/v1/auth/register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
-	var request auth.RegisterRequest
+	var request requests.RegisterRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
@@ -83,7 +80,7 @@ func (h *AuthHandler) Logout(c *gin.Context) {
 }
 
 func (h *AuthHandler) RefreshToken(c *gin.Context) {
-	var request auth.RefreshTokenRequest
+	var request requests.RefreshTokenRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return

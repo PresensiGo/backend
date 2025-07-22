@@ -10,10 +10,13 @@ docs:
 	swag init
 	swag fmt
 
+di:
+	wire gen api/internal/injectors
+
 docker-compose-up:
 	docker compose -p presensi-sekolah up -d
 
 docker-compose-down:
 	docker compose down
 
-.PHONY: up drop docs docker-compose-up docker-compose-down
+.PHONY: up drop docs di docker-compose-up docker-compose-down

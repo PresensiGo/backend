@@ -1,5 +1,5 @@
 definitions:
-  auth.LoginRequest:
+  requests.LoginRequest:
     properties:
       email:
         default: email@email.com
@@ -7,14 +7,7 @@ definitions:
       password:
         type: string
     type: object
-  auth.LoginResponse:
-    properties:
-      access_token:
-        type: string
-      token:
-        type: string
-    type: object
-  auth.RegisterRequest:
+  requests.RegisterRequest:
     properties:
       email:
         default: email@email.com
@@ -26,7 +19,14 @@ definitions:
         default: password
         type: string
     type: object
-  auth.RegisterResponse:
+  responses.LoginResponse:
+    properties:
+      access_token:
+        type: string
+      token:
+        type: string
+    type: object
+  responses.RegisterResponse:
     properties:
       access_token:
         type: string
@@ -42,36 +42,38 @@ paths:
     post:
       consumes:
       - application/json
+      operationId: Login
       parameters:
       - description: Login request
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.LoginRequest'
+          $ref: '#/definitions/requests.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.LoginResponse'
+            $ref: '#/definitions/responses.LoginResponse'
       tags:
       - auth
   /api/v1/auth/register:
     post:
+      operationId: Register
       parameters:
       - description: Login request
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.RegisterRequest'
+          $ref: '#/definitions/requests.RegisterRequest'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.RegisterResponse'
+            $ref: '#/definitions/responses.RegisterResponse'
       tags:
       - auth
 swagger: "2.0"

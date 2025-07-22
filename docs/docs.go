@@ -26,6 +26,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
+                "operationId": "Login",
                 "parameters": [
                     {
                         "description": "Login request",
@@ -33,7 +34,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.LoginRequest"
+                            "$ref": "#/definitions/requests.LoginRequest"
                         }
                     }
                 ],
@@ -41,7 +42,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.LoginResponse"
+                            "$ref": "#/definitions/responses.LoginResponse"
                         }
                     }
                 }
@@ -52,6 +53,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
+                "operationId": "Register",
                 "parameters": [
                     {
                         "description": "Login request",
@@ -59,7 +61,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.RegisterRequest"
+                            "$ref": "#/definitions/requests.RegisterRequest"
                         }
                     }
                 ],
@@ -67,7 +69,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.RegisterResponse"
+                            "$ref": "#/definitions/responses.RegisterResponse"
                         }
                     }
                 }
@@ -75,7 +77,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.LoginRequest": {
+        "requests.LoginRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -87,18 +89,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth.RegisterRequest": {
+        "requests.RegisterRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -115,7 +106,18 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.RegisterResponse": {
+        "responses.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.RegisterResponse": {
             "type": "object",
             "properties": {
                 "access_token": {

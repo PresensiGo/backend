@@ -1,6 +1,7 @@
-package auth
+package services
 
 import (
+	"api/internal/dto/responses"
 	models2 "api/internal/models"
 	"api/utils"
 
@@ -9,23 +10,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type AuthService interface {
-	Login(email string, password string) (*LoginResponse, error)
-	Register(name string, email string, password string) (*RegisterResponse, error)
-	RefreshToken(accessToken string) (*RefreshTokenResponse, error)
-}
-
-type authService struct {
+type AuthService struct {
 	db *gorm.DB
 }
 
-func NewAuthService(db *gorm.DB) *authService {
-	return &authService{
+func NewAuthService(db *gorm.DB) *AuthService {
+	return &AuthService{
 		db,
 	}
 }
 
-func (s *authService) Login(email string, password string) (*LoginResponse, error) {
+func (s *AuthService) Login(email string, password string) (*responses.LoginResponse, error) {
 	var user models2.User
 	if err := s.db.Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
@@ -65,19 +60,19 @@ func (s *authService) Login(email string, password string) (*LoginResponse, erro
 		return nil, err
 	}
 
-	return &LoginResponse{
+	return &responses.LoginResponse{
 		Token:       token,
 		AccessToken: accessToken,
 	}, nil
 }
 
-func (s *authService) Register(name string, email string, password string) (*RegisterResponse, error) {
+func (s *AuthService) Register(name string, email string, password string) (*responses.RegisterResponse, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
 
-	var response RegisterResponse
+	var response responses.RegisterResponse
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
 		// create user
 		var userId uint
@@ -104,7 +99,7 @@ func (s *authService) Register(name string, email string, password string) (*Reg
 			return err
 		}
 
-		response = RegisterResponse{
+		response = responses.RegisterResponse{
 			Token:       token,
 			AccessToken: accessToken,
 		}
@@ -117,7 +112,7 @@ func (s *authService) Register(name string, email string, password string) (*Reg
 	return &response, nil
 }
 
-func (s *authService) RefreshToken(accessToken string) (*RefreshTokenResponse, error) {
+func (s *AuthService) RefreshToken(accessToken string) (*responses.RefreshTokenResponse, error) {
 	var userToken models2.UserToken
 	if err := s.db.Preload("User").
 		Where("access_token = ?", accessToken).
@@ -139,7 +134,7 @@ func (s *authService) RefreshToken(accessToken string) (*RefreshTokenResponse, e
 		return nil, err
 	}
 
-	return &RefreshTokenResponse{
+	return &responses.RefreshTokenResponse{
 		Token:       token,
 		AccessToken: newAccessToken,
 	}, nil
