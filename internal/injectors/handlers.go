@@ -62,3 +62,12 @@ func InitResetService() *services.ResetService {
 	)
 	return nil
 }
+
+func InitStudentHandler() *handlers.Student {
+	wire.Build(
+		handlers.NewStudent,
+		services.NewStudent,
+		database.NewDatabase,
+	)
+	return nil
+}

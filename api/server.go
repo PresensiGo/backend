@@ -24,6 +24,7 @@ func NewServer() {
 		routes.RegisterClassRoutes(authorized)
 		routes.RegisterMajorRoutes(authorized)
 		routes.RegisterExcelRoutes(authorized)
+		routes.RegisterStudent(authorized)
 	}
 
 	// swagger
