@@ -1,16 +1,16 @@
 package responses
 
-type LoginResponse struct {
+type Login struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }
 
-type RegisterResponse struct {
+type Register struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }
 
-type RefreshTokenResponse struct {
+type RefreshToken struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }

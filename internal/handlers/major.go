@@ -7,15 +7,15 @@ import (
 	"strconv"
 )
 
-type MajorHandler struct {
-	service *services.MajorService
+type Major struct {
+	service *services.Major
 }
 
-func NewMajorHandler(service *services.MajorService) *MajorHandler {
-	return &MajorHandler{service}
+func NewMajor(service *services.Major) *Major {
+	return &Major{service}
 }
 
-func (h *MajorHandler) GetAllMajors(c *gin.Context) {
+func (h *Major) GetAllMajors(c *gin.Context) {
 	batchId, err := strconv.ParseUint(c.Param("batch_id"), 10, 64)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)

@@ -7,15 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type MajorService struct {
+type Major struct {
 	db *gorm.DB
 }
 
-func NewMajorService(db *gorm.DB) *MajorService {
-	return &MajorService{db}
+func NewMajor(db *gorm.DB) *Major {
+	return &Major{db}
 }
 
-func (s *MajorService) GetAllMajors(batchId uint64) (*responses.GetAllMajorsResponse, error) {
+func (s *Major) GetAllMajors(batchId uint64) (*responses.GetAllMajors, error) {
 	var majors []models.Major
 	if err := s.db.Where("batch_id = ?", batchId).
 		Find(&majors).
@@ -31,7 +31,7 @@ func (s *MajorService) GetAllMajors(batchId uint64) (*responses.GetAllMajorsResp
 		})
 	}
 
-	return &responses.GetAllMajorsResponse{
+	return &responses.GetAllMajors{
 		Majors: mappedMajors,
 	}, nil
 }

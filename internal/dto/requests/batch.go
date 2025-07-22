@@ -1,5 +1,5 @@
 package requests
 
-type CreateBatchRequest struct {
+type CreateBatch struct {
 	Name string `json:"name"`
 }

@@ -7,15 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type BatchService struct {
+type Batch struct {
 	db *gorm.DB
 }
 
-func NewBatchService(db *gorm.DB) *BatchService {
-	return &BatchService{db}
+func NewBatch(db *gorm.DB) *Batch {
+	return &Batch{db}
 }
 
-func (s *BatchService) Create(name string) (*responses.CreateBatchResponse, error) {
+func (s *Batch) Create(name string) (*responses.CreateBatch, error) {
 	batch := models.Batch{
 		Name: name,
 	}
@@ -24,13 +24,13 @@ func (s *BatchService) Create(name string) (*responses.CreateBatchResponse, erro
 		return nil, err
 	}
 
-	return &responses.CreateBatchResponse{
+	return &responses.CreateBatch{
 		Id:   batch.ID,
 		Name: batch.Name,
 	}, nil
 }
 
-func (s *BatchService) GetAll() (*responses.GetAllBatchesResponse, error) {
+func (s *Batch) GetAll() (*responses.GetAllBatches, error) {
 	var batches []models.Batch
 	if err := s.db.Find(&batches).Error; err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (s *BatchService) GetAll() (*responses.GetAllBatchesResponse, error) {
 		)
 	}
 
-	return &responses.GetAllBatchesResponse{
+	return &responses.GetAllBatches{
 		Batches: mappedBatches,
 	}, nil
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterClassRoutes(g *gin.RouterGroup) {
+func RegisterClass(g *gin.RouterGroup) {
 	group := g.Group("/class")
 	handler := injectors.InitClassHandler()
 

@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterMajorRoutes(g *gin.RouterGroup) {
+func RegisterMajor(g *gin.RouterGroup) {
 	group := g.Group("/major")
 	handler := injectors.InitMajorHandler()
 

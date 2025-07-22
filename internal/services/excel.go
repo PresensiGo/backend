@@ -8,15 +8,15 @@ import (
 	"io"
 )
 
-type ExcelService struct {
+type Excel struct {
 	db *gorm.DB
 }
 
-func NewExcelService(db *gorm.DB) *ExcelService {
-	return &ExcelService{db}
+func NewExcel(db *gorm.DB) *Excel {
+	return &Excel{db}
 }
 
-func (s *ExcelService) Import(reader io.Reader) (any, error) {
+func (s *Excel) Import(reader io.Reader) (any, error) {
 	file, err := excelize.OpenReader(reader)
 	if err != nil {
 		return nil, err

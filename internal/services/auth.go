@@ -10,17 +10,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type AuthService struct {
+type Auth struct {
 	db *gorm.DB
 }
 
-func NewAuthService(db *gorm.DB) *AuthService {
-	return &AuthService{
+func NewAuth(db *gorm.DB) *Auth {
+	return &Auth{
 		db,
 	}
 }
 
-func (s *AuthService) Login(email string, password string) (*responses.LoginResponse, error) {
+func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 	var user models.User
 	if err := s.db.Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
@@ -60,19 +60,19 @@ func (s *AuthService) Login(email string, password string) (*responses.LoginResp
 		return nil, err
 	}
 
-	return &responses.LoginResponse{
+	return &responses.Login{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}, nil
 }
 
-func (s *AuthService) Register(name string, email string, password string) (*responses.RegisterResponse, error) {
+func (s *Auth) Register(name string, email string, password string) (*responses.Register, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
 
-	var response responses.RegisterResponse
+	var response responses.Register
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
 		// create user
 		user := models.User{
@@ -99,7 +99,7 @@ func (s *AuthService) Register(name string, email string, password string) (*res
 			return err
 		}
 
-		response = responses.RegisterResponse{
+		response = responses.Register{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
 		}
@@ -112,7 +112,7 @@ func (s *AuthService) Register(name string, email string, password string) (*res
 	return &response, nil
 }
 
-func (s *AuthService) RefreshToken(accessToken string) (*responses.RefreshTokenResponse, error) {
+func (s *Auth) RefreshToken(accessToken string) (*responses.RefreshToken, error) {
 	var userToken models.UserToken
 	if err := s.db.Preload("User").
 		Where("access_token = ?", accessToken).
@@ -134,7 +134,7 @@ func (s *AuthService) RefreshToken(accessToken string) (*responses.RefreshTokenR
 		return nil, err
 	}
 
-	return &responses.RefreshTokenResponse{
+	return &responses.RefreshToken{
 		AccessToken:  accessToken,
 		RefreshToken: newRefreshToken,
 	}, nil

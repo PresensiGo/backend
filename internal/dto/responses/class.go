@@ -2,6 +2,6 @@ package responses
 
 import "api/internal/dto"
 
-type GetAllClassesResponse struct {
+type GetAllClasses struct {
 	Classes []dto.Class `json:"classes"`
 }

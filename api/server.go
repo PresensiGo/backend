@@ -14,16 +14,16 @@ func NewServer() {
 	router := gin.Default()
 	v1 := router.Group("/api/v1")
 
-	routes.RegisterAuthRoutes(v1)
+	routes.RegisterAuth(v1)
 
 	// protected routes
 	authorized := v1.Group("/")
 	authorized.Use(middleware.AuthMiddleware())
 	{
-		routes.RegisterBatchRoutes(authorized)
-		routes.RegisterClassRoutes(authorized)
-		routes.RegisterMajorRoutes(authorized)
-		routes.RegisterExcelRoutes(authorized)
+		routes.RegisterBatch(authorized)
+		routes.RegisterClass(authorized)
+		routes.RegisterMajor(authorized)
+		routes.RegisterExcel(authorized)
 		routes.RegisterStudent(authorized)
 	}
 

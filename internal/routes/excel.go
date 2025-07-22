@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterExcelRoutes(g *gin.RouterGroup) {
+func RegisterExcel(g *gin.RouterGroup) {
 	group := g.Group("/excel")
 	handler := injectors.InitExcelHandler()
 

@@ -8,12 +8,12 @@ import (
 	"net/http"
 )
 
-type AuthHandler struct {
-	service *services.AuthService
+type Auth struct {
+	service *services.Auth
 }
 
-func NewAuthHandler(service *services.AuthService) *AuthHandler {
-	return &AuthHandler{service}
+func NewAuth(service *services.Auth) *Auth {
+	return &Auth{service}
 }
 
 // Login godoc
@@ -22,11 +22,11 @@ func NewAuthHandler(service *services.AuthService) *AuthHandler {
 //	@Accept		json
 //	@Produce	json
 //	@Tags		auth
-//	@Param		body	body		requests.LoginRequest	true	"Login request"
+//	@Param		body	body		requests.Login	true	"Login request"
 //	@Success	200		{object}	responses.LoginResponse
 //	@Router		/api/v1/auth/login [post]
-func (h *AuthHandler) Login(c *gin.Context) {
-	var request requests.LoginRequest
+func (h *Auth) Login(c *gin.Context) {
+	var request requests.Login
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
@@ -50,11 +50,11 @@ func (h *AuthHandler) Login(c *gin.Context) {
 //
 //	@Id			Register
 //	@Tags		auth
-//	@Param		body	body		requests.RegisterRequest	true	"Login request"
+//	@Param		body	body		requests.Register	true	"Login request"
 //	@Success	200		{object}	responses.RegisterResponse
 //	@Router		/api/v1/auth/register [post]
-func (h *AuthHandler) Register(c *gin.Context) {
-	var request requests.RegisterRequest
+func (h *Auth) Register(c *gin.Context) {
+	var request requests.Register
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
@@ -73,14 +73,14 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *AuthHandler) Logout(c *gin.Context) {
+func (h *Auth) Logout(c *gin.Context) {
 	userData := utils.GetAuthenticatedUser(c)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully", "user": userData})
 }
 
-func (h *AuthHandler) RefreshToken(c *gin.Context) {
-	var request requests.RefreshTokenRequest
+func (h *Auth) RefreshToken(c *gin.Context) {
+	var request requests.RefreshToken
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return

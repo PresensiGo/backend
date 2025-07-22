@@ -2,6 +2,6 @@ package responses
 
 import "api/internal/dto"
 
-type GetAllMajorsResponse struct {
+type GetAllMajors struct {
 	Majors []dto.Major `json:"majors"`
 }

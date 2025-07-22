@@ -7,15 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type ClassService struct {
+type Class struct {
 	db *gorm.DB
 }
 
-func NewClassService(db *gorm.DB) *ClassService {
-	return &ClassService{db}
+func NewClass(db *gorm.DB) *Class {
+	return &Class{db}
 }
 
-func (s *ClassService) GetAllClasses(majorId uint64) (*responses.GetAllClassesResponse, error) {
+func (s *Class) GetAllClasses(majorId uint64) (*responses.GetAllClasses, error) {
 	var classes []models.Class
 	if err := s.db.Where("major_id = ?", majorId).
 		Find(&classes).Error; err != nil {
@@ -33,7 +33,7 @@ func (s *ClassService) GetAllClasses(majorId uint64) (*responses.GetAllClassesRe
 		)
 	}
 
-	return &responses.GetAllClassesResponse{
+	return &responses.GetAllClasses{
 		Classes: mappedClasses,
 	}, nil
 }

@@ -1,5 +1,5 @@
 package responses
 
-type ResetResponse struct {
+type Reset struct {
 	Message string `json:"message"`
 }

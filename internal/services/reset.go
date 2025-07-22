@@ -6,15 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type ResetService struct {
+type Reset struct {
 	db *gorm.DB
 }
 
-func NewResetService(db *gorm.DB) *ResetService {
-	return &ResetService{db}
+func NewReset(db *gorm.DB) *Reset {
+	return &Reset{db}
 }
 
-func (s *ResetService) Reset() (*responses.ResetResponse, error) {
+func (s *Reset) Reset() (*responses.Reset, error) {
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Where("true").Unscoped().Delete(&models.Student{}).Error; err != nil {
 			return err
@@ -37,7 +37,7 @@ func (s *ResetService) Reset() (*responses.ResetResponse, error) {
 		return nil, err
 	}
 
-	return &responses.ResetResponse{
+	return &responses.Reset{
 		Message: "Reset Success",
 	}, nil
 }

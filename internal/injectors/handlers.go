@@ -10,54 +10,54 @@ import (
 	"github.com/google/wire"
 )
 
-func InitAuthHandler() *handlers.AuthHandler {
+func InitAuthHandler() *handlers.Auth {
 	wire.Build(
-		handlers.NewAuthHandler,
-		services.NewAuthService,
+		handlers.NewAuth,
+		services.NewAuth,
 		database.NewDatabase,
 	)
 	return nil
 }
 
-func InitBatchHandler() *handlers.BatchHandler {
+func InitBatchHandler() *handlers.Batch {
 	wire.Build(
-		handlers.NewBatchHandler,
-		services.NewBatchService,
+		handlers.NewBatch,
+		services.NewBatch,
 		database.NewDatabase,
 	)
 	return nil
 }
 
-func InitClassHandler() *handlers.ClassHandler {
+func InitClassHandler() *handlers.Class {
 	wire.Build(
-		handlers.NewClassHandler,
-		services.NewClassService,
+		handlers.NewClass,
+		services.NewClass,
 		database.NewDatabase,
 	)
 	return nil
 }
 
-func InitExcelHandler() *handlers.ExcelHandler {
+func InitExcelHandler() *handlers.Excel {
 	wire.Build(
-		handlers.NewExcelHandler,
-		services.NewExcelService,
+		handlers.NewExcel,
+		services.NewExcel,
 		database.NewDatabase,
 	)
 	return nil
 }
 
-func InitMajorHandler() *handlers.MajorHandler {
+func InitMajorHandler() *handlers.Major {
 	wire.Build(
-		handlers.NewMajorHandler,
-		services.NewMajorService,
+		handlers.NewMajor,
+		services.NewMajor,
 		database.NewDatabase,
 	)
 	return nil
 }
 
-func InitResetService() *services.ResetService {
+func InitResetService() *services.Reset {
 	wire.Build(
-		services.NewResetService,
+		services.NewReset,
 		database.NewDatabase,
 	)
 	return nil

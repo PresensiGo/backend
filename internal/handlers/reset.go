@@ -6,15 +6,15 @@ import (
 	"net/http"
 )
 
-type ResetHandler struct {
-	service *services.ResetService
+type Reset struct {
+	service *services.Reset
 }
 
-func NewResetHandler(service *services.ResetService) *ResetHandler {
-	return &ResetHandler{service}
+func NewReset(service *services.Reset) *Reset {
+	return &Reset{service}
 }
 
-func (h *ResetHandler) Reset(c *gin.Context) {
+func (h *Reset) Reset(c *gin.Context) {
 	response, err := h.service.Reset()
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)

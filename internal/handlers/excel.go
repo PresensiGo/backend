@@ -7,12 +7,12 @@ import (
 	"path/filepath"
 )
 
-type ExcelHandler struct {
-	service *services.ExcelService
+type Excel struct {
+	service *services.Excel
 }
 
-func NewExcelHandler(service *services.ExcelService) *ExcelHandler {
-	return &ExcelHandler{service}
+func NewExcel(service *services.Excel) *Excel {
+	return &Excel{service}
 }
 
 // Import godoc
@@ -21,7 +21,7 @@ func NewExcelHandler(service *services.ExcelService) *ExcelHandler {
 //	@Tags		excel
 //	@Success	200	{string}	string
 //	@Router		/api/v1/excel/import [post]
-func (h *ExcelHandler) Import(c *gin.Context) {
+func (h *Excel) Import(c *gin.Context) {
 	file, err := c.FormFile("data")
 	if file == nil || err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)

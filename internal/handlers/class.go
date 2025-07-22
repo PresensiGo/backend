@@ -7,15 +7,15 @@ import (
 	"strconv"
 )
 
-type ClassHandler struct {
-	service *services.ClassService
+type Class struct {
+	service *services.Class
 }
 
-func NewClassHandler(service *services.ClassService) *ClassHandler {
-	return &ClassHandler{service}
+func NewClass(service *services.Class) *Class {
+	return &Class{service}
 }
 
-func (h *ClassHandler) GetAllClasses(c *gin.Context) {
+func (h *Class) GetAllClasses(c *gin.Context) {
 	majorId, err := strconv.ParseUint(c.Param("major_id"), 10, 64)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
