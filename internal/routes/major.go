@@ -9,5 +9,5 @@ func RegisterMajorRoutes(g *gin.RouterGroup) {
 	group := g.Group("/major")
 	handler := injectors.InitMajorHandler()
 
-	group.GET("/:batch_id", handler.GetAllMajors)
+	group.GET("/batch/:batch_id", handler.GetAllMajors)
 }
