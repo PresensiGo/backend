@@ -86,7 +86,7 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	response, err := h.service.RefreshToken(request.AccessToken)
+	response, err := h.service.RefreshToken(request.RefreshToken)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

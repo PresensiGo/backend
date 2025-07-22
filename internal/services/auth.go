@@ -31,19 +31,19 @@ func (s *AuthService) Login(email string, password string) (*responses.LoginResp
 		return nil, err
 	}
 
-	token, err := utils.GenerateJWT(user.ID, user.Name, user.Email)
+	accessToken, err := utils.GenerateJWT(user.ID, user.Name, user.Email)
 	if err != nil {
 		return nil, err
 	}
-	accessToken := uuid.New().String()
+	refreshToken := uuid.New().String()
 
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
 		userToken := models.UserToken{
-			UserId:      user.ID,
-			AccessToken: accessToken,
+			UserId:       user.ID,
+			RefreshToken: refreshToken,
 		}
 
-		// delete previous access token
+		// delete previous access accessToken
 		if err := tx.Where("user_id = ?", user.ID).
 			Unscoped().
 			Delete(&models.UserToken{}).
@@ -51,7 +51,7 @@ func (s *AuthService) Login(email string, password string) (*responses.LoginResp
 			return err
 		}
 
-		// create new access token
+		// create new access accessToken
 		if err := s.db.Create(&userToken).Error; err != nil {
 			return err
 		}
@@ -61,8 +61,8 @@ func (s *AuthService) Login(email string, password string) (*responses.LoginResp
 	}
 
 	return &responses.LoginResponse{
-		Token:       token,
-		AccessToken: accessToken,
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
 	}, nil
 }
 
@@ -84,24 +84,24 @@ func (s *AuthService) Register(name string, email string, password string) (*res
 			return err
 		}
 
-		// create user token
-		token, err := utils.GenerateJWT(user.ID, name, email)
+		// create user accessToken
+		accessToken, err := utils.GenerateJWT(user.ID, name, email)
 		if err != nil {
 			return err
 		}
-		accessToken := uuid.New().String()
+		refreshToken := uuid.New().String()
 
 		userToken := models.UserToken{
-			UserId:      user.ID,
-			AccessToken: accessToken,
+			UserId:       user.ID,
+			RefreshToken: refreshToken,
 		}
 		if err := tx.Create(&userToken).Error; err != nil {
 			return err
 		}
 
 		response = responses.RegisterResponse{
-			Token:       token,
-			AccessToken: accessToken,
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
 		}
 
 		return nil
@@ -121,21 +121,21 @@ func (s *AuthService) RefreshToken(accessToken string) (*responses.RefreshTokenR
 		return nil, err
 	}
 
-	// generate new token
-	token, err := utils.GenerateJWT(userToken.User.ID, userToken.User.Name, userToken.User.Email)
+	// generate new accessToken
+	accessToken, err := utils.GenerateJWT(userToken.User.ID, userToken.User.Name, userToken.User.Email)
 	if err != nil {
 		return nil, err
 	}
-	newAccessToken := uuid.New().String()
+	newRefreshToken := uuid.New().String()
 
-	// update new token into database
-	userToken.AccessToken = newAccessToken
+	// update new accessToken into database
+	userToken.RefreshToken = newRefreshToken
 	if err := s.db.Save(&userToken).Error; err != nil {
 		return nil, err
 	}
 
 	return &responses.RefreshTokenResponse{
-		Token:       token,
-		AccessToken: newAccessToken,
+		AccessToken:  accessToken,
+		RefreshToken: newRefreshToken,
 	}, nil
 }

@@ -15,6 +15,12 @@ func NewExcelHandler(service *services.ExcelService) *ExcelHandler {
 	return &ExcelHandler{service}
 }
 
+// Import godoc
+//
+//	@Id			Import
+//	@Tags		excel
+//	@Success	200	{string}	string
+//	@Router		/api/v1/excel/import [post]
 func (h *ExcelHandler) Import(c *gin.Context) {
 	file, err := c.FormFile("data")
 	if file == nil || err != nil {

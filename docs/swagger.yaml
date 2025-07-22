@@ -76,4 +76,14 @@ paths:
             $ref: '#/definitions/responses.RegisterResponse'
       tags:
       - auth
+  /api/v1/excel/import:
+    post:
+      operationId: Import
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - excel
 swagger: "2.0"

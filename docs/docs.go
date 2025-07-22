@@ -74,6 +74,22 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/excel/import": {
+            "post": {
+                "tags": [
+                    "excel"
+                ],
+                "operationId": "Import",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
