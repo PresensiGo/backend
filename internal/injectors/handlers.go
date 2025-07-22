@@ -46,6 +46,15 @@ func InitExcelHandler() *handlers.ExcelHandler {
 	return nil
 }
 
+func InitMajorHandler() *handlers.MajorHandler {
+	wire.Build(
+		handlers.NewMajorHandler,
+		services.NewMajorService,
+		database.NewDatabase,
+	)
+	return nil
+}
+
 func InitResetService() *services.ResetService {
 	wire.Build(
 		services.NewResetService,
