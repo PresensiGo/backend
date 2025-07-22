@@ -1,11 +1,11 @@
 package main
 
 import (
-	"api/api"
+	"api/pkg/http"
 )
 
-//	@title		Presensi Sekolah API
-//	@version	1.0
+// @title		Presensi Sekolah API
+// @version	1.0
 func main() {
-	api.NewServer()
+	http.NewServer()
 }

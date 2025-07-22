@@ -1,12 +1,12 @@
 package database
 
 import (
-	models2 "api/internal/models"
+	"api/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func NewDatabase() *gorm.DB {
+func New() *gorm.DB {
 	dsn := "host=localhost user=root dbname=presensi_sekolah port=5432 sslmode=disable TimeZone=Asia/Jakarta"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
@@ -15,12 +15,12 @@ func NewDatabase() *gorm.DB {
 	}
 
 	db.AutoMigrate(
-		&models2.User{},
-		&models2.UserToken{},
-		&models2.Batch{},
-		&models2.Major{},
-		&models2.Class{},
-		&models2.Student{},
+		&models.User{},
+		&models.UserToken{},
+		&models.Batch{},
+		&models.Major{},
+		&models.Class{},
+		&models.Student{},
 	)
 
 	return db

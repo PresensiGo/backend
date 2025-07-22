@@ -4,9 +4,9 @@
 package injectors
 
 import (
-	"api/database"
 	"api/internal/handlers"
 	"api/internal/services"
+	"api/pkg/database"
 	"github.com/google/wire"
 )
 
@@ -14,7 +14,7 @@ func InitAuthHandler() *handlers.Auth {
 	wire.Build(
 		handlers.NewAuth,
 		services.NewAuth,
-		database.NewDatabase,
+		database.New,
 	)
 	return nil
 }
@@ -23,7 +23,7 @@ func InitBatchHandler() *handlers.Batch {
 	wire.Build(
 		handlers.NewBatch,
 		services.NewBatch,
-		database.NewDatabase,
+		database.New,
 	)
 	return nil
 }
@@ -32,7 +32,7 @@ func InitClassHandler() *handlers.Class {
 	wire.Build(
 		handlers.NewClass,
 		services.NewClass,
-		database.NewDatabase,
+		database.New,
 	)
 	return nil
 }
@@ -41,7 +41,7 @@ func InitExcelHandler() *handlers.Excel {
 	wire.Build(
 		handlers.NewExcel,
 		services.NewExcel,
-		database.NewDatabase,
+		database.New,
 	)
 	return nil
 }
@@ -50,7 +50,7 @@ func InitMajorHandler() *handlers.Major {
 	wire.Build(
 		handlers.NewMajor,
 		services.NewMajor,
-		database.NewDatabase,
+		database.New,
 	)
 	return nil
 }
@@ -58,7 +58,7 @@ func InitMajorHandler() *handlers.Major {
 func InitResetService() *services.Reset {
 	wire.Build(
 		services.NewReset,
-		database.NewDatabase,
+		database.New,
 	)
 	return nil
 }
@@ -67,7 +67,7 @@ func InitStudentHandler() *handlers.Student {
 	wire.Build(
 		handlers.NewStudent,
 		services.NewStudent,
-		database.NewDatabase,
+		database.New,
 	)
 	return nil
 }

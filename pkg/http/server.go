@@ -1,9 +1,9 @@
-package api
+package http
 
 import (
 	_ "api/docs"
 	"api/internal/routes"
-	"api/pkg/middleware"
+	"api/pkg/http/middleware"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 

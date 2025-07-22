@@ -2,7 +2,7 @@ package routes
 
 import (
 	"api/internal/injectors"
-	"api/pkg/middleware"
+	"api/pkg/http/middleware"
 	"github.com/gin-gonic/gin"
 )
 
