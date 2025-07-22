@@ -2,7 +2,7 @@ package services
 
 import (
 	"api/internal/dto/responses"
-	models2 "api/internal/models"
+	"api/internal/models"
 	"api/utils"
 
 	"github.com/google/uuid"
@@ -21,7 +21,7 @@ func NewAuthService(db *gorm.DB) *AuthService {
 }
 
 func (s *AuthService) Login(email string, password string) (*responses.LoginResponse, error) {
-	var user models2.User
+	var user models.User
 	if err := s.db.Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func (s *AuthService) Login(email string, password string) (*responses.LoginResp
 	accessToken := uuid.New().String()
 
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
-		userToken := models2.UserToken{
+		userToken := models.UserToken{
 			UserId:      user.ID,
 			AccessToken: accessToken,
 		}
@@ -46,7 +46,7 @@ func (s *AuthService) Login(email string, password string) (*responses.LoginResp
 		// delete previous access token
 		if err := tx.Where("user_id = ?", user.ID).
 			Unscoped().
-			Delete(&models2.UserToken{}).
+			Delete(&models.UserToken{}).
 			Error; err != nil {
 			return err
 		}
@@ -75,27 +75,27 @@ func (s *AuthService) Register(name string, email string, password string) (*res
 	var response responses.RegisterResponse
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
 		// create user
-		var userId uint
-		if err := s.db.Raw(`
-			insert into users (name, email, password)
-			values (?, ?, ?)
-			returning id`,
-			name, email, hashedPassword,
-		).Find(&userId).Error; err != nil {
+		user := models.User{
+			Name:     name,
+			Email:    email,
+			Password: string(hashedPassword),
+		}
+		if err := tx.Create(&user).Error; err != nil {
 			return err
 		}
 
 		// create user token
-		token, err := utils.GenerateJWT(userId, name, email)
+		token, err := utils.GenerateJWT(user.ID, name, email)
 		if err != nil {
 			return err
 		}
 		accessToken := uuid.New().String()
 
-		if err := s.db.Exec(`
-			insert into user_tokens (user_id, access_token)
-			values (?, ?)`,
-			userId, accessToken).Error; err != nil {
+		userToken := models.UserToken{
+			UserId:      user.ID,
+			AccessToken: accessToken,
+		}
+		if err := tx.Create(&userToken).Error; err != nil {
 			return err
 		}
 
@@ -113,7 +113,7 @@ func (s *AuthService) Register(name string, email string, password string) (*res
 }
 
 func (s *AuthService) RefreshToken(accessToken string) (*responses.RefreshTokenResponse, error) {
-	var userToken models2.UserToken
+	var userToken models.UserToken
 	if err := s.db.Preload("User").
 		Where("access_token = ?", accessToken).
 		First(&userToken).
