@@ -28,6 +28,15 @@ func InitBatchHandler() *handlers.BatchHandler {
 	return nil
 }
 
+func InitClassHandler() *handlers.ClassHandler {
+	wire.Build(
+		handlers.NewClassHandler,
+		services.NewClassService,
+		database.NewDatabase,
+	)
+	return nil
+}
+
 func InitExcelHandler() *handlers.ExcelHandler {
 	wire.Build(
 		handlers.NewExcelHandler,
