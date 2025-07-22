@@ -1,20 +1,21 @@
 package services
 
 import (
+	"api/internal/dto"
 	"api/internal/dto/responses"
 	"api/internal/models"
 	"gorm.io/gorm"
 )
 
-type Service struct {
+type BatchService struct {
 	db *gorm.DB
 }
 
-func NewService(db *gorm.DB) *Service {
-	return &Service{db}
+func NewBatchService(db *gorm.DB) *BatchService {
+	return &BatchService{db}
 }
 
-func (s *Service) Create(name string) (*responses.CreateBatchResponse, error) {
+func (s *BatchService) Create(name string) (*responses.CreateBatchResponse, error) {
 	batch := models.Batch{
 		Name: name,
 	}
@@ -26,5 +27,27 @@ func (s *Service) Create(name string) (*responses.CreateBatchResponse, error) {
 	return &responses.CreateBatchResponse{
 		Id:   batch.ID,
 		Name: batch.Name,
+	}, nil
+}
+
+func (s *BatchService) GetAll() (*responses.GetAllBatchesResponse, error) {
+	var batches []models.Batch
+	if err := s.db.Find(&batches).Error; err != nil {
+		return nil, err
+	}
+
+	var mappedBatches []dto.Batch
+	for _, batch := range batches {
+		mappedBatches = append(
+			mappedBatches,
+			dto.Batch{
+				Id:   batch.ID,
+				Name: batch.Name,
+			},
+		)
+	}
+
+	return &responses.GetAllBatchesResponse{
+		Batches: mappedBatches,
 	}, nil
 }

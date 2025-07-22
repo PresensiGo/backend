@@ -20,6 +20,7 @@ func NewServer() {
 	authorized := v1.Group("/")
 	authorized.Use(middleware.AuthMiddleware())
 	{
+		routes.RegisterBatchRoutes(authorized)
 		routes.RegisterExcelRoutes(authorized)
 	}
 

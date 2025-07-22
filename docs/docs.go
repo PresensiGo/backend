@@ -75,6 +75,22 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batch": {
+            "get": {
+                "tags": [
+                    "batch"
+                ],
+                "operationId": "getAllBatches",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllBatchesResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/excel/import": {
             "post": {
                 "tags": [
@@ -93,6 +109,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.Batch": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.LoginRequest": {
             "type": "object",
             "properties": {
@@ -122,13 +149,24 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.GetAllBatchesResponse": {
+            "type": "object",
+            "properties": {
+                "batches": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Batch"
+                    }
+                }
+            }
+        },
         "responses.LoginResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
                     "type": "string"
                 },
-                "token": {
+                "refresh_token": {
                     "type": "string"
                 }
             }
@@ -139,7 +177,7 @@ const docTemplate = `{
                 "access_token": {
                     "type": "string"
                 },
-                "token": {
+                "refresh_token": {
                     "type": "string"
                 }
             }

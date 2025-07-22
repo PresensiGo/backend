@@ -19,6 +19,15 @@ func InitAuthHandler() *handlers.AuthHandler {
 	return nil
 }
 
+func InitBatchHandler() *handlers.BatchHandler {
+	wire.Build(
+		handlers.NewBatchHandler,
+		services.NewBatchService,
+		database.NewDatabase,
+	)
+	return nil
+}
+
 func InitExcelHandler() *handlers.ExcelHandler {
 	wire.Build(
 		handlers.NewExcelHandler,

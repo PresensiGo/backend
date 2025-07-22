@@ -1,4 +1,11 @@
 definitions:
+  dto.Batch:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   requests.LoginRequest:
     properties:
       email:
@@ -19,18 +26,25 @@ definitions:
         default: password
         type: string
     type: object
+  responses.GetAllBatchesResponse:
+    properties:
+      batches:
+        items:
+          $ref: '#/definitions/dto.Batch'
+        type: array
+    type: object
   responses.LoginResponse:
     properties:
       access_token:
         type: string
-      token:
+      refresh_token:
         type: string
     type: object
   responses.RegisterResponse:
     properties:
       access_token:
         type: string
-      token:
+      refresh_token:
         type: string
     type: object
 info:
@@ -76,6 +90,16 @@ paths:
             $ref: '#/definitions/responses.RegisterResponse'
       tags:
       - auth
+  /api/v1/batch:
+    get:
+      operationId: getAllBatches
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllBatchesResponse'
+      tags:
+      - batch
   /api/v1/excel/import:
     post:
       operationId: Import
