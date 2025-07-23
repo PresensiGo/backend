@@ -13,6 +13,8 @@ RUN go build -o app .
 
 FROM alpine:3.22
 
+RUN apk add --no-cache tzdata
+
 WORKDIR /app
 
 COPY --from=builder /app/app .
