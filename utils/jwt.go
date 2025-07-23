@@ -10,7 +10,7 @@ import (
 
 func GenerateJWT(id uint, name string, email string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, authentication.JWTClaim{
-		Id:    id,
+		ID:    id,
 		Name:  name,
 		Email: email,
 		RegisteredClaims: jwt.RegisteredClaims{
