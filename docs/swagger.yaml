@@ -37,6 +37,11 @@ definitions:
       password:
         type: string
     type: object
+  requests.RefreshToken:
+    properties:
+      refresh_token:
+        type: string
+    type: object
   requests.Register:
     properties:
       email:
@@ -55,6 +60,8 @@ definitions:
         items:
           $ref: '#/definitions/dto.Batch'
         type: array
+    required:
+    - batches
     type: object
   responses.GetAllClasses:
     properties:
@@ -83,6 +90,9 @@ definitions:
         type: string
       refresh_token:
         type: string
+    required:
+    - access_token
+    - refresh_token
     type: object
   responses.Logout:
     type: object
@@ -92,6 +102,9 @@ definitions:
         type: string
       refresh_token:
         type: string
+    required:
+    - access_token
+    - refresh_token
     type: object
   responses.Register:
     properties:
@@ -99,6 +112,9 @@ definitions:
         type: string
       refresh_token:
         type: string
+    required:
+    - access_token
+    - refresh_token
     type: object
 info:
   contact: {}
@@ -139,6 +155,13 @@ paths:
   /api/v1/auth/refresh-token:
     post:
       operationId: refreshToken
+      parameters:
+      - description: Refresh token req
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.RefreshToken'
       responses:
         "200":
           description: OK
@@ -164,6 +187,16 @@ paths:
       tags:
       - auth
   /api/v1/batch:
+    get:
+      operationId: getAllBatches
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllBatches'
+      tags:
+      - batch
+  /api/v1/class:
     get:
       operationId: getAllClasses
       responses:

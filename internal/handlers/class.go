@@ -18,7 +18,7 @@ func NewClass(service *services.Class) *Class {
 // @ID			getAllClasses
 // @Tags		class
 // @Success	200	{object}	responses.GetAllClasses
-// @Router		/api/v1/batch [get]
+// @Router		/api/v1/class [get]
 func (h *Class) GetAll(c *gin.Context) {
 	majorId, err := strconv.ParseUint(c.Param("major_id"), 10, 64)
 	if err != nil {

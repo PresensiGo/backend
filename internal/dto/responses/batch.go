@@ -8,5 +8,5 @@ type CreateBatch struct {
 }
 
 type GetAllBatches struct {
-	Batches []dto.Batch `json:"batches"`
+	Batches []dto.Batch `json:"batches" validate:"required"`
 }

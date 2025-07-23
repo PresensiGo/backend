@@ -70,6 +70,17 @@ const docTemplate = `{
                     "auth"
                 ],
                 "operationId": "refreshToken",
+                "parameters": [
+                    {
+                        "description": "Refresh token req",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.RefreshToken"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -108,6 +119,22 @@ const docTemplate = `{
             }
         },
         "/api/v1/batch": {
+            "get": {
+                "tags": [
+                    "batch"
+                ],
+                "operationId": "getAllBatches",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllBatches"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/class": {
             "get": {
                 "tags": [
                     "class"
@@ -232,6 +259,14 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.RefreshToken": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.Register": {
             "type": "object",
             "properties": {
@@ -251,6 +286,9 @@ const docTemplate = `{
         },
         "responses.GetAllBatches": {
             "type": "object",
+            "required": [
+                "batches"
+            ],
             "properties": {
                 "batches": {
                     "type": "array",
@@ -295,6 +333,10 @@ const docTemplate = `{
         },
         "responses.Login": {
             "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
             "properties": {
                 "access_token": {
                     "type": "string"
@@ -309,6 +351,10 @@ const docTemplate = `{
         },
         "responses.RefreshToken": {
             "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
             "properties": {
                 "access_token": {
                     "type": "string"
@@ -320,6 +366,10 @@ const docTemplate = `{
         },
         "responses.Register": {
             "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
             "properties": {
                 "access_token": {
                     "type": "string"

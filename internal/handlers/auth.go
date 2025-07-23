@@ -87,7 +87,8 @@ func (h *Auth) Logout(c *gin.Context) {
 
 // @ID			refreshToken
 // @Tags		auth
-// @Success	200	{object}	responses.RefreshToken
+// @Param		body	body		requests.RefreshToken	true	"Refresh token req"
+// @Success	200		{object}	responses.RefreshToken
 // @Router		/api/v1/auth/refresh-token [post]
 func (h *Auth) RefreshToken(c *gin.Context) {
 	var request requests.RefreshToken
