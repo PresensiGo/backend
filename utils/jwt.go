@@ -8,7 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(id uint, name string, email string) (string, error) {
+func GenerateJWT(id uint64, name string, email string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, authentication.JWTClaim{
 		ID:    id,
 		Name:  name,

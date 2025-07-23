@@ -31,7 +31,7 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 		return nil, err
 	}
 
-	accessToken, err := utils.GenerateJWT(user.ID, user.Name, user.Email)
+	accessToken, err := utils.GenerateJWT(uint64(user.ID), user.Name, user.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (s *Auth) Register(name string, email string, password string) (*responses.
 		}
 
 		// create user accessToken
-		accessToken, err := utils.GenerateJWT(user.ID, name, email)
+		accessToken, err := utils.GenerateJWT(uint64(user.ID), name, email)
 		if err != nil {
 			return err
 		}
@@ -132,7 +132,7 @@ func (s *Auth) RefreshToken(accessToken string) (*responses.RefreshToken, error)
 	}
 
 	// generate new accessToken
-	accessToken, err := utils.GenerateJWT(userToken.User.ID, userToken.User.Name, userToken.User.Email)
+	accessToken, err := utils.GenerateJWT(uint64(userToken.User.ID), userToken.User.Name, userToken.User.Email)
 	if err != nil {
 		return nil, err
 	}
