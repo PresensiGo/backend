@@ -16,7 +16,7 @@ func NewBatch(service *services.Batch) *Batch {
 
 // @ID			getAllBatches
 // @Tags		batch
-// @Success	200	{object}	responses.GetAllBatchesResponse
+// @Success	200	{object}	responses.GetAllBatches
 // @Router		/api/v1/batch [get]
 func (h *Batch) GetAll(c *gin.Context) {
 	response, err := h.service.GetAll()

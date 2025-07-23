@@ -34,7 +34,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.LoginRequest"
+                            "$ref": "#/definitions/requests.Login"
                         }
                     }
                 ],
@@ -42,7 +42,23 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.LoginResponse"
+                            "$ref": "#/definitions/responses.Login"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/logout": {
+            "get": {
+                "tags": [
+                    "auth"
+                ],
+                "operationId": "Logout",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Logout"
                         }
                     }
                 }
@@ -61,7 +77,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.RegisterRequest"
+                            "$ref": "#/definitions/requests.Register"
                         }
                     }
                 ],
@@ -69,7 +85,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.RegisterResponse"
+                            "$ref": "#/definitions/responses.Register"
                         }
                     }
                 }
@@ -85,7 +101,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllBatchesResponse"
+                            "$ref": "#/definitions/responses.GetAllBatches"
                         }
                     }
                 }
@@ -120,7 +136,7 @@ const docTemplate = `{
                 }
             }
         },
-        "requests.LoginRequest": {
+        "requests.Login": {
             "type": "object",
             "properties": {
                 "email": {
@@ -132,7 +148,7 @@ const docTemplate = `{
                 }
             }
         },
-        "requests.RegisterRequest": {
+        "requests.Register": {
             "type": "object",
             "properties": {
                 "email": {
@@ -149,7 +165,7 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.GetAllBatchesResponse": {
+        "responses.GetAllBatches": {
             "type": "object",
             "properties": {
                 "batches": {
@@ -160,7 +176,7 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.LoginResponse": {
+        "responses.Login": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -171,7 +187,10 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.RegisterResponse": {
+        "responses.Logout": {
+            "type": "object"
+        },
+        "responses.Register": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -191,7 +210,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Presensi Sekolah API",
+	Title:            "PresensiGo API",
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

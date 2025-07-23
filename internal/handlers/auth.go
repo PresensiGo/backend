@@ -71,7 +71,7 @@ func (h *Auth) Register(c *gin.Context) {
 
 // @ID			Logout
 // @Tags		auth
-// @Success	200		{object}	responses.Logout
+// @Success	200	{object}	responses.Logout
 // @Router		/api/v1/auth/logout [get]
 func (h *Auth) Logout(c *gin.Context) {
 	authUser := utils.GetAuthenticatedUser(c)

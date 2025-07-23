@@ -6,7 +6,7 @@ definitions:
       name:
         type: string
     type: object
-  requests.LoginRequest:
+  requests.Login:
     properties:
       email:
         default: email@email.com
@@ -14,7 +14,7 @@ definitions:
       password:
         type: string
     type: object
-  requests.RegisterRequest:
+  requests.Register:
     properties:
       email:
         default: email@email.com
@@ -26,21 +26,23 @@ definitions:
         default: password
         type: string
     type: object
-  responses.GetAllBatchesResponse:
+  responses.GetAllBatches:
     properties:
       batches:
         items:
           $ref: '#/definitions/dto.Batch'
         type: array
     type: object
-  responses.LoginResponse:
+  responses.Login:
     properties:
       access_token:
         type: string
       refresh_token:
         type: string
     type: object
-  responses.RegisterResponse:
+  responses.Logout:
+    type: object
+  responses.Register:
     properties:
       access_token:
         type: string
@@ -49,7 +51,7 @@ definitions:
     type: object
 info:
   contact: {}
-  title: Presensi Sekolah API
+  title: PresensiGo API
   version: "1.0"
 paths:
   /api/v1/auth/login:
@@ -63,14 +65,24 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.LoginRequest'
+          $ref: '#/definitions/requests.Login'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.LoginResponse'
+            $ref: '#/definitions/responses.Login'
+      tags:
+      - auth
+  /api/v1/auth/logout:
+    get:
+      operationId: Logout
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.Logout'
       tags:
       - auth
   /api/v1/auth/register:
@@ -82,12 +94,12 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.RegisterRequest'
+          $ref: '#/definitions/requests.Register'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.RegisterResponse'
+            $ref: '#/definitions/responses.Register'
       tags:
       - auth
   /api/v1/batch:
@@ -97,7 +109,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllBatchesResponse'
+            $ref: '#/definitions/responses.GetAllBatches'
       tags:
       - batch
   /api/v1/excel/import:
