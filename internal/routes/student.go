@@ -9,5 +9,5 @@ func RegisterStudent(g *gin.RouterGroup) {
 	group := g.Group("/student")
 	handler := injectors.InitStudentHandler()
 
-	group.GET("/class/:class_id", handler.GetAllStudents)
+	group.GET("/class/:class_id", handler.GetAll)
 }

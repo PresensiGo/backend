@@ -6,6 +6,29 @@ definitions:
       name:
         type: string
     type: object
+  dto.Class:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  dto.Major:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  dto.Student:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nis:
+        type: string
+    type: object
   requests.Login:
     properties:
       email:
@@ -33,6 +56,27 @@ definitions:
           $ref: '#/definitions/dto.Batch'
         type: array
     type: object
+  responses.GetAllClasses:
+    properties:
+      classes:
+        items:
+          $ref: '#/definitions/dto.Class'
+        type: array
+    type: object
+  responses.GetAllMajors:
+    properties:
+      majors:
+        items:
+          $ref: '#/definitions/dto.Major'
+        type: array
+    type: object
+  responses.GetAllStudents:
+    properties:
+      students:
+        items:
+          $ref: '#/definitions/dto.Student'
+        type: array
+    type: object
   responses.Login:
     properties:
       access_token:
@@ -41,6 +85,13 @@ definitions:
         type: string
     type: object
   responses.Logout:
+    type: object
+  responses.RefreshToken:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
     type: object
   responses.Register:
     properties:
@@ -58,7 +109,7 @@ paths:
     post:
       consumes:
       - application/json
-      operationId: Login
+      operationId: login
       parameters:
       - description: Login request
         in: body
@@ -77,7 +128,7 @@ paths:
       - auth
   /api/v1/auth/logout:
     get:
-      operationId: Logout
+      operationId: logout
       responses:
         "200":
           description: OK
@@ -85,9 +136,19 @@ paths:
             $ref: '#/definitions/responses.Logout'
       tags:
       - auth
+  /api/v1/auth/refresh-token:
+    post:
+      operationId: refreshToken
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.RefreshToken'
+      tags:
+      - auth
   /api/v1/auth/register:
     post:
-      operationId: Register
+      operationId: register
       parameters:
       - description: Login request
         in: body
@@ -104,17 +165,17 @@ paths:
       - auth
   /api/v1/batch:
     get:
-      operationId: getAllBatches
+      operationId: getAllClasses
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllBatches'
+            $ref: '#/definitions/responses.GetAllClasses'
       tags:
-      - batch
+      - class
   /api/v1/excel/import:
     post:
-      operationId: Import
+      operationId: importData
       responses:
         "200":
           description: OK
@@ -122,4 +183,24 @@ paths:
             type: string
       tags:
       - excel
+  /api/v1/major:
+    get:
+      operationId: getAllMajors
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllMajors'
+      tags:
+      - major
+  /api/v1/student:
+    get:
+      operationId: getAllStudents
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllStudents'
+      tags:
+      - student
 swagger: "2.0"

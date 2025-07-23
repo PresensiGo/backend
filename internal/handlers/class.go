@@ -15,7 +15,11 @@ func NewClass(service *services.Class) *Class {
 	return &Class{service}
 }
 
-func (h *Class) GetAllClasses(c *gin.Context) {
+// @ID			getAllClasses
+// @Tags		class
+// @Success	200	{object}	responses.GetAllClasses
+// @Router		/api/v1/batch [get]
+func (h *Class) GetAll(c *gin.Context) {
 	majorId, err := strconv.ParseUint(c.Param("major_id"), 10, 64)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)

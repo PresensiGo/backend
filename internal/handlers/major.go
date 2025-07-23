@@ -15,7 +15,11 @@ func NewMajor(service *services.Major) *Major {
 	return &Major{service}
 }
 
-func (h *Major) GetAllMajors(c *gin.Context) {
+// @ID			getAllMajors
+// @Tags		major
+// @Success	200	{object}	responses.GetAllMajors
+// @Router		/api/v1/major [get]
+func (h *Major) GetAll(c *gin.Context) {
 	batchId, err := strconv.ParseUint(c.Param("batch_id"), 10, 64)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)

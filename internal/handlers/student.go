@@ -15,7 +15,11 @@ func NewStudent(service *services.Student) *Student {
 	return &Student{service}
 }
 
-func (h *Student) GetAllStudents(c *gin.Context) {
+// @ID			getAllStudents
+// @Tags		student
+// @Success	200	{object}	responses.GetAllStudents
+// @Router		/api/v1/student [get]
+func (h *Student) GetAll(c *gin.Context) {
 	classId, err := strconv.ParseUint(c.Param("class_id"), 10, 8)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)

@@ -26,7 +26,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "operationId": "Login",
+                "operationId": "login",
                 "parameters": [
                     {
                         "description": "Login request",
@@ -53,7 +53,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "operationId": "Logout",
+                "operationId": "logout",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -64,12 +64,28 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/auth/refresh-token": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "operationId": "refreshToken",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.RefreshToken"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/auth/register": {
             "post": {
                 "tags": [
                     "auth"
                 ],
-                "operationId": "Register",
+                "operationId": "register",
                 "parameters": [
                     {
                         "description": "Login request",
@@ -94,14 +110,14 @@ const docTemplate = `{
         "/api/v1/batch": {
             "get": {
                 "tags": [
-                    "batch"
+                    "class"
                 ],
-                "operationId": "getAllBatches",
+                "operationId": "getAllClasses",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllBatches"
+                            "$ref": "#/definitions/responses.GetAllClasses"
                         }
                     }
                 }
@@ -112,12 +128,44 @@ const docTemplate = `{
                 "tags": [
                     "excel"
                 ],
-                "operationId": "Import",
+                "operationId": "importData",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/major": {
+            "get": {
+                "tags": [
+                    "major"
+                ],
+                "operationId": "getAllMajors",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllMajors"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/student": {
+            "get": {
+                "tags": [
+                    "student"
+                ],
+                "operationId": "getAllStudents",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllStudents"
                         }
                     }
                 }
@@ -132,6 +180,42 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.Class": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.Major": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.Student": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nis": {
                     "type": "string"
                 }
             }
@@ -176,6 +260,39 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.GetAllClasses": {
+            "type": "object",
+            "properties": {
+                "classes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Class"
+                    }
+                }
+            }
+        },
+        "responses.GetAllMajors": {
+            "type": "object",
+            "properties": {
+                "majors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Major"
+                    }
+                }
+            }
+        },
+        "responses.GetAllStudents": {
+            "type": "object",
+            "properties": {
+                "students": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Student"
+                    }
+                }
+            }
+        },
         "responses.Login": {
             "type": "object",
             "properties": {
@@ -189,6 +306,17 @@ const docTemplate = `{
         },
         "responses.Logout": {
             "type": "object"
+        },
+        "responses.RefreshToken": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
         },
         "responses.Register": {
             "type": "object",

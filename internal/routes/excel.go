@@ -9,5 +9,5 @@ func RegisterExcel(g *gin.RouterGroup) {
 	group := g.Group("/excel")
 	handler := injectors.InitExcelHandler()
 
-	group.POST("/import", handler.Import)
+	group.POST("/import", handler.ImportData)
 }
