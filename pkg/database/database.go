@@ -14,10 +14,11 @@ func New() *gorm.DB {
 	dbName := os.Getenv("DB_NAME")
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
+	dbTimezone := os.Getenv("DB_TIMEZONE")
 
 	dsn := fmt.Sprintf(
-		"host=%s user=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Jakarta",
-		dbHost, dbUser, dbName, dbPort,
+		"host=%s user=%s dbname=%s port=%s sslmode=disable TimeZone=%s",
+		dbHost, dbUser, dbName, dbPort, dbTimezone,
 	)
 	if dbPassword != "" {
 		dsn = fmt.Sprintf(
@@ -25,6 +26,8 @@ func New() *gorm.DB {
 			dsn, dbPassword,
 		)
 	}
+
+	fmt.Println("dsn", dsn)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
