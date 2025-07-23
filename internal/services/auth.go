@@ -112,6 +112,16 @@ func (s *Auth) Register(name string, email string, password string) (*responses.
 	return &response, nil
 }
 
+func (s *Auth) Logout(userId uint64) (*responses.Logout, error) {
+	if err := s.db.Where("user_id = ?", userId).
+		Delete(&models.UserToken{}).
+		Error; err != nil {
+		return nil, err
+	}
+
+	return &responses.Logout{}, nil
+}
+
 func (s *Auth) RefreshToken(accessToken string) (*responses.RefreshToken, error) {
 	var userToken models.UserToken
 	if err := s.db.Preload("User").

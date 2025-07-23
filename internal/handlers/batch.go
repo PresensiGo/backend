@@ -14,7 +14,7 @@ func NewBatch(service *services.Batch) *Batch {
 	return &Batch{service}
 }
 
-// @Id			getAllBatches
+// @ID			getAllBatches
 // @Tags		batch
 // @Success	200	{object}	responses.GetAllBatchesResponse
 // @Router		/api/v1/batch [get]

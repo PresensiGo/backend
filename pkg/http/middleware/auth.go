@@ -33,7 +33,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		ctx.Set("token", authentication.AuthenticatedUser{
-			Id:    claims.Id,
+			ID:    claims.Id,
 			Name:  claims.Name,
 			Email: claims.Email,
 		})

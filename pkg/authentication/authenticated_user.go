@@ -1,7 +1,7 @@
 package authentication
 
 type AuthenticatedUser struct {
-	Id    uint   `json:"id"`
+	ID    uint64 `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }

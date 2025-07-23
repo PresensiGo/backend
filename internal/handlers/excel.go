@@ -17,7 +17,7 @@ func NewExcel(service *services.Excel) *Excel {
 
 // Import godoc
 //
-//	@Id			Import
+//	@ID			Import
 //	@Tags		excel
 //	@Success	200	{string}	string
 //	@Router		/api/v1/excel/import [post]

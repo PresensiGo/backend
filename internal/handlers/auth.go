@@ -16,15 +16,13 @@ func NewAuth(service *services.Auth) *Auth {
 	return &Auth{service}
 }
 
-// Login godoc
-//
-//	@Id			Login
-//	@Accept		json
-//	@Produce	json
-//	@Tags		auth
-//	@Param		body	body		requests.Login	true	"Login request"
-//	@Success	200		{object}	responses.LoginResponse
-//	@Router		/api/v1/auth/login [post]
+// @ID			Login
+// @Accept		json
+// @Produce	json
+// @Tags		auth
+// @Param		body	body		requests.Login	true	"Login request"
+// @Success	200		{object}	responses.Login
+// @Router		/api/v1/auth/login [post]
 func (h *Auth) Login(c *gin.Context) {
 	var request requests.Login
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -46,13 +44,11 @@ func (h *Auth) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// Register godoc
-//
-//	@Id			Register
-//	@Tags		auth
-//	@Param		body	body		requests.Register	true	"Login request"
-//	@Success	200		{object}	responses.RegisterResponse
-//	@Router		/api/v1/auth/register [post]
+// @ID			Register
+// @Tags		auth
+// @Param		body	body		requests.Register	true	"Login request"
+// @Success	200		{object}	responses.Register
+// @Router		/api/v1/auth/register [post]
 func (h *Auth) Register(c *gin.Context) {
 	var request requests.Register
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -73,10 +69,20 @@ func (h *Auth) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @ID			Logout
+// @Tags		auth
+// @Success	200		{object}	responses.Logout
+// @Router		/api/v1/auth/logout [get]
 func (h *Auth) Logout(c *gin.Context) {
-	userData := utils.GetAuthenticatedUser(c)
+	authUser := utils.GetAuthenticatedUser(c)
 
-	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully", "user": userData})
+	response, err := h.service.Logout(authUser.ID)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 func (h *Auth) RefreshToken(c *gin.Context) {
