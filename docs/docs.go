@@ -51,7 +51,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Class ID",
+                        "description": "Classroom ID",
                         "name": "class_id",
                         "in": "path",
                         "required": true
@@ -191,12 +191,12 @@ const docTemplate = `{
                 "tags": [
                     "class"
                 ],
-                "operationId": "getAllClasses",
+                "operationId": "getAllClassrooms",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllClasses"
+                            "$ref": "#/definitions/responses.GetAllClassrooms"
                         }
                     }
                 }
@@ -207,7 +207,7 @@ const docTemplate = `{
                 "tags": [
                     "classMajor"
                 ],
-                "operationId": "getAllClassMajors",
+                "operationId": "getAllClassroomMajors",
                 "parameters": [
                     {
                         "type": "integer",
@@ -221,7 +221,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllClassMajors"
+                            "$ref": "#/definitions/responses.GetAllClassroomMajors"
                         }
                     }
                 }
@@ -274,6 +274,15 @@ const docTemplate = `{
                     "student"
                 ],
                 "operationId": "getAllStudents",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Classroom ID",
+                        "name": "class_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -289,12 +298,12 @@ const docTemplate = `{
         "dto.Attendance": {
             "type": "object",
             "required": [
-                "class_id",
+                "classroom_id",
                 "date",
                 "id"
             ],
             "properties": {
-                "class_id": {
+                "classroom_id": {
                     "type": "integer"
                 },
                 "date": {
@@ -320,7 +329,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.Class": {
+        "dto.Classroom": {
             "type": "object",
             "required": [
                 "id",
@@ -357,13 +366,13 @@ const docTemplate = `{
         "dto.Student": {
             "type": "object",
             "required": [
-                "class_id",
+                "classroom_id",
                 "id",
                 "name",
                 "nis"
             ],
             "properties": {
-                "class_id": {
+                "classroom_id": {
                     "type": "integer"
                 },
                 "id": {
@@ -472,15 +481,15 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.ClassMajor": {
+        "responses.ClassroomMajor": {
             "type": "object",
             "required": [
-                "class",
+                "classroom",
                 "major"
             ],
             "properties": {
-                "class": {
-                    "$ref": "#/definitions/dto.Class"
+                "classroom": {
+                    "$ref": "#/definitions/dto.Classroom"
                 },
                 "major": {
                     "$ref": "#/definitions/dto.Major"
@@ -512,7 +521,7 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.GetAllClassMajors": {
+        "responses.GetAllClassroomMajors": {
             "type": "object",
             "required": [
                 "data"
@@ -521,21 +530,21 @@ const docTemplate = `{
                 "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/responses.ClassMajor"
+                        "$ref": "#/definitions/responses.ClassroomMajor"
                     }
                 }
             }
         },
-        "responses.GetAllClasses": {
+        "responses.GetAllClassrooms": {
             "type": "object",
             "required": [
-                "classes"
+                "classrooms"
             ],
             "properties": {
-                "classes": {
+                "classrooms": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.Class"
+                        "$ref": "#/definitions/dto.Classroom"
                     }
                 }
             }

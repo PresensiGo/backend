@@ -42,7 +42,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Class ID",
+                        "description": "Classroom ID",
                         "name": "class_id",
                         "in": "path",
                         "required": true
@@ -182,12 +182,12 @@
                 "tags": [
                     "class"
                 ],
-                "operationId": "getAllClasses",
+                "operationId": "getAllClassrooms",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllClasses"
+                            "$ref": "#/definitions/responses.GetAllClassrooms"
                         }
                     }
                 }
@@ -198,7 +198,7 @@
                 "tags": [
                     "classMajor"
                 ],
-                "operationId": "getAllClassMajors",
+                "operationId": "getAllClassroomMajors",
                 "parameters": [
                     {
                         "type": "integer",
@@ -212,7 +212,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllClassMajors"
+                            "$ref": "#/definitions/responses.GetAllClassroomMajors"
                         }
                     }
                 }
@@ -265,6 +265,15 @@
                     "student"
                 ],
                 "operationId": "getAllStudents",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Classroom ID",
+                        "name": "class_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -280,12 +289,12 @@
         "dto.Attendance": {
             "type": "object",
             "required": [
-                "class_id",
+                "classroom_id",
                 "date",
                 "id"
             ],
             "properties": {
-                "class_id": {
+                "classroom_id": {
                     "type": "integer"
                 },
                 "date": {
@@ -311,7 +320,7 @@
                 }
             }
         },
-        "dto.Class": {
+        "dto.Classroom": {
             "type": "object",
             "required": [
                 "id",
@@ -348,13 +357,13 @@
         "dto.Student": {
             "type": "object",
             "required": [
-                "class_id",
+                "classroom_id",
                 "id",
                 "name",
                 "nis"
             ],
             "properties": {
-                "class_id": {
+                "classroom_id": {
                     "type": "integer"
                 },
                 "id": {
@@ -463,15 +472,15 @@
                 }
             }
         },
-        "responses.ClassMajor": {
+        "responses.ClassroomMajor": {
             "type": "object",
             "required": [
-                "class",
+                "classroom",
                 "major"
             ],
             "properties": {
-                "class": {
-                    "$ref": "#/definitions/dto.Class"
+                "classroom": {
+                    "$ref": "#/definitions/dto.Classroom"
                 },
                 "major": {
                     "$ref": "#/definitions/dto.Major"
@@ -503,7 +512,7 @@
                 }
             }
         },
-        "responses.GetAllClassMajors": {
+        "responses.GetAllClassroomMajors": {
             "type": "object",
             "required": [
                 "data"
@@ -512,21 +521,21 @@
                 "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/responses.ClassMajor"
+                        "$ref": "#/definitions/responses.ClassroomMajor"
                     }
                 }
             }
         },
-        "responses.GetAllClasses": {
+        "responses.GetAllClassrooms": {
             "type": "object",
             "required": [
-                "classes"
+                "classrooms"
             ],
             "properties": {
-                "classes": {
+                "classrooms": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.Class"
+                        "$ref": "#/definitions/dto.Classroom"
                     }
                 }
             }

@@ -20,7 +20,7 @@ func (s *Reset) Reset() (*responses.Reset, error) {
 			return err
 		}
 
-		if err := tx.Where("true").Unscoped().Delete(&models.Class{}).Error; err != nil {
+		if err := tx.Where("true").Unscoped().Delete(&models.Classroom{}).Error; err != nil {
 			return err
 		}
 

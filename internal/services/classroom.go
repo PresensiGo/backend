@@ -7,33 +7,33 @@ import (
 	"gorm.io/gorm"
 )
 
-type Class struct {
+type Classroom struct {
 	db *gorm.DB
 }
 
-func NewClass(db *gorm.DB) *Class {
-	return &Class{db}
+func NewClassroom(db *gorm.DB) *Classroom {
+	return &Classroom{db}
 }
 
-func (s *Class) GetAllClasses(majorId uint64) (*responses.GetAllClasses, error) {
-	var classes []models.Class
+func (s *Classroom) GetAllClassrooms(majorId uint64) (*responses.GetAllClassrooms, error) {
+	var classes []models.Classroom
 	if err := s.db.Where("major_id = ?", majorId).
 		Find(&classes).Error; err != nil {
 		return nil, err
 	}
 
-	var mappedClasses []dto.Class
+	var mappedClasses []dto.Classroom
 	for _, class := range classes {
 		mappedClasses = append(
 			mappedClasses,
-			dto.Class{
+			dto.Classroom{
 				ID:   class.ID,
 				Name: class.Name,
 			},
 		)
 	}
 
-	return &responses.GetAllClasses{
-		Classes: mappedClasses,
+	return &responses.GetAllClassrooms{
+		Classrooms: mappedClasses,
 	}, nil
 }

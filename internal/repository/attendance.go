@@ -33,9 +33,9 @@ func (r *Attendance) GetAll(classId uint) (*[]dto.Attendance, error) {
 	mappedAttendances := make([]dto.Attendance, len(attendances))
 	for i, attendance := range attendances {
 		mappedAttendances[i] = dto.Attendance{
-			ID:      attendance.ID,
-			ClassID: attendance.ClassID,
-			Date:    attendance.Date,
+			ID:          attendance.ID,
+			ClassroomID: attendance.ClassroomID,
+			Date:        attendance.Date,
 		}
 	}
 

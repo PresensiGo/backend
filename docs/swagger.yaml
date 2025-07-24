@@ -1,14 +1,14 @@
 definitions:
   dto.Attendance:
     properties:
-      class_id:
+      classroom_id:
         type: integer
       date:
         type: string
       id:
         type: integer
     required:
-    - class_id
+    - classroom_id
     - date
     - id
     type: object
@@ -22,7 +22,7 @@ definitions:
     - id
     - name
     type: object
-  dto.Class:
+  dto.Classroom:
     properties:
       id:
         type: integer
@@ -47,7 +47,7 @@ definitions:
     type: object
   dto.Student:
     properties:
-      class_id:
+      classroom_id:
         type: integer
       id:
         type: integer
@@ -56,7 +56,7 @@ definitions:
       nis:
         type: string
     required:
-    - class_id
+    - classroom_id
     - id
     - name
     - nis
@@ -126,14 +126,14 @@ definitions:
         default: password
         type: string
     type: object
-  responses.ClassMajor:
+  responses.ClassroomMajor:
     properties:
-      class:
-        $ref: '#/definitions/dto.Class'
+      classroom:
+        $ref: '#/definitions/dto.Classroom'
       major:
         $ref: '#/definitions/dto.Major'
     required:
-    - class
+    - classroom
     - major
     type: object
   responses.GetAllAttendances:
@@ -152,23 +152,23 @@ definitions:
     required:
     - batches
     type: object
-  responses.GetAllClassMajors:
+  responses.GetAllClassroomMajors:
     properties:
       data:
         items:
-          $ref: '#/definitions/responses.ClassMajor'
+          $ref: '#/definitions/responses.ClassroomMajor'
         type: array
     required:
     - data
     type: object
-  responses.GetAllClasses:
+  responses.GetAllClassrooms:
     properties:
-      classes:
+      classrooms:
         items:
-          $ref: '#/definitions/dto.Class'
+          $ref: '#/definitions/dto.Classroom'
         type: array
     required:
-    - classes
+    - classrooms
     type: object
   responses.GetAllMajors:
     properties:
@@ -237,7 +237,7 @@ paths:
     get:
       operationId: getAllAttendances
       parameters:
-      - description: Class ID
+      - description: Classroom ID
         in: path
         name: class_id
         required: true
@@ -326,17 +326,17 @@ paths:
       - batch
   /api/v1/class:
     get:
-      operationId: getAllClasses
+      operationId: getAllClassrooms
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllClasses'
+            $ref: '#/definitions/responses.GetAllClassrooms'
       tags:
       - class
   /api/v1/class_majors/batch/{batch_id}:
     get:
-      operationId: getAllClassMajors
+      operationId: getAllClassroomMajors
       parameters:
       - description: Batch ID
         in: path
@@ -347,7 +347,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllClassMajors'
+            $ref: '#/definitions/responses.GetAllClassroomMajors'
       tags:
       - classMajor
   /api/v1/excel/import:
@@ -379,6 +379,12 @@ paths:
   /api/v1/students/class/{class_id}:
     get:
       operationId: getAllStudents
+      parameters:
+      - description: Classroom ID
+        in: path
+        name: class_id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK

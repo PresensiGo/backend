@@ -15,10 +15,10 @@ func NewClassMajor(service *services.ClassMajor) *ClassMajor {
 	return &ClassMajor{service}
 }
 
-// @ID			getAllClassMajors
+// @ID			getAllClassroomMajors
 // @Tags		classMajor
 // @Param		batch_id	path		int	true	"Batch ID"
-// @Success		200			{object}	responses.GetAllClassMajors
+// @Success		200			{object}	responses.GetAllClassroomMajors
 // @Router		/api/v1/class_majors/batch/{batch_id} [get]
 func (h *ClassMajor) GetAll(c *gin.Context) {
 	batchId, err := strconv.Atoi(c.Param("batch_id"))

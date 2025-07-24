@@ -7,12 +7,12 @@ import (
 )
 
 type ClassMajor struct {
-	classRepository *repository.Class
+	classRepository *repository.Classroom
 	majorRepository *repository.Major
 }
 
 func NewClassMajor(
-	classRepository *repository.Class,
+	classRepository *repository.Classroom,
 	majorRepository *repository.Major,
 ) *ClassMajor {
 	return &ClassMajor{
@@ -21,7 +21,7 @@ func NewClassMajor(
 	}
 }
 
-func (s *ClassMajor) GetAll(batchId uint) (*responses.GetAllClassMajors, error) {
+func (s *ClassMajor) GetAll(batchId uint) (*responses.GetAllClassroomMajors, error) {
 	majors, err := s.majorRepository.GetAllByBatchId(batchId)
 	if err != nil {
 		return nil, err
@@ -42,15 +42,15 @@ func (s *ClassMajor) GetAll(batchId uint) (*responses.GetAllClassMajors, error) 
 		return nil, err
 	}
 
-	result := make([]responses.ClassMajor, len(classes))
+	result := make([]responses.ClassroomMajor, len(classes))
 	for index, class := range classes {
-		result[index] = responses.ClassMajor{
-			Class: class,
-			Major: majorMap[class.ID],
+		result[index] = responses.ClassroomMajor{
+			Classroom: class,
+			Major:     majorMap[class.ID],
 		}
 	}
 
-	return &responses.GetAllClassMajors{
+	return &responses.GetAllClassroomMajors{
 		Data: result,
 	}, nil
 }

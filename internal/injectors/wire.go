@@ -41,20 +41,20 @@ func InitBatchHandler() *handlers.Batch {
 	return nil
 }
 
-func InitClassHandler() *handlers.Class {
+func InitClassroomHandler() *handlers.Classroom {
 	wire.Build(
-		handlers.NewClass,
-		services.NewClass,
+		handlers.NewClassroom,
+		services.NewClassroom,
 		database.New,
 	)
 	return nil
 }
 
-func InitClassMajorHandler() *handlers.ClassMajor {
+func InitClassroomMajorHandler() *handlers.ClassMajor {
 	wire.Build(
 		handlers.NewClassMajor,
 		services.NewClassMajor,
-		repository.NewClass,
+		repository.NewClassroom,
 		repository.NewMajor,
 		database.New,
 	)

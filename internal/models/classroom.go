@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type Class struct {
+type Classroom struct {
 	gorm.Model
 
 	Name    string `gorm:"not null"`

@@ -17,7 +17,7 @@ const (
 type Attendance struct {
 	gorm.Model
 
-	ClassID uint `json:"class_id"`
-	Class   Class
-	Date    time.Time `json:"date"`
+	ClassroomID uint `json:"classroom_id"`
+	Classroom   Classroom
+	Date        time.Time `json:"date"`
 }

@@ -26,10 +26,10 @@ func (r *Student) GetAllByClassId(classId uint) ([]dto.Student, error) {
 	mappedStudents := make([]dto.Student, len(students))
 	for index, student := range students {
 		mappedStudents[index] = dto.Student{
-			ID:      student.ID,
-			NIS:     student.NIS,
-			Name:    student.Name,
-			ClassID: student.ClassID,
+			ID:          student.ID,
+			NIS:         student.NIS,
+			Name:        student.Name,
+			ClassroomID: student.ClassroomID,
 		}
 	}
 

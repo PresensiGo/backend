@@ -7,26 +7,26 @@ import (
 	"strconv"
 )
 
-type Class struct {
-	service *services.Class
+type Classroom struct {
+	service *services.Classroom
 }
 
-func NewClass(service *services.Class) *Class {
-	return &Class{service}
+func NewClassroom(service *services.Classroom) *Classroom {
+	return &Classroom{service}
 }
 
-// @ID			getAllClasses
+// @ID			getAllClassrooms
 // @Tags		class
-// @Success	200	{object}	responses.GetAllClasses
+// @Success	200	{object}	responses.GetAllClassrooms
 // @Router		/api/v1/class [get]
-func (h *Class) GetAll(c *gin.Context) {
+func (h *Classroom) GetAll(c *gin.Context) {
 	majorId, err := strconv.ParseUint(c.Param("major_id"), 10, 64)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	response, err := h.service.GetAllClasses(majorId)
+	response, err := h.service.GetAllClassrooms(majorId)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

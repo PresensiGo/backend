@@ -5,7 +5,7 @@ import (
 )
 
 type Attendance struct {
-	ID      uint      `json:"id" validate:"required"`
-	ClassID uint      `json:"class_id" validate:"required"`
-	Date    time.Time `json:"date" validate:"required"`
+	ID          uint      `json:"id" validate:"required"`
+	ClassroomID uint      `json:"classroom_id" validate:"required"`
+	Date        time.Time `json:"date" validate:"required"`
 }

@@ -38,7 +38,7 @@ func New() *gorm.DB {
 		&models.UserToken{},
 		&models.Batch{},
 		&models.Major{},
-		&models.Class{},
+		&models.Classroom{},
 		&models.Student{},
 		&models.Attendance{},
 		&models.AttendanceStudent{},

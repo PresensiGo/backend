@@ -39,7 +39,7 @@ func (h *Attendance) Create(c *gin.Context) {
 
 // @ID 			getAllAttendances
 // @Tags 		attendance
-// @Param 		class_id path int true "Class ID"
+// @Param 		class_id path int true "Classroom ID"
 // @Success 	200 {object} responses.GetAllAttendances
 // @Router		/api/v1/attendances/class/{class_id} [get]
 func (h *Attendance) GetAll(c *gin.Context) {

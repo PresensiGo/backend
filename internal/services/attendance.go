@@ -25,8 +25,8 @@ func NewAttendance(
 func (s *Attendance) Create(req requests.CreateAttendance) error {
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
 		attendance := dto.Attendance{
-			ClassID: req.ClassID,
-			Date:    req.Date,
+			ClassroomID: req.ClassID,
+			Date:        req.Date,
 		}
 		if err := s.attendance.Create(tx, &attendance); err != nil {
 			return err

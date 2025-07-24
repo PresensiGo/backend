@@ -6,16 +6,16 @@ import (
 	"gorm.io/gorm"
 )
 
-type Class struct {
+type Classroom struct {
 	db *gorm.DB
 }
 
-func NewClass(db *gorm.DB) *Class {
-	return &Class{db}
+func NewClassroom(db *gorm.DB) *Classroom {
+	return &Classroom{db}
 }
 
-func (r *Class) GetManyByMajorId(majorIds []uint) ([]dto.Class, error) {
-	var classes []models.Class
+func (r *Classroom) GetManyByMajorId(majorIds []uint) ([]dto.Classroom, error) {
+	var classes []models.Classroom
 	if err := r.db.Where("major_id in ?", majorIds).
 		Order("name asc").
 		Find(&classes).
@@ -23,9 +23,9 @@ func (r *Class) GetManyByMajorId(majorIds []uint) ([]dto.Class, error) {
 		return nil, err
 	}
 
-	var mappedClasses []dto.Class
+	var mappedClasses []dto.Classroom
 	for _, class := range classes {
-		mappedClasses = append(mappedClasses, dto.Class{
+		mappedClasses = append(mappedClasses, dto.Classroom{
 			ID:      class.ID,
 			Name:    class.Name,
 			MajorID: class.MajorId,

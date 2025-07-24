@@ -39,18 +39,18 @@ func InitBatchHandler() *handlers.Batch {
 	return handlersBatch
 }
 
-func InitClassHandler() *handlers.Class {
+func InitClassroomHandler() *handlers.Classroom {
 	db := database.New()
-	class := services.NewClass(db)
-	handlersClass := handlers.NewClass(class)
-	return handlersClass
+	classroom := services.NewClassroom(db)
+	handlersClassroom := handlers.NewClassroom(classroom)
+	return handlersClassroom
 }
 
-func InitClassMajorHandler() *handlers.ClassMajor {
+func InitClassroomMajorHandler() *handlers.ClassMajor {
 	db := database.New()
-	class := repository.NewClass(db)
+	classroom := repository.NewClassroom(db)
 	major := repository.NewMajor(db)
-	classMajor := services.NewClassMajor(class, major)
+	classMajor := services.NewClassMajor(classroom, major)
 	handlersClassMajor := handlers.NewClassMajor(classMajor)
 	return handlersClassMajor
 }

@@ -17,6 +17,7 @@ func NewStudent(service *services.Student) *Student {
 
 // @ID			getAllStudents
 // @Tags		student
+// @Param		class_id path int true "Classroom ID"
 // @Success		200	{object}	responses.GetAllStudents
 // @Router		/api/v1/students/class/{class_id} [get]
 func (h *Student) GetAll(c *gin.Context) {
