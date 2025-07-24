@@ -157,12 +157,21 @@
                 }
             }
         },
-        "/api/v1/major": {
+        "/api/v1/majors/batch/{batch_id}": {
             "get": {
                 "tags": [
                     "major"
                 ],
                 "operationId": "getAllMajors",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Batch ID",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -193,6 +202,10 @@
     "definitions": {
         "dto.Batch": {
             "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -204,6 +217,10 @@
         },
         "dto.Class": {
             "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -215,6 +232,10 @@
         },
         "dto.Major": {
             "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -226,6 +247,11 @@
         },
         "dto.Student": {
             "type": "object",
+            "required": [
+                "id",
+                "name",
+                "nis"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -291,6 +317,9 @@
         },
         "responses.GetAllClasses": {
             "type": "object",
+            "required": [
+                "classes"
+            ],
             "properties": {
                 "classes": {
                     "type": "array",
@@ -302,6 +331,9 @@
         },
         "responses.GetAllMajors": {
             "type": "object",
+            "required": [
+                "majors"
+            ],
             "properties": {
                 "majors": {
                     "type": "array",
@@ -313,6 +345,9 @@
         },
         "responses.GetAllStudents": {
             "type": "object",
+            "required": [
+                "students"
+            ],
             "properties": {
                 "students": {
                     "type": "array",

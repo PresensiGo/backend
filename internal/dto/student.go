@@ -1,7 +1,7 @@
 package dto
 
 type Student struct {
-	Id   uint   `json:"id"`
-	NIS  string `json:"nis"`
-	Name string `json:"name"`
+	Id   uint   `json:"id" validate:"required"`
+	NIS  string `json:"nis" validate:"required"`
+	Name string `json:"name" validate:"required"`
 }

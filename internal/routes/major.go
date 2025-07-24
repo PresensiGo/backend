@@ -6,7 +6,7 @@ import (
 )
 
 func RegisterMajor(g *gin.RouterGroup) {
-	group := g.Group("/major")
+	group := g.Group("/majors")
 	handler := injectors.InitMajorHandler()
 
 	group.GET("/batch/:batch_id", handler.GetAll)

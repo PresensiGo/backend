@@ -166,12 +166,21 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/major": {
+        "/api/v1/majors/batch/{batch_id}": {
             "get": {
                 "tags": [
                     "major"
                 ],
                 "operationId": "getAllMajors",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Batch ID",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -202,6 +211,10 @@ const docTemplate = `{
     "definitions": {
         "dto.Batch": {
             "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -213,6 +226,10 @@ const docTemplate = `{
         },
         "dto.Class": {
             "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -224,6 +241,10 @@ const docTemplate = `{
         },
         "dto.Major": {
             "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -235,6 +256,11 @@ const docTemplate = `{
         },
         "dto.Student": {
             "type": "object",
+            "required": [
+                "id",
+                "name",
+                "nis"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -300,6 +326,9 @@ const docTemplate = `{
         },
         "responses.GetAllClasses": {
             "type": "object",
+            "required": [
+                "classes"
+            ],
             "properties": {
                 "classes": {
                     "type": "array",
@@ -311,6 +340,9 @@ const docTemplate = `{
         },
         "responses.GetAllMajors": {
             "type": "object",
+            "required": [
+                "majors"
+            ],
             "properties": {
                 "majors": {
                     "type": "array",
@@ -322,6 +354,9 @@ const docTemplate = `{
         },
         "responses.GetAllStudents": {
             "type": "object",
+            "required": [
+                "students"
+            ],
             "properties": {
                 "students": {
                     "type": "array",

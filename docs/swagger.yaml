@@ -5,6 +5,9 @@ definitions:
         type: integer
       name:
         type: string
+    required:
+    - id
+    - name
     type: object
   dto.Class:
     properties:
@@ -12,6 +15,9 @@ definitions:
         type: integer
       name:
         type: string
+    required:
+    - id
+    - name
     type: object
   dto.Major:
     properties:
@@ -19,6 +25,9 @@ definitions:
         type: integer
       name:
         type: string
+    required:
+    - id
+    - name
     type: object
   dto.Student:
     properties:
@@ -28,6 +37,10 @@ definitions:
         type: string
       nis:
         type: string
+    required:
+    - id
+    - name
+    - nis
     type: object
   requests.Login:
     properties:
@@ -69,6 +82,8 @@ definitions:
         items:
           $ref: '#/definitions/dto.Class'
         type: array
+    required:
+    - classes
     type: object
   responses.GetAllMajors:
     properties:
@@ -76,6 +91,8 @@ definitions:
         items:
           $ref: '#/definitions/dto.Major'
         type: array
+    required:
+    - majors
     type: object
   responses.GetAllStudents:
     properties:
@@ -83,6 +100,8 @@ definitions:
         items:
           $ref: '#/definitions/dto.Student'
         type: array
+    required:
+    - students
     type: object
   responses.Login:
     properties:
@@ -216,9 +235,15 @@ paths:
             type: string
       tags:
       - excel
-  /api/v1/major:
+  /api/v1/majors/batch/{batch_id}:
     get:
       operationId: getAllMajors
+      parameters:
+      - description: Batch ID
+        in: path
+        name: batch_id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK
