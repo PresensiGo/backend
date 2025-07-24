@@ -1,15 +1,14 @@
-package utils
+package authentication
 
 import (
-	"api/pkg/authentication"
 	"context"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(id uint64, name string, email string) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, authentication.JWTClaim{
+func GenerateJWT(id uint, name string, email string) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, JWTClaim{
 		ID:    id,
 		Name:  name,
 		Email: email,
@@ -28,10 +27,10 @@ func GenerateJWT(id uint64, name string, email string) (string, error) {
 	return tokenString, nil
 }
 
-func VerifyJWT(token string) (*authentication.JWTClaim, error) {
+func VerifyJWT(token string) (*JWTClaim, error) {
 	accessToken, err := jwt.ParseWithClaims(
 		token,
-		&authentication.JWTClaim{},
+		&JWTClaim{},
 		func(t *jwt.Token) (any, error) {
 			return []byte("password-sementara"), nil
 		},
@@ -41,7 +40,7 @@ func VerifyJWT(token string) (*authentication.JWTClaim, error) {
 		return nil, err
 	}
 
-	claims, ok := accessToken.Claims.(*authentication.JWTClaim)
+	claims, ok := accessToken.Claims.(*JWTClaim)
 	if !ok {
 		return nil, jwt.ErrTokenMalformed
 	}
@@ -49,11 +48,11 @@ func VerifyJWT(token string) (*authentication.JWTClaim, error) {
 	return claims, nil
 }
 
-func GetAuthenticatedUser(ctx context.Context) authentication.AuthenticatedUser {
-	authenticatedUser, exists := ctx.Value("token").(authentication.AuthenticatedUser)
+func GetAuthenticatedUser(ctx context.Context) AuthenticatedUser {
+	authenticatedUser, exists := ctx.Value("token").(AuthenticatedUser)
 	if exists {
 		return authenticatedUser
 	}
 
-	return authentication.AuthenticatedUser{}
+	return AuthenticatedUser{}
 }

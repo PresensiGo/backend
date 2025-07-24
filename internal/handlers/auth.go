@@ -3,7 +3,7 @@ package handlers
 import (
 	"api/internal/dto/requests"
 	"api/internal/services"
-	"api/utils"
+	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -74,7 +74,7 @@ func (h *Auth) Register(c *gin.Context) {
 // @Success	200	{object}	responses.Logout
 // @Router		/api/v1/auth/logout [get]
 func (h *Auth) Logout(c *gin.Context) {
-	authUser := utils.GetAuthenticatedUser(c)
+	authUser := authentication.GetAuthenticatedUser(c)
 
 	response, err := h.service.Logout(authUser.ID)
 	if err != nil {
@@ -88,7 +88,7 @@ func (h *Auth) Logout(c *gin.Context) {
 // @ID			refreshToken
 // @Tags		auth
 // @Param		body	body		requests.RefreshToken	true	"Refresh token req"
-// @Success	200		{object}	responses.RefreshToken
+// @Success		200		{object}	responses.RefreshToken
 // @Router		/api/v1/auth/refresh-token [post]
 func (h *Auth) RefreshToken(c *gin.Context) {
 	var request requests.RefreshToken

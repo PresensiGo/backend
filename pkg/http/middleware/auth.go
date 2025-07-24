@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"api/pkg/authentication"
-	"api/utils"
 	"fmt"
 	"net/http"
 
@@ -22,7 +21,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		token := authHeader[7:]
-		claims, err := utils.VerifyJWT(token)
+		claims, err := authentication.VerifyJWT(token)
 		if err != nil {
 			fmt.Println(err)
 			ctx.AbortWithStatusJSON(

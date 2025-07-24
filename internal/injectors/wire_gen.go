@@ -17,8 +17,9 @@ import (
 
 func InitAuthHandler() *handlers.Auth {
 	db := database.New()
-	auth := services.NewAuth(db)
-	handlersAuth := handlers.NewAuth(auth)
+	auth := repository.NewAuth(db)
+	servicesAuth := services.NewAuth(auth)
+	handlersAuth := handlers.NewAuth(servicesAuth)
 	return handlersAuth
 }
 

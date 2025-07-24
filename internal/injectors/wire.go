@@ -15,6 +15,7 @@ func InitAuthHandler() *handlers.Auth {
 	wire.Build(
 		handlers.NewAuth,
 		services.NewAuth,
+		repository.NewAuth,
 		database.New,
 	)
 	return nil
