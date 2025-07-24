@@ -46,7 +46,7 @@ func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWit
 	for index, class := range classes {
 		result[index] = responses.ClassroomMajor{
 			Classroom: class,
-			Major:     majorMap[class.ID],
+			Major:     majorMap[class.MajorID],
 		}
 	}
 
