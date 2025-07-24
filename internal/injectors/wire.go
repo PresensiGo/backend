@@ -45,15 +45,6 @@ func InitClassroomHandler() *handlers.Classroom {
 	wire.Build(
 		handlers.NewClassroom,
 		services.NewClassroom,
-		database.New,
-	)
-	return nil
-}
-
-func InitClassroomMajorHandler() *handlers.ClassMajor {
-	wire.Build(
-		handlers.NewClassMajor,
-		services.NewClassMajor,
 		repository.NewClassroom,
 		repository.NewMajor,
 		database.New,

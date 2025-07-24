@@ -2,6 +2,11 @@ package responses
 
 import "api/internal/dto"
 
-type GetAllClassrooms struct {
-	Classrooms []dto.Classroom `json:"classrooms" validate:"required"`
+type ClassroomMajor struct {
+	Classroom dto.Classroom `json:"classroom" validate:"required"`
+	Major     dto.Major     `json:"major" validate:"required"`
+}
+
+type GetAllClassroomWithMajors struct {
+	Data []ClassroomMajor `json:"data" validate:"required"`
 }

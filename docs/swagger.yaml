@@ -152,7 +152,7 @@ definitions:
     required:
     - batches
     type: object
-  responses.GetAllClassroomMajors:
+  responses.GetAllClassroomWithMajors:
     properties:
       data:
         items:
@@ -160,15 +160,6 @@ definitions:
         type: array
     required:
     - data
-    type: object
-  responses.GetAllClassrooms:
-    properties:
-      classrooms:
-        items:
-          $ref: '#/definitions/dto.Classroom'
-        type: array
-    required:
-    - classrooms
     type: object
   responses.GetAllMajors:
     properties:
@@ -324,19 +315,9 @@ paths:
             $ref: '#/definitions/responses.GetAllBatches'
       tags:
       - batch
-  /api/v1/class:
+  /api/v1/classrooms/batches/{batch_id}:
     get:
-      operationId: getAllClassrooms
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.GetAllClassrooms'
-      tags:
-      - class
-  /api/v1/class_majors/batch/{batch_id}:
-    get:
-      operationId: getAllClassroomMajors
+      operationId: getAllClassroomWithMajors
       parameters:
       - description: Batch ID
         in: path
@@ -347,9 +328,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllClassroomMajors'
+            $ref: '#/definitions/responses.GetAllClassroomWithMajors'
       tags:
-      - classMajor
+      - classroom
   /api/v1/excel/import:
     post:
       operationId: importData

@@ -6,8 +6,8 @@ import (
 )
 
 func RegisterClassroom(g *gin.RouterGroup) {
-	group := g.Group("/class")
-	handler := injectors.InitClassHandler()
+	group := g.Group("/classrooms")
+	handler := injectors.InitClassroomHandler()
 
-	group.GET("/major/:major_id", handler.GetAll)
+	group.GET("/batches/:batch_id", handler.GetAllWithMajors)
 }

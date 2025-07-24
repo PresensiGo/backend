@@ -3,37 +3,54 @@ package services
 import (
 	"api/internal/dto"
 	"api/internal/dto/responses"
-	"api/internal/models"
-	"gorm.io/gorm"
+	"api/internal/repository"
 )
 
 type Classroom struct {
-	db *gorm.DB
+	classroomRepo *repository.Classroom
+	majorRepo     *repository.Major
 }
 
-func NewClassroom(db *gorm.DB) *Classroom {
-	return &Classroom{db}
+func NewClassroom(
+	classroomRepo *repository.Classroom,
+	majorRepo *repository.Major,
+) *Classroom {
+	return &Classroom{
+		classroomRepo,
+		majorRepo,
+	}
 }
 
-func (s *Classroom) GetAllClassrooms(majorId uint64) (*responses.GetAllClassrooms, error) {
-	var classes []models.Classroom
-	if err := s.db.Where("major_id = ?", majorId).
-		Find(&classes).Error; err != nil {
+func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWithMajors, error) {
+	majors, err := s.majorRepo.GetAllByBatchId(batchId)
+	if err != nil {
 		return nil, err
 	}
 
-	var mappedClasses []dto.Classroom
-	for _, class := range classes {
-		mappedClasses = append(
-			mappedClasses,
-			dto.Classroom{
-				ID:   class.ID,
-				Name: class.Name,
-			},
-		)
+	majorMap := make(map[uint]dto.Major)
+	for _, major := range majors {
+		majorMap[major.ID] = major
 	}
 
-	return &responses.GetAllClassrooms{
-		Classrooms: mappedClasses,
+	var majorIds []uint
+	for _, major := range majors {
+		majorIds = append(majorIds, major.ID)
+	}
+
+	classes, err := s.classroomRepo.GetManyByMajorId(majorIds)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]responses.ClassroomMajor, len(classes))
+	for index, class := range classes {
+		result[index] = responses.ClassroomMajor{
+			Classroom: class,
+			Major:     majorMap[class.ID],
+		}
+	}
+
+	return &responses.GetAllClassroomWithMajors{
+		Data: result,
 	}, nil
 }

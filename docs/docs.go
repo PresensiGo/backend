@@ -186,28 +186,12 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/class": {
+        "/api/v1/classrooms/batches/{batch_id}": {
             "get": {
                 "tags": [
-                    "class"
+                    "classroom"
                 ],
-                "operationId": "getAllClassrooms",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.GetAllClassrooms"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/class_majors/batch/{batch_id}": {
-            "get": {
-                "tags": [
-                    "classMajor"
-                ],
-                "operationId": "getAllClassroomMajors",
+                "operationId": "getAllClassroomWithMajors",
                 "parameters": [
                     {
                         "type": "integer",
@@ -221,7 +205,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllClassroomMajors"
+                            "$ref": "#/definitions/responses.GetAllClassroomWithMajors"
                         }
                     }
                 }
@@ -521,7 +505,7 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.GetAllClassroomMajors": {
+        "responses.GetAllClassroomWithMajors": {
             "type": "object",
             "required": [
                 "data"
@@ -531,20 +515,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/responses.ClassroomMajor"
-                    }
-                }
-            }
-        },
-        "responses.GetAllClassrooms": {
-            "type": "object",
-            "required": [
-                "classrooms"
-            ],
-            "properties": {
-                "classrooms": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.Classroom"
                     }
                 }
             }
