@@ -27,7 +27,7 @@ func (s *ClassMajor) GetAll(batchId uint) (*responses.GetAllClassMajors, error) 
 		return nil, err
 	}
 
-	var majorMap map[uint]dto.Major
+	majorMap := make(map[uint]dto.Major)
 	for _, major := range majors {
 		majorMap[major.ID] = major
 	}
