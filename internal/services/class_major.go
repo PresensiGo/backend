@@ -27,6 +27,11 @@ func (s *ClassMajor) GetAll(batchId uint) (*responses.GetAllClassMajors, error) 
 		return nil, err
 	}
 
+	var majorMap map[uint]dto.Major
+	for _, major := range majors {
+		majorMap[major.ID] = major
+	}
+
 	var majorIds []uint
 	for _, major := range majors {
 		majorIds = append(majorIds, major.ID)
@@ -39,17 +44,9 @@ func (s *ClassMajor) GetAll(batchId uint) (*responses.GetAllClassMajors, error) 
 
 	var result []responses.ClassMajor
 	for _, class := range classes {
-		var major dto.Major
-		for _, _major := range majors {
-			if _major.ID == class.MajorID {
-				major = _major
-				break
-			}
-		}
-
 		result = append(result, responses.ClassMajor{
 			Class: class,
-			Major: major,
+			Major: majorMap[class.ID],
 		})
 	}
 
