@@ -1,4 +1,17 @@
 definitions:
+  dto.Attendance:
+    properties:
+      class_id:
+        type: integer
+      date:
+        type: string
+      id:
+        type: integer
+    required:
+    - class_id
+    - date
+    - id
+    type: object
   dto.Batch:
     properties:
       id:
@@ -13,13 +26,13 @@ definitions:
     properties:
       id:
         type: integer
-      major:
-        $ref: '#/definitions/dto.Major'
+      major_id:
+        type: integer
       name:
         type: string
     required:
     - id
-    - major
+    - major_id
     - name
     type: object
   dto.Major:
@@ -34,6 +47,8 @@ definitions:
     type: object
   dto.Student:
     properties:
+      class_id:
+        type: integer
       id:
         type: integer
       name:
@@ -41,9 +56,50 @@ definitions:
       nis:
         type: string
     required:
+    - class_id
     - id
     - name
     - nis
+    type: object
+  dto.Token:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
+  models.AttendanceStatus:
+    enum:
+    - hadir
+    - izin
+    - sakit
+    - alpha
+    type: string
+    x-enum-varnames:
+    - AttendancePresent
+    - AttendancePermission
+    - AttendanceSick
+    - AttendanceAlpha
+  requests.CreateAttendance:
+    properties:
+      attendance_students:
+        items:
+          properties:
+            note:
+              type: string
+            status:
+              $ref: '#/definitions/models.AttendanceStatus'
+            student_id:
+              type: integer
+          type: object
+        type: array
+      class_id:
+        type: integer
+      date:
+        type: string
     type: object
   requests.Login:
     properties:
@@ -70,6 +126,23 @@ definitions:
         default: password
         type: string
     type: object
+  responses.ClassMajor:
+    properties:
+      class:
+        $ref: '#/definitions/dto.Class'
+      major:
+        $ref: '#/definitions/dto.Major'
+    required:
+    - class
+    - major
+    type: object
+  responses.GetAllAttendances:
+    properties:
+      attendances:
+        items:
+          $ref: '#/definitions/dto.Attendance'
+        type: array
+    type: object
   responses.GetAllBatches:
     properties:
       batches:
@@ -81,12 +154,12 @@ definitions:
     type: object
   responses.GetAllClassMajors:
     properties:
-      classes:
+      data:
         items:
-          $ref: '#/definitions/dto.Class'
+          $ref: '#/definitions/responses.ClassMajor'
         type: array
     required:
-    - classes
+    - data
     type: object
   responses.GetAllClasses:
     properties:
@@ -117,41 +190,65 @@ definitions:
     type: object
   responses.Login:
     properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
+      token:
+        $ref: '#/definitions/dto.Token'
     required:
-    - access_token
-    - refresh_token
+    - token
     type: object
   responses.Logout:
     type: object
   responses.RefreshToken:
     properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
+      token:
+        $ref: '#/definitions/dto.Token'
     required:
-    - access_token
-    - refresh_token
+    - token
     type: object
   responses.Register:
     properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
+      token:
+        $ref: '#/definitions/dto.Token'
     required:
-    - access_token
-    - refresh_token
+    - token
     type: object
 info:
   contact: {}
   title: PresensiGo API
   version: "1.0"
 paths:
+  /api/v1/attendances:
+    post:
+      operationId: createAttendance
+      parameters:
+      - description: Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateAttendance'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - attendance
+  /api/v1/attendances/class/{class_id}:
+    get:
+      operationId: getAllAttendances
+      parameters:
+      - description: Class ID
+        in: path
+        name: class_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllAttendances'
+      tags:
+      - attendance
   /api/v1/auth/login:
     post:
       consumes:
@@ -279,7 +376,7 @@ paths:
             $ref: '#/definitions/responses.GetAllMajors'
       tags:
       - major
-  /api/v1/student:
+  /api/v1/students/class/{class_id}:
     get:
       operationId: getAllStudents
       responses:

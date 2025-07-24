@@ -15,6 +15,58 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/attendances": {
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "createAttendance",
+                "parameters": [
+                    {
+                        "description": "Body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateAttendance"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/attendances/class/{class_id}": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "getAllAttendances",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Class ID",
+                        "name": "class_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllAttendances"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/auth/login": {
             "post": {
                 "consumes": [
@@ -216,7 +268,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/student": {
+        "/api/v1/students/class/{class_id}": {
             "get": {
                 "tags": [
                     "student"
@@ -234,6 +286,25 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.Attendance": {
+            "type": "object",
+            "required": [
+                "class_id",
+                "date",
+                "id"
+            ],
+            "properties": {
+                "class_id": {
+                    "type": "integer"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.Batch": {
             "type": "object",
             "required": [
@@ -253,15 +324,15 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "id",
-                "major",
+                "major_id",
                 "name"
             ],
             "properties": {
                 "id": {
                     "type": "integer"
                 },
-                "major": {
-                    "$ref": "#/definitions/dto.Major"
+                "major_id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -286,11 +357,15 @@ const docTemplate = `{
         "dto.Student": {
             "type": "object",
             "required": [
+                "class_id",
                 "id",
                 "name",
                 "nis"
             ],
             "properties": {
+                "class_id": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -298,6 +373,64 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "nis": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.Token": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AttendanceStatus": {
+            "type": "string",
+            "enum": [
+                "hadir",
+                "izin",
+                "sakit",
+                "alpha"
+            ],
+            "x-enum-varnames": [
+                "AttendancePresent",
+                "AttendancePermission",
+                "AttendanceSick",
+                "AttendanceAlpha"
+            ]
+        },
+        "requests.CreateAttendance": {
+            "type": "object",
+            "properties": {
+                "attendance_students": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "note": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "$ref": "#/definitions/models.AttendanceStatus"
+                            },
+                            "student_id": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                },
+                "class_id": {
+                    "type": "integer"
+                },
+                "date": {
                     "type": "string"
                 }
             }
@@ -339,6 +472,32 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.ClassMajor": {
+            "type": "object",
+            "required": [
+                "class",
+                "major"
+            ],
+            "properties": {
+                "class": {
+                    "$ref": "#/definitions/dto.Class"
+                },
+                "major": {
+                    "$ref": "#/definitions/dto.Major"
+                }
+            }
+        },
+        "responses.GetAllAttendances": {
+            "type": "object",
+            "properties": {
+                "attendances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Attendance"
+                    }
+                }
+            }
+        },
         "responses.GetAllBatches": {
             "type": "object",
             "required": [
@@ -356,13 +515,13 @@ const docTemplate = `{
         "responses.GetAllClassMajors": {
             "type": "object",
             "required": [
-                "classes"
+                "data"
             ],
             "properties": {
-                "classes": {
+                "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.Class"
+                        "$ref": "#/definitions/responses.ClassMajor"
                     }
                 }
             }
@@ -412,15 +571,11 @@ const docTemplate = `{
         "responses.Login": {
             "type": "object",
             "required": [
-                "access_token",
-                "refresh_token"
+                "token"
             ],
             "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
+                "token": {
+                    "$ref": "#/definitions/dto.Token"
                 }
             }
         },
@@ -430,30 +585,22 @@ const docTemplate = `{
         "responses.RefreshToken": {
             "type": "object",
             "required": [
-                "access_token",
-                "refresh_token"
+                "token"
             ],
             "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
+                "token": {
+                    "$ref": "#/definitions/dto.Token"
                 }
             }
         },
         "responses.Register": {
             "type": "object",
             "required": [
-                "access_token",
-                "refresh_token"
+                "token"
             ],
             "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
+                "token": {
+                    "$ref": "#/definitions/dto.Token"
                 }
             }
         }

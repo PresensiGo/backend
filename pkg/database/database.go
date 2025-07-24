@@ -41,6 +41,7 @@ func New() *gorm.DB {
 		&models.Class{},
 		&models.Student{},
 		&models.Attendance{},
+		&models.AttendanceStudent{},
 	)
 
 	return db

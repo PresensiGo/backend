@@ -2,6 +2,7 @@ package repository
 
 import (
 	"api/internal/dto"
+	"api/internal/models"
 	"gorm.io/gorm"
 )
 
@@ -18,4 +19,25 @@ func (r *Attendance) Create(
 	attendance *dto.Attendance,
 ) error {
 	return tx.Create(&attendance).Error
+}
+
+func (r *Attendance) GetAll(classId uint) (*[]dto.Attendance, error) {
+	var attendances []models.Attendance
+	if err := r.db.
+		Where("class_id = ?", classId).
+		Order("date asc").
+		Find(&attendances).Error; err != nil {
+		return nil, err
+	}
+
+	mappedAttendances := make([]dto.Attendance, len(attendances))
+	for i, attendance := range attendances {
+		mappedAttendances[i] = dto.Attendance{
+			ID:      attendance.ID,
+			ClassID: attendance.ClassID,
+			Date:    attendance.Date,
+		}
+	}
+
+	return &mappedAttendances, nil
 }

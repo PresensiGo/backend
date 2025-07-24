@@ -46,8 +46,8 @@ func (h *Auth) Login(c *gin.Context) {
 
 // @ID			register
 // @Tags		auth
-// @Param		body	body		requests.Register	true	"Login request"
-// @Success	200		{object}	responses.Register
+// @Param		body body		requests.Register	true	"Login request"
+// @Success		200	{object}	responses.Register
 // @Router		/api/v1/auth/register [post]
 func (h *Auth) Register(c *gin.Context) {
 	var request requests.Register

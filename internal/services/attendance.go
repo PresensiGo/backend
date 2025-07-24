@@ -3,6 +3,7 @@ package services
 import (
 	"api/internal/dto"
 	"api/internal/dto/requests"
+	"api/internal/dto/responses"
 	"api/internal/repository"
 	"gorm.io/gorm"
 )
@@ -50,4 +51,15 @@ func (s *Attendance) Create(req requests.CreateAttendance) error {
 	}
 
 	return nil
+}
+
+func (s *Attendance) GetAll(classId uint) (*responses.GetAllAttendances, error) {
+	attendances, err := s.attendance.GetAll(classId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.GetAllAttendances{
+		Attendances: *attendances,
+	}, nil
 }
