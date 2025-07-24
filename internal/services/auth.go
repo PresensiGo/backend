@@ -122,23 +122,23 @@ func (s *Auth) Logout(userId uint64) (*responses.Logout, error) {
 	return &responses.Logout{}, nil
 }
 
-func (s *Auth) RefreshToken(accessToken string) (*responses.RefreshToken, error) {
+func (s *Auth) RefreshToken(refreshToken string) (*responses.RefreshToken, error) {
 	var userToken models.UserToken
 	if err := s.db.Preload("User").
-		Where("access_token = ?", accessToken).
+		Where("refresh_token = ?", refreshToken).
 		First(&userToken).
 		Error; err != nil {
 		return nil, err
 	}
 
-	// generate new accessToken
+	// generate new token
 	accessToken, err := utils.GenerateJWT(uint64(userToken.User.ID), userToken.User.Name, userToken.User.Email)
 	if err != nil {
 		return nil, err
 	}
 	newRefreshToken := uuid.New().String()
 
-	// update new accessToken into database
+	// update new token into database
 	userToken.RefreshToken = newRefreshToken
 	if err := s.db.Save(&userToken).Error; err != nil {
 		return nil, err
