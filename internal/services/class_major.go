@@ -42,12 +42,12 @@ func (s *ClassMajor) GetAll(batchId uint) (*responses.GetAllClassMajors, error) 
 		return nil, err
 	}
 
-	var result []responses.ClassMajor
-	for _, class := range classes {
-		result = append(result, responses.ClassMajor{
+	result := make([]responses.ClassMajor, len(classes))
+	for index, class := range classes {
+		result[index] = responses.ClassMajor{
 			Class: class,
 			Major: majorMap[class.ID],
-		})
+		}
 	}
 
 	return &responses.GetAllClassMajors{

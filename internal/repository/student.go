@@ -23,14 +23,14 @@ func (r *Student) GetAllByClassId(classId uint) ([]dto.Student, error) {
 		return nil, err
 	}
 
-	var mappedStudents []dto.Student
-	for _, student := range students {
-		mappedStudents = append(mappedStudents, dto.Student{
+	mappedStudents := make([]dto.Student, len(students))
+	for index, student := range students {
+		mappedStudents[index] = dto.Student{
 			ID:      student.ID,
 			NIS:     student.NIS,
 			Name:    student.Name,
 			ClassID: student.ClassID,
-		})
+		}
 	}
 
 	return mappedStudents, nil
