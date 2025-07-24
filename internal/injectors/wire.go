@@ -79,6 +79,7 @@ func InitStudentHandler() *handlers.Student {
 	wire.Build(
 		handlers.NewStudent,
 		services.NewStudent,
+		repository.NewStudent,
 		database.New,
 	)
 	return nil

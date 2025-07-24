@@ -1,40 +1,25 @@
 package services
 
 import (
-	"api/internal/dto"
 	"api/internal/dto/responses"
-	"api/internal/models"
-	"gorm.io/gorm"
+	"api/internal/repository"
 )
 
 type Student struct {
-	db *gorm.DB
+	student *repository.Student
 }
 
-func NewStudent(db *gorm.DB) *Student {
-	return &Student{db}
+func NewStudent(student *repository.Student) *Student {
+	return &Student{student}
 }
 
-func (s *Student) GetAllStudents(classId uint64) (*responses.GetAllStudents, error) {
-	var students []models.Student
-	if err := s.db.Where("class_id = ?", classId).
-		Find(&students).
-		Error; err != nil {
+func (s *Student) GetAllStudents(classId uint) (*responses.GetAllStudents, error) {
+	students, err := s.student.GetAllByClassId(classId)
+	if err != nil {
 		return nil, err
 	}
 
-	var mappedStudents []dto.Student
-	for _, student := range students {
-		mappedStudents = append(
-			mappedStudents,
-			dto.Student{
-				Id:   student.ID,
-				Name: student.Name,
-			},
-		)
-	}
-
 	return &responses.GetAllStudents{
-		Students: mappedStudents,
+		Students: students,
 	}, nil
 }

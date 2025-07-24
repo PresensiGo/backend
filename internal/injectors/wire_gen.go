@@ -13,7 +13,7 @@ import (
 	"api/pkg/database"
 )
 
-// Injectors from handlers.go:
+// Injectors from wire.go:
 
 func InitAuthHandler() *handlers.Auth {
 	db := database.New()
@@ -67,7 +67,8 @@ func InitResetService() *services.Reset {
 
 func InitStudentHandler() *handlers.Student {
 	db := database.New()
-	student := services.NewStudent(db)
-	handlersStudent := handlers.NewStudent(student)
+	student := repository.NewStudent(db)
+	servicesStudent := services.NewStudent(student)
+	handlersStudent := handlers.NewStudent(servicesStudent)
 	return handlersStudent
 }

@@ -17,16 +17,16 @@ func NewStudent(service *services.Student) *Student {
 
 // @ID			getAllStudents
 // @Tags		student
-// @Success	200	{object}	responses.GetAllStudents
-// @Router		/api/v1/student [get]
+// @Success		200	{object}	responses.GetAllStudents
+// @Router		/api/v1/students/class/{class_id} [get]
 func (h *Student) GetAll(c *gin.Context) {
-	classId, err := strconv.ParseUint(c.Param("class_id"), 10, 8)
+	classId, err := strconv.Atoi(c.Param("class_id"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	response, err := h.service.GetAllStudents(classId)
+	response, err := h.service.GetAllStudents(uint(classId))
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

@@ -7,6 +7,6 @@ type Student struct {
 
 	NIS     string `gorm:"not null"`
 	Name    string `gorm:"not null"`
-	ClassId uint   `gorm:"not null"`
+	ClassID uint   `gorm:"not null"`
 	Class   Class
 }
