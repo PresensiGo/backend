@@ -27,8 +27,6 @@ func New() *gorm.DB {
 		)
 	}
 
-	fmt.Println("dsn", dsn)
-
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {

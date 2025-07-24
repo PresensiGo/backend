@@ -1,8 +1,7 @@
-package services
+package repository
 
 import (
 	"api/internal/dto"
-	"api/internal/dto/responses"
 	"api/internal/models"
 	"gorm.io/gorm"
 )
@@ -15,11 +14,12 @@ func NewMajor(db *gorm.DB) *Major {
 	return &Major{db}
 }
 
-func (s *Major) GetAllMajors(batchId uint64) (*responses.GetAllMajors, error) {
+func (r *Major) GetAllByBatchId(batchId uint) ([]dto.Major, error) {
 	var majors []models.Major
-	if err := s.db.Where("batch_id = ?", batchId).
-		Find(&majors).
-		Error; err != nil {
+	if err := r.db.Model(&models.Major{}).
+		Where("batch_id = ?", batchId).
+		Order("name asc").
+		Find(&majors).Error; err != nil {
 		return nil, err
 	}
 
@@ -31,7 +31,5 @@ func (s *Major) GetAllMajors(batchId uint64) (*responses.GetAllMajors, error) {
 		})
 	}
 
-	return &responses.GetAllMajors{
-		Majors: mappedMajors,
-	}, nil
+	return mappedMajors, nil
 }

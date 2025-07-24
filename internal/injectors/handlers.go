@@ -5,6 +5,7 @@ package injectors
 
 import (
 	"api/internal/handlers"
+	"api/internal/repository"
 	"api/internal/services"
 	"api/pkg/database"
 	"github.com/google/wire"
@@ -32,6 +33,17 @@ func InitClassHandler() *handlers.Class {
 	wire.Build(
 		handlers.NewClass,
 		services.NewClass,
+		database.New,
+	)
+	return nil
+}
+
+func InitClassMajorHandler() *handlers.ClassMajor {
+	wire.Build(
+		handlers.NewClassMajor,
+		services.NewClassMajor,
+		repository.NewClass,
+		repository.NewMajor,
 		database.New,
 	)
 	return nil

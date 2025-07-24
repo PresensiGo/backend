@@ -27,7 +27,7 @@ func (s *Class) GetAllClasses(majorId uint64) (*responses.GetAllClasses, error) 
 		mappedClasses = append(
 			mappedClasses,
 			dto.Class{
-				Id:   class.ID,
+				ID:   class.ID,
 				Name: class.Name,
 			},
 		)

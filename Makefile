@@ -8,7 +8,6 @@ drop:
 
 docs: 
 	swag init
-	swag fmt
 
 di:
 	wire gen api/internal/injectors

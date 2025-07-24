@@ -13,10 +13,13 @@ definitions:
     properties:
       id:
         type: integer
+      major:
+        $ref: '#/definitions/dto.Major'
       name:
         type: string
     required:
     - id
+    - major
     - name
     type: object
   dto.Major:
@@ -75,6 +78,15 @@ definitions:
         type: array
     required:
     - batches
+    type: object
+  responses.GetAllClassMajors:
+    properties:
+      classes:
+        items:
+          $ref: '#/definitions/dto.Class'
+        type: array
+    required:
+    - classes
     type: object
   responses.GetAllClasses:
     properties:
@@ -225,6 +237,22 @@ paths:
             $ref: '#/definitions/responses.GetAllClasses'
       tags:
       - class
+  /api/v1/class_majors/batch/{batch_id}:
+    get:
+      operationId: getAllClassMajors
+      parameters:
+      - description: Batch ID
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllClassMajors'
+      tags:
+      - classMajor
   /api/v1/excel/import:
     post:
       operationId: importData

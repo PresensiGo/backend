@@ -150,6 +150,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/class_majors/batch/{batch_id}": {
+            "get": {
+                "tags": [
+                    "classMajor"
+                ],
+                "operationId": "getAllClassMajors",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Batch ID",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllClassMajors"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/excel/import": {
             "post": {
                 "tags": [
@@ -228,11 +253,15 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "id",
+                "major",
                 "name"
             ],
             "properties": {
                 "id": {
                     "type": "integer"
+                },
+                "major": {
+                    "$ref": "#/definitions/dto.Major"
                 },
                 "name": {
                     "type": "string"
@@ -320,6 +349,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.Batch"
+                    }
+                }
+            }
+        },
+        "responses.GetAllClassMajors": {
+            "type": "object",
+            "required": [
+                "classes"
+            ],
+            "properties": {
+                "classes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Class"
                     }
                 }
             }

@@ -22,6 +22,7 @@ func NewServer() {
 	{
 		routes.RegisterBatch(authorized)
 		routes.RegisterClass(authorized)
+		routes.RegisterClassMajor(authorized)
 		routes.RegisterMajor(authorized)
 		routes.RegisterExcel(authorized)
 		routes.RegisterStudent(authorized)

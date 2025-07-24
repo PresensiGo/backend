@@ -1,6 +1,7 @@
 package dto
 
 type Class struct {
-	Id   uint   `json:"id" validate:"required"`
-	Name string `json:"name" validate:"required"`
+	ID      uint   `json:"id" validate:"required"`
+	Name    string `json:"name" validate:"required"`
+	MajorID uint   `json:"major_id" validate:"required"`
 }

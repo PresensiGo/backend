@@ -8,6 +8,7 @@ package injectors
 
 import (
 	"api/internal/handlers"
+	"api/internal/repository"
 	"api/internal/services"
 	"api/pkg/database"
 )
@@ -33,6 +34,15 @@ func InitClassHandler() *handlers.Class {
 	class := services.NewClass(db)
 	handlersClass := handlers.NewClass(class)
 	return handlersClass
+}
+
+func InitClassMajorHandler() *handlers.ClassMajor {
+	db := database.New()
+	class := repository.NewClass(db)
+	major := repository.NewMajor(db)
+	classMajor := services.NewClassMajor(class, major)
+	handlersClassMajor := handlers.NewClassMajor(classMajor)
+	return handlersClassMajor
 }
 
 func InitExcelHandler() *handlers.Excel {
