@@ -15,6 +15,15 @@ import (
 
 // Injectors from wire.go:
 
+func InitAttendanceHandler() *handlers.Attendance {
+	db := database.New()
+	attendance := repository.NewAttendance(db)
+	attendanceStudent := repository.NewAttendanceStudent()
+	servicesAttendance := services.NewAttendance(db, attendance, attendanceStudent)
+	handlersAttendance := handlers.NewAttendance(servicesAttendance)
+	return handlersAttendance
+}
+
 func InitAuthHandler() *handlers.Auth {
 	db := database.New()
 	auth := repository.NewAuth(db)

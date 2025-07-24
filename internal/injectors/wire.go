@@ -11,6 +11,17 @@ import (
 	"github.com/google/wire"
 )
 
+func InitAttendanceHandler() *handlers.Attendance {
+	wire.Build(
+		handlers.NewAttendance,
+		services.NewAttendance,
+		repository.NewAttendance,
+		repository.NewAttendanceStudent,
+		database.New,
+	)
+	return nil
+}
+
 func InitAuthHandler() *handlers.Auth {
 	wire.Build(
 		handlers.NewAuth,

@@ -20,6 +20,7 @@ func NewServer() {
 	authorized := v1.Group("/")
 	authorized.Use(middleware.AuthMiddleware())
 	{
+		routes.RegisterAttendance(authorized)
 		routes.RegisterBatch(authorized)
 		routes.RegisterClass(authorized)
 		routes.RegisterClassMajor(authorized)
