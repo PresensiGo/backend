@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/attendances": {
+        "/api/v1/attendances/": {
             "post": {
                 "tags": [
                     "attendance"
@@ -28,7 +28,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.CreateAttendance"
+                            "$ref": "#/definitions/CreateAttendanceReq"
                         }
                     }
                 ],
@@ -284,6 +284,37 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "CreateAttendanceItemReq": {
+            "type": "object",
+            "properties": {
+                "note": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/models.AttendanceStatus"
+                },
+                "student_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "CreateAttendanceReq": {
+            "type": "object",
+            "properties": {
+                "attendance_students": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CreateAttendanceItemReq"
+                    }
+                },
+                "classroom_id": {
+                    "type": "integer"
+                },
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.Attendance": {
             "type": "object",
             "required": [
@@ -389,34 +420,6 @@ const docTemplate = `{
                 "AttendanceSick",
                 "AttendanceAlpha"
             ]
-        },
-        "requests.CreateAttendance": {
-            "type": "object",
-            "properties": {
-                "attendance_students": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "note": {
-                                "type": "string"
-                            },
-                            "status": {
-                                "$ref": "#/definitions/models.AttendanceStatus"
-                            },
-                            "student_id": {
-                                "type": "integer"
-                            }
-                        }
-                    }
-                },
-                "class_id": {
-                    "type": "integer"
-                },
-                "date": {
-                    "type": "string"
-                }
-            }
         },
         "requests.Login": {
             "type": "object",

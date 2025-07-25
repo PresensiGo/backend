@@ -20,7 +20,7 @@ func NewAttendance(service *services.Attendance) *Attendance {
 // @Tags 		attendance
 // @Param 		body body requests.CreateAttendance true "Body"
 // @Success 	200 {string} string
-// @Router		/api/v1/attendances [post]
+// @Router		/api/v1/attendances/ [post]
 func (h *Attendance) Create(c *gin.Context) {
 	var request requests.CreateAttendance
 	if err := c.ShouldBindJSON(&request); err != nil {

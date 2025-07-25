@@ -1,4 +1,24 @@
 definitions:
+  CreateAttendanceItemReq:
+    properties:
+      note:
+        type: string
+      status:
+        $ref: '#/definitions/models.AttendanceStatus'
+      student_id:
+        type: integer
+    type: object
+  CreateAttendanceReq:
+    properties:
+      attendance_students:
+        items:
+          $ref: '#/definitions/CreateAttendanceItemReq'
+        type: array
+      classroom_id:
+        type: integer
+      date:
+        type: string
+    type: object
   dto.Attendance:
     properties:
       classroom_id:
@@ -73,24 +93,6 @@ definitions:
     - AttendancePermission
     - AttendanceSick
     - AttendanceAlpha
-  requests.CreateAttendance:
-    properties:
-      attendance_students:
-        items:
-          properties:
-            note:
-              type: string
-            status:
-              $ref: '#/definitions/models.AttendanceStatus'
-            student_id:
-              type: integer
-          type: object
-        type: array
-      class_id:
-        type: integer
-      date:
-        type: string
-    type: object
   requests.Login:
     properties:
       email:
@@ -215,7 +217,7 @@ info:
   title: PresensiGo API
   version: "1.0"
 paths:
-  /api/v1/attendances:
+  /api/v1/attendances/:
     post:
       operationId: createAttendance
       parameters:
@@ -224,7 +226,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.CreateAttendance'
+          $ref: '#/definitions/CreateAttendanceReq'
       responses:
         "200":
           description: OK

@@ -6,6 +6,7 @@ import (
 	"api/internal/dto/responses"
 	"api/internal/repository"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Attendance struct {
@@ -24,9 +25,14 @@ func NewAttendance(
 
 func (s *Attendance) Create(req requests.CreateAttendance) error {
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
+		parsedDate, err := time.Parse("2006-01-02", req.Date)
+		if err != nil {
+			return err
+		}
+
 		attendance := dto.Attendance{
-			ClassroomID: req.ClassID,
-			Date:        req.Date,
+			ClassroomID: req.ClassroomID,
+			Date:        parsedDate,
 		}
 		if err := s.attendance.Create(tx, &attendance); err != nil {
 			return err
