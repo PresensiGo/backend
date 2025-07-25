@@ -69,12 +69,6 @@ const docTemplate = `{
         },
         "/api/v1/auth/login": {
             "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "auth"
                 ],
@@ -101,11 +95,22 @@ const docTemplate = `{
             }
         },
         "/api/v1/auth/logout": {
-            "get": {
+            "post": {
                 "tags": [
                     "auth"
                 ],
                 "operationId": "logout",
+                "parameters": [
+                    {
+                        "description": "Logout Request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.Logout"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -370,21 +375,6 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.Token": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
         "models.AttendanceStatus": {
             "type": "string",
             "enum": [
@@ -436,6 +426,17 @@ const docTemplate = `{
                     "default": "email@email.com"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.Logout": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
                     "type": "string"
                 }
             }
@@ -550,11 +551,15 @@ const docTemplate = `{
         "responses.Login": {
             "type": "object",
             "required": [
-                "token"
+                "access_token",
+                "refresh_token"
             ],
             "properties": {
-                "token": {
-                    "$ref": "#/definitions/dto.Token"
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },
@@ -564,22 +569,30 @@ const docTemplate = `{
         "responses.RefreshToken": {
             "type": "object",
             "required": [
-                "token"
+                "access_token",
+                "refresh_token"
             ],
             "properties": {
-                "token": {
-                    "$ref": "#/definitions/dto.Token"
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },
         "responses.Register": {
             "type": "object",
             "required": [
-                "token"
+                "access_token",
+                "refresh_token"
             ],
             "properties": {
-                "token": {
-                    "$ref": "#/definitions/dto.Token"
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         }

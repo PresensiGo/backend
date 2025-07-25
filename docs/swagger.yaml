@@ -61,16 +61,6 @@ definitions:
     - name
     - nis
     type: object
-  dto.Token:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - refresh_token
-    type: object
   models.AttendanceStatus:
     enum:
     - hadir
@@ -108,6 +98,13 @@ definitions:
         type: string
       password:
         type: string
+    type: object
+  requests.Logout:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
     type: object
   requests.RefreshToken:
     properties:
@@ -181,26 +178,35 @@ definitions:
     type: object
   responses.Login:
     properties:
-      token:
-        $ref: '#/definitions/dto.Token'
+      access_token:
+        type: string
+      refresh_token:
+        type: string
     required:
-    - token
+    - access_token
+    - refresh_token
     type: object
   responses.Logout:
     type: object
   responses.RefreshToken:
     properties:
-      token:
-        $ref: '#/definitions/dto.Token'
+      access_token:
+        type: string
+      refresh_token:
+        type: string
     required:
-    - token
+    - access_token
+    - refresh_token
     type: object
   responses.Register:
     properties:
-      token:
-        $ref: '#/definitions/dto.Token'
+      access_token:
+        type: string
+      refresh_token:
+        type: string
     required:
-    - token
+    - access_token
+    - refresh_token
     type: object
 info:
   contact: {}
@@ -242,8 +248,6 @@ paths:
       - attendance
   /api/v1/auth/login:
     post:
-      consumes:
-      - application/json
       operationId: login
       parameters:
       - description: Login request
@@ -252,8 +256,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/requests.Login'
-      produces:
-      - application/json
       responses:
         "200":
           description: OK
@@ -262,8 +264,15 @@ paths:
       tags:
       - auth
   /api/v1/auth/logout:
-    get:
+    post:
       operationId: logout
+      parameters:
+      - description: Logout Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Logout'
       responses:
         "200":
           description: OK

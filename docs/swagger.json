@@ -60,12 +60,6 @@
         },
         "/api/v1/auth/login": {
             "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "auth"
                 ],
@@ -92,11 +86,22 @@
             }
         },
         "/api/v1/auth/logout": {
-            "get": {
+            "post": {
                 "tags": [
                     "auth"
                 ],
                 "operationId": "logout",
+                "parameters": [
+                    {
+                        "description": "Logout Request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.Logout"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -361,21 +366,6 @@
                 }
             }
         },
-        "dto.Token": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
         "models.AttendanceStatus": {
             "type": "string",
             "enum": [
@@ -427,6 +417,17 @@
                     "default": "email@email.com"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.Logout": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
                     "type": "string"
                 }
             }
@@ -541,11 +542,15 @@
         "responses.Login": {
             "type": "object",
             "required": [
-                "token"
+                "access_token",
+                "refresh_token"
             ],
             "properties": {
-                "token": {
-                    "$ref": "#/definitions/dto.Token"
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },
@@ -555,22 +560,30 @@
         "responses.RefreshToken": {
             "type": "object",
             "required": [
-                "token"
+                "access_token",
+                "refresh_token"
             ],
             "properties": {
-                "token": {
-                    "$ref": "#/definitions/dto.Token"
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },
         "responses.Register": {
             "type": "object",
             "required": [
-                "token"
+                "access_token",
+                "refresh_token"
             ],
             "properties": {
-                "token": {
-                    "$ref": "#/definitions/dto.Token"
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         }

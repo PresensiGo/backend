@@ -15,5 +15,5 @@ func RegisterAuth(r *gin.RouterGroup) {
 	group.POST("/refresh-token", handler.RefreshToken)
 
 	group.Use(middleware.AuthMiddleware()).
-		GET("/logout", handler.Logout)
+		POST("/logout", handler.Logout)
 }
