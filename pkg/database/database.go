@@ -15,10 +15,7 @@ var (
 )
 
 func New() *gorm.DB {
-	fmt.Println("database.New")
 	dbOnce.Do(func() {
-		fmt.Println("database.New.Once")
-
 		dbHost := os.Getenv("DB_HOST")
 		dbPort := os.Getenv("DB_PORT")
 		dbName := os.Getenv("DB_NAME")

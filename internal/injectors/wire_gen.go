@@ -26,9 +26,10 @@ func InitAttendanceHandler() *handlers.Attendance {
 
 func InitAuthHandler() *handlers.Auth {
 	db := database.New()
-	auth := repository.NewAuth(db)
-	servicesAuth := services.NewAuth(auth)
-	handlersAuth := handlers.NewAuth(servicesAuth)
+	user := repository.NewUser(db)
+	userToken := repository.NewUserToken(db)
+	auth := services.NewAuth(user, userToken, db)
+	handlersAuth := handlers.NewAuth(auth)
 	return handlersAuth
 }
 

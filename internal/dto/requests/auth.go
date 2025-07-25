@@ -11,6 +11,10 @@ type Register struct {
 	Password string `json:"password" default:"password"`
 }
 
+type Logout struct {
+	RefreshToken string `json:"refresh_token" validate:"required"`
+}
+
 type RefreshToken struct {
 	RefreshToken string `json:"refresh_token"`
 }

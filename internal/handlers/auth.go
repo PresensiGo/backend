@@ -3,7 +3,6 @@ package handlers
 import (
 	"api/internal/dto/requests"
 	"api/internal/services"
-	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -17,11 +16,9 @@ func NewAuth(service *services.Auth) *Auth {
 }
 
 // @ID			login
-// @Accept		json
-// @Produce	json
 // @Tags		auth
 // @Param		body	body		requests.Login	true	"Login request"
-// @Success	200		{object}	responses.Login
+// @Success		200		{object}	responses.Login
 // @Router		/api/v1/auth/login [post]
 func (h *Auth) Login(c *gin.Context) {
 	var request requests.Login
@@ -71,12 +68,17 @@ func (h *Auth) Register(c *gin.Context) {
 
 // @ID			logout
 // @Tags		auth
-// @Success	200	{object}	responses.Logout
-// @Router		/api/v1/auth/logout [get]
+// @Param		body body requests.Logout true "Logout Request"
+// @Success		200	{object} responses.Logout
+// @Router		/api/v1/auth/logout [post]
 func (h *Auth) Logout(c *gin.Context) {
-	authUser := authentication.GetAuthenticatedUser(c)
+	var req requests.Logout
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
 
-	response, err := h.service.Logout(authUser.ID)
+	response, err := h.service.Logout(req.RefreshToken)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
