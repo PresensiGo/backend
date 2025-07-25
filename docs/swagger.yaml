@@ -139,6 +139,8 @@ definitions:
         items:
           $ref: '#/definitions/dto.Attendance'
         type: array
+    required:
+    - attendances
     type: object
   responses.GetAllBatches:
     properties:
@@ -366,13 +368,13 @@ paths:
             $ref: '#/definitions/responses.GetAllMajors'
       tags:
       - major
-  /api/v1/students/class/{class_id}:
+  /api/v1/students/classrooms/{classroom_id}:
     get:
       operationId: getAllStudents
       parameters:
       - description: Classroom ID
         in: path
-        name: class_id
+        name: classroom_id
         required: true
         type: integer
       responses:

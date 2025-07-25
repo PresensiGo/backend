@@ -17,7 +17,7 @@ func NewStudent(db *gorm.DB) *Student {
 func (r *Student) GetAllByClassId(classId uint) ([]dto.Student, error) {
 	var students []models.Student
 	if err := r.db.Model(&models.Student{}).
-		Where("class_id = ?", classId).
+		Where("classroom_id = ?", classId).
 		Order("name asc").
 		Find(&students).Error; err != nil {
 		return nil, err

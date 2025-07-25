@@ -6,8 +6,8 @@ import (
 )
 
 func RegisterStudent(g *gin.RouterGroup) {
-	group := g.Group("/student")
+	group := g.Group("/students")
 	handler := injectors.InitStudentHandler()
 
-	group.GET("/class/:class_id", handler.GetAll)
+	group.GET("/classrooms/:classroom_id", handler.GetAll)
 }

@@ -257,7 +257,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/students/class/{class_id}": {
+        "/api/v1/students/classrooms/{classroom_id}": {
             "get": {
                 "tags": [
                     "student"
@@ -267,7 +267,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "Classroom ID",
-                        "name": "class_id",
+                        "name": "classroom_id",
                         "in": "path",
                         "required": true
                     }
@@ -483,6 +483,9 @@ const docTemplate = `{
         },
         "responses.GetAllAttendances": {
             "type": "object",
+            "required": [
+                "attendances"
+            ],
             "properties": {
                 "attendances": {
                     "type": "array",
