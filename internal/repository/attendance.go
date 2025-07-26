@@ -21,10 +21,10 @@ func (r *Attendance) Create(
 	return tx.Create(&attendance).Error
 }
 
-func (r *Attendance) GetAll(classId uint) (*[]dto.Attendance, error) {
+func (r *Attendance) GetAll(classroomID uint) (*[]dto.Attendance, error) {
 	var attendances []models.Attendance
 	if err := r.db.
-		Where("class_id = ?", classId).
+		Where("classroom_id = ?", classroomID).
 		Order("date asc").
 		Find(&attendances).Error; err != nil {
 		return nil, err

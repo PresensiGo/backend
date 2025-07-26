@@ -33,7 +33,7 @@
                 }
             }
         },
-        "/api/v1/attendances/class/{class_id}": {
+        "/api/v1/attendances/classrooms/{classroom_id}": {
             "get": {
                 "tags": [
                     "attendance"
@@ -43,7 +43,7 @@
                     {
                         "type": "integer",
                         "description": "Classroom ID",
-                        "name": "class_id",
+                        "name": "classroom_id",
                         "in": "path",
                         "required": true
                     }
@@ -52,7 +52,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllAttendances"
+                            "$ref": "#/definitions/GetAllAttendancesRes"
                         }
                     }
                 }
@@ -306,6 +306,20 @@
                 }
             }
         },
+        "GetAllAttendancesRes": {
+            "type": "object",
+            "required": [
+                "attendances"
+            ],
+            "properties": {
+                "attendances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Attendance"
+                    }
+                }
+            }
+        },
         "dto.Attendance": {
             "type": "object",
             "required": [
@@ -472,20 +486,6 @@
                 },
                 "major": {
                     "$ref": "#/definitions/dto.Major"
-                }
-            }
-        },
-        "responses.GetAllAttendances": {
-            "type": "object",
-            "required": [
-                "attendances"
-            ],
-            "properties": {
-                "attendances": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.Attendance"
-                    }
                 }
             }
         },

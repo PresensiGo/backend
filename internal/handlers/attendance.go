@@ -39,11 +39,11 @@ func (h *Attendance) Create(c *gin.Context) {
 
 // @ID 			getAllAttendances
 // @Tags 		attendance
-// @Param 		class_id path int true "Classroom ID"
+// @Param 		classroom_id path int true "Classroom ID"
 // @Success 	200 {object} responses.GetAllAttendances
-// @Router		/api/v1/attendances/class/{class_id} [get]
+// @Router		/api/v1/attendances/classrooms/{classroom_id} [get]
 func (h *Attendance) GetAll(c *gin.Context) {
-	classId, err := strconv.Atoi(c.Param("class_id"))
+	classId, err := strconv.Atoi(c.Param("classroom_id"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return

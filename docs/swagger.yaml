@@ -19,6 +19,15 @@ definitions:
       date:
         type: string
     type: object
+  GetAllAttendancesRes:
+    properties:
+      attendances:
+        items:
+          $ref: '#/definitions/dto.Attendance'
+        type: array
+    required:
+    - attendances
+    type: object
   dto.Attendance:
     properties:
       classroom_id:
@@ -135,15 +144,6 @@ definitions:
     - classroom
     - major
     type: object
-  responses.GetAllAttendances:
-    properties:
-      attendances:
-        items:
-          $ref: '#/definitions/dto.Attendance'
-        type: array
-    required:
-    - attendances
-    type: object
   responses.GetAllBatches:
     properties:
       batches:
@@ -234,20 +234,20 @@ paths:
             type: string
       tags:
       - attendance
-  /api/v1/attendances/class/{class_id}:
+  /api/v1/attendances/classrooms/{classroom_id}:
     get:
       operationId: getAllAttendances
       parameters:
       - description: Classroom ID
         in: path
-        name: class_id
+        name: classroom_id
         required: true
         type: integer
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllAttendances'
+            $ref: '#/definitions/GetAllAttendancesRes'
       tags:
       - attendance
   /api/v1/auth/login:

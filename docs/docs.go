@@ -42,7 +42,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/attendances/class/{class_id}": {
+        "/api/v1/attendances/classrooms/{classroom_id}": {
             "get": {
                 "tags": [
                     "attendance"
@@ -52,7 +52,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "Classroom ID",
-                        "name": "class_id",
+                        "name": "classroom_id",
                         "in": "path",
                         "required": true
                     }
@@ -61,7 +61,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllAttendances"
+                            "$ref": "#/definitions/GetAllAttendancesRes"
                         }
                     }
                 }
@@ -315,6 +315,20 @@ const docTemplate = `{
                 }
             }
         },
+        "GetAllAttendancesRes": {
+            "type": "object",
+            "required": [
+                "attendances"
+            ],
+            "properties": {
+                "attendances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Attendance"
+                    }
+                }
+            }
+        },
         "dto.Attendance": {
             "type": "object",
             "required": [
@@ -481,20 +495,6 @@ const docTemplate = `{
                 },
                 "major": {
                     "$ref": "#/definitions/dto.Major"
-                }
-            }
-        },
-        "responses.GetAllAttendances": {
-            "type": "object",
-            "required": [
-                "attendances"
-            ],
-            "properties": {
-                "attendances": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.Attendance"
-                    }
                 }
             }
         },

@@ -10,5 +10,5 @@ func RegisterAttendance(g *gin.RouterGroup) {
 	handler := injectors.InitAttendanceHandler()
 
 	group.POST("/", handler.Create)
-	group.GET("/class/:class_id", handler.GetAll)
+	group.GET("/classrooms/:classroom_id", handler.GetAll)
 }
