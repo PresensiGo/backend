@@ -107,3 +107,23 @@ func (h *Auth) RefreshToken(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+// @ID			refreshTokenTTL
+// @Tags		auth
+// @Param		body	body		requests.RefreshTokenTTL	true	"Refresh token req"
+// @Success		200		{string}	string
+// @Router		/api/v1/auth/refresh-token-ttl [post]
+func (h *Auth) RefreshTokenTTL(c *gin.Context) {
+	var req requests.RefreshTokenTTL
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if err := h.service.RefreshTokenTTL(req.RefreshToken); err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true})
+}

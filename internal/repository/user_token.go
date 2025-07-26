@@ -4,6 +4,7 @@ import (
 	"api/internal/dto"
 	"api/internal/models"
 	"gorm.io/gorm"
+	"time"
 )
 
 type UserToken struct {
@@ -38,6 +39,7 @@ func (r *UserToken) GetByRefreshToken(refreshToken string) (*dto.UserToken, erro
 		ID:           userToken.ID,
 		RefreshToken: userToken.RefreshToken,
 		UserID:       userToken.UserId,
+		TTL:          userToken.TTL,
 	}, nil
 }
 
@@ -45,6 +47,13 @@ func (r *UserToken) UpdateByRefreshToken(oldRefreshToken string, token dto.UserT
 	return r.db.Model(&models.UserToken{}).
 		Where("refresh_token = ?", oldRefreshToken).
 		Update("refresh_token", token.RefreshToken).
+		Error
+}
+
+func (r *UserToken) UpdateTTLByRefreshToken(refreshToken string) error {
+	return r.db.Model(&models.UserToken{}).
+		Where("refresh_token = ?", refreshToken).
+		Update("ttl", time.Now().Add(time.Hour*24*30)).
 		Error
 }
 

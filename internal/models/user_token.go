@@ -11,5 +11,5 @@ type UserToken struct {
 	UserId       uint
 	User         User      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	RefreshToken string    `gorm:"unique"`
-	LastLogin    time.Time `gorm:"default:CURRENT_TIMESTAMP"`
+	TTL          time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 }

@@ -5,9 +5,11 @@ import (
 	"api/internal/dto/responses"
 	"api/internal/repository"
 	"api/pkg/authentication"
+	"fmt"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Auth struct {
@@ -134,6 +136,10 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 		return nil, err
 	}
 
+	if time.Now().After(oldUserToken.TTL) {
+		return nil, fmt.Errorf("refresh token expired")
+	}
+
 	currentUser, err := s.userRepo.GetByID(oldUserToken.UserID)
 	if err != nil {
 		return nil, err
@@ -162,4 +168,8 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}, nil
+}
+
+func (s *Auth) RefreshTokenTTL(refreshToken string) error {
+	return s.userTokenRepo.UpdateTTLByRefreshToken(refreshToken)
 }

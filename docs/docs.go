@@ -196,6 +196,33 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/auth/refresh-token-ttl": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "operationId": "refreshTokenTTL",
+                "parameters": [
+                    {
+                        "description": "Refresh token req",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/RefreshTokenTTLReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/auth/register": {
             "post": {
                 "tags": [
@@ -385,7 +412,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "attendanceStudent": {
-                    "$ref": "#/definitions/dto.AttendanceStudent"
+                    "$ref": "#/definitions/dto.AttendanceDetail"
                 },
                 "student": {
                     "$ref": "#/definitions/dto.Student"
@@ -410,6 +437,14 @@ const docTemplate = `{
                 }
             }
         },
+        "RefreshTokenTTLReq": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.Attendance": {
             "type": "object",
             "required": [
@@ -429,7 +464,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.AttendanceStudent": {
+        "dto.AttendanceDetail": {
             "type": "object",
             "required": [
                 "attendance_id",

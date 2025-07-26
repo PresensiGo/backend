@@ -31,7 +31,7 @@ definitions:
   GetAttendanceItemRes:
     properties:
       attendanceStudent:
-        $ref: '#/definitions/dto.AttendanceStudent'
+        $ref: '#/definitions/dto.AttendanceDetail'
       student:
         $ref: '#/definitions/dto.Student'
     required:
@@ -50,6 +50,11 @@ definitions:
     - attendance
     - items
     type: object
+  RefreshTokenTTLReq:
+    properties:
+      refresh_token:
+        type: string
+    type: object
   dto.Attendance:
     properties:
       classroom_id:
@@ -63,7 +68,7 @@ definitions:
     - date
     - id
     type: object
-  dto.AttendanceStudent:
+  dto.AttendanceDetail:
     properties:
       attendance_id:
         type: integer
@@ -371,6 +376,23 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.RefreshToken'
+      tags:
+      - auth
+  /api/v1/auth/refresh-token-ttl:
+    post:
+      operationId: refreshTokenTTL
+      parameters:
+      - description: Refresh token req
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/RefreshTokenTTLReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
       tags:
       - auth
   /api/v1/auth/register:

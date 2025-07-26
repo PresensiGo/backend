@@ -18,3 +18,7 @@ type Logout struct {
 type RefreshToken struct {
 	RefreshToken string `json:"refresh_token"`
 }
+
+type RefreshTokenTTL struct {
+	RefreshToken string `json:"refresh_token"`
+} // @name RefreshTokenTTLReq

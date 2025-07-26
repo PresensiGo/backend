@@ -14,6 +14,9 @@ func RegisterAuth(r *gin.RouterGroup) {
 	group.POST("/register", handler.Register)
 	group.POST("/refresh-token", handler.RefreshToken)
 
-	group.Use(middleware.AuthMiddleware()).
-		POST("/logout", handler.Logout)
+	authorized := group.Group("/")
+	authorized.Use(middleware.AuthMiddleware())
+
+	authorized.POST("/logout", handler.Logout)
+	authorized.POST("/refresh-token-ttl", handler.RefreshTokenTTL)
 }
