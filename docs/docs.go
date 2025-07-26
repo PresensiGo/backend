@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/attendances/": {
+        "/api/v1/attendances": {
             "post": {
                 "tags": [
                     "attendance"
@@ -62,6 +62,31 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/GetAllAttendancesRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/attendances/{attendance_id}": {
+            "delete": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "deleteAttendance",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Attendance ID",
+                        "name": "attendance_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }

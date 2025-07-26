@@ -41,3 +41,10 @@ func (r *Attendance) GetAll(classroomID uint) (*[]dto.Attendance, error) {
 
 	return &mappedAttendances, nil
 }
+
+func (r *Attendance) DeleteByID(tx *gorm.DB, attendanceID uint) error {
+	return tx.Where("id = ?", attendanceID).
+		Unscoped().
+		Delete(&models.Attendance{}).
+		Error
+}

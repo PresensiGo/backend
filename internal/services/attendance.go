@@ -69,3 +69,23 @@ func (s *Attendance) GetAll(classId uint) (*responses.GetAllAttendances, error) 
 		Attendances: *attendances,
 	}, nil
 }
+
+func (s *Attendance) Delete(attendanceID uint) error {
+	if err := s.db.Transaction(func(tx *gorm.DB) error {
+		// delete all attendance students
+		if err := s.attendanceStudent.DeleteByAttendanceID(tx, attendanceID); err != nil {
+			return err
+		}
+
+		// delete attendance
+		if err := s.attendance.DeleteByID(tx, attendanceID); err != nil {
+			return err
+		}
+
+		return nil
+	}); err != nil {
+		return err
+	}
+
+	return nil
+}

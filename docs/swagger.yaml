@@ -217,7 +217,7 @@ info:
   title: PresensiGo API
   version: "1.0"
 paths:
-  /api/v1/attendances/:
+  /api/v1/attendances:
     post:
       operationId: createAttendance
       parameters:
@@ -227,6 +227,22 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/CreateAttendanceReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - attendance
+  /api/v1/attendances/{attendance_id}:
+    delete:
+      operationId: deleteAttendance
+      parameters:
+      - description: Attendance ID
+        in: path
+        name: attendance_id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK

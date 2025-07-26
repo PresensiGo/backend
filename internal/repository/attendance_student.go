@@ -2,6 +2,7 @@ package repository
 
 import (
 	"api/internal/dto"
+	"api/internal/models"
 	"gorm.io/gorm"
 )
 
@@ -16,4 +17,11 @@ func (r *AttendanceStudent) CreateBatch(
 	attendanceStudents *[]dto.AttendanceStudent,
 ) error {
 	return tx.Create(attendanceStudents).Error
+}
+
+func (r *AttendanceStudent) DeleteByAttendanceID(tx *gorm.DB, attendanceID uint) error {
+	return tx.Where("attendance_id = ?", attendanceID).
+		Unscoped().
+		Delete(&models.AttendanceStudent{}).
+		Error
 }

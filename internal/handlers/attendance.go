@@ -20,7 +20,7 @@ func NewAttendance(service *services.Attendance) *Attendance {
 // @Tags 		attendance
 // @Param 		body body requests.CreateAttendance true "Body"
 // @Success 	200 {string} string
-// @Router		/api/v1/attendances/ [post]
+// @Router		/api/v1/attendances [post]
 func (h *Attendance) Create(c *gin.Context) {
 	var request requests.CreateAttendance
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -56,4 +56,24 @@ func (h *Attendance) GetAll(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+
+// @ID 			deleteAttendance
+// @Tags 		attendance
+// @Param 		attendance_id path int true "Attendance ID"
+// @Success 	200 {string} string
+// @Router		/api/v1/attendances/{attendance_id} [delete]
+func (h *Attendance) Delete(c *gin.Context) {
+	attendanceID, err := strconv.Atoi(c.Param("attendance_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if err := h.service.Delete(uint(attendanceID)); err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true})
 }
