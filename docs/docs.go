@@ -68,6 +68,29 @@ const docTemplate = `{
             }
         },
         "/api/v1/attendances/{attendance_id}": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "getAttendance",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Attendance ID",
+                        "name": "attendance_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetAttendanceRes"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "attendance"
@@ -354,6 +377,39 @@ const docTemplate = `{
                 }
             }
         },
+        "GetAttendanceItemRes": {
+            "type": "object",
+            "required": [
+                "attendanceStudent",
+                "student"
+            ],
+            "properties": {
+                "attendanceStudent": {
+                    "$ref": "#/definitions/dto.AttendanceStudent"
+                },
+                "student": {
+                    "$ref": "#/definitions/dto.Student"
+                }
+            }
+        },
+        "GetAttendanceRes": {
+            "type": "object",
+            "required": [
+                "attendance",
+                "items"
+            ],
+            "properties": {
+                "attendance": {
+                    "$ref": "#/definitions/dto.Attendance"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAttendanceItemRes"
+                    }
+                }
+            }
+        },
         "dto.Attendance": {
             "type": "object",
             "required": [
@@ -369,6 +425,33 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.AttendanceStudent": {
+            "type": "object",
+            "required": [
+                "attendance_id",
+                "id",
+                "note",
+                "status",
+                "student_id"
+            ],
+            "properties": {
+                "attendance_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/models.AttendanceStatus"
+                },
+                "student_id": {
                     "type": "integer"
                 }
             }

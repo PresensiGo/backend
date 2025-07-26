@@ -13,14 +13,21 @@ type Attendance struct {
 	db                *gorm.DB
 	attendance        *repository.Attendance
 	attendanceStudent *repository.AttendanceStudent
+	studentRepo       *repository.Student
 }
 
 func NewAttendance(
 	db *gorm.DB,
 	attendance *repository.Attendance,
 	attendanceStudent *repository.AttendanceStudent,
+	studentRepo *repository.Student,
 ) *Attendance {
-	return &Attendance{db, attendance, attendanceStudent}
+	return &Attendance{
+		db,
+		attendance,
+		attendanceStudent,
+		studentRepo,
+	}
 }
 
 func (s *Attendance) Create(req requests.CreateAttendance) error {
@@ -67,6 +74,43 @@ func (s *Attendance) GetAll(classId uint) (*responses.GetAllAttendances, error) 
 
 	return &responses.GetAllAttendances{
 		Attendances: *attendances,
+	}, nil
+}
+
+func (s *Attendance) GetById(attendanceId uint) (*responses.GetAttendance, error) {
+	attendance, err := s.attendance.GetById(attendanceId)
+	if err != nil {
+		return nil, err
+	}
+
+	attendanceStudents, err := s.attendanceStudent.GetAllByAttendanceId(attendanceId)
+	if err != nil {
+		return nil, err
+	}
+
+	mapAttendanceStudents := make(map[uint]dto.AttendanceStudent)
+	studentIds := make([]uint, len(*attendanceStudents))
+	for i, item := range *attendanceStudents {
+		studentIds[i] = item.StudentID
+		mapAttendanceStudents[item.StudentID] = item
+	}
+
+	students, err := s.studentRepo.GetManyById(studentIds)
+	if err != nil {
+		return nil, err
+	}
+
+	mappedItems := make([]responses.GetAttendanceItem, len(*students))
+	for i, item := range *students {
+		mappedItems[i] = responses.GetAttendanceItem{
+			Student:           item,
+			AttendanceStudent: mapAttendanceStudents[item.ID],
+		}
+	}
+
+	return &responses.GetAttendance{
+		Attendance: *attendance,
+		Items:      mappedItems,
 	}, nil
 }
 

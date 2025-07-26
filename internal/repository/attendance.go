@@ -42,6 +42,21 @@ func (r *Attendance) GetAll(classroomID uint) (*[]dto.Attendance, error) {
 	return &mappedAttendances, nil
 }
 
+func (r *Attendance) GetById(attendanceId uint) (*dto.Attendance, error) {
+	var attendance models.Attendance
+	if err := r.db.Where("id = ?", attendanceId).
+		First(&attendance).
+		Error; err != nil {
+		return nil, err
+	}
+
+	return &dto.Attendance{
+		ID:          attendance.ID,
+		ClassroomID: attendance.ClassroomID,
+		Date:        attendance.Date,
+	}, nil
+}
+
 func (r *Attendance) DeleteByID(tx *gorm.DB, attendanceID uint) error {
 	return tx.Where("id = ?", attendanceID).
 		Unscoped().

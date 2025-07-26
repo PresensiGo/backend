@@ -28,6 +28,28 @@ definitions:
     required:
     - attendances
     type: object
+  GetAttendanceItemRes:
+    properties:
+      attendanceStudent:
+        $ref: '#/definitions/dto.AttendanceStudent'
+      student:
+        $ref: '#/definitions/dto.Student'
+    required:
+    - attendanceStudent
+    - student
+    type: object
+  GetAttendanceRes:
+    properties:
+      attendance:
+        $ref: '#/definitions/dto.Attendance'
+      items:
+        items:
+          $ref: '#/definitions/GetAttendanceItemRes'
+        type: array
+    required:
+    - attendance
+    - items
+    type: object
   dto.Attendance:
     properties:
       classroom_id:
@@ -40,6 +62,25 @@ definitions:
     - classroom_id
     - date
     - id
+    type: object
+  dto.AttendanceStudent:
+    properties:
+      attendance_id:
+        type: integer
+      id:
+        type: integer
+      note:
+        type: string
+      status:
+        $ref: '#/definitions/models.AttendanceStatus'
+      student_id:
+        type: integer
+    required:
+    - attendance_id
+    - id
+    - note
+    - status
+    - student_id
     type: object
   dto.Batch:
     properties:
@@ -248,6 +289,21 @@ paths:
           description: OK
           schema:
             type: string
+      tags:
+      - attendance
+    get:
+      operationId: getAttendance
+      parameters:
+      - description: Attendance ID
+        in: path
+        name: attendance_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAttendanceRes'
       tags:
       - attendance
   /api/v1/attendances/classrooms/{classroom_id}:

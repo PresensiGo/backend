@@ -18,8 +18,9 @@ import (
 func InitAttendanceHandler() *handlers.Attendance {
 	db := database.New()
 	attendance := repository.NewAttendance(db)
-	attendanceStudent := repository.NewAttendanceStudent()
-	servicesAttendance := services.NewAttendance(db, attendance, attendanceStudent)
+	attendanceStudent := repository.NewAttendanceStudent(db)
+	student := repository.NewStudent(db)
+	servicesAttendance := services.NewAttendance(db, attendance, attendanceStudent, student)
 	handlersAttendance := handlers.NewAttendance(servicesAttendance)
 	return handlersAttendance
 }

@@ -11,5 +11,6 @@ func RegisterAttendance(g *gin.RouterGroup) {
 
 	group.POST("", handler.Create)
 	group.GET("/classrooms/:classroom_id", handler.GetAll)
+	group.GET("/:attendance_id", handler.GetById)
 	group.DELETE("/:attendance_id", handler.Delete)
 }

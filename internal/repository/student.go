@@ -35,3 +35,25 @@ func (r *Student) GetAllByClassId(classId uint) ([]dto.Student, error) {
 
 	return mappedStudents, nil
 }
+
+func (r *Student) GetManyById(studentIds []uint) (*[]dto.Student, error) {
+	var students []models.Student
+	if err := r.db.Model(&models.Student{}).
+		Where("id in ?", studentIds).
+		Order("name asc").
+		Find(&students).Error; err != nil {
+		return nil, err
+	}
+
+	mappedStudents := make([]dto.Student, len(students))
+	for index, student := range students {
+		mappedStudents[index] = dto.Student{
+			ID:          student.ID,
+			NIS:         student.NIS,
+			Name:        student.Name,
+			ClassroomID: student.ClassroomID,
+		}
+	}
+
+	return &mappedStudents, nil
+}

@@ -17,6 +17,7 @@ func InitAttendanceHandler() *handlers.Attendance {
 		services.NewAttendance,
 		repository.NewAttendance,
 		repository.NewAttendanceStudent,
+		repository.NewStudent,
 		database.New,
 	)
 	return nil

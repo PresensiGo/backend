@@ -58,6 +58,27 @@ func (h *Attendance) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @ID 			getAttendance
+// @Tags 		attendance
+// @Param 		attendance_id path int true "Attendance ID"
+// @Success 	200 {object} responses.GetAttendance
+// @Router		/api/v1/attendances/{attendance_id} [get]
+func (h *Attendance) GetById(c *gin.Context) {
+	attendanceId, err := strconv.Atoi(c.Param("attendance_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	response, err := h.service.GetById(uint(attendanceId))
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
 // @ID 			deleteAttendance
 // @Tags 		attendance
 // @Param 		attendance_id path int true "Attendance ID"
