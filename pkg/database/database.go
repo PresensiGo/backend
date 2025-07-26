@@ -39,15 +39,16 @@ func New() *gorm.DB {
 			panic("failed to connect to database: " + err.Error())
 		}
 
-		db.AutoMigrate(
+		_ = db.AutoMigrate(
 			&models.User{},
 			&models.UserToken{},
+			&models.School{},
 			&models.Batch{},
 			&models.Major{},
 			&models.Classroom{},
 			&models.Student{},
 			&models.Attendance{},
-			&models.AttendanceStudent{},
+			&models.AttendanceDetail{},
 		)
 
 		dbInstance = db

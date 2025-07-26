@@ -2,12 +2,12 @@ package models
 
 import "gorm.io/gorm"
 
-type AttendanceStudent struct {
+type AttendanceDetail struct {
 	gorm.Model
 
-	AttendanceID uint `json:"attendance_id"`
+	AttendanceId uint `json:"attendance_id"`
 	Attendance   Attendance
-	StudentID    uint `json:"student_id"`
+	StudentId    uint `json:"student_id"`
 	Student      Student
 	Status       AttendanceStatus `json:"status"`
 	Note         string           `json:"note"`

@@ -2,7 +2,7 @@ package dto
 
 import "api/internal/models"
 
-type AttendanceStudent struct {
+type AttendanceDetail struct {
 	ID           uint                    `json:"id" validate:"required"`
 	AttendanceID uint                    `json:"attendance_id" validate:"required"`
 	StudentID    uint                    `json:"student_id" validate:"required"`

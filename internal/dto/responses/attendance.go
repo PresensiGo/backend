@@ -7,8 +7,8 @@ type GetAllAttendances struct {
 } // @name GetAllAttendancesRes
 
 type GetAttendanceItem struct {
-	Student           dto.Student           `json:"student" validate:"required"`
-	AttendanceStudent dto.AttendanceStudent `json:"attendanceStudent" validate:"required"`
+	Student           dto.Student          `json:"student" validate:"required"`
+	AttendanceStudent dto.AttendanceDetail `json:"attendanceStudent" validate:"required"`
 } // @name GetAttendanceItemRes
 type GetAttendance struct {
 	Attendance dto.Attendance      `json:"attendance" validate:"required"`

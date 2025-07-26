@@ -85,7 +85,7 @@ func (s *Excel) Import(reader io.Reader) (any, error) {
 				students = append(students, models2.Student{
 					NIS:         studentNIS,
 					Name:        studentName,
-					ClassroomID: class.ID,
+					ClassroomId: class.ID,
 				})
 			}
 

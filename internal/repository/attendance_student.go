@@ -18,25 +18,25 @@ func NewAttendanceStudent(
 
 func (r *AttendanceStudent) CreateBatch(
 	tx *gorm.DB,
-	attendanceStudents *[]dto.AttendanceStudent,
+	attendanceStudents *[]dto.AttendanceDetail,
 ) error {
 	return tx.Create(attendanceStudents).Error
 }
 
-func (r *AttendanceStudent) GetAllByAttendanceId(attendanceId uint) (*[]dto.AttendanceStudent, error) {
-	var attendanceStudents []models.AttendanceStudent
-	if err := r.db.Model(&models.AttendanceStudent{}).
+func (r *AttendanceStudent) GetAllByAttendanceId(attendanceId uint) (*[]dto.AttendanceDetail, error) {
+	var attendanceStudents []models.AttendanceDetail
+	if err := r.db.Model(&models.AttendanceDetail{}).
 		Where("attendance_id = ?", attendanceId).
 		Find(&attendanceStudents).Error; err != nil {
 		return nil, err
 	}
 
-	mappedAttendanceStudents := make([]dto.AttendanceStudent, len(attendanceStudents))
+	mappedAttendanceStudents := make([]dto.AttendanceDetail, len(attendanceStudents))
 	for i, item := range attendanceStudents {
-		mappedAttendanceStudents[i] = dto.AttendanceStudent{
+		mappedAttendanceStudents[i] = dto.AttendanceDetail{
 			ID:           item.ID,
-			AttendanceID: item.AttendanceID,
-			StudentID:    item.StudentID,
+			AttendanceID: item.AttendanceId,
+			StudentID:    item.StudentId,
 			Status:       item.Status,
 			Note:         item.Note,
 		}
@@ -48,6 +48,6 @@ func (r *AttendanceStudent) GetAllByAttendanceId(attendanceId uint) (*[]dto.Atte
 func (r *AttendanceStudent) DeleteByAttendanceID(tx *gorm.DB, attendanceID uint) error {
 	return tx.Where("attendance_id = ?", attendanceID).
 		Unscoped().
-		Delete(&models.AttendanceStudent{}).
+		Delete(&models.AttendanceDetail{}).
 		Error
 }

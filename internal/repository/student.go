@@ -29,7 +29,7 @@ func (r *Student) GetAllByClassId(classId uint) ([]dto.Student, error) {
 			ID:          student.ID,
 			NIS:         student.NIS,
 			Name:        student.Name,
-			ClassroomID: student.ClassroomID,
+			ClassroomID: student.ClassroomId,
 		}
 	}
 
@@ -51,7 +51,7 @@ func (r *Student) GetManyById(studentIds []uint) (*[]dto.Student, error) {
 			ID:          student.ID,
 			NIS:         student.NIS,
 			Name:        student.Name,
-			ClassroomID: student.ClassroomID,
+			ClassroomID: student.ClassroomId,
 		}
 	}
 
