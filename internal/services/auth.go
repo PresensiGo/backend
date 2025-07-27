@@ -61,6 +61,7 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 		if err := s.userTokenRepo.Create(tx, dto.UserToken{
 			UserID:       currentUser.ID,
 			RefreshToken: refreshToken,
+			TTL:          time.Now().Add(time.Hour * 24 * 30),
 		}); err != nil {
 			return err
 		}
@@ -105,6 +106,7 @@ func (s *Auth) Register(name string, email string, password string) (*responses.
 		if err := s.userTokenRepo.Create(tx, dto.UserToken{
 			RefreshToken: refreshToken,
 			UserID:       userID,
+			TTL:          time.Now().Add(time.Hour * 24 * 30),
 		}); err != nil {
 			return err
 		}

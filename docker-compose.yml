@@ -6,3 +6,5 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - TZ=Asia/Jakarta
+      - PGTZ=Asia/Jakarta

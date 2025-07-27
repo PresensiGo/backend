@@ -4,6 +4,7 @@
 package injectors
 
 import (
+	"api/internal/cron"
 	"api/internal/handlers"
 	"api/internal/repository"
 	"api/internal/services"
@@ -85,6 +86,15 @@ func InitStudentHandler() *handlers.Student {
 		handlers.NewStudent,
 		services.NewStudent,
 		repository.NewStudent,
+		database.New,
+	)
+	return nil
+}
+
+func InitUserTokenCron() *cron.UserToken {
+	wire.Build(
+		cron.NewUserToken,
+		repository.NewUserToken,
 		database.New,
 	)
 	return nil

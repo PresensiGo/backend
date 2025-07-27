@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api/pkg/cron"
 	"api/pkg/http"
 	"fmt"
 	"github.com/joho/godotenv"
@@ -13,5 +14,6 @@ func main() {
 		fmt.Println("error loading .env file")
 	}
 
+	cron.New()
 	http.NewServer()
 }

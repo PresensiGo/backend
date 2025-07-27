@@ -19,6 +19,7 @@ func (r *UserToken) Create(tx *gorm.DB, token dto.UserToken) error {
 	userToken := models.UserToken{
 		UserId:       token.UserID,
 		RefreshToken: token.RefreshToken,
+		TTL:          token.TTL,
 	}
 	if err := tx.Create(&userToken).Error; err != nil {
 		return err
@@ -59,6 +60,13 @@ func (r *UserToken) UpdateTTLByRefreshToken(refreshToken string) error {
 
 func (r *UserToken) DeleteByRefreshToken(refreshToken string) error {
 	return r.db.Where("refresh_token = ?", refreshToken).
+		Unscoped().
+		Delete(&models.UserToken{}).
+		Error
+}
+
+func (r *UserToken) DeleteExpiredTokens() error {
+	return r.db.Where("ttl < ?", time.Now()).
 		Unscoped().
 		Delete(&models.UserToken{}).
 		Error
