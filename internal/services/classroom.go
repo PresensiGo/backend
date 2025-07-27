@@ -3,17 +3,17 @@ package services
 import (
 	"api/internal/dto"
 	"api/internal/dto/responses"
-	"api/internal/repository"
+	"api/internal/repositories"
 )
 
 type Classroom struct {
-	classroomRepo *repository.Classroom
-	majorRepo     *repository.Major
+	classroomRepo *repositories.Classroom
+	majorRepo     *repositories.Major
 }
 
 func NewClassroom(
-	classroomRepo *repository.Classroom,
-	majorRepo *repository.Major,
+	classroomRepo *repositories.Classroom,
+	majorRepo *repositories.Major,
 ) *Classroom {
 	return &Classroom{
 		classroomRepo,

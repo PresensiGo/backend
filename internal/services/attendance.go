@@ -4,23 +4,23 @@ import (
 	"api/internal/dto"
 	"api/internal/dto/requests"
 	"api/internal/dto/responses"
-	"api/internal/repository"
+	"api/internal/repositories"
 	"gorm.io/gorm"
 	"time"
 )
 
 type Attendance struct {
 	db                *gorm.DB
-	attendance        *repository.Attendance
-	attendanceStudent *repository.AttendanceDetail
-	studentRepo       *repository.Student
+	attendance        *repositories.Attendance
+	attendanceStudent *repositories.AttendanceDetail
+	studentRepo       *repositories.Student
 }
 
 func NewAttendance(
 	db *gorm.DB,
-	attendance *repository.Attendance,
-	attendanceStudent *repository.AttendanceDetail,
-	studentRepo *repository.Student,
+	attendance *repositories.Attendance,
+	attendanceStudent *repositories.AttendanceDetail,
+	studentRepo *repositories.Student,
 ) *Attendance {
 	return &Attendance{
 		db,

@@ -4,7 +4,7 @@ import (
 	"api/internal/dto"
 	"api/internal/dto/requests"
 	"api/internal/dto/responses"
-	"api/internal/repository"
+	"api/internal/repositories"
 	"api/pkg/authentication"
 	"fmt"
 	"github.com/google/uuid"
@@ -14,16 +14,16 @@ import (
 )
 
 type Auth struct {
-	userRepo      *repository.User
-	userTokenRepo *repository.UserToken
-	schoolRepo    *repository.School
+	userRepo      *repositories.User
+	userTokenRepo *repositories.UserToken
+	schoolRepo    *repositories.School
 	db            *gorm.DB
 }
 
 func NewAuth(
-	userRepo *repository.User,
-	userTokenRepo *repository.UserToken,
-	schoolRepo *repository.School,
+	userRepo *repositories.User,
+	userTokenRepo *repositories.UserToken,
+	schoolRepo *repositories.School,
 	db *gorm.DB,
 ) *Auth {
 	return &Auth{

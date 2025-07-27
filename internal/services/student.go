@@ -2,14 +2,14 @@ package services
 
 import (
 	"api/internal/dto/responses"
-	"api/internal/repository"
+	"api/internal/repositories"
 )
 
 type Student struct {
-	student *repository.Student
+	student *repositories.Student
 }
 
-func NewStudent(student *repository.Student) *Student {
+func NewStudent(student *repositories.Student) *Student {
 	return &Student{student}
 }
 

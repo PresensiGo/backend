@@ -9,7 +9,7 @@ package injectors
 import (
 	"api/internal/cron"
 	"api/internal/handlers"
-	"api/internal/repository"
+	"api/internal/repositories"
 	"api/internal/services"
 	"api/pkg/database"
 )
@@ -18,19 +18,19 @@ import (
 
 func InitAttendanceHandler() *handlers.Attendance {
 	db := database.New()
-	attendance := repository.NewAttendance(db)
-	attendanceStudent := repository.NewAttendanceStudent(db)
-	student := repository.NewStudent(db)
-	servicesAttendance := services.NewAttendance(db, attendance, attendanceStudent, student)
+	attendance := repositories.NewAttendance(db)
+	attendanceDetail := repositories.NewAttendanceStudent(db)
+	student := repositories.NewStudent(db)
+	servicesAttendance := services.NewAttendance(db, attendance, attendanceDetail, student)
 	handlersAttendance := handlers.NewAttendance(servicesAttendance)
 	return handlersAttendance
 }
 
 func InitAuthHandler() *handlers.Auth {
 	db := database.New()
-	user := repository.NewUser(db)
-	userToken := repository.NewUserToken(db)
-	school := repository.NewSchool(db)
+	user := repositories.NewUser(db)
+	userToken := repositories.NewUserToken(db)
+	school := repositories.NewSchool(db)
 	auth := services.NewAuth(user, userToken, school, db)
 	handlersAuth := handlers.NewAuth(auth)
 	return handlersAuth
@@ -45,8 +45,8 @@ func InitBatchHandler() *handlers.Batch {
 
 func InitClassroomHandler() *handlers.Classroom {
 	db := database.New()
-	classroom := repository.NewClassroom(db)
-	major := repository.NewMajor(db)
+	classroom := repositories.NewClassroom(db)
+	major := repositories.NewMajor(db)
 	servicesClassroom := services.NewClassroom(classroom, major)
 	handlersClassroom := handlers.NewClassroom(servicesClassroom)
 	return handlersClassroom
@@ -74,7 +74,7 @@ func InitResetService() *services.Reset {
 
 func InitStudentHandler() *handlers.Student {
 	db := database.New()
-	student := repository.NewStudent(db)
+	student := repositories.NewStudent(db)
 	servicesStudent := services.NewStudent(student)
 	handlersStudent := handlers.NewStudent(servicesStudent)
 	return handlersStudent
@@ -82,7 +82,7 @@ func InitStudentHandler() *handlers.Student {
 
 func InitUserTokenCron() *cron.UserToken {
 	db := database.New()
-	userToken := repository.NewUserToken(db)
+	userToken := repositories.NewUserToken(db)
 	cronUserToken := cron.NewUserToken(userToken)
 	return cronUserToken
 }

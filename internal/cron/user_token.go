@@ -1,15 +1,15 @@
 package cron
 
 import (
-	"api/internal/repository"
+	"api/internal/repositories"
 	"fmt"
 )
 
 type UserToken struct {
-	userTokenRepo *repository.UserToken
+	userTokenRepo *repositories.UserToken
 }
 
-func NewUserToken(userTokenRepo *repository.UserToken) *UserToken {
+func NewUserToken(userTokenRepo *repositories.UserToken) *UserToken {
 	return &UserToken{userTokenRepo}
 }
 
