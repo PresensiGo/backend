@@ -12,14 +12,14 @@ import (
 type Attendance struct {
 	db                *gorm.DB
 	attendance        *repository.Attendance
-	attendanceStudent *repository.AttendanceStudent
+	attendanceStudent *repository.AttendanceDetail
 	studentRepo       *repository.Student
 }
 
 func NewAttendance(
 	db *gorm.DB,
 	attendance *repository.Attendance,
-	attendanceStudent *repository.AttendanceStudent,
+	attendanceStudent *repository.AttendanceDetail,
 	studentRepo *repository.Student,
 ) *Attendance {
 	return &Attendance{

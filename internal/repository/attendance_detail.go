@@ -6,24 +6,24 @@ import (
 	"gorm.io/gorm"
 )
 
-type AttendanceStudent struct {
+type AttendanceDetail struct {
 	db *gorm.DB
 }
 
 func NewAttendanceStudent(
 	db *gorm.DB,
-) *AttendanceStudent {
-	return &AttendanceStudent{db}
+) *AttendanceDetail {
+	return &AttendanceDetail{db}
 }
 
-func (r *AttendanceStudent) CreateBatch(
+func (r *AttendanceDetail) CreateBatch(
 	tx *gorm.DB,
 	attendanceStudents *[]dto.AttendanceDetail,
 ) error {
 	return tx.Create(attendanceStudents).Error
 }
 
-func (r *AttendanceStudent) GetAllByAttendanceId(attendanceId uint) (*[]dto.AttendanceDetail, error) {
+func (r *AttendanceDetail) GetAllByAttendanceId(attendanceId uint) (*[]dto.AttendanceDetail, error) {
 	var attendanceStudents []models.AttendanceDetail
 	if err := r.db.Model(&models.AttendanceDetail{}).
 		Where("attendance_id = ?", attendanceId).
@@ -45,7 +45,7 @@ func (r *AttendanceStudent) GetAllByAttendanceId(attendanceId uint) (*[]dto.Atte
 	return &mappedAttendanceStudents, nil
 }
 
-func (r *AttendanceStudent) DeleteByAttendanceID(tx *gorm.DB, attendanceID uint) error {
+func (r *AttendanceDetail) DeleteByAttendanceID(tx *gorm.DB, attendanceID uint) error {
 	return tx.Where("attendance_id = ?", attendanceID).
 		Unscoped().
 		Delete(&models.AttendanceDetail{}).
