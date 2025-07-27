@@ -15,9 +15,9 @@ func NewMajor(service *services.Major) *Major {
 	return &Major{service}
 }
 
-// @ID			getAllMajors
+// @Id			getAllMajors
 // @Tags		major
-// @Param		batch_id	path		int	true	"Batch ID"
+// @Param		batch_id	path		int	true	"Batch Id"
 // @Success	200			{object}	responses.GetAllMajors
 // @Router		/api/v1/majors/batch/{batch_id} [get]
 func (h *Major) GetAll(c *gin.Context) {

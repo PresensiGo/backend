@@ -33,8 +33,8 @@ func (r *Attendance) GetAll(classroomID uint) (*[]dto.Attendance, error) {
 	mappedAttendances := make([]dto.Attendance, len(attendances))
 	for i, attendance := range attendances {
 		mappedAttendances[i] = dto.Attendance{
-			ID:          attendance.ID,
-			ClassroomID: attendance.ClassroomID,
+			Id:          attendance.ID,
+			ClassroomId: attendance.ClassroomId,
 			Date:        attendance.Date,
 		}
 	}
@@ -51,8 +51,8 @@ func (r *Attendance) GetById(attendanceId uint) (*dto.Attendance, error) {
 	}
 
 	return &dto.Attendance{
-		ID:          attendance.ID,
-		ClassroomID: attendance.ClassroomID,
+		Id:          attendance.ID,
+		ClassroomId: attendance.ClassroomId,
 		Date:        attendance.Date,
 	}, nil
 }

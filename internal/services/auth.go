@@ -55,7 +55,7 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 
 	// generate token
 	accessToken, err := s.generateAccessToken(
-		currentUser.ID, currentUser.Name, currentUser.Email, currentUser.Role,
+		currentUser.Id, currentUser.Name, currentUser.Email, currentUser.Role,
 		school.Id, school.Name, school.Code,
 	)
 	if err != nil {
@@ -67,7 +67,7 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
 		// create user token
 		if err := s.userTokenRepo.Create(tx, dto.UserToken{
-			UserID:       currentUser.ID,
+			UserId:       currentUser.Id,
 			RefreshToken: refreshToken,
 			TTL:          time.Now().Add(time.Hour * 24 * 30),
 		}); err != nil {
@@ -123,7 +123,7 @@ func (s *Auth) Register(req requests.Register) (*responses.Register, error) {
 		// store token into database
 		if err := s.userTokenRepo.Create(tx, dto.UserToken{
 			RefreshToken: refreshToken,
-			UserID:       userID,
+			UserId:       userID,
 			TTL:          time.Now().Add(time.Hour * 24 * 30),
 		}); err != nil {
 			return err
@@ -160,7 +160,7 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 		return nil, fmt.Errorf("refresh token expired")
 	}
 
-	currentUser, err := s.userRepo.GetByID(oldUserToken.UserID)
+	currentUser, err := s.userRepo.GetByID(oldUserToken.UserId)
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +172,7 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 
 	// generate user token
 	accessToken, err := s.generateAccessToken(
-		currentUser.ID, currentUser.Name, currentUser.Email, currentUser.Role,
+		currentUser.Id, currentUser.Name, currentUser.Email, currentUser.Role,
 		school.Id, school.Name, school.Code,
 	)
 	if err != nil {
@@ -182,7 +182,7 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 
 	// store new token into database
 	if err := s.userTokenRepo.UpdateByRefreshToken(oldRefreshToken, dto.UserToken{
-		UserID:       currentUser.ID,
+		UserId:       currentUser.Id,
 		RefreshToken: refreshToken,
 	}); err != nil {
 		return nil, err

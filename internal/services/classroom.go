@@ -29,12 +29,12 @@ func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWit
 
 	majorMap := make(map[uint]dto.Major)
 	for _, major := range majors {
-		majorMap[major.ID] = major
+		majorMap[major.Id] = major
 	}
 
 	var majorIds []uint
 	for _, major := range majors {
-		majorIds = append(majorIds, major.ID)
+		majorIds = append(majorIds, major.Id)
 	}
 
 	classes, err := s.classroomRepo.GetManyByMajorId(majorIds)
@@ -46,7 +46,7 @@ func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWit
 	for index, class := range classes {
 		result[index] = responses.ClassroomMajor{
 			Classroom: class,
-			Major:     majorMap[class.MajorID],
+			Major:     majorMap[class.MajorId],
 		}
 	}
 

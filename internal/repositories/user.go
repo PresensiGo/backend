@@ -36,7 +36,7 @@ func (r *User) GetByID(id uint) (*dto.User, error) {
 	}
 
 	return &dto.User{
-		ID:       user.ID,
+		Id:       user.ID,
 		Name:     user.Name,
 		Email:    user.Email,
 		Password: user.Password,
@@ -54,7 +54,7 @@ func (r *User) GetByEmail(email string) (*dto.User, error) {
 	}
 
 	return &dto.User{
-		ID:       user.ID,
+		Id:       user.ID,
 		Name:     user.Name,
 		Email:    user.Email,
 		Password: user.Password,

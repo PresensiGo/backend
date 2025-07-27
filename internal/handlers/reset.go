@@ -15,7 +15,7 @@ func NewReset(service *services.Reset) *Reset {
 	return &Reset{service}
 }
 
-// @ID			reset
+// @Id			reset
 // @Tags		reset
 // @Success		200	{string} string
 // @Router		/api/v1/reset [get]

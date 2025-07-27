@@ -49,6 +49,8 @@ func New() *gorm.DB {
 			&models.Student{},
 			&models.Attendance{},
 			&models.AttendanceDetail{},
+			&models.Lateness{},
+			&models.LatenessDetail{},
 		)
 
 		dbInstance = db

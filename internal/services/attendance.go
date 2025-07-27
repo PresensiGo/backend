@@ -38,7 +38,7 @@ func (s *Attendance) Create(req requests.CreateAttendance) error {
 		}
 
 		attendance := dto.Attendance{
-			ClassroomID: req.ClassroomID,
+			ClassroomId: req.ClassroomID,
 			Date:        parsedDate,
 		}
 		if err := s.attendance.Create(tx, &attendance); err != nil {
@@ -48,8 +48,8 @@ func (s *Attendance) Create(req requests.CreateAttendance) error {
 		mappedAttendanceStudents := make([]dto.AttendanceDetail, len(req.AttendanceStudents))
 		for i, attendanceStudent := range req.AttendanceStudents {
 			mappedAttendanceStudents[i] = dto.AttendanceDetail{
-				AttendanceID: attendance.ID,
-				StudentID:    attendanceStudent.StudentID,
+				AttendanceId: attendance.Id,
+				StudentId:    attendanceStudent.StudentID,
 				Status:       attendanceStudent.Status,
 				Note:         attendanceStudent.Note,
 			}
@@ -91,8 +91,8 @@ func (s *Attendance) GetById(attendanceId uint) (*responses.GetAttendance, error
 	mapAttendanceStudents := make(map[uint]dto.AttendanceDetail)
 	studentIds := make([]uint, len(*attendanceStudents))
 	for i, item := range *attendanceStudents {
-		studentIds[i] = item.StudentID
-		mapAttendanceStudents[item.StudentID] = item
+		studentIds[i] = item.StudentId
+		mapAttendanceStudents[item.StudentId] = item
 	}
 
 	students, err := s.studentRepo.GetManyById(studentIds)
@@ -104,7 +104,7 @@ func (s *Attendance) GetById(attendanceId uint) (*responses.GetAttendance, error
 	for i, item := range *students {
 		mappedItems[i] = responses.GetAttendanceItem{
 			Student:           item,
-			AttendanceStudent: mapAttendanceStudents[item.ID],
+			AttendanceStudent: mapAttendanceStudents[item.Id],
 		}
 	}
 

@@ -54,7 +54,7 @@ func (h *Excel) ImportDataV2(c *gin.Context) {
 	})
 }
 
-// @ID			importData
+// @Id			importData
 // @Tags		excel
 // @Success	200	{string}	string
 // @Router		/api/v1/excel/import [post]

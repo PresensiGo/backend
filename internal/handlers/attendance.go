@@ -16,7 +16,7 @@ func NewAttendance(service *services.Attendance) *Attendance {
 	return &Attendance{service}
 }
 
-// @ID 			createAttendance
+// @Id 			createAttendance
 // @Tags 		attendance
 // @Param 		body body requests.CreateAttendance true "Body"
 // @Success 	200 {string} string
@@ -37,9 +37,9 @@ func (h *Attendance) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
 
-// @ID 			getAllAttendances
+// @Id 			getAllAttendances
 // @Tags 		attendance
-// @Param 		classroom_id path int true "Classroom ID"
+// @Param 		classroom_id path int true "Classroom Id"
 // @Success 	200 {object} responses.GetAllAttendances
 // @Router		/api/v1/attendances/classrooms/{classroom_id} [get]
 func (h *Attendance) GetAll(c *gin.Context) {
@@ -58,9 +58,9 @@ func (h *Attendance) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @ID 			getAttendance
+// @Id 			getAttendance
 // @Tags 		attendance
-// @Param 		attendance_id path int true "Attendance ID"
+// @Param 		attendance_id path int true "Attendance Id"
 // @Success 	200 {object} responses.GetAttendance
 // @Router		/api/v1/attendances/{attendance_id} [get]
 func (h *Attendance) GetById(c *gin.Context) {
@@ -79,9 +79,9 @@ func (h *Attendance) GetById(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @ID 			deleteAttendance
+// @Id 			deleteAttendance
 // @Tags 		attendance
-// @Param 		attendance_id path int true "Attendance ID"
+// @Param 		attendance_id path int true "Attendance Id"
 // @Success 	200 {string} string
 // @Router		/api/v1/attendances/{attendance_id} [delete]
 func (h *Attendance) Delete(c *gin.Context) {

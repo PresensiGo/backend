@@ -111,7 +111,7 @@ func (s *Excel) ImportData(schoolId uint, reader io.Reader) error {
 			} else {
 				newClassroomId, err := s.classroomRepo.CreateInTx(tx, dto.Classroom{
 					Name:    classroomName,
-					MajorID: majorId,
+					MajorId: majorId,
 				})
 				if err != nil {
 					return err
@@ -138,7 +138,7 @@ func (s *Excel) ImportData(schoolId uint, reader io.Reader) error {
 				students = append(students, dto.Student{
 					NIS:         studentNIS,
 					Name:        studentName,
-					ClassroomID: classroomId,
+					ClassroomId: classroomId,
 				})
 			}
 			if err := s.studentRepo.CreateBatchInTx(tx, students); err != nil {

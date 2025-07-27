@@ -17,7 +17,7 @@ func NewClassroom(db *gorm.DB) *Classroom {
 func (r *Classroom) CreateInTx(tx *gorm.DB, data dto.Classroom) (*uint, error) {
 	classroom := models.Classroom{
 		Name:    data.Name,
-		MajorId: data.MajorID,
+		MajorId: data.MajorId,
 	}
 	if err := tx.Create(&classroom).Error; err != nil {
 		return nil, err
@@ -38,9 +38,9 @@ func (r *Classroom) GetManyByMajorId(majorIds []uint) ([]dto.Classroom, error) {
 	var mappedClasses []dto.Classroom
 	for _, class := range classes {
 		mappedClasses = append(mappedClasses, dto.Classroom{
-			ID:      class.ID,
+			Id:      class.ID,
 			Name:    class.Name,
-			MajorID: class.MajorId,
+			MajorId: class.MajorId,
 		})
 	}
 

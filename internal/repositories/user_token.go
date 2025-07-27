@@ -17,7 +17,7 @@ func NewUserToken(db *gorm.DB) *UserToken {
 
 func (r *UserToken) Create(tx *gorm.DB, token dto.UserToken) error {
 	userToken := models.UserToken{
-		UserId:       token.UserID,
+		UserId:       token.UserId,
 		RefreshToken: token.RefreshToken,
 		TTL:          token.TTL,
 	}
@@ -37,9 +37,9 @@ func (r *UserToken) GetByRefreshToken(refreshToken string) (*dto.UserToken, erro
 	}
 
 	return &dto.UserToken{
-		ID:           userToken.ID,
+		Id:           userToken.ID,
 		RefreshToken: userToken.RefreshToken,
-		UserID:       userToken.UserId,
+		UserId:       userToken.UserId,
 		TTL:          userToken.TTL,
 	}, nil
 }

@@ -20,7 +20,7 @@ func (r *Student) CreateBatchInTx(tx *gorm.DB, data []dto.Student) error {
 		students[i] = models.Student{
 			NIS:         student.NIS,
 			Name:        student.Name,
-			ClassroomId: student.ClassroomID,
+			ClassroomId: student.ClassroomId,
 		}
 	}
 
@@ -39,10 +39,10 @@ func (r *Student) GetAllByClassId(classId uint) ([]dto.Student, error) {
 	mappedStudents := make([]dto.Student, len(students))
 	for index, student := range students {
 		mappedStudents[index] = dto.Student{
-			ID:          student.ID,
+			Id:          student.ID,
 			NIS:         student.NIS,
 			Name:        student.Name,
-			ClassroomID: student.ClassroomId,
+			ClassroomId: student.ClassroomId,
 		}
 	}
 
@@ -61,10 +61,10 @@ func (r *Student) GetManyById(studentIds []uint) (*[]dto.Student, error) {
 	mappedStudents := make([]dto.Student, len(students))
 	for index, student := range students {
 		mappedStudents[index] = dto.Student{
-			ID:          student.ID,
+			Id:          student.ID,
 			NIS:         student.NIS,
 			Name:        student.Name,
-			ClassroomID: student.ClassroomId,
+			ClassroomId: student.ClassroomId,
 		}
 	}
 

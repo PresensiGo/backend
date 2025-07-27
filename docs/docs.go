@@ -51,7 +51,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Classroom ID",
+                        "description": "Classroom Id",
                         "name": "classroom_id",
                         "in": "path",
                         "required": true
@@ -76,7 +76,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Attendance ID",
+                        "description": "Attendance Id",
                         "name": "attendance_id",
                         "in": "path",
                         "required": true
@@ -99,7 +99,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Attendance ID",
+                        "description": "Attendance Id",
                         "name": "attendance_id",
                         "in": "path",
                         "required": true
@@ -275,7 +275,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Batch ID",
+                        "description": "Batch Id",
                         "name": "batch_id",
                         "in": "path",
                         "required": true
@@ -316,7 +316,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Batch ID",
+                        "description": "Batch Id",
                         "name": "batch_id",
                         "in": "path",
                         "required": true
@@ -357,7 +357,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Classroom ID",
+                        "description": "Classroom Id",
                         "name": "classroom_id",
                         "in": "path",
                         "required": true

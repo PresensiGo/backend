@@ -34,9 +34,9 @@ func (r *AttendanceDetail) GetAllByAttendanceId(attendanceId uint) (*[]dto.Atten
 	mappedAttendanceStudents := make([]dto.AttendanceDetail, len(attendanceStudents))
 	for i, item := range attendanceStudents {
 		mappedAttendanceStudents[i] = dto.AttendanceDetail{
-			ID:           item.ID,
-			AttendanceID: item.AttendanceId,
-			StudentID:    item.StudentId,
+			Id:           item.ID,
+			AttendanceId: item.AttendanceId,
+			StudentId:    item.StudentId,
 			Status:       item.Status,
 			Note:         item.Note,
 		}

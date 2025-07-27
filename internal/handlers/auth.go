@@ -15,7 +15,7 @@ func NewAuth(service *services.Auth) *Auth {
 	return &Auth{service}
 }
 
-// @ID			login
+// @Id			login
 // @Tags		auth
 // @Param		body	body		requests.Login	true	"Login request"
 // @Success		200		{object}	responses.Login
@@ -41,7 +41,7 @@ func (h *Auth) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @ID			register
+// @Id			register
 // @Tags		auth
 // @Param		body body		requests.Register	true	"Login request"
 // @Success		200	{object}	responses.Register
@@ -62,7 +62,7 @@ func (h *Auth) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @ID			logout
+// @Id			logout
 // @Tags		auth
 // @Param		body body requests.Logout true "Logout Request"
 // @Success		200	{object} responses.Logout
@@ -83,7 +83,7 @@ func (h *Auth) Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @ID			refreshToken
+// @Id			refreshToken
 // @Tags		auth
 // @Param		body	body		requests.RefreshToken	true	"Refresh token req"
 // @Success		200		{object}	responses.RefreshToken
@@ -104,7 +104,7 @@ func (h *Auth) RefreshToken(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @ID			refreshTokenTTL
+// @Id			refreshTokenTTL
 // @Tags		auth
 // @Param		body	body		requests.RefreshTokenTTL	true	"Refresh token req"
 // @Success		200		{string}	string

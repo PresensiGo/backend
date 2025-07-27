@@ -38,7 +38,7 @@ func (r *Major) GetAllByBatchId(batchId uint) ([]dto.Major, error) {
 	var mappedMajors []dto.Major
 	for _, major := range majors {
 		mappedMajors = append(mappedMajors, dto.Major{
-			ID:   major.ID,
+			Id:   major.ID,
 			Name: major.Name,
 		})
 	}

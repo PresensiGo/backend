@@ -15,9 +15,9 @@ func NewClassroom(service *services.Classroom) *Classroom {
 	return &Classroom{service}
 }
 
-// @ID			getAllClassroomWithMajors
+// @Id			getAllClassroomWithMajors
 // @Tags		classroom
-// @Param 		batch_id path int true "Batch ID"
+// @Param 		batch_id path int true "Batch Id"
 // @Success		200	{object}	responses.GetAllClassroomWithMajors
 // @Router		/api/v1/classrooms/batches/{batch_id} [get]
 func (h *Classroom) GetAllWithMajors(c *gin.Context) {
