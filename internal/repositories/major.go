@@ -14,6 +14,18 @@ func NewMajor(db *gorm.DB) *Major {
 	return &Major{db}
 }
 
+func (r *Major) CreateInTx(tx *gorm.DB, data dto.Major) (*uint, error) {
+	major := models.Major{
+		Name:    data.Name,
+		BatchId: data.BatchId,
+	}
+	if err := tx.Create(&major).Error; err != nil {
+		return nil, err
+	}
+
+	return &major.ID, nil
+}
+
 func (r *Major) GetAllByBatchId(batchId uint) ([]dto.Major, error) {
 	var majors []models.Major
 	if err := r.db.Model(&models.Major{}).

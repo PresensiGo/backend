@@ -14,6 +14,19 @@ func NewStudent(db *gorm.DB) *Student {
 	return &Student{db}
 }
 
+func (r *Student) CreateBatchInTx(tx *gorm.DB, data []dto.Student) error {
+	students := make([]models.Student, len(data))
+	for i, student := range data {
+		students[i] = models.Student{
+			NIS:         student.NIS,
+			Name:        student.Name,
+			ClassroomId: student.ClassroomID,
+		}
+	}
+
+	return tx.Create(&students).Error
+}
+
 func (r *Student) GetAllByClassId(classId uint) ([]dto.Student, error) {
 	var students []models.Student
 	if err := r.db.Model(&models.Student{}).

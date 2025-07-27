@@ -54,7 +54,11 @@ func InitClassroomHandler() *handlers.Classroom {
 
 func InitExcelHandler() *handlers.Excel {
 	db := database.New()
-	excel := services.NewExcel(db)
+	batch := repositories.NewBatch(db)
+	major := repositories.NewMajor(db)
+	classroom := repositories.NewClassroom(db)
+	student := repositories.NewStudent(db)
+	excel := services.NewExcel(batch, major, classroom, student, db)
 	handlersExcel := handlers.NewExcel(excel)
 	return handlersExcel
 }

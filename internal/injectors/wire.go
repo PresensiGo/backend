@@ -60,6 +60,10 @@ func InitExcelHandler() *handlers.Excel {
 	wire.Build(
 		handlers.NewExcel,
 		services.NewExcel,
+		repositories.NewBatch,
+		repositories.NewMajor,
+		repositories.NewClassroom,
+		repositories.NewStudent,
 		database.New,
 	)
 	return nil

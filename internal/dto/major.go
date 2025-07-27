@@ -1,6 +1,7 @@
 package dto
 
 type Major struct {
-	ID   uint   `json:"id" validate:"required"`
-	Name string `json:"name" validate:"required"`
+	ID      uint   `json:"id" validate:"required"`
+	Name    string `json:"name" validate:"required"`
+	BatchId uint   `json:"batch_id" validate:"required"`
 }

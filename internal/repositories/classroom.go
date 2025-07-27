@@ -14,6 +14,18 @@ func NewClassroom(db *gorm.DB) *Classroom {
 	return &Classroom{db}
 }
 
+func (r *Classroom) CreateInTx(tx *gorm.DB, data dto.Classroom) (*uint, error) {
+	classroom := models.Classroom{
+		Name:    data.Name,
+		MajorId: data.MajorID,
+	}
+	if err := tx.Create(&classroom).Error; err != nil {
+		return nil, err
+	}
+
+	return &classroom.ID, nil
+}
+
 func (r *Classroom) GetManyByMajorId(majorIds []uint) ([]dto.Classroom, error) {
 	var classes []models.Classroom
 	if err := r.db.Where("major_id in ?", majorIds).
