@@ -1,6 +1,8 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type User struct {
 	gorm.Model
@@ -9,4 +11,6 @@ type User struct {
 	Email    string `gorm:"unique"`
 	Password string
 	Role     string `gorm:"default:'student'"`
+	SchoolId uint
+	School   School
 }

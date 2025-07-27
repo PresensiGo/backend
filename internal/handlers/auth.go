@@ -53,11 +53,7 @@ func (h *Auth) Register(c *gin.Context) {
 		return
 	}
 
-	response, err := h.service.Register(
-		request.Name,
-		request.Email,
-		request.Password,
-	)
+	response, err := h.service.Register(request)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return

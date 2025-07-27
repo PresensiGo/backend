@@ -30,6 +30,7 @@ func InitAuthHandler() *handlers.Auth {
 		services.NewAuth,
 		repository.NewUser,
 		repository.NewUserToken,
+		repository.NewSchool,
 		database.New,
 	)
 	return nil

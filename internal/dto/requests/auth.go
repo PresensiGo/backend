@@ -6,6 +6,7 @@ type Login struct {
 }
 
 type Register struct {
+	Code     string `json:"code"`
 	Name     string `json:"name" default:"John Doe"`
 	Email    string `json:"email" default:"email@email.com"`
 	Password string `json:"password" default:"password"`

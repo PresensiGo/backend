@@ -30,7 +30,8 @@ func InitAuthHandler() *handlers.Auth {
 	db := database.New()
 	user := repository.NewUser(db)
 	userToken := repository.NewUserToken(db)
-	auth := services.NewAuth(user, userToken, db)
+	school := repository.NewSchool(db)
+	auth := services.NewAuth(user, userToken, school, db)
 	handlersAuth := handlers.NewAuth(auth)
 	return handlersAuth
 }

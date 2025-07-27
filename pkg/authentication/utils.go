@@ -7,11 +7,15 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(id uint, name string, email string) (string, error) {
+func GenerateJWT(user JWTClaim) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, JWTClaim{
-		ID:    id,
-		Name:  name,
-		Email: email,
+		ID:         user.ID,
+		Name:       user.Name,
+		Email:      user.Email,
+		Role:       user.Role,
+		SchoolId:   user.SchoolId,
+		SchoolName: user.SchoolName,
+		SchoolCode: user.SchoolCode,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "API Presensi Sekolah",
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -48,11 +52,11 @@ func VerifyJWT(token string) (*JWTClaim, error) {
 	return claims, nil
 }
 
-func GetAuthenticatedUser(ctx context.Context) AuthenticatedUser {
-	authenticatedUser, exists := ctx.Value("token").(AuthenticatedUser)
+func GetAuthenticatedUser(ctx context.Context) JWTClaim {
+	authenticatedUser, exists := ctx.Value("token").(JWTClaim)
 	if exists {
 		return authenticatedUser
 	}
 
-	return AuthenticatedUser{}
+	return JWTClaim{}
 }

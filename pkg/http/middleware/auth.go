@@ -31,10 +31,14 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("token", authentication.AuthenticatedUser{
-			ID:    claims.ID,
-			Name:  claims.Name,
-			Email: claims.Email,
+		ctx.Set("token", authentication.JWTClaim{
+			ID:         claims.ID,
+			Name:       claims.Name,
+			Email:      claims.Email,
+			Role:       claims.Role,
+			SchoolId:   claims.SchoolId,
+			SchoolName: claims.SchoolName,
+			SchoolCode: claims.SchoolCode,
 		})
 
 		ctx.Next()

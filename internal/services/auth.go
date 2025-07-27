@@ -2,6 +2,7 @@ package services
 
 import (
 	"api/internal/dto"
+	"api/internal/dto/requests"
 	"api/internal/dto/responses"
 	"api/internal/repository"
 	"api/pkg/authentication"
@@ -15,17 +16,20 @@ import (
 type Auth struct {
 	userRepo      *repository.User
 	userTokenRepo *repository.UserToken
+	schoolRepo    *repository.School
 	db            *gorm.DB
 }
 
 func NewAuth(
 	userRepo *repository.User,
 	userTokenRepo *repository.UserToken,
+	schoolRepo *repository.School,
 	db *gorm.DB,
 ) *Auth {
 	return &Auth{
 		userRepo,
 		userTokenRepo,
+		schoolRepo,
 		db,
 	}
 }
@@ -44,11 +48,15 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 		return nil, err
 	}
 
+	school, err := s.schoolRepo.GetById(currentUser.SchoolId)
+	if err != nil {
+		return nil, err
+	}
+
 	// generate token
-	accessToken, err := authentication.GenerateJWT(
-		currentUser.ID,
-		currentUser.Name,
-		currentUser.Email,
+	accessToken, err := s.generateAccessToken(
+		currentUser.ID, currentUser.Name, currentUser.Email, currentUser.Role,
+		school.Id, school.Name, school.Code,
 	)
 	if err != nil {
 		return nil, err
@@ -77,26 +85,36 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 	}, nil
 }
 
-func (s *Auth) Register(name string, email string, password string) (*responses.Register, error) {
+func (s *Auth) Register(req requests.Register) (*responses.Register, error) {
+	// get school by code
+	school, err := s.schoolRepo.GetByCode(req.Code)
+	if err != nil {
+		return nil, err
+	}
+
 	var response responses.Register
 	if err := s.db.Transaction(func(tx *gorm.DB) error {
 		// create new user
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 		if err != nil {
 			return err
 		}
 
 		userID, err := s.userRepo.Create(tx, dto.User{
-			Name:     name,
-			Email:    email,
+			Name:     req.Name,
+			Email:    req.Email,
 			Password: string(hashedPassword),
+			Role:     "teacher",
 		})
 		if err != nil {
 			return err
 		}
 
 		// generate user token
-		accessToken, err := authentication.GenerateJWT(userID, name, email)
+		accessToken, err := s.generateAccessToken(
+			userID, req.Name, req.Email, "teacher",
+			school.Id, school.Name, school.Code,
+		)
 		if err != nil {
 			return err
 		}
@@ -147,11 +165,15 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 		return nil, err
 	}
 
+	school, err := s.schoolRepo.GetById(currentUser.SchoolId)
+	if err != nil {
+		return nil, err
+	}
+
 	// generate user token
-	accessToken, err := authentication.GenerateJWT(
-		currentUser.ID,
-		currentUser.Name,
-		currentUser.Email,
+	accessToken, err := s.generateAccessToken(
+		currentUser.ID, currentUser.Name, currentUser.Email, currentUser.Role,
+		school.Id, school.Name, school.Code,
 	)
 	if err != nil {
 		return nil, err
@@ -174,4 +196,21 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 
 func (s *Auth) RefreshTokenTTL(refreshToken string) error {
 	return s.userTokenRepo.UpdateTTLByRefreshToken(refreshToken)
+}
+
+func (s *Auth) generateAccessToken(
+	id uint, name string, email string, role string,
+	schoolId uint, schoolName string, schoolCode string,
+) (string, error) {
+	return authentication.GenerateJWT(
+		authentication.JWTClaim{
+			ID:         id,
+			Name:       name,
+			Email:      email,
+			Role:       role,
+			SchoolId:   schoolId,
+			SchoolName: schoolName,
+			SchoolCode: schoolCode,
+		},
+	)
 }
