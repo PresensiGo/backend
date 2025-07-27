@@ -7,5 +7,5 @@ type Classroom struct {
 
 	Name    string `gorm:"not null"`
 	MajorId uint   `gorm:"not null"`
-	Major   Major
+	Major   Major  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }

@@ -1,43 +1,17 @@
 package services
 
 import (
-	"api/internal/dto/responses"
-	"api/internal/models"
-	"gorm.io/gorm"
+	"api/internal/repositories"
 )
 
 type Reset struct {
-	db *gorm.DB
+	batchRepo *repositories.Batch
 }
 
-func NewReset(db *gorm.DB) *Reset {
-	return &Reset{db}
+func NewReset(batchRepo *repositories.Batch) *Reset {
+	return &Reset{batchRepo}
 }
 
-func (s *Reset) Reset() (*responses.Reset, error) {
-	if err := s.db.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Where("true").Unscoped().Delete(&models.Student{}).Error; err != nil {
-			return err
-		}
-
-		if err := tx.Where("true").Unscoped().Delete(&models.Classroom{}).Error; err != nil {
-			return err
-		}
-
-		if err := tx.Where("true").Unscoped().Delete(&models.Major{}).Error; err != nil {
-			return err
-		}
-
-		if err := tx.Where("true").Unscoped().Delete(&models.Batch{}).Error; err != nil {
-			return err
-		}
-
-		return nil
-	}); err != nil {
-		return nil, err
-	}
-
-	return &responses.Reset{
-		Message: "Reset Success",
-	}, nil
+func (s *Reset) ResetBySchoolId(schoolId uint) error {
+	return s.batchRepo.DeleteBySchoolId(schoolId)
 }

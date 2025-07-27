@@ -17,7 +17,7 @@ const (
 type Attendance struct {
 	gorm.Model
 
-	ClassroomID uint `json:"classroom_id"`
-	Classroom   Classroom
+	ClassroomID uint      `json:"classroom_id"`
+	Classroom   Classroom `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Date        time.Time `json:"date"`
 }

@@ -332,6 +332,22 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/reset": {
+            "get": {
+                "tags": [
+                    "reset"
+                ],
+                "operationId": "reset",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/students/classrooms/{classroom_id}": {
             "get": {
                 "tags": [
@@ -612,6 +628,9 @@ const docTemplate = `{
         "requests.Register": {
             "type": "object",
             "properties": {
+                "code": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string",
                     "default": "email@email.com"

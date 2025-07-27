@@ -66,10 +66,12 @@ func InitMajorHandler() *handlers.Major {
 	return handlersMajor
 }
 
-func InitResetService() *services.Reset {
+func InitResetHandler() *handlers.Reset {
 	db := database.New()
-	reset := services.NewReset(db)
-	return reset
+	batch := repositories.NewBatch(db)
+	reset := services.NewReset(batch)
+	handlersReset := handlers.NewReset(reset)
+	return handlersReset
 }
 
 func InitStudentHandler() *handlers.Student {

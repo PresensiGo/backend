@@ -8,5 +8,5 @@ type Student struct {
 	NIS         string `gorm:"not null"`
 	Name        string `gorm:"not null"`
 	ClassroomId uint
-	Classroom   Classroom
+	Classroom   Classroom `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }

@@ -7,5 +7,5 @@ type Major struct {
 
 	Name    string `gorm:"not null"`
 	BatchId uint   `gorm:"not null"`
-	Batch   Batch
+	Batch   Batch  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }

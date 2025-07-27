@@ -170,6 +170,8 @@ definitions:
     type: object
   requests.Register:
     properties:
+      code:
+        type: string
       email:
         default: email@email.com
         type: string
@@ -464,6 +466,16 @@ paths:
             $ref: '#/definitions/responses.GetAllMajors'
       tags:
       - major
+  /api/v1/reset:
+    get:
+      operationId: reset
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - reset
   /api/v1/students/classrooms/{classroom_id}:
     get:
       operationId: getAllStudents

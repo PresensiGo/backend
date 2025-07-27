@@ -74,9 +74,11 @@ func InitMajorHandler() *handlers.Major {
 	return nil
 }
 
-func InitResetService() *services.Reset {
+func InitResetHandler() *handlers.Reset {
 	wire.Build(
+		handlers.NewReset,
 		services.NewReset,
+		repositories.NewBatch,
 		database.New,
 	)
 	return nil

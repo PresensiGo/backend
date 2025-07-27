@@ -7,5 +7,5 @@ type Batch struct {
 
 	Name     string `gorm:"not null"`
 	SchoolId uint
-	School   School
+	School   School `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
