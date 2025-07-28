@@ -423,12 +423,37 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/students/classrooms/{classroom_id}": {
+        "/api/v1/students": {
             "get": {
                 "tags": [
                     "student"
                 ],
                 "operationId": "getAllStudents",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Keyword",
+                        "name": "keyword",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetAllStudentsRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/students/classrooms/{classroom_id}": {
+            "get": {
+                "tags": [
+                    "student"
+                ],
+                "operationId": "getAllStudentsByClassroomId",
                 "parameters": [
                     {
                         "type": "integer",
@@ -442,7 +467,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllStudents"
+                            "$ref": "#/definitions/GetAllStudentsByClassroomIdRes"
                         }
                     }
                 }
@@ -527,6 +552,34 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.Lateness"
+                    }
+                }
+            }
+        },
+        "GetAllStudentsByClassroomIdRes": {
+            "type": "object",
+            "required": [
+                "students"
+            ],
+            "properties": {
+                "students": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Student"
+                    }
+                }
+            }
+        },
+        "GetAllStudentsRes": {
+            "type": "object",
+            "required": [
+                "students"
+            ],
+            "properties": {
+                "students": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Student"
                     }
                 }
             }
@@ -836,20 +889,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.Major"
-                    }
-                }
-            }
-        },
-        "responses.GetAllStudents": {
-            "type": "object",
-            "required": [
-                "students"
-            ],
-            "properties": {
-                "students": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.Student"
                     }
                 }
             }

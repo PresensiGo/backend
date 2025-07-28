@@ -51,6 +51,24 @@ definitions:
     required:
     - latenesses
     type: object
+  GetAllStudentsByClassroomIdRes:
+    properties:
+      students:
+        items:
+          $ref: '#/definitions/dto.Student'
+        type: array
+    required:
+    - students
+    type: object
+  GetAllStudentsRes:
+    properties:
+      students:
+        items:
+          $ref: '#/definitions/dto.Student'
+        type: array
+    required:
+    - students
+    type: object
   GetAttendanceItemRes:
     properties:
       attendanceStudent:
@@ -260,15 +278,6 @@ definitions:
         type: array
     required:
     - majors
-    type: object
-  responses.GetAllStudents:
-    properties:
-      students:
-        items:
-          $ref: '#/definitions/dto.Student'
-        type: array
-    required:
-    - students
     type: object
   responses.Login:
     properties:
@@ -566,9 +575,25 @@ paths:
             type: string
       tags:
       - reset
-  /api/v1/students/classrooms/{classroom_id}:
+  /api/v1/students:
     get:
       operationId: getAllStudents
+      parameters:
+      - description: Keyword
+        in: query
+        name: keyword
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAllStudentsRes'
+      tags:
+      - student
+  /api/v1/students/classrooms/{classroom_id}:
+    get:
+      operationId: getAllStudentsByClassroomId
       parameters:
       - description: Classroom Id
         in: path
@@ -579,7 +604,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllStudents'
+            $ref: '#/definitions/GetAllStudentsByClassroomIdRes'
       tags:
       - student
 swagger: "2.0"

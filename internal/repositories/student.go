@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"fmt"
+	"strings"
+
 	"api/internal/dto"
 	"api/internal/models"
 	"gorm.io/gorm"
@@ -27,10 +30,34 @@ func (r *Student) CreateBatchInTx(tx *gorm.DB, data []dto.Student) error {
 	return tx.Create(&students).Error
 }
 
-func (r *Student) GetAllByClassId(classId uint) ([]dto.Student, error) {
+func (r *Student) GetAll(keyword string) (*[]dto.Student, error) {
+	keyword = fmt.Sprintf("%%%s%%", strings.ToLower(keyword))
+
+	var students []models.Student
+	if err := r.db.
+		Where(
+			"lower(name) like ? or lower(nis) like ?",
+			keyword, keyword,
+		).
+		Order("name asc").
+		Order("nis asc").
+		Find(&students).
+		Error; err != nil {
+		return nil, err
+	}
+
+	mappedStudents := make([]dto.Student, len(students))
+	for i, student := range students {
+		mappedStudents[i] = *dto.FromStudentModel(&student)
+	}
+
+	return &mappedStudents, nil
+}
+
+func (r *Student) GetAllByClassroomId(classroomId uint) ([]dto.Student, error) {
 	var students []models.Student
 	if err := r.db.Model(&models.Student{}).
-		Where("classroom_id = ?", classId).
+		Where("classroom_id = ?", classroomId).
 		Order("name asc").
 		Find(&students).Error; err != nil {
 		return nil, err
