@@ -36,3 +36,19 @@ func (h *Lateness) Create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
+
+func (h *Lateness) GetAll(c *gin.Context) {
+	authUser := authentication.GetAuthenticatedUser(c)
+	if authUser.SchoolId == 0 {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	response, err := h.service.GetAllBySchoolId(authUser.SchoolId)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}

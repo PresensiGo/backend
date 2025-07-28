@@ -10,4 +10,5 @@ func RegisterLateness(g *gin.RouterGroup) {
 	handler := injectors.InitLatenessHandler()
 
 	group.POST("", handler.Create)
+	group.GET("", handler.GetAll)
 }

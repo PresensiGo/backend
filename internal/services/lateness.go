@@ -3,6 +3,7 @@ package services
 import (
 	"api/internal/dto"
 	"api/internal/dto/requests"
+	"api/internal/dto/responses"
 	"api/internal/repositories"
 )
 
@@ -26,4 +27,15 @@ func (s *Lateness) Create(
 	}
 
 	return nil
+}
+
+func (s *Lateness) GetAllBySchoolId(schoolId uint) (*responses.GetAllLatenesses, error) {
+	latenesses, err := s.latenessRepo.GetAllBySchoolId(schoolId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.GetAllLatenesses{
+		Latenesses: *latenesses,
+	}, nil
 }
