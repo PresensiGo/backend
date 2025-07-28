@@ -4,6 +4,7 @@ import (
 	"api/internal/dto/requests"
 	"api/internal/services"
 	"api/pkg/authentication"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -19,6 +20,7 @@ func NewLateness(service *services.Lateness) *Lateness {
 func (h *Lateness) Create(c *gin.Context) {
 	var req requests.CreateLateness
 	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err.Error())
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

@@ -5,6 +5,7 @@ import (
 	"api/internal/dto/requests"
 	"api/internal/dto/responses"
 	"api/internal/repositories"
+	"api/pkg/utils"
 )
 
 type Lateness struct {
@@ -19,8 +20,13 @@ func (s *Lateness) Create(
 	schoolId uint,
 	req *requests.CreateLateness,
 ) error {
+	parsedDate, err := utils.GetParsedDate(req.Date)
+	if err != nil {
+		return err
+	}
+
 	if _, err := s.latenessRepo.Create(&dto.Lateness{
-		Date:     req.Date,
+		Date:     *parsedDate,
 		SchoolId: schoolId,
 	}); err != nil {
 		return err
