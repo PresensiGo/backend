@@ -327,6 +327,17 @@ const docTemplate = `{
                     "lateness"
                 ],
                 "operationId": "createLateness",
+                "parameters": [
+                    {
+                        "description": "Payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateLatenessReq"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -343,6 +354,24 @@ const docTemplate = `{
                     "lateness"
                 ],
                 "operationId": "createLatenessDetail",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Payload",
+                        "name": "lateness_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateLatenessDetailReq"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -447,6 +476,28 @@ const docTemplate = `{
                 "classroom_id": {
                     "type": "integer"
                 },
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "CreateLatenessDetailReq": {
+            "type": "object",
+            "required": [
+                "student_id"
+            ],
+            "properties": {
+                "student_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "CreateLatenessReq": {
+            "type": "object",
+            "required": [
+                "date"
+            ],
+            "properties": {
                 "date": {
                     "type": "string"
                 }

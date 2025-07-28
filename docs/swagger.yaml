@@ -19,6 +19,20 @@ definitions:
       date:
         type: string
     type: object
+  CreateLatenessDetailReq:
+    properties:
+      student_id:
+        type: integer
+    required:
+    - student_id
+    type: object
+  CreateLatenessReq:
+    properties:
+      date:
+        type: string
+    required:
+    - date
+    type: object
   GetAllAttendancesRes:
     properties:
       attendances:
@@ -490,6 +504,13 @@ paths:
       - lateness
     post:
       operationId: createLateness
+      parameters:
+      - description: Payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateLatenessReq'
       responses:
         "200":
           description: OK
@@ -500,6 +521,18 @@ paths:
   /api/v1/latenesses/{lateness_id}:
     post:
       operationId: createLatenessDetail
+      parameters:
+      - description: Payload
+        in: path
+        name: lateness_id
+        required: true
+        type: integer
+      - description: Payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateLatenessDetailReq'
       responses:
         "200":
           description: OK

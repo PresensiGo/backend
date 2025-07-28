@@ -21,7 +21,7 @@ func NewLateness(service *services.Lateness) *Lateness {
 
 // @id 			createLateness
 // @tags 		lateness
-// @params 		body body {object} requests.CreateLateness true "Payload"
+// @param 		body body requests.CreateLateness true "Payload"
 // @success 	200 {string} string
 // @router		/api/v1/latenesses [post]
 func (h *Lateness) Create(c *gin.Context) {
@@ -48,7 +48,8 @@ func (h *Lateness) Create(c *gin.Context) {
 
 // @id 			createLatenessDetail
 // @tags 		lateness
-// @params 		body body {object} requests.CreateLatenessDetail true "Payload"
+// @param 		lateness_id path int true "Payload"
+// @param 		body body requests.CreateLatenessDetail true "Payload"
 // @success 	200 {string} string
 // @router		/api/v1/latenesses/{lateness_id} [post]
 func (h *Lateness) CreateDetail(c *gin.Context) {
