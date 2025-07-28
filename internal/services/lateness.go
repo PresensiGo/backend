@@ -9,11 +9,14 @@ import (
 )
 
 type Lateness struct {
-	latenessRepo *repositories.Lateness
+	latenessRepo       *repositories.Lateness
+	latenessDetailRepo *repositories.LatenessDetail
 }
 
-func NewLateness(latenessRepo *repositories.Lateness) *Lateness {
-	return &Lateness{latenessRepo}
+func NewLateness(
+	latenessRepo *repositories.Lateness, latenessDetailRepo *repositories.LatenessDetail,
+) *Lateness {
+	return &Lateness{latenessRepo, latenessDetailRepo}
 }
 
 func (s *Lateness) Create(
@@ -25,14 +28,27 @@ func (s *Lateness) Create(
 		return err
 	}
 
-	if _, err := s.latenessRepo.Create(&dto.Lateness{
-		Date:     *parsedDate,
-		SchoolId: schoolId,
-	}); err != nil {
+	if _, err := s.latenessRepo.Create(
+		&dto.Lateness{
+			Date:     *parsedDate,
+			SchoolId: schoolId,
+		},
+	); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (s *Lateness) CreateDetail(latenessId uint, req *requests.CreateLatenessDetail) error {
+	_, err := s.latenessDetailRepo.Create(
+		&dto.LatenessDetail{
+			LatenessId: latenessId,
+			StudentId:  req.StudentId,
+		},
+	)
+
+	return err
 }
 
 func (s *Lateness) GetAllBySchoolId(schoolId uint) (*responses.GetAllLatenesses, error) {

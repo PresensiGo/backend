@@ -74,6 +74,7 @@ func InitLatenessHandler() *handlers.Lateness {
 		handlers.NewLateness,
 		services.NewLateness,
 		repositories.NewLateness,
+		repositories.NewLatenessDetail,
 		database.New,
 	)
 	return nil

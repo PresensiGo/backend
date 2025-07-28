@@ -1,8 +1,9 @@
 package dto
 
 import (
-	"api/internal/models"
 	"time"
+
+	"api/internal/models"
 )
 
 type Lateness struct {

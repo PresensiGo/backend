@@ -66,7 +66,8 @@ func InitExcelHandler() *handlers.Excel {
 func InitLatenessHandler() *handlers.Lateness {
 	db := database.New()
 	lateness := repositories.NewLateness(db)
-	servicesLateness := services.NewLateness(lateness)
+	latenessDetail := repositories.NewLatenessDetail(db)
+	servicesLateness := services.NewLateness(lateness, latenessDetail)
 	handlersLateness := handlers.NewLateness(servicesLateness)
 	return handlersLateness
 }
