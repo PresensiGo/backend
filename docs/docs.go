@@ -307,6 +307,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/latenesses": {
+            "get": {
+                "tags": [
+                    "lateness"
+                ],
+                "operationId": "getAllLatenesses",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetAllLatenessesRes"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "lateness"
+                ],
+                "operationId": "createLateness",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/latenesses/{lateness_id}": {
+            "post": {
+                "tags": [
+                    "lateness"
+                ],
+                "operationId": "createLatenessDetail",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/majors/batch/{batch_id}": {
             "get": {
                 "tags": [
@@ -420,6 +466,20 @@ const docTemplate = `{
                 }
             }
         },
+        "GetAllLatenessesRes": {
+            "type": "object",
+            "required": [
+                "latenesses"
+            ],
+            "properties": {
+                "latenesses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Lateness"
+                    }
+                }
+            }
+        },
         "GetAttendanceItemRes": {
             "type": "object",
             "required": [
@@ -511,7 +571,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "id",
-                "name"
+                "name",
+                "school_id"
             ],
             "properties": {
                 "id": {
@@ -519,6 +580,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -541,13 +605,36 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.Lateness": {
+            "type": "object",
+            "required": [
+                "date",
+                "id",
+                "school_id"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "school_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.Major": {
             "type": "object",
             "required": [
+                "batch_id",
                 "id",
                 "name"
             ],
             "properties": {
+                "batch_id": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
                 },

@@ -28,6 +28,15 @@ definitions:
     required:
     - attendances
     type: object
+  GetAllLatenessesRes:
+    properties:
+      latenesses:
+        items:
+          $ref: '#/definitions/dto.Lateness'
+        type: array
+    required:
+    - latenesses
+    type: object
   GetAttendanceItemRes:
     properties:
       attendanceStudent:
@@ -93,9 +102,12 @@ definitions:
         type: integer
       name:
         type: string
+      school_id:
+        type: integer
     required:
     - id
     - name
+    - school_id
     type: object
   dto.Classroom:
     properties:
@@ -110,13 +122,29 @@ definitions:
     - major_id
     - name
     type: object
+  dto.Lateness:
+    properties:
+      date:
+        type: string
+      id:
+        type: integer
+      school_id:
+        type: integer
+    required:
+    - date
+    - id
+    - school_id
+    type: object
   dto.Major:
     properties:
+      batch_id:
+        type: integer
       id:
         type: integer
       name:
         type: string
     required:
+    - batch_id
     - id
     - name
     type: object
@@ -286,7 +314,7 @@ paths:
     delete:
       operationId: deleteAttendance
       parameters:
-      - description: Attendance ID
+      - description: Attendance Id
         in: path
         name: attendance_id
         required: true
@@ -301,7 +329,7 @@ paths:
     get:
       operationId: getAttendance
       parameters:
-      - description: Attendance ID
+      - description: Attendance Id
         in: path
         name: attendance_id
         required: true
@@ -317,7 +345,7 @@ paths:
     get:
       operationId: getAllAttendances
       parameters:
-      - description: Classroom ID
+      - description: Classroom Id
         in: path
         name: classroom_id
         required: true
@@ -428,7 +456,7 @@ paths:
     get:
       operationId: getAllClassroomWithMajors
       parameters:
-      - description: Batch ID
+      - description: Batch Id
         in: path
         name: batch_id
         required: true
@@ -450,11 +478,40 @@ paths:
             type: string
       tags:
       - excel
+  /api/v1/latenesses:
+    get:
+      operationId: getAllLatenesses
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAllLatenessesRes'
+      tags:
+      - lateness
+    post:
+      operationId: createLateness
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - lateness
+  /api/v1/latenesses/{lateness_id}:
+    post:
+      operationId: createLatenessDetail
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - lateness
   /api/v1/majors/batch/{batch_id}:
     get:
       operationId: getAllMajors
       parameters:
-      - description: Batch ID
+      - description: Batch Id
         in: path
         name: batch_id
         required: true
@@ -480,7 +537,7 @@ paths:
     get:
       operationId: getAllStudents
       parameters:
-      - description: Classroom ID
+      - description: Classroom Id
         in: path
         name: classroom_id
         required: true

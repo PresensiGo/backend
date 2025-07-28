@@ -19,6 +19,11 @@ func NewLateness(service *services.Lateness) *Lateness {
 	return &Lateness{service}
 }
 
+// @id 			createLateness
+// @tags 		lateness
+// @params 		body body {object} requests.CreateLateness true "Payload"
+// @success 	200 {string} string
+// @router		/api/v1/latenesses [post]
 func (h *Lateness) Create(c *gin.Context) {
 	var req requests.CreateLateness
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -41,6 +46,11 @@ func (h *Lateness) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
 
+// @id 			createLatenessDetail
+// @tags 		lateness
+// @params 		body body {object} requests.CreateLatenessDetail true "Payload"
+// @success 	200 {string} string
+// @router		/api/v1/latenesses/{lateness_id} [post]
 func (h *Lateness) CreateDetail(c *gin.Context) {
 	latenessId, err := strconv.Atoi(c.Param("lateness_id"))
 	if err != nil {
@@ -62,6 +72,10 @@ func (h *Lateness) CreateDetail(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
 
+// @id 			getAllLatenesses
+// @tags 		lateness
+// @success 	200 {object} responses.GetAllLatenesses
+// @router		/api/v1/latenesses [get]
 func (h *Lateness) GetAll(c *gin.Context) {
 	authUser := authentication.GetAuthenticatedUser(c)
 	if authUser.SchoolId == 0 {

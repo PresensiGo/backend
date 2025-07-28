@@ -42,7 +42,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Classroom ID",
+                        "description": "Classroom Id",
                         "name": "classroom_id",
                         "in": "path",
                         "required": true
@@ -67,7 +67,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Attendance ID",
+                        "description": "Attendance Id",
                         "name": "attendance_id",
                         "in": "path",
                         "required": true
@@ -90,7 +90,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Attendance ID",
+                        "description": "Attendance Id",
                         "name": "attendance_id",
                         "in": "path",
                         "required": true
@@ -266,7 +266,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Batch ID",
+                        "description": "Batch Id",
                         "name": "batch_id",
                         "in": "path",
                         "required": true
@@ -298,6 +298,52 @@
                 }
             }
         },
+        "/api/v1/latenesses": {
+            "get": {
+                "tags": [
+                    "lateness"
+                ],
+                "operationId": "getAllLatenesses",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetAllLatenessesRes"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "lateness"
+                ],
+                "operationId": "createLateness",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/latenesses/{lateness_id}": {
+            "post": {
+                "tags": [
+                    "lateness"
+                ],
+                "operationId": "createLatenessDetail",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/majors/batch/{batch_id}": {
             "get": {
                 "tags": [
@@ -307,7 +353,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Batch ID",
+                        "description": "Batch Id",
                         "name": "batch_id",
                         "in": "path",
                         "required": true
@@ -348,7 +394,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Classroom ID",
+                        "description": "Classroom Id",
                         "name": "classroom_id",
                         "in": "path",
                         "required": true
@@ -407,6 +453,20 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.Attendance"
+                    }
+                }
+            }
+        },
+        "GetAllLatenessesRes": {
+            "type": "object",
+            "required": [
+                "latenesses"
+            ],
+            "properties": {
+                "latenesses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Lateness"
                     }
                 }
             }
@@ -502,7 +562,8 @@
             "type": "object",
             "required": [
                 "id",
-                "name"
+                "name",
+                "school_id"
             ],
             "properties": {
                 "id": {
@@ -510,6 +571,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -532,13 +596,36 @@
                 }
             }
         },
+        "dto.Lateness": {
+            "type": "object",
+            "required": [
+                "date",
+                "id",
+                "school_id"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "school_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.Major": {
             "type": "object",
             "required": [
+                "batch_id",
                 "id",
                 "name"
             ],
             "properties": {
+                "batch_id": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
                 },
