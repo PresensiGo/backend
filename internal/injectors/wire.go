@@ -69,6 +69,16 @@ func InitExcelHandler() *handlers.Excel {
 	return nil
 }
 
+func InitLatenessHandler() *handlers.Lateness {
+	wire.Build(
+		handlers.NewLateness,
+		services.NewLateness,
+		repositories.NewLateness,
+		database.New,
+	)
+	return nil
+}
+
 func InitMajorHandler() *handlers.Major {
 	wire.Build(
 		handlers.NewMajor,

@@ -25,6 +25,7 @@ func NewServer() {
 		routes.RegisterClassroom(authorized)
 		routes.RegisterMajor(authorized)
 		routes.RegisterExcel(authorized)
+		routes.RegisterLateness(authorized)
 		routes.RegisterReset(authorized)
 		routes.RegisterStudent(authorized)
 	}
