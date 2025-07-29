@@ -93,10 +93,35 @@ definitions:
     - attendance
     - items
     type: object
+  GetLatenessRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/combined.StudentMajorClassroom'
+        type: array
+      lateness:
+        $ref: '#/definitions/dto.Lateness'
+    required:
+    - items
+    - lateness
+    type: object
   RefreshTokenTTLReq:
     properties:
       refresh_token:
         type: string
+    type: object
+  combined.StudentMajorClassroom:
+    properties:
+      classroom:
+        $ref: '#/definitions/dto.Classroom'
+      major:
+        $ref: '#/definitions/dto.Major'
+      student:
+        $ref: '#/definitions/dto.Student'
+    required:
+    - classroom
+    - major
+    - student
     type: object
   dto.Attendance:
     properties:
@@ -530,6 +555,21 @@ paths:
       tags:
       - lateness
   /api/v1/latenesses/{lateness_id}:
+    get:
+      operationId: getLateness
+      parameters:
+      - description: Lateness ID
+        in: path
+        name: lateness_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetLatenessRes'
+      tags:
+      - lateness
     post:
       operationId: createLatenessDetail
       parameters:

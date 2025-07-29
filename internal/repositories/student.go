@@ -86,13 +86,8 @@ func (r *Student) GetManyById(studentIds []uint) (*[]dto.Student, error) {
 	}
 
 	mappedStudents := make([]dto.Student, len(students))
-	for index, student := range students {
-		mappedStudents[index] = dto.Student{
-			Id:          student.ID,
-			NIS:         student.NIS,
-			Name:        student.Name,
-			ClassroomId: student.ClassroomId,
-		}
+	for i, item := range students {
+		mappedStudents[i] = *dto.FromStudentModel(&item)
 	}
 
 	return &mappedStudents, nil

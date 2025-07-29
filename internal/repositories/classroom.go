@@ -37,12 +37,31 @@ func (r *Classroom) GetManyByMajorId(majorIds []uint) ([]dto.Classroom, error) {
 
 	var mappedClasses []dto.Classroom
 	for _, class := range classes {
-		mappedClasses = append(mappedClasses, dto.Classroom{
-			Id:      class.ID,
-			Name:    class.Name,
-			MajorId: class.MajorId,
-		})
+		mappedClasses = append(
+			mappedClasses, dto.Classroom{
+				Id:      class.ID,
+				Name:    class.Name,
+				MajorId: class.MajorId,
+			},
+		)
 	}
 
 	return mappedClasses, nil
+}
+
+func (r *Classroom) GetManyByIds(classroomIds []uint) (*[]dto.Classroom, error) {
+	var classrooms []models.Classroom
+	if err := r.db.Model(&models.Classroom{}).
+		Where("id in (?)", classroomIds).
+		Find(&classrooms).
+		Error; err != nil {
+		return nil, err
+	}
+
+	mappedClassrooms := make([]dto.Classroom, len(classrooms))
+	for i, item := range classrooms {
+		mappedClassrooms[i] = *dto.FromClassroomModel(&item)
+	}
+
+	return &mappedClassrooms, nil
 }

@@ -349,6 +349,29 @@ const docTemplate = `{
             }
         },
         "/api/v1/latenesses/{lateness_id}": {
+            "get": {
+                "tags": [
+                    "lateness"
+                ],
+                "operationId": "getLateness",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Lateness ID",
+                        "name": "lateness_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetLatenessRes"
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "lateness"
@@ -620,11 +643,48 @@ const docTemplate = `{
                 }
             }
         },
+        "GetLatenessRes": {
+            "type": "object",
+            "required": [
+                "items",
+                "lateness"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/combined.StudentMajorClassroom"
+                    }
+                },
+                "lateness": {
+                    "$ref": "#/definitions/dto.Lateness"
+                }
+            }
+        },
         "RefreshTokenTTLReq": {
             "type": "object",
             "properties": {
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "combined.StudentMajorClassroom": {
+            "type": "object",
+            "required": [
+                "classroom",
+                "major",
+                "student"
+            ],
+            "properties": {
+                "classroom": {
+                    "$ref": "#/definitions/dto.Classroom"
+                },
+                "major": {
+                    "$ref": "#/definitions/dto.Major"
+                },
+                "student": {
+                    "$ref": "#/definitions/dto.Student"
                 }
             }
         },

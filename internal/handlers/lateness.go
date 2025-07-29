@@ -93,6 +93,23 @@ func (h *Lateness) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @id 			getLateness
+// @tags 		lateness
+// @param		lateness_id path int true "Lateness ID"
+// @success 	200 {object} responses.GetLateness
+// @router		/api/v1/latenesses/{lateness_id} [get]
 func (h *Lateness) Get(c *gin.Context) {
+	latenessId, err := strconv.Atoi(c.Param("lateness_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
+	response, err := h.service.GetDetail(uint(latenessId))
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
 }

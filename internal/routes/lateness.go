@@ -13,5 +13,5 @@ func RegisterLateness(g *gin.RouterGroup) {
 	group.GET("", handler.GetAll)
 
 	group.POST("/:lateness_id", handler.CreateDetail)
-	group.POST("/:lateness_id", handler.Get)
+	group.GET("/:lateness_id", handler.Get)
 }

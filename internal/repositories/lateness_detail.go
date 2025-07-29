@@ -22,3 +22,19 @@ func (r *LatenessDetail) CreateBatch(data *[]dto.LatenessDetail) error {
 
 	return r.db.Create(&latenessDetails).Error
 }
+
+func (r *LatenessDetail) GetAllByLatenessId(latenessId uint) (*[]dto.LatenessDetail, error) {
+	var latenessDetails []models.LatenessDetail
+	if err := r.db.Where("lateness_id = ?", latenessId).
+		Find(&latenessDetails).
+		Error; err != nil {
+		return nil, err
+	}
+
+	mappedLatenessDetails := make([]dto.LatenessDetail, len(latenessDetails))
+	for i, item := range latenessDetails {
+		mappedLatenessDetails[i] = *dto.FromLatenessDetailModel(&item)
+	}
+
+	return &mappedLatenessDetails, nil
+}

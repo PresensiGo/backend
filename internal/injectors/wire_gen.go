@@ -67,7 +67,10 @@ func InitLatenessHandler() *handlers.Lateness {
 	db := database.New()
 	lateness := repositories.NewLateness(db)
 	latenessDetail := repositories.NewLatenessDetail(db)
-	servicesLateness := services.NewLateness(lateness, latenessDetail)
+	student := repositories.NewStudent(db)
+	major := repositories.NewMajor(db)
+	classroom := repositories.NewClassroom(db)
+	servicesLateness := services.NewLateness(lateness, latenessDetail, student, major, classroom)
 	handlersLateness := handlers.NewLateness(servicesLateness)
 	return handlersLateness
 }

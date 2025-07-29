@@ -39,3 +39,14 @@ func (r *Lateness) GetAllBySchoolId(schoolId uint) (*[]dto.Lateness, error) {
 
 	return &mappedLatenesses, nil
 }
+
+func (r *Lateness) GetById(latenessId uint) (*dto.Lateness, error) {
+	var lateness models.Lateness
+	if err := r.db.Where("id = ?", latenessId).
+		First(&lateness).
+		Error; err != nil {
+		return nil, err
+	}
+
+	return dto.FromLatenessModel(&lateness), nil
+}
