@@ -1,16 +1,17 @@
 package services
 
 import (
+	"fmt"
+	"time"
+
 	"api/internal/dto"
 	"api/internal/dto/requests"
 	"api/internal/dto/responses"
 	"api/internal/repositories"
 	"api/pkg/authentication"
-	"fmt"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"time"
 )
 
 type Auth struct {
@@ -64,18 +65,22 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 	refreshToken := uuid.New().String()
 
 	// store token into database
-	if err := s.db.Transaction(func(tx *gorm.DB) error {
-		// create user token
-		if err := s.userTokenRepo.Create(tx, dto.UserToken{
-			UserId:       currentUser.Id,
-			RefreshToken: refreshToken,
-			TTL:          time.Now().Add(time.Hour * 24 * 30),
-		}); err != nil {
-			return err
-		}
+	if err := s.db.Transaction(
+		func(tx *gorm.DB) error {
+			// create user token
+			if err := s.userTokenRepo.Create(
+				tx, dto.UserToken{
+					UserId:       currentUser.Id,
+					RefreshToken: refreshToken,
+					TTL:          time.Now().Add(time.Hour * 24 * 30),
+				},
+			); err != nil {
+				return err
+			}
 
-		return nil
-	}); err != nil {
+			return nil
+		},
+	); err != nil {
 		return nil, err
 	}
 
@@ -93,49 +98,57 @@ func (s *Auth) Register(req requests.Register) (*responses.Register, error) {
 	}
 
 	var response responses.Register
-	if err := s.db.Transaction(func(tx *gorm.DB) error {
-		// create new user
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-		if err != nil {
-			return err
-		}
+	if err := s.db.Transaction(
+		func(tx *gorm.DB) error {
+			// create new user
+			hashedPassword, err := bcrypt.GenerateFromPassword(
+				[]byte(req.Password), bcrypt.DefaultCost,
+			)
+			if err != nil {
+				return err
+			}
 
-		userID, err := s.userRepo.Create(tx, dto.User{
-			Name:     req.Name,
-			Email:    req.Email,
-			Password: string(hashedPassword),
-			Role:     "teacher",
-		})
-		if err != nil {
-			return err
-		}
+			userID, err := s.userRepo.Create(
+				tx, dto.User{
+					Name:     req.Name,
+					Email:    req.Email,
+					Password: string(hashedPassword),
+					Role:     "teacher",
+				},
+			)
+			if err != nil {
+				return err
+			}
 
-		// generate user token
-		accessToken, err := s.generateAccessToken(
-			userID, req.Name, req.Email, "teacher",
-			school.Id, school.Name, school.Code,
-		)
-		if err != nil {
-			return err
-		}
-		refreshToken := uuid.New().String()
+			// generate user token
+			accessToken, err := s.generateAccessToken(
+				userID, req.Name, req.Email, "teacher",
+				school.Id, school.Name, school.Code,
+			)
+			if err != nil {
+				return err
+			}
+			refreshToken := uuid.New().String()
 
-		// store token into database
-		if err := s.userTokenRepo.Create(tx, dto.UserToken{
-			RefreshToken: refreshToken,
-			UserId:       userID,
-			TTL:          time.Now().Add(time.Hour * 24 * 30),
-		}); err != nil {
-			return err
-		}
+			// store token into database
+			if err := s.userTokenRepo.Create(
+				tx, dto.UserToken{
+					RefreshToken: refreshToken,
+					UserId:       userID,
+					TTL:          time.Now().Add(time.Hour * 24 * 30),
+				},
+			); err != nil {
+				return err
+			}
 
-		response = responses.Register{
-			AccessToken:  accessToken,
-			RefreshToken: refreshToken,
-		}
+			response = responses.Register{
+				AccessToken:  accessToken,
+				RefreshToken: refreshToken,
+			}
 
-		return nil
-	}); err != nil {
+			return nil
+		},
+	); err != nil {
 		return nil, err
 	}
 
@@ -181,10 +194,12 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 	refreshToken := uuid.New().String()
 
 	// store new token into database
-	if err := s.userTokenRepo.UpdateByRefreshToken(oldRefreshToken, dto.UserToken{
-		UserId:       currentUser.Id,
-		RefreshToken: refreshToken,
-	}); err != nil {
+	if err := s.userTokenRepo.UpdateByRefreshToken(
+		oldRefreshToken, dto.UserToken{
+			UserId:       currentUser.Id,
+			RefreshToken: refreshToken,
+		},
+	); err != nil {
 		return nil, err
 	}
 

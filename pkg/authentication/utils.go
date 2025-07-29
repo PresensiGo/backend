@@ -8,20 +8,22 @@ import (
 )
 
 func GenerateJWT(user JWTClaim) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, JWTClaim{
-		ID:         user.ID,
-		Name:       user.Name,
-		Email:      user.Email,
-		Role:       user.Role,
-		SchoolId:   user.SchoolId,
-		SchoolName: user.SchoolName,
-		SchoolCode: user.SchoolCode,
-		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer:    "API Presensi Sekolah",
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+	token := jwt.NewWithClaims(
+		jwt.SigningMethodHS256, JWTClaim{
+			ID:         user.ID,
+			Name:       user.Name,
+			Email:      user.Email,
+			Role:       user.Role,
+			SchoolId:   user.SchoolId,
+			SchoolName: user.SchoolName,
+			SchoolCode: user.SchoolCode,
+			RegisteredClaims: jwt.RegisteredClaims{
+				Issuer:    "API Presensi Sekolah",
+				IssuedAt:  jwt.NewNumericDate(time.Now()),
+				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+			},
 		},
-	})
+	)
 
 	tokenString, err := token.SignedString([]byte("password-sementara"))
 	if err != nil {
