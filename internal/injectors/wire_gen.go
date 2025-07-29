@@ -85,7 +85,8 @@ func InitMajorHandler() *handlers.Major {
 func InitResetHandler() *handlers.Reset {
 	db := database.New()
 	batch := repositories.NewBatch(db)
-	reset := services.NewReset(batch)
+	lateness := repositories.NewLateness(db)
+	reset := services.NewReset(db, batch, lateness)
 	handlersReset := handlers.NewReset(reset)
 	return handlersReset
 }
