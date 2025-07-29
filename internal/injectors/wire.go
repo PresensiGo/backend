@@ -97,6 +97,7 @@ func InitResetHandler() *handlers.Reset {
 		handlers.NewReset,
 		services.NewReset,
 		repositories.NewBatch,
+		repositories.NewLateness,
 		database.New,
 	)
 	return nil

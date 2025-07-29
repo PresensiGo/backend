@@ -9,5 +9,5 @@ func RegisterReset(g *gin.RouterGroup) {
 	group := g.Group("/reset")
 	handler := injectors.InitResetHandler()
 
-	group.GET("/", handler.Reset)
+	group.GET("", handler.Reset)
 }

@@ -27,8 +27,8 @@ func (r *Batch) CreateInTx(tx *gorm.DB, data dto.Batch) (*uint, error) {
 	return &batch.ID, nil
 }
 
-func (r *Batch) DeleteBySchoolId(schoolId uint) error {
-	return r.db.Where("school_id = ?", schoolId).
+func (r *Batch) DeleteBySchoolIdInTx(tx *gorm.DB, schoolId uint) error {
+	return tx.Where("school_id = ?", schoolId).
 		Unscoped().
 		Delete(&models.Batch{}).
 		Error

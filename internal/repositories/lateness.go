@@ -50,3 +50,10 @@ func (r *Lateness) GetById(latenessId uint) (*dto.Lateness, error) {
 
 	return dto.FromLatenessModel(&lateness), nil
 }
+
+func (r *Lateness) DeleteBySchoolIdInTx(tx *gorm.DB, schoolId uint) error {
+	return tx.Where("school_id = ?", schoolId).
+		Unscoped().
+		Delete(&models.Lateness{}).Error
+
+}
