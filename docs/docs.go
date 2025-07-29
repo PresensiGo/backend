@@ -509,11 +509,14 @@ const docTemplate = `{
         "CreateLatenessDetailReq": {
             "type": "object",
             "required": [
-                "student_id"
+                "student_ids"
             ],
             "properties": {
-                "student_id": {
-                    "type": "integer"
+                "student_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

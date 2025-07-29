@@ -5,5 +5,5 @@ type CreateLateness struct {
 } // @name CreateLatenessReq
 
 type CreateLatenessDetail struct {
-	StudentId uint `json:"student_id" validate:"required"`
+	StudentIds []uint `json:"student_ids" validate:"required"`
 } // @name CreateLatenessDetailReq

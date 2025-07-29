@@ -21,10 +21,12 @@ definitions:
     type: object
   CreateLatenessDetailReq:
     properties:
-      student_id:
-        type: integer
+      student_ids:
+        items:
+          type: integer
+        type: array
     required:
-    - student_id
+    - student_ids
     type: object
   CreateLatenessReq:
     properties:

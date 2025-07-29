@@ -41,14 +41,15 @@ func (s *Lateness) Create(
 }
 
 func (s *Lateness) CreateDetail(latenessId uint, req *requests.CreateLatenessDetail) error {
-	_, err := s.latenessDetailRepo.Create(
-		&dto.LatenessDetail{
+	latenessDetails := make([]dto.LatenessDetail, len(req.StudentIds))
+	for i, item := range req.StudentIds {
+		latenessDetails[i] = dto.LatenessDetail{
 			LatenessId: latenessId,
-			StudentId:  req.StudentId,
-		},
-	)
+			StudentId:  item,
+		}
+	}
 
-	return err
+	return s.latenessDetailRepo.CreateBatch(&latenessDetails)
 }
 
 func (s *Lateness) GetAllBySchoolId(schoolId uint) (*responses.GetAllLatenesses, error) {

@@ -92,3 +92,7 @@ func (h *Lateness) GetAll(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *Lateness) Get(c *gin.Context) {
+
+}

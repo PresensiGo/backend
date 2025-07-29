@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"api/internal/dto"
+	"api/internal/models"
 	"gorm.io/gorm"
 )
 
@@ -13,11 +14,11 @@ func NewLatenessDetail(db *gorm.DB) *LatenessDetail {
 	return &LatenessDetail{db}
 }
 
-func (r *LatenessDetail) Create(data *dto.LatenessDetail) (*uint, error) {
-	latenessDetail := data.ToModel()
-	if err := r.db.Create(&latenessDetail).Error; err != nil {
-		return nil, err
+func (r *LatenessDetail) CreateBatch(data *[]dto.LatenessDetail) error {
+	latenessDetails := make([]models.LatenessDetail, len(*data))
+	for i, item := range *data {
+		latenessDetails[i] = *item.ToModel()
 	}
 
-	return &latenessDetail.ID, nil
+	return r.db.Create(&latenessDetails).Error
 }
