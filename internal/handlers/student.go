@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"api/internal/dto"
+	"api/internal/dto/combined"
 	"api/internal/dto/responses"
 	"api/internal/services"
 	"github.com/gin-gonic/gin"
@@ -39,17 +39,17 @@ func (h *Student) GetAllByClassroomId(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @id getAllStudents
-// @tags student
-// @param keyword query string true "Keyword"
-// @success 200 {object} responses.GetAllStudents
-// @router /api/v1/students [get]
+// @id 			getAllStudents
+// @tags 		student
+// @param 		keyword query string true "Keyword"
+// @success 	200 {object} responses.GetAllStudents
+// @router 		/api/v1/students [get]
 func (h *Student) GetAll(c *gin.Context) {
 	keyword := c.Query("keyword")
 	if len(keyword) == 0 {
 		c.JSON(
 			http.StatusOK, responses.GetAllStudents{
-				Students: make([]dto.Student, 0),
+				Students: make([]combined.StudentMajorClassroom, 0),
 			},
 		)
 		return

@@ -93,8 +93,10 @@ func InitResetHandler() *handlers.Reset {
 
 func InitStudentHandler() *handlers.Student {
 	db := database.New()
+	major := repositories.NewMajor(db)
+	classroom := repositories.NewClassroom(db)
 	student := repositories.NewStudent(db)
-	servicesStudent := services.NewStudent(student)
+	servicesStudent := services.NewStudent(major, classroom, student)
 	handlersStudent := handlers.NewStudent(servicesStudent)
 	return handlersStudent
 }

@@ -107,6 +107,8 @@ func InitStudentHandler() *handlers.Student {
 	wire.Build(
 		handlers.NewStudent,
 		services.NewStudent,
+		repositories.NewMajor,
+		repositories.NewClassroom,
 		repositories.NewStudent,
 		database.New,
 	)

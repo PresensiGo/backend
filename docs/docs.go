@@ -605,7 +605,7 @@ const docTemplate = `{
                 "students": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.Student"
+                        "$ref": "#/definitions/combined.StudentMajorClassroom"
                     }
                 }
             }
