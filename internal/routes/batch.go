@@ -9,5 +9,5 @@ func RegisterBatch(g *gin.RouterGroup) {
 	group := g.Group("/batch")
 	handler := injectors.InitBatchHandler()
 
-	group.GET("/", handler.GetAll)
+	group.GET("", handler.GetAll)
 }

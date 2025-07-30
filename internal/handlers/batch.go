@@ -1,9 +1,11 @@
 package handlers
 
 import (
-	"api/internal/services"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"api/internal/services"
+	"api/pkg/authentication"
+	"github.com/gin-gonic/gin"
 )
 
 type Batch struct {
@@ -16,10 +18,16 @@ func NewBatch(service *services.Batch) *Batch {
 
 // @Id			getAllBatches
 // @Tags		batch
-// @Success	200	{object}	responses.GetAllBatches
+// @Success		200	{object} responses.GetAllBatches
 // @Router		/api/v1/batch [get]
 func (h *Batch) GetAll(c *gin.Context) {
-	response, err := h.service.GetAll()
+	authUser := authentication.GetAuthenticatedUser(c)
+	if authUser.SchoolId == 0 {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	response, err := h.service.GetAllBySchoolId(authUser.SchoolId)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

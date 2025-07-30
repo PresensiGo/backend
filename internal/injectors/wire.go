@@ -40,6 +40,9 @@ func InitBatchHandler() *handlers.Batch {
 	wire.Build(
 		handlers.NewBatch,
 		services.NewBatch,
+		repositories.NewBatch,
+		repositories.NewMajor,
+		repositories.NewClassroom,
 		database.New,
 	)
 	return nil

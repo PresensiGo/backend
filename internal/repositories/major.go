@@ -64,3 +64,20 @@ func (r *Major) GetManyByIds(majorIds []uint) (*[]dto.Major, error) {
 
 	return &mappedMajors, nil
 }
+
+func (r *Major) GetManyByBatchIds(batchIds []uint) (*[]dto.Major, error) {
+	var majors []models.Major
+	if err := r.db.Model(&models.Major{}).
+		Where("batch_id in ?", batchIds).
+		Find(&majors).
+		Error; err != nil {
+		return nil, err
+	}
+
+	mappedMajors := make([]dto.Major, len(majors))
+	for i, item := range majors {
+		mappedMajors[i] = *dto.FromMajorModel(&item)
+	}
+
+	return &mappedMajors, nil
+}

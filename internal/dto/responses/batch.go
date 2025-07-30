@@ -1,6 +1,8 @@
 package responses
 
-import "api/internal/dto"
+import (
+	"api/internal/dto/combined"
+)
 
 type CreateBatch struct {
 	Id   uint   `json:"id"`
@@ -8,5 +10,5 @@ type CreateBatch struct {
 }
 
 type GetAllBatches struct {
-	Batches []dto.Batch `json:"batches" validate:"required"`
+	Batches []combined.BatchInfo `json:"batches" validate:"required"`
 }

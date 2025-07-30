@@ -38,8 +38,11 @@ func InitAuthHandler() *handlers.Auth {
 
 func InitBatchHandler() *handlers.Batch {
 	db := database.New()
-	batch := services.NewBatch(db)
-	handlersBatch := handlers.NewBatch(batch)
+	batch := repositories.NewBatch(db)
+	major := repositories.NewMajor(db)
+	classroom := repositories.NewClassroom(db)
+	servicesBatch := services.NewBatch(db, batch, major, classroom)
+	handlersBatch := handlers.NewBatch(servicesBatch)
 	return handlersBatch
 }
 
