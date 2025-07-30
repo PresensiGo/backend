@@ -669,6 +669,25 @@ const docTemplate = `{
                 }
             }
         },
+        "combined.BatchInfo": {
+            "type": "object",
+            "required": [
+                "batch",
+                "classrooms_count",
+                "majors_count"
+            ],
+            "properties": {
+                "batch": {
+                    "$ref": "#/definitions/dto.Batch"
+                },
+                "classrooms_count": {
+                    "type": "integer"
+                },
+                "majors_count": {
+                    "type": "integer"
+                }
+            }
+        },
         "combined.StudentMajorClassroom": {
             "type": "object",
             "required": [
@@ -923,7 +942,7 @@ const docTemplate = `{
                 "batches": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.Batch"
+                        "$ref": "#/definitions/combined.BatchInfo"
                     }
                 }
             }
