@@ -31,35 +31,37 @@ func NewAttendance(
 }
 
 func (s *Attendance) Create(req requests.CreateAttendance) error {
-	if err := s.db.Transaction(func(tx *gorm.DB) error {
-		parsedDate, err := time.Parse("2006-01-02", req.Date)
-		if err != nil {
-			return err
-		}
-
-		attendance := dto.Attendance{
-			ClassroomId: req.ClassroomID,
-			Date:        parsedDate,
-		}
-		if err := s.attendance.Create(tx, &attendance); err != nil {
-			return err
-		}
-
-		mappedAttendanceStudents := make([]dto.AttendanceDetail, len(req.AttendanceStudents))
-		for i, attendanceStudent := range req.AttendanceStudents {
-			mappedAttendanceStudents[i] = dto.AttendanceDetail{
-				AttendanceId: attendance.Id,
-				StudentId:    attendanceStudent.StudentID,
-				Status:       attendanceStudent.Status,
-				Note:         attendanceStudent.Note,
+	if err := s.db.Transaction(
+		func(tx *gorm.DB) error {
+			parsedDate, err := time.Parse("2006-01-02", req.Date)
+			if err != nil {
+				return err
 			}
-		}
-		if err := s.attendanceStudent.CreateBatch(tx, &mappedAttendanceStudents); err != nil {
-			return err
-		}
 
-		return nil
-	}); err != nil {
+			attendance := dto.Attendance{
+				ClassroomId: req.ClassroomID,
+				Date:        parsedDate,
+			}
+			if err := s.attendance.Create(tx, &attendance); err != nil {
+				return err
+			}
+
+			mappedAttendanceStudents := make([]dto.AttendanceDetail, len(req.AttendanceStudents))
+			for i, attendanceStudent := range req.AttendanceStudents {
+				mappedAttendanceStudents[i] = dto.AttendanceDetail{
+					AttendanceId: attendance.Id,
+					StudentId:    attendanceStudent.StudentID,
+					Status:       attendanceStudent.Status,
+					Note:         attendanceStudent.Note,
+				}
+			}
+			if err := s.attendanceStudent.CreateBatch(tx, &mappedAttendanceStudents); err != nil {
+				return err
+			}
+
+			return nil
+		},
+	); err != nil {
 		return err
 	}
 
@@ -115,19 +117,21 @@ func (s *Attendance) GetById(attendanceId uint) (*responses.GetAttendance, error
 }
 
 func (s *Attendance) Delete(attendanceID uint) error {
-	if err := s.db.Transaction(func(tx *gorm.DB) error {
-		// delete all attendance students
-		if err := s.attendanceStudent.DeleteByAttendanceID(tx, attendanceID); err != nil {
-			return err
-		}
+	if err := s.db.Transaction(
+		func(tx *gorm.DB) error {
+			// delete all attendance students
+			if err := s.attendanceStudent.DeleteByAttendanceID(tx, attendanceID); err != nil {
+				return err
+			}
 
-		// delete attendance
-		if err := s.attendance.DeleteByID(tx, attendanceID); err != nil {
-			return err
-		}
+			// delete attendance
+			if err := s.attendance.DeleteByID(tx, attendanceID); err != nil {
+				return err
+			}
 
-		return nil
-	}); err != nil {
+			return nil
+		},
+	); err != nil {
 		return err
 	}
 

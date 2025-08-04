@@ -4,6 +4,7 @@ import (
 	_ "api/docs"
 	"api/internal/routes"
 	"api/pkg/http/middleware"
+	"github.com/gin-contrib/cors"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
@@ -12,6 +13,16 @@ import (
 
 func NewServer() {
 	router := gin.Default()
+
+	// cors
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
+	corsConfig.AllowCredentials = true
+
+	router.Use(cors.New(corsConfig))
+
 	v1 := router.Group("/api/v1")
 
 	routes.RegisterAuth(v1)
