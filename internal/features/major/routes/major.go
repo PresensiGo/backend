@@ -8,5 +8,6 @@ import (
 func RegisterMajor(g *gin.RouterGroup, handler *handlers.Major) {
 	group := g.Group("/majors")
 
-	group.GET("/batch/:batch_id", handler.GetAll)
+	group.GET("", handler.GetAllMajors)
+	group.GET("/batch/:batch_id", handler.GetAllByBatchId)
 }

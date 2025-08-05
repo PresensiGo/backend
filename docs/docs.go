@@ -487,12 +487,31 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/majors/batch/{batch_id}": {
+        "/api/v1/majors": {
             "get": {
                 "tags": [
                     "major"
                 ],
                 "operationId": "getAllMajors",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domains.Major"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/majors/batch/{batch_id}": {
+            "get": {
+                "tags": [
+                    "major"
+                ],
+                "operationId": "getAllMajorsByBatchId",
                 "parameters": [
                     {
                         "type": "integer",
@@ -506,7 +525,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllMajors"
+                            "$ref": "#/definitions/responses.GetAllMajorsByBatchId"
                         }
                     }
                 }
@@ -1059,7 +1078,7 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.GetAllMajors": {
+        "responses.GetAllMajorsByBatchId": {
             "type": "object",
             "required": [
                 "majors"

@@ -80,8 +80,10 @@ func InitBatchHandlers() *injector2.BatchHandlers {
 
 func InitMajorHandlers() *injector3.MajorHandlers {
 	db := database.New()
-	major := services3.NewMajor(db)
-	handlersMajor := handlers3.NewMajor(major)
+	batch := repositories6.NewBatch(db)
+	major := repositories4.NewMajor(db)
+	servicesMajor := services3.NewMajor(db, batch, major)
+	handlersMajor := handlers3.NewMajor(servicesMajor)
 	majorHandlers := injector3.NewMajorHandlers(handlersMajor)
 	return majorHandlers
 }

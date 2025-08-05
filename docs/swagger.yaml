@@ -320,7 +320,7 @@ definitions:
     required:
     - data
     type: object
-  responses.GetAllMajors:
+  responses.GetAllMajorsByBatchId:
     properties:
       majors:
         items:
@@ -667,9 +667,21 @@ paths:
             type: string
       tags:
       - lateness
-  /api/v1/majors/batch/{batch_id}:
+  /api/v1/majors:
     get:
       operationId: getAllMajors
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domains.Major'
+            type: array
+      tags:
+      - major
+  /api/v1/majors/batch/{batch_id}:
+    get:
+      operationId: getAllMajorsByBatchId
       parameters:
       - description: Batch Id
         in: path
@@ -680,7 +692,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllMajors'
+            $ref: '#/definitions/responses.GetAllMajorsByBatchId'
       tags:
       - major
   /api/v1/reset:

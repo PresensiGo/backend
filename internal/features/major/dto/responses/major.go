@@ -7,3 +7,7 @@ import (
 type GetAllMajors struct {
 	Majors []domains.Major `json:"majors" validate:"required"`
 }
+
+type GetAllMajorsByBatchId struct {
+	Majors []domains.Major `json:"majors" validate:"required"`
+}

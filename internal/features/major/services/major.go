@@ -1,21 +1,44 @@
 package services
 
 import (
+	batchRepo "api/internal/features/batch/repositories"
 	"api/internal/features/major/domains"
 	"api/internal/features/major/dto/responses"
 	"api/internal/features/major/models"
+	"api/internal/features/major/repositories"
 	"gorm.io/gorm"
 )
 
 type Major struct {
-	db *gorm.DB
+	db        *gorm.DB
+	batchRepo *batchRepo.Batch
+	majorRepo *repositories.Major
 }
 
-func NewMajor(db *gorm.DB) *Major {
-	return &Major{db}
+func NewMajor(db *gorm.DB, batchRepo *batchRepo.Batch, majorRepo *repositories.Major) *Major {
+	return &Major{db, batchRepo, majorRepo}
 }
 
-func (s *Major) GetAllMajors(batchId uint64) (*responses.GetAllMajors, error) {
+func (s *Major) GetAllMajors(schoolId uint) (*[]domains.Major, error) {
+	batches, err := s.batchRepo.GetAllBySchoolId(schoolId)
+	if err != nil {
+		return nil, err
+	}
+
+	batchIds := make([]uint, len(*batches))
+	for i, v := range *batches {
+		batchIds[i] = v.Id
+	}
+
+	majors, err := s.majorRepo.GetManyByBatchIds(batchIds)
+	if err != nil {
+		return nil, err
+	}
+
+	return majors, nil
+}
+
+func (s *Major) GetAllMajorsByBatchId(batchId uint64) (*responses.GetAllMajorsByBatchId, error) {
 	var majors []models.Major
 	if err := s.db.Where("batch_id = ?", batchId).
 		Find(&majors).
@@ -33,7 +56,7 @@ func (s *Major) GetAllMajors(batchId uint64) (*responses.GetAllMajors, error) {
 		)
 	}
 
-	return &responses.GetAllMajors{
+	return &responses.GetAllMajorsByBatchId{
 		Majors: mappedMajors,
 	}, nil
 }
