@@ -90,9 +90,10 @@ func InitMajorHandlers() *injector3.MajorHandlers {
 
 func InitClassroomHandlers() *injector4.ClassroomHandlers {
 	db := database.New()
-	classroom := repositories5.NewClassroom(db)
+	batch := repositories6.NewBatch(db)
 	major := repositories4.NewMajor(db)
-	servicesClassroom := services4.NewClassroom(classroom, major)
+	classroom := repositories5.NewClassroom(db)
+	servicesClassroom := services4.NewClassroom(batch, major, classroom)
 	handlersClassroom := handlers4.NewClassroom(servicesClassroom)
 	classroomHandlers := injector4.NewClassroomHandlers(handlersClassroom)
 	return classroomHandlers

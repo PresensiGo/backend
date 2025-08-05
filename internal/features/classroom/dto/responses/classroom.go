@@ -1,13 +1,17 @@
 package responses
 
 import (
-	domains2 "api/internal/features/classroom/domains"
-	"api/internal/features/major/domains"
+	"api/internal/features/classroom/domains"
+	majorDomain "api/internal/features/major/domains"
 )
 
 type ClassroomMajor struct {
-	Classroom domains2.Classroom `json:"classroom" validate:"required"`
-	Major     domains.Major      `json:"major" validate:"required"`
+	Classroom domains.Classroom `json:"classroom" validate:"required"`
+	Major     majorDomain.Major `json:"major" validate:"required"`
+}
+
+type GetAll struct {
+	Classrooms []domains.Classroom `json:"classrooms" validate:"required"`
 }
 
 type GetAllClassroomWithMajors struct {

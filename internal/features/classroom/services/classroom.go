@@ -1,25 +1,60 @@
 package services
 
 import (
+	batchRepo "api/internal/features/batch/repositories"
 	"api/internal/features/classroom/dto/responses"
 	"api/internal/features/classroom/repositories"
-	"api/internal/features/major/domains"
-	repositories2 "api/internal/features/major/repositories"
+	majorDomain "api/internal/features/major/domains"
+	majorRepo "api/internal/features/major/repositories"
 )
 
 type Classroom struct {
+	batchRepo     *batchRepo.Batch
+	majorRepo     *majorRepo.Major
 	classroomRepo *repositories.Classroom
-	majorRepo     *repositories2.Major
 }
 
 func NewClassroom(
+	batchRepo *batchRepo.Batch,
+	majorRepo *majorRepo.Major,
 	classroomRepo *repositories.Classroom,
-	majorRepo *repositories2.Major,
 ) *Classroom {
 	return &Classroom{
-		classroomRepo,
+		batchRepo,
 		majorRepo,
+		classroomRepo,
 	}
+}
+
+func (s *Classroom) GetAll(schoolId uint) (*responses.GetAll, error) {
+	batches, err := s.batchRepo.GetAllBySchoolId(schoolId)
+	if err != nil {
+		return nil, err
+	}
+
+	batchIds := make([]uint, len(*batches))
+	for i, v := range *batches {
+		batchIds[i] = v.Id
+	}
+
+	majors, err := s.majorRepo.GetManyByBatchIds(batchIds)
+	if err != nil {
+		return nil, err
+	}
+
+	majorIds := make([]uint, len(*majors))
+	for i, v := range *majors {
+		majorIds[i] = v.Id
+	}
+
+	classrooms, err := s.classroomRepo.GetManyByMajorId(majorIds)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.GetAll{
+		Classrooms: classrooms,
+	}, nil
 }
 
 func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWithMajors, error) {
@@ -28,7 +63,7 @@ func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWit
 		return nil, err
 	}
 
-	majorMap := make(map[uint]domains.Major)
+	majorMap := make(map[uint]majorDomain.Major)
 	for _, major := range majors {
 		majorMap[major.Id] = major
 	}

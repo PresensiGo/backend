@@ -348,6 +348,22 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/classrooms": {
+            "get": {
+                "tags": [
+                    "classroom"
+                ],
+                "operationId": "getAllClassrooms",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAll"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/classrooms/batches/{batch_id}": {
             "get": {
                 "tags": [
@@ -1159,6 +1175,20 @@ const docTemplate = `{
                 },
                 "major": {
                     "$ref": "#/definitions/domains.Major"
+                }
+            }
+        },
+        "responses.GetAll": {
+            "type": "object",
+            "required": [
+                "classrooms"
+            ],
+            "properties": {
+                "classrooms": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domains.Classroom"
+                    }
                 }
             }
         },

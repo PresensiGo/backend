@@ -322,6 +322,15 @@ definitions:
     - classroom
     - major
     type: object
+  responses.GetAll:
+    properties:
+      classrooms:
+        items:
+          $ref: '#/definitions/domains.Classroom'
+        type: array
+    required:
+    - classrooms
+    type: object
   responses.GetAllBatches:
     properties:
       batches:
@@ -598,6 +607,16 @@ paths:
             $ref: '#/definitions/domains.Batch'
       tags:
       - batch
+  /api/v1/classrooms:
+    get:
+      operationId: getAllClassrooms
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAll'
+      tags:
+      - classroom
   /api/v1/classrooms/batches/{batch_id}:
     get:
       operationId: getAllClassroomWithMajors

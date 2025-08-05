@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"api/internal/features/classroom/services"
+	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,26 @@ type Classroom struct {
 
 func NewClassroom(service *services.Classroom) *Classroom {
 	return &Classroom{service}
+}
+
+// @id 			getAllClassrooms
+// @tags 		classroom
+// @success 	200 {object} responses.GetAll
+// @router 		/api/v1/classrooms [get]
+func (h *Classroom) GetAll(c *gin.Context) {
+	authUser := authentication.GetAuthenticatedUser(c)
+	if authUser.SchoolId == 0 {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.GetAll(authUser.SchoolId)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
 }
 
 // @Id			getAllClassroomWithMajors
