@@ -10,9 +10,9 @@ import (
 type GeneralAttendance struct {
 	gorm.Model
 
-	Date     time.Time
-	DueTime  time.Time
+	DateTime time.Time
 	Note     string
 	SchoolId uint
 	School   models.School `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Code     string        `gorm:"unique"`
 }

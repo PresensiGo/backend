@@ -1061,17 +1061,17 @@ const docTemplate = `{
         "domains.GeneralAttendance": {
             "type": "object",
             "required": [
-                "date",
-                "due_time",
+                "code",
+                "datetime",
                 "id",
                 "note",
                 "school_id"
             ],
             "properties": {
-                "date": {
+                "code": {
                     "type": "string"
                 },
-                "due_time": {
+                "datetime": {
                     "type": "string"
                 },
                 "id": {
@@ -1183,7 +1183,7 @@ const docTemplate = `{
         "requests.CreateGeneralAttendance": {
             "type": "object",
             "properties": {
-                "date": {
+                "datetime": {
                     "type": "string"
                 },
                 "note": {

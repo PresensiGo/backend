@@ -8,27 +8,27 @@ import (
 
 type GeneralAttendance struct {
 	Id       uint      `json:"id" validate:"required"`
-	Date     time.Time `json:"date" validate:"required"`
-	DueTime  time.Time `json:"due_time" validate:"required"`
+	DateTime time.Time `json:"datetime" validate:"required"`
 	Note     string    `json:"note" validate:"required"`
 	SchoolId uint      `json:"school_id" validate:"required"`
+	Code     string    `json:"code" validate:"required"`
 }
 
 func FromGeneralAttendanceModel(m *models.GeneralAttendance) *GeneralAttendance {
 	return &GeneralAttendance{
 		Id:       m.ID,
-		Date:     m.Date,
-		DueTime:  m.DueTime,
+		DateTime: m.DateTime,
 		Note:     m.Note,
 		SchoolId: m.SchoolId,
+		Code:     m.Code,
 	}
 }
 
 func (g *GeneralAttendance) ToModel() *models.GeneralAttendance {
 	return &models.GeneralAttendance{
-		Date:     g.Date,
-		DueTime:  g.DueTime,
+		DateTime: g.DateTime,
 		Note:     g.Note,
 		SchoolId: g.SchoolId,
+		Code:     g.Code,
 	}
 }

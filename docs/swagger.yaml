@@ -213,9 +213,9 @@ definitions:
     type: object
   domains.GeneralAttendance:
     properties:
-      date:
+      code:
         type: string
-      due_time:
+      datetime:
         type: string
       id:
         type: integer
@@ -224,8 +224,8 @@ definitions:
       school_id:
         type: integer
     required:
-    - date
-    - due_time
+    - code
+    - datetime
     - id
     - note
     - school_id
@@ -299,7 +299,7 @@ definitions:
     - AttendanceAlpha
   requests.CreateGeneralAttendance:
     properties:
-      date:
+      datetime:
         type: string
       note:
         type: string

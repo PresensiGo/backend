@@ -1,6 +1,6 @@
 package requests
 
 type CreateGeneralAttendance struct {
-	Date string `json:"date"`
-	Note string `json:"note"`
+	DateTime string `json:"datetime"`
+	Note     string `json:"note"`
 }

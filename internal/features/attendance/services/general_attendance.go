@@ -7,6 +7,7 @@ import (
 	"api/internal/features/attendance/dto/requests"
 	"api/internal/features/attendance/dto/responses"
 	"api/internal/features/attendance/repositories"
+	"github.com/google/uuid"
 )
 
 type GeneralAttendance struct {
@@ -20,12 +21,18 @@ func NewGeneralAttendance(generalAttendanceRepo *repositories.GeneralAttendance)
 func (s *GeneralAttendance) Create(
 	schoolId uint, req requests.CreateGeneralAttendance,
 ) (*responses.CreateGeneralAttendance, error) {
-	parsedDate, err := time.Parse("2006-01-02", req.Date)
+	timezone, err := time.LoadLocation("Asia/Jakarta")
+	if err != nil {
+		return nil, err
+	}
+
+	parsedDateTime, err := time.ParseInLocation("2006-01-02 15:04:05", req.DateTime, timezone)
 
 	generalAttendance := domains.GeneralAttendance{
-		Date:     parsedDate,
+		DateTime: parsedDateTime,
 		Note:     req.Note,
 		SchoolId: schoolId,
+		Code:     uuid.NewString(),
 	}
 
 	result, err := s.generalAttendanceRepo.Create(generalAttendance)
