@@ -10,4 +10,5 @@ func RegisterBatch(g *gin.RouterGroup, handler *handlers.Batch) {
 
 	group.POST("", handler.Create)
 	group.GET("", handler.GetAll)
+	group.PUT("/:batch_id", handler.Update)
 }

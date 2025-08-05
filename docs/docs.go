@@ -291,6 +291,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}": {
+            "put": {
+                "tags": [
+                    "batch"
+                ],
+                "operationId": "updateBatch",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.Update"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domains.Batch"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/classrooms/batches/{batch_id}": {
             "get": {
                 "tags": [
@@ -948,6 +982,14 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "default": "password"
+                }
+            }
+        },
+        "requests.Update": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
                 }
             }
         },

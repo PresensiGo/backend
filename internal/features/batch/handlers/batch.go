@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"api/internal/features/batch/dto/requests"
 	"api/internal/features/batch/services"
@@ -62,4 +63,32 @@ func (h *Batch) GetAll(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+
+// @id 			updateBatch
+// @tags 		batch
+// @param 		batch_id path int true "batch id"
+// @param 		body body requests.Update true "body"
+// @success 	200 {object} domains.Batch
+// @router 		/api/v1/batches/{batch_id} [put]
+func (h *Batch) Update(c *gin.Context) {
+	batchId, err := strconv.Atoi(c.Param("batch_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var req requests.Update
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Update(uint(batchId), req)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
 }

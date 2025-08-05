@@ -287,6 +287,11 @@ definitions:
         default: password
         type: string
     type: object
+  requests.Update:
+    properties:
+      name:
+        type: string
+    type: object
   responses.ClassroomMajor:
     properties:
       classroom:
@@ -529,6 +534,28 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/requests.Create'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domains.Batch'
+      tags:
+      - batch
+  /api/v1/batches/{batch_id}:
+    put:
+      operationId: updateBatch
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Update'
       responses:
         "200":
           description: OK

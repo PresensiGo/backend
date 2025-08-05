@@ -113,3 +113,12 @@ func (s *Batch) GetAllBySchoolId(schoolId uint) (*responses.GetAllBatches, error
 		Batches: mappedBatches,
 	}, nil
 }
+
+func (s *Batch) Update(batchId uint, req requests.Update) (*domains.Batch, error) {
+	batch := domains.Batch{
+		Id:   batchId,
+		Name: req.Name,
+	}
+
+	return s.batchRepo.Update(batch)
+}

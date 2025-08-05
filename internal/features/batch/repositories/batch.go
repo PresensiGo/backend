@@ -54,6 +54,15 @@ func (r *Batch) GetAllBySchoolId(schoolId uint) (*[]domains.Batch, error) {
 	return &mappedBatches, nil
 }
 
+func (r *Batch) Update(domain domains.Batch) (*domains.Batch, error) {
+	model := domain.ToModel()
+	if err := r.db.Model(&model).Where("id = ?", domain.Id).Updates(&model).Error; err != nil {
+		return nil, err
+	}
+
+	return domains.FromBatchModel(model), nil
+}
+
 func (r *Batch) DeleteBySchoolIdInTx(tx *gorm.DB, schoolId uint) error {
 	return tx.Where("school_id = ?", schoolId).
 		Unscoped().
