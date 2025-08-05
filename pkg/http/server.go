@@ -2,7 +2,13 @@ package http
 
 import (
 	_ "api/docs"
-	"api/internal/routes"
+	"api/internal/features/attendance"
+	"api/internal/features/batch"
+	"api/internal/features/classroom"
+	"api/internal/features/data"
+	"api/internal/features/major"
+	"api/internal/features/student"
+	"api/internal/features/user"
 	"api/pkg/http/middleware"
 	"github.com/gin-contrib/cors"
 	swaggerfiles "github.com/swaggo/files"
@@ -25,20 +31,18 @@ func NewServer() {
 
 	v1 := router.Group("/api/v1")
 
-	routes.RegisterAuth(v1)
+	user.RegisterUser(v1)
 
 	// protected routes
 	authorized := v1.Group("/")
 	authorized.Use(middleware.AuthMiddleware())
 	{
-		routes.RegisterAttendance(authorized)
-		routes.RegisterBatch(authorized)
-		routes.RegisterClassroom(authorized)
-		routes.RegisterMajor(authorized)
-		routes.RegisterExcel(authorized)
-		routes.RegisterLateness(authorized)
-		routes.RegisterReset(authorized)
-		routes.RegisterStudent(authorized)
+		attendance.RegisterAttendance(authorized)
+		batch.RegisterBatch(authorized)
+		major.RegisterMajor(authorized)
+		classroom.RegisterClassroom(authorized)
+		student.RegisterStudent(authorized)
+		data.RegisterData(authorized)
 	}
 
 	// swagger

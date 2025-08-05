@@ -39,7 +39,7 @@ definitions:
     properties:
       attendances:
         items:
-          $ref: '#/definitions/dto.Attendance'
+          $ref: '#/definitions/domains.Attendance'
         type: array
     required:
     - attendances
@@ -48,7 +48,7 @@ definitions:
     properties:
       latenesses:
         items:
-          $ref: '#/definitions/dto.Lateness'
+          $ref: '#/definitions/domains.Lateness'
         type: array
     required:
     - latenesses
@@ -57,7 +57,7 @@ definitions:
     properties:
       students:
         items:
-          $ref: '#/definitions/dto.Student'
+          $ref: '#/definitions/domains.Student'
         type: array
     required:
     - students
@@ -66,7 +66,7 @@ definitions:
     properties:
       students:
         items:
-          $ref: '#/definitions/combined.StudentMajorClassroom'
+          $ref: '#/definitions/domains.StudentMajorClassroom'
         type: array
     required:
     - students
@@ -74,9 +74,9 @@ definitions:
   GetAttendanceItemRes:
     properties:
       attendanceStudent:
-        $ref: '#/definitions/dto.AttendanceDetail'
+        $ref: '#/definitions/domains.AttendanceDetail'
       student:
-        $ref: '#/definitions/dto.Student'
+        $ref: '#/definitions/domains.Student'
     required:
     - attendanceStudent
     - student
@@ -84,7 +84,7 @@ definitions:
   GetAttendanceRes:
     properties:
       attendance:
-        $ref: '#/definitions/dto.Attendance'
+        $ref: '#/definitions/domains.Attendance'
       items:
         items:
           $ref: '#/definitions/GetAttendanceItemRes'
@@ -97,10 +97,10 @@ definitions:
     properties:
       items:
         items:
-          $ref: '#/definitions/combined.StudentMajorClassroom'
+          $ref: '#/definitions/domains.StudentMajorClassroom'
         type: array
       lateness:
-        $ref: '#/definitions/dto.Lateness'
+        $ref: '#/definitions/domains.Lateness'
     required:
     - items
     - lateness
@@ -110,33 +110,7 @@ definitions:
       refresh_token:
         type: string
     type: object
-  combined.BatchInfo:
-    properties:
-      batch:
-        $ref: '#/definitions/dto.Batch'
-      classrooms_count:
-        type: integer
-      majors_count:
-        type: integer
-    required:
-    - batch
-    - classrooms_count
-    - majors_count
-    type: object
-  combined.StudentMajorClassroom:
-    properties:
-      classroom:
-        $ref: '#/definitions/dto.Classroom'
-      major:
-        $ref: '#/definitions/dto.Major'
-      student:
-        $ref: '#/definitions/dto.Student'
-    required:
-    - classroom
-    - major
-    - student
-    type: object
-  dto.Attendance:
+  domains.Attendance:
     properties:
       classroom_id:
         type: integer
@@ -149,7 +123,7 @@ definitions:
     - date
     - id
     type: object
-  dto.AttendanceDetail:
+  domains.AttendanceDetail:
     properties:
       attendance_id:
         type: integer
@@ -168,7 +142,7 @@ definitions:
     - status
     - student_id
     type: object
-  dto.Batch:
+  domains.Batch:
     properties:
       id:
         type: integer
@@ -181,7 +155,20 @@ definitions:
     - name
     - school_id
     type: object
-  dto.Classroom:
+  domains.BatchInfo:
+    properties:
+      batch:
+        $ref: '#/definitions/domains.Batch'
+      classrooms_count:
+        type: integer
+      majors_count:
+        type: integer
+    required:
+    - batch
+    - classrooms_count
+    - majors_count
+    type: object
+  domains.Classroom:
     properties:
       id:
         type: integer
@@ -194,7 +181,7 @@ definitions:
     - major_id
     - name
     type: object
-  dto.Lateness:
+  domains.Lateness:
     properties:
       date:
         type: string
@@ -207,7 +194,7 @@ definitions:
     - id
     - school_id
     type: object
-  dto.Major:
+  domains.Major:
     properties:
       batch_id:
         type: integer
@@ -220,7 +207,7 @@ definitions:
     - id
     - name
     type: object
-  dto.Student:
+  domains.Student:
     properties:
       classroom_id:
         type: integer
@@ -235,6 +222,19 @@ definitions:
     - id
     - name
     - nis
+    type: object
+  domains.StudentMajorClassroom:
+    properties:
+      classroom:
+        $ref: '#/definitions/domains.Classroom'
+      major:
+        $ref: '#/definitions/domains.Major'
+      student:
+        $ref: '#/definitions/domains.Student'
+    required:
+    - classroom
+    - major
+    - student
     type: object
   models.AttendanceStatus:
     enum:
@@ -285,9 +285,9 @@ definitions:
   responses.ClassroomMajor:
     properties:
       classroom:
-        $ref: '#/definitions/dto.Classroom'
+        $ref: '#/definitions/domains.Classroom'
       major:
-        $ref: '#/definitions/dto.Major'
+        $ref: '#/definitions/domains.Major'
     required:
     - classroom
     - major
@@ -296,7 +296,7 @@ definitions:
     properties:
       batches:
         items:
-          $ref: '#/definitions/combined.BatchInfo'
+          $ref: '#/definitions/domains.BatchInfo'
         type: array
     required:
     - batches
@@ -314,7 +314,7 @@ definitions:
     properties:
       majors:
         items:
-          $ref: '#/definitions/dto.Major'
+          $ref: '#/definitions/domains.Major'
         type: array
     required:
     - majors

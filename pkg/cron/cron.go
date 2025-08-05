@@ -1,10 +1,11 @@
 package cron
 
 import (
-	"api/internal/injectors"
 	"fmt"
-	"github.com/go-co-op/gocron/v2"
 	"time"
+
+	"api/internal/injector"
+	"github.com/go-co-op/gocron/v2"
 )
 
 func New() {
@@ -16,9 +17,11 @@ func New() {
 
 	_, err = s.NewJob(
 		gocron.DurationJob(10*time.Minute),
-		gocron.NewTask(func() {
-			injectors.InitUserTokenCron().Start()
-		}),
+		gocron.NewTask(
+			func() {
+				injector.InitUserTokenCron().Start()
+			},
+		),
 	)
 	if err != nil {
 		fmt.Println(err)

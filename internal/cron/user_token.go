@@ -1,19 +1,20 @@
 package cron
 
 import (
-	"api/internal/repositories"
 	"fmt"
+
+	"api/internal/features/user/repositories"
 )
 
-type UserToken struct {
+type UserTokenCron struct {
 	userTokenRepo *repositories.UserToken
 }
 
-func NewUserToken(userTokenRepo *repositories.UserToken) *UserToken {
-	return &UserToken{userTokenRepo}
+func NewUserTokenCron(userTokenRepo *repositories.UserToken) *UserTokenCron {
+	return &UserTokenCron{userTokenRepo}
 }
 
-func (c *UserToken) Start() {
+func (c *UserTokenCron) Start() {
 	if err := c.userTokenRepo.DeleteExpiredTokens(); err != nil {
 		fmt.Println(err.Error())
 	}

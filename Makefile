@@ -10,7 +10,7 @@ docs:
 	swag init
 
 di:
-	wire gen api/internal/injectors
+	wire gen api/internal/injector
 
 docker-compose-up:
 	docker compose -p presensi-sekolah up -d
