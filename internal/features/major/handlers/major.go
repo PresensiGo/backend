@@ -79,3 +79,31 @@ func (h *Major) GetAllByBatchId(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+// @id 			updateMajor
+// @tags 		major
+// @param		major_id path int true "major id"
+// @param		body body requests.Update true "body"
+// @success 	200 {object} domains.Major
+// @router 		/api/v1/majors/{major_id} [put]
+func (h *Major) Update(c *gin.Context) {
+	majorId, err := strconv.Atoi(c.Param("major_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var req requests.Update
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Update(uint(majorId), req)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}

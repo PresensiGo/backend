@@ -90,3 +90,14 @@ func (r *Major) GetManyByBatchIds(batchIds []uint) (*[]domains.Major, error) {
 
 	return &mappedMajors, nil
 }
+
+func (r *Major) Update(majorId uint, data domains.Major) (*domains.Major, error) {
+	major := data.ToModel()
+	if err := r.db.Model(&models.Major{}).Where(
+		"id = ?", majorId,
+	).Updates(&major).Error; err != nil {
+		return nil, err
+	}
+
+	return domains.FromMajorModel(major), nil
+}

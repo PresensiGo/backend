@@ -311,7 +311,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.Update"
+                            "$ref": "#/definitions/api_internal_features_batch_dto_requests.Update"
                         }
                     }
                 ],
@@ -551,6 +551,40 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.GetAllMajorsByBatchId"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/majors/{major_id}": {
+            "put": {
+                "tags": [
+                    "major"
+                ],
+                "operationId": "updateMajor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_internal_features_major_dto_requests.Update"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domains.Major"
                         }
                     }
                 }
@@ -803,7 +837,30 @@ const docTemplate = `{
                 }
             }
         },
+        "api_internal_features_batch_dto_requests.Update": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "api_internal_features_major_dto_requests.Create": {
+            "type": "object",
+            "required": [
+                "batch_id",
+                "name"
+            ],
+            "properties": {
+                "batch_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "api_internal_features_major_dto_requests.Update": {
             "type": "object",
             "required": [
                 "batch_id",
@@ -1064,14 +1121,6 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "default": "password"
-                }
-            }
-        },
-        "requests.Update": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
                 }
             }
         },

@@ -70,3 +70,12 @@ func (s *Major) GetAllMajorsByBatchId(batchId uint64) (*responses.GetAllMajorsBy
 		Majors: mappedMajors,
 	}, nil
 }
+
+func (s *Major) Update(majorId uint, req requests.Update) (*domains.Major, error) {
+	major := domains.Major{
+		Name:    req.Name,
+		BatchId: req.BatchId,
+	}
+
+	return s.majorRepo.Update(majorId, major)
+}

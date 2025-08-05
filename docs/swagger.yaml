@@ -115,7 +115,22 @@ definitions:
       name:
         type: string
     type: object
+  api_internal_features_batch_dto_requests.Update:
+    properties:
+      name:
+        type: string
+    type: object
   api_internal_features_major_dto_requests.Create:
+    properties:
+      batch_id:
+        type: integer
+      name:
+        type: string
+    required:
+    - batch_id
+    - name
+    type: object
+  api_internal_features_major_dto_requests.Update:
     properties:
       batch_id:
         type: integer
@@ -295,11 +310,6 @@ definitions:
         type: string
       password:
         default: password
-        type: string
-    type: object
-  requests.Update:
-    properties:
-      name:
         type: string
     type: object
   responses.ClassroomMajor:
@@ -580,7 +590,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.Update'
+          $ref: '#/definitions/api_internal_features_batch_dto_requests.Update'
       responses:
         "200":
           description: OK
@@ -698,6 +708,28 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/api_internal_features_major_dto_requests.Create'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domains.Major'
+      tags:
+      - major
+  /api/v1/majors/{major_id}:
+    put:
+      operationId: updateMajor
+      parameters:
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api_internal_features_major_dto_requests.Update'
       responses:
         "200":
           description: OK
