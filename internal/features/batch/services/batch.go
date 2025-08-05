@@ -2,8 +2,8 @@ package services
 
 import (
 	"api/internal/features/batch/domains"
+	"api/internal/features/batch/dto/requests"
 	"api/internal/features/batch/dto/responses"
-	"api/internal/features/batch/models"
 	repositories2 "api/internal/features/batch/repositories"
 	"api/internal/features/classroom/repositories"
 	domains2 "api/internal/features/major/domains"
@@ -26,19 +26,18 @@ func NewBatch(
 	return &Batch{db, batchRepo, majorRepo, classroomRepo}
 }
 
-func (s *Batch) Create(name string) (*responses.CreateBatch, error) {
-	batch := models.Batch{
-		Name: name,
+func (s *Batch) Create(schoolId uint, req requests.Create) (*domains.Batch, error) {
+	batch := domains.Batch{
+		Name:     req.Name,
+		SchoolId: schoolId,
 	}
 
-	if err := s.db.Create(&batch).Error; err != nil {
+	result, err := s.batchRepo.Create(batch)
+	if err != nil {
 		return nil, err
 	}
 
-	return &responses.CreateBatch{
-		Id:   batch.ID,
-		Name: batch.Name,
-	}, nil
+	return result, nil
 }
 
 func (s *Batch) GetAllBySchoolId(schoolId uint) (*responses.GetAllBatches, error) {

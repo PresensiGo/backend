@@ -6,7 +6,8 @@ import (
 )
 
 func RegisterBatch(g *gin.RouterGroup, handler *handlers.Batch) {
-	group := g.Group("/batch")
+	group := g.Group("/batches")
 
+	group.POST("", handler.Create)
 	group.GET("", handler.GetAll)
 }

@@ -250,7 +250,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/batch": {
+        "/api/v1/batches": {
             "get": {
                 "tags": [
                     "batch"
@@ -261,6 +261,31 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.GetAllBatches"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "batch"
+                ],
+                "operationId": "createBatch",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.Create"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domains.Batch"
                         }
                     }
                 }
@@ -866,6 +891,14 @@ const docTemplate = `{
                 "AttendanceSick",
                 "AttendanceAlpha"
             ]
+        },
+        "requests.Create": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
         },
         "requests.Login": {
             "type": "object",

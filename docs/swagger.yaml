@@ -248,6 +248,11 @@ definitions:
     - AttendancePermission
     - AttendanceSick
     - AttendanceAlpha
+  requests.Create:
+    properties:
+      name:
+        type: string
+    type: object
   requests.Login:
     properties:
       email:
@@ -505,7 +510,7 @@ paths:
             $ref: '#/definitions/responses.Register'
       tags:
       - auth
-  /api/v1/batch:
+  /api/v1/batches:
     get:
       operationId: getAllBatches
       responses:
@@ -513,6 +518,22 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.GetAllBatches'
+      tags:
+      - batch
+    post:
+      operationId: createBatch
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Create'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domains.Batch'
       tags:
       - batch
   /api/v1/classrooms/batches/{batch_id}:
