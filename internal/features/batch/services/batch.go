@@ -122,3 +122,7 @@ func (s *Batch) Update(batchId uint, req requests.Update) (*domains.Batch, error
 
 	return s.batchRepo.Update(batch)
 }
+
+func (s *Batch) Delete(batchId uint) error {
+	return s.batchRepo.Delete(batchId)
+}

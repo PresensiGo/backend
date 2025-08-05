@@ -92,3 +92,23 @@ func (h *Batch) Update(c *gin.Context) {
 
 	c.JSON(http.StatusOK, result)
 }
+
+// @id 			deleteBatch
+// @tags 		batch
+// @param 		batch_id path int true "batch id"
+// @success 	200 {string} string
+// @router 		/api/v1/batches/{batch_id} [delete]
+func (h *Batch) Delete(c *gin.Context) {
+	batchId, err := strconv.Atoi(c.Param("batch_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if err := h.service.Delete(uint(batchId)); err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, "ok")
+}

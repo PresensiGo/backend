@@ -63,6 +63,10 @@ func (r *Batch) Update(domain domains.Batch) (*domains.Batch, error) {
 	return domains.FromBatchModel(model), nil
 }
 
+func (r *Batch) Delete(batchId uint) error {
+	return r.db.Where("id = ?", batchId).Unscoped().Delete(&models.Batch{}).Error
+}
+
 func (r *Batch) DeleteBySchoolIdInTx(tx *gorm.DB, schoolId uint) error {
 	return tx.Where("school_id = ?", schoolId).
 		Unscoped().

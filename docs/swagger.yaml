@@ -542,6 +542,21 @@ paths:
       tags:
       - batch
   /api/v1/batches/{batch_id}:
+    delete:
+      operationId: deleteBatch
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - batch
     put:
       operationId: updateBatch
       parameters:
