@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"api/internal/features/major/dto/requests"
 	"api/internal/features/major/services"
 	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,27 @@ type Major struct {
 
 func NewMajor(service *services.Major) *Major {
 	return &Major{service}
+}
+
+// @id 			createMajor
+// @tags 		major
+// @param		body body requests.Create true "body"
+// @success 	200 {object} domains.Major
+// @router 		/api/v1/majors [post]
+func (h *Major) Create(c *gin.Context) {
+	var req requests.Create
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Create(req)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
 }
 
 // @id 			getAllMajors

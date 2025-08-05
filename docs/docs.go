@@ -277,7 +277,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.Create"
+                            "$ref": "#/definitions/api_internal_features_batch_dto_requests.Create"
                         }
                     }
                 ],
@@ -501,6 +501,31 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/domains.Major"
                             }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "major"
+                ],
+                "operationId": "createMajor",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_internal_features_major_dto_requests.Create"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domains.Major"
                         }
                     }
                 }
@@ -770,6 +795,29 @@ const docTemplate = `{
                 }
             }
         },
+        "api_internal_features_batch_dto_requests.Create": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "api_internal_features_major_dto_requests.Create": {
+            "type": "object",
+            "required": [
+                "batch_id",
+                "name"
+            ],
+            "properties": {
+                "batch_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "domains.Attendance": {
             "type": "object",
             "required": [
@@ -967,14 +1015,6 @@ const docTemplate = `{
                 "AttendanceSick",
                 "AttendanceAlpha"
             ]
-        },
-        "requests.Create": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
         },
         "requests.Login": {
             "type": "object",

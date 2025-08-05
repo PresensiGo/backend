@@ -3,6 +3,7 @@ package services
 import (
 	batchRepo "api/internal/features/batch/repositories"
 	"api/internal/features/major/domains"
+	"api/internal/features/major/dto/requests"
 	"api/internal/features/major/dto/responses"
 	"api/internal/features/major/models"
 	"api/internal/features/major/repositories"
@@ -17,6 +18,15 @@ type Major struct {
 
 func NewMajor(db *gorm.DB, batchRepo *batchRepo.Batch, majorRepo *repositories.Major) *Major {
 	return &Major{db, batchRepo, majorRepo}
+}
+
+func (s *Major) Create(req requests.Create) (*domains.Major, error) {
+	major := domains.Major{
+		Name:    req.Name,
+		BatchId: req.BatchId,
+	}
+
+	return s.majorRepo.Create(major)
 }
 
 func (s *Major) GetAllMajors(schoolId uint) (*[]domains.Major, error) {

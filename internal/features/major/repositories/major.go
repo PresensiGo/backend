@@ -14,6 +14,15 @@ func NewMajor(db *gorm.DB) *Major {
 	return &Major{db}
 }
 
+func (r *Major) Create(data domains.Major) (*domains.Major, error) {
+	major := data.ToModel()
+	if err := r.db.Create(&major).Error; err != nil {
+		return nil, err
+	}
+
+	return domains.FromMajorModel(major), nil
+}
+
 func (r *Major) CreateInTx(tx *gorm.DB, data domains.Major) (*uint, error) {
 	major := models.Major{
 		Name:    data.Name,
