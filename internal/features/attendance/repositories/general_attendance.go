@@ -40,3 +40,16 @@ func (r *GeneralAttendance) GetAllBySchoolId(schoolId uint) (*[]domains.GeneralA
 
 	return &result, nil
 }
+
+func (r *GeneralAttendance) Update(
+	generalAttendanceId uint, data domains.GeneralAttendance,
+) (*domains.GeneralAttendance, error) {
+	generalAttendance := data.ToModel()
+	if err := r.db.Where(
+		"id = ?", generalAttendanceId,
+	).Updates(&generalAttendance).Error; err != nil {
+		return nil, err
+	}
+
+	return domains.FromGeneralAttendanceModel(generalAttendance), nil
+}

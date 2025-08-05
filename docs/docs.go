@@ -446,6 +446,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/general_attendances/{general_attendance_id}": {
+            "put": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "updateGeneralAttendances",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "general attendance id",
+                        "name": "general_attendance_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateGeneralAttendance"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.UpdateGeneralAttendance"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/latenesses": {
             "get": {
                 "tags": [
@@ -1242,6 +1276,17 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.UpdateGeneralAttendance": {
+            "type": "object",
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.ClassroomMajor": {
             "type": "object",
             "required": [
@@ -1383,6 +1428,17 @@ const docTemplate = `{
                 },
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.UpdateGeneralAttendance": {
+            "type": "object",
+            "required": [
+                "general_attendance"
+            ],
+            "properties": {
+                "general_attendance": {
+                    "$ref": "#/definitions/domains.GeneralAttendance"
                 }
             }
         }

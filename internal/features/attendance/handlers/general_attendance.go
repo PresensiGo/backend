@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"api/internal/features/attendance/dto/requests"
 	"api/internal/features/attendance/services"
@@ -56,6 +57,34 @@ func (h *GeneralAttendance) GetAll(c *gin.Context) {
 	}
 
 	result, err := h.service.GetAll(authUser.SchoolId)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+// @id 			updateGeneralAttendances
+// @tags 		attendance
+// @param 		general_attendance_id path int true "general attendance id"
+// @param 		body body requests.UpdateGeneralAttendance true "body"
+// @success 	200 {object} responses.UpdateGeneralAttendance
+// @router 		/api/v1/general_attendances/{general_attendance_id} [put]
+func (h *GeneralAttendance) Update(c *gin.Context) {
+	generalAttendanceId, err := strconv.Atoi(c.Param("general_attendance_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var req requests.UpdateGeneralAttendance
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Update(uint(generalAttendanceId), req)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

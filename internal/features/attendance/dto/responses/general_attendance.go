@@ -9,3 +9,7 @@ type CreateGeneralAttendance struct {
 type GetAllGeneralAttendances struct {
 	GeneralAttendances []domains.GeneralAttendance `json:"general_attendances" validate:"required"`
 }
+
+type UpdateGeneralAttendance struct {
+	GeneralAttendance domains.GeneralAttendance `json:"general_attendance" validate:"required"`
+}

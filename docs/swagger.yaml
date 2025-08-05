@@ -338,6 +338,13 @@ definitions:
         default: password
         type: string
     type: object
+  requests.UpdateGeneralAttendance:
+    properties:
+      datetime:
+        type: string
+      note:
+        type: string
+    type: object
   responses.ClassroomMajor:
     properties:
       classroom:
@@ -431,6 +438,13 @@ definitions:
     required:
     - access_token
     - refresh_token
+    type: object
+  responses.UpdateGeneralAttendance:
+    properties:
+      general_attendance:
+        $ref: '#/definitions/domains.GeneralAttendance'
+    required:
+    - general_attendance
     type: object
 info:
   contact: {}
@@ -709,6 +723,28 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.CreateGeneralAttendance'
+      tags:
+      - attendance
+  /api/v1/general_attendances/{general_attendance_id}:
+    put:
+      operationId: updateGeneralAttendances
+      parameters:
+      - description: general attendance id
+        in: path
+        name: general_attendance_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateGeneralAttendance'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UpdateGeneralAttendance'
       tags:
       - attendance
   /api/v1/latenesses:

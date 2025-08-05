@@ -4,3 +4,8 @@ type CreateGeneralAttendance struct {
 	DateTime string `json:"datetime"`
 	Note     string `json:"note"`
 }
+
+type UpdateGeneralAttendance struct {
+	DateTime string `json:"datetime"`
+	Note     string `json:"note"`
+}

@@ -1,12 +1,11 @@
 package services
 
 import (
-	"time"
-
 	"api/internal/features/attendance/domains"
 	"api/internal/features/attendance/dto/requests"
 	"api/internal/features/attendance/dto/responses"
 	"api/internal/features/attendance/repositories"
+	"api/pkg/utils"
 	"github.com/google/uuid"
 )
 
@@ -21,15 +20,13 @@ func NewGeneralAttendance(generalAttendanceRepo *repositories.GeneralAttendance)
 func (s *GeneralAttendance) Create(
 	schoolId uint, req requests.CreateGeneralAttendance,
 ) (*responses.CreateGeneralAttendance, error) {
-	timezone, err := time.LoadLocation("Asia/Jakarta")
+	parsedDateTime, err := utils.GetParsedDateTime(req.DateTime)
 	if err != nil {
 		return nil, err
 	}
 
-	parsedDateTime, err := time.ParseInLocation("2006-01-02 15:04:05", req.DateTime, timezone)
-
 	generalAttendance := domains.GeneralAttendance{
-		DateTime: parsedDateTime,
+		DateTime: *parsedDateTime,
 		Note:     req.Note,
 		SchoolId: schoolId,
 		Code:     uuid.NewString(),
@@ -53,5 +50,28 @@ func (s *GeneralAttendance) GetAll(schoolId uint) (*responses.GetAllGeneralAtten
 
 	return &responses.GetAllGeneralAttendances{
 		GeneralAttendances: *result,
+	}, nil
+}
+
+func (s *GeneralAttendance) Update(
+	generalAttendanceId uint, req requests.UpdateGeneralAttendance,
+) (*responses.UpdateGeneralAttendance, error) {
+	parsedDateTime, err := utils.GetParsedDateTime(req.DateTime)
+	if err != nil {
+		return nil, err
+	}
+
+	generalAttendance := domains.GeneralAttendance{
+		DateTime: *parsedDateTime,
+		Note:     req.Note,
+	}
+
+	result, err := s.generalAttendanceRepo.Update(generalAttendanceId, generalAttendance)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.UpdateGeneralAttendance{
+		GeneralAttendance: *result,
 	}, nil
 }
