@@ -63,7 +63,10 @@ func InitAttendanceHandlers() *injector.AttendanceHandlers {
 	classroom := repositories5.NewClassroom(db)
 	servicesLateness := services.NewLateness(lateness, latenessDetail, student, major, classroom)
 	handlersLateness := handlers.NewLateness(servicesLateness)
-	attendanceHandlers := injector.NewAttendanceHandlers(handlersAttendance, handlersLateness)
+	generalAttendance := repositories2.NewGeneralAttendance(db)
+	servicesGeneralAttendance := services.NewGeneralAttendance(generalAttendance)
+	handlersGeneralAttendance := handlers.NewGeneralAttendance(servicesGeneralAttendance)
+	attendanceHandlers := injector.NewAttendanceHandlers(handlersAttendance, handlersLateness, handlersGeneralAttendance)
 	return attendanceHandlers
 }
 

@@ -211,6 +211,25 @@ definitions:
     - major_id
     - name
     type: object
+  domains.GeneralAttendance:
+    properties:
+      date:
+        type: string
+      due_time:
+        type: string
+      id:
+        type: integer
+      note:
+        type: string
+      school_id:
+        type: integer
+    required:
+    - date
+    - due_time
+    - id
+    - note
+    - school_id
+    type: object
   domains.Lateness:
     properties:
       date:
@@ -278,6 +297,13 @@ definitions:
     - AttendancePermission
     - AttendanceSick
     - AttendanceAlpha
+  requests.CreateGeneralAttendance:
+    properties:
+      date:
+        type: string
+      note:
+        type: string
+    type: object
   requests.Login:
     properties:
       email:
@@ -322,6 +348,13 @@ definitions:
     - classroom
     - major
     type: object
+  responses.CreateGeneralAttendance:
+    properties:
+      general_attendance:
+        $ref: '#/definitions/domains.GeneralAttendance'
+    required:
+    - general_attendance
+    type: object
   responses.GetAll:
     properties:
       classrooms:
@@ -348,6 +381,15 @@ definitions:
         type: array
     required:
     - data
+    type: object
+  responses.GetAllGeneralAttendances:
+    properties:
+      general_attendances:
+        items:
+          $ref: '#/definitions/domains.GeneralAttendance'
+        type: array
+    required:
+    - general_attendances
     type: object
   responses.GetAllMajorsByBatchId:
     properties:
@@ -643,6 +685,32 @@ paths:
             type: string
       tags:
       - excel
+  /api/v1/general_attendances:
+    get:
+      operationId: getAllGeneralAttendances
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllGeneralAttendances'
+      tags:
+      - attendance
+    post:
+      operationId: createGeneralAttendance
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateGeneralAttendance'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.CreateGeneralAttendance'
+      tags:
+      - attendance
   /api/v1/latenesses:
     get:
       operationId: getAllLatenesses

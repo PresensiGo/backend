@@ -5,13 +5,13 @@ import (
 	"os"
 	"sync"
 
-	models3 "api/internal/features/attendance/models"
-	models4 "api/internal/features/batch/models"
-	models6 "api/internal/features/classroom/models"
-	models5 "api/internal/features/major/models"
-	models2 "api/internal/features/school/models"
-	models7 "api/internal/features/student/models"
-	models8 "api/internal/features/user/models"
+	attendance "api/internal/features/attendance/models"
+	batch "api/internal/features/batch/models"
+	classroom "api/internal/features/classroom/models"
+	major "api/internal/features/major/models"
+	school "api/internal/features/school/models"
+	student "api/internal/features/student/models"
+	user "api/internal/features/user/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -48,17 +48,20 @@ func New() *gorm.DB {
 			}
 
 			_ = db.AutoMigrate(
-				&models8.User{},
-				&models8.UserToken{},
-				&models2.School{},
-				&models4.Batch{},
-				&models5.Major{},
-				&models6.Classroom{},
-				&models7.Student{},
-				&models3.Attendance{},
-				&models3.AttendanceDetail{},
-				&models3.Lateness{},
-				&models3.LatenessDetail{},
+				&user.User{},
+				&user.UserToken{},
+				&school.School{},
+				&batch.Batch{},
+				&major.Major{},
+				&classroom.Classroom{},
+				&student.Student{},
+				&attendance.Attendance{},
+				&attendance.AttendanceDetail{},
+				&attendance.Lateness{},
+				&attendance.LatenessDetail{},
+
+				&attendance.GeneralAttendance{},
+				&attendance.GeneralAttendanceItem{},
 			)
 
 			dbInstance = db

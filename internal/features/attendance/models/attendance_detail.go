@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// deprecated
 type AttendanceDetail struct {
 	gorm.Model
 

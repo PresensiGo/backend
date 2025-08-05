@@ -405,6 +405,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/general_attendances": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "getAllGeneralAttendances",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllGeneralAttendances"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "createGeneralAttendance",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateGeneralAttendance"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateGeneralAttendance"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/latenesses": {
             "get": {
                 "tags": [
@@ -1017,6 +1058,33 @@ const docTemplate = `{
                 }
             }
         },
+        "domains.GeneralAttendance": {
+            "type": "object",
+            "required": [
+                "date",
+                "due_time",
+                "id",
+                "note",
+                "school_id"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "due_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "domains.Lateness": {
             "type": "object",
             "required": [
@@ -1112,6 +1180,17 @@ const docTemplate = `{
                 "AttendanceAlpha"
             ]
         },
+        "requests.CreateGeneralAttendance": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.Login": {
             "type": "object",
             "properties": {
@@ -1178,6 +1257,17 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.CreateGeneralAttendance": {
+            "type": "object",
+            "required": [
+                "general_attendance"
+            ],
+            "properties": {
+                "general_attendance": {
+                    "$ref": "#/definitions/domains.GeneralAttendance"
+                }
+            }
+        },
         "responses.GetAll": {
             "type": "object",
             "required": [
@@ -1216,6 +1306,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/responses.ClassroomMajor"
+                    }
+                }
+            }
+        },
+        "responses.GetAllGeneralAttendances": {
+            "type": "object",
+            "required": [
+                "general_attendances"
+            ],
+            "properties": {
+                "general_attendances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domains.GeneralAttendance"
                     }
                 }
             }

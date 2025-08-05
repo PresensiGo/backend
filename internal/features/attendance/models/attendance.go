@@ -16,6 +16,7 @@ const (
 	AttendanceAlpha      AttendanceStatus = "alpha"
 )
 
+// deprecated
 type Attendance struct {
 	gorm.Model
 
