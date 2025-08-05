@@ -101,3 +101,7 @@ func (r *Major) Update(majorId uint, data domains.Major) (*domains.Major, error)
 
 	return domains.FromMajorModel(major), nil
 }
+
+func (r *Major) Delete(majorId uint) error {
+	return r.db.Where("id = ?", majorId).Unscoped().Delete(&models.Major{}).Error
+}

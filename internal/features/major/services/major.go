@@ -79,3 +79,7 @@ func (s *Major) Update(majorId uint, req requests.Update) (*domains.Major, error
 
 	return s.majorRepo.Update(majorId, major)
 }
+
+func (s *Major) Delete(majorId uint) error {
+	return s.majorRepo.Delete(majorId)
+}

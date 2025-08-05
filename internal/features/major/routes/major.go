@@ -12,4 +12,5 @@ func RegisterMajor(g *gin.RouterGroup, handler *handlers.Major) {
 	group.GET("", handler.GetAllMajors)
 	group.GET("/batch/:batch_id", handler.GetAllByBatchId)
 	group.PUT("/:major_id", handler.Update)
+	group.DELETE("/:major_id", handler.Delete)
 }

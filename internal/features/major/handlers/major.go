@@ -107,3 +107,23 @@ func (h *Major) Update(c *gin.Context) {
 
 	c.JSON(http.StatusOK, result)
 }
+
+// @id 			deleteMajor
+// @tags 		major
+// @param		major_id path int true "major id"
+// @success 	200 {string} string
+// @router 		/api/v1/majors/{major_id} [delete]
+func (h *Major) Delete(c *gin.Context) {
+	majorId, err := strconv.Atoi(c.Param("major_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if err := h.service.Delete(uint(majorId)); err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, "ok")
+}

@@ -716,6 +716,21 @@ paths:
       tags:
       - major
   /api/v1/majors/{major_id}:
+    delete:
+      operationId: deleteMajor
+      parameters:
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - major
     put:
       operationId: updateMajor
       parameters:
