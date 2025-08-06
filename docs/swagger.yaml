@@ -788,6 +788,31 @@ paths:
             $ref: '#/definitions/responses.GetAllMajorsByBatchId'
       tags:
       - major
+  /api/v1/batches/{batch_id}/majors/{major_id}/classrooms:
+    get:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllClassroomsByMajorId'
+      tags:
+      - classroom
   /api/v1/classrooms:
     get:
       operationId: getAllClassrooms
@@ -812,21 +837,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.GetAllClassroomWithMajors'
-      tags:
-      - classroom
-  /api/v1/classrooms/major/{major_id}:
-    get:
-      parameters:
-      - description: major id
-        in: path
-        name: major_id
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.GetAllClassroomsByMajorId'
       tags:
       - classroom
   /api/v1/excel/import:

@@ -373,6 +373,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms": {
+            "get": {
+                "tags": [
+                    "classroom"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllClassroomsByMajorId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/classrooms": {
             "get": {
                 "tags": [
@@ -409,30 +447,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.GetAllClassroomWithMajors"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/classrooms/major/{major_id}": {
-            "get": {
-                "tags": [
-                    "classroom"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "major id",
-                        "name": "major_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.GetAllClassroomsByMajorId"
                         }
                     }
                 }
