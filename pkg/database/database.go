@@ -63,6 +63,7 @@ func New() *gorm.DB {
 
 				&attendance.GeneralAttendance{},
 				&attendance.GeneralAttendanceItem{},
+				&attendance.SubjectAttendance{},
 				&subject.Subject{},
 			)
 

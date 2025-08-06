@@ -816,6 +816,22 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/subject-attendances": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "getAllSubjectAttendances",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllSubjectAttendances"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/subjects": {
             "get": {
                 "tags": [
@@ -1362,6 +1378,37 @@ const docTemplate = `{
                 }
             }
         },
+        "domains.SubjectAttendance": {
+            "type": "object",
+            "required": [
+                "classroom_id",
+                "code",
+                "date_time",
+                "id",
+                "note",
+                "subject_id"
+            ],
+            "properties": {
+                "classroom_id": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "date_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "subject_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.AttendanceStatus": {
             "type": "string",
             "enum": [
@@ -1594,6 +1641,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domains.Major"
+                    }
+                }
+            }
+        },
+        "responses.GetAllSubjectAttendances": {
+            "type": "object",
+            "required": [
+                "subject_attendances"
+            ],
+            "properties": {
+                "subject_attendances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domains.SubjectAttendance"
                     }
                 }
             }

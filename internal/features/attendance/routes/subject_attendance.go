@@ -6,7 +6,7 @@ import (
 )
 
 func RegisterSubjectAttendance(g *gin.RouterGroup, handler *handlers.SubjectAttendance) {
-	group := g.Group("/subject_attendances")
+	group := g.Group("/subject-attendances")
 
 	group.GET("", handler.GetAll)
 }

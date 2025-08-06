@@ -18,6 +18,10 @@ func NewSubjectAttendance(service *services.SubjectAttendance) *SubjectAttendanc
 	}
 }
 
+// @id 			getAllSubjectAttendances
+// @tags 		attendance
+// @success 	200 {object} responses.GetAllSubjectAttendances
+// @router 		/api/v1/subject-attendances [get]
 func (h *SubjectAttendance) GetAll(c *gin.Context) {
 	authUser := authentication.GetAuthenticatedUser(c)
 	if authUser.SchoolId == 0 {
