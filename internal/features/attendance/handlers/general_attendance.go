@@ -65,6 +65,27 @@ func (h *GeneralAttendance) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// @id 			getGeneralAttendance
+// @tags 		attendance
+// @param 		general_attendance_id path int true "general attendance id"
+// @success 	200 {object} responses.GetGeneralAttendance
+// @router 		/api/v1/general_attendances/{general_attendance_id} [get]
+func (h *GeneralAttendance) Get(c *gin.Context) {
+	generalAttendanceId, err := strconv.Atoi(c.Param("general_attendance_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Get(uint(generalAttendanceId))
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 // @id 			updateGeneralAttendance
 // @tags 		attendance
 // @param 		general_attendance_id path int true "general attendance id"

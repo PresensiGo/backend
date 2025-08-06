@@ -53,6 +53,19 @@ func (s *GeneralAttendance) GetAll(schoolId uint) (*responses.GetAllGeneralAtten
 	}, nil
 }
 
+func (s *GeneralAttendance) Get(generalAttendanceId uint) (
+	*responses.GetGeneralAttendance, error,
+) {
+	result, err := s.generalAttendanceRepo.Get(generalAttendanceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.GetGeneralAttendance{
+		GeneralAttendance: *result,
+	}, nil
+}
+
 func (s *GeneralAttendance) Update(
 	generalAttendanceId uint, req requests.UpdateGeneralAttendance,
 ) (*responses.UpdateGeneralAttendance, error) {

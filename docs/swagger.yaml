@@ -412,6 +412,13 @@ definitions:
     required:
     - majors
     type: object
+  responses.GetGeneralAttendance:
+    properties:
+      general_attendance:
+        $ref: '#/definitions/domains.GeneralAttendance'
+    required:
+    - general_attendance
+    type: object
   responses.Login:
     properties:
       access_token:
@@ -744,6 +751,21 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.DeleteGeneralAttendance'
+      tags:
+      - attendance
+    get:
+      operationId: getGeneralAttendance
+      parameters:
+      - description: general attendance id
+        in: path
+        name: general_attendance_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetGeneralAttendance'
       tags:
       - attendance
     put:

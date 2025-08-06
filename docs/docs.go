@@ -447,6 +447,29 @@ const docTemplate = `{
             }
         },
         "/api/v1/general_attendances/{general_attendance_id}": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "getGeneralAttendance",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "general attendance id",
+                        "name": "general_attendance_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetGeneralAttendance"
+                        }
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "attendance"
@@ -1411,6 +1434,17 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/domains.Major"
                     }
+                }
+            }
+        },
+        "responses.GetGeneralAttendance": {
+            "type": "object",
+            "required": [
+                "general_attendance"
+            ],
+            "properties": {
+                "general_attendance": {
+                    "$ref": "#/definitions/domains.GeneralAttendance"
                 }
             }
         },
