@@ -9,3 +9,7 @@ type CreateSubject struct {
 type GetAllSubjects struct {
 	Subjects []domains.Subject `json:"subjects" validate:"required"`
 }
+
+type UpdateSubject struct {
+	Subject domains.Subject `json:"subject" validate:"required"`
+}

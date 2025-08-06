@@ -38,3 +38,12 @@ func (r *Subject) GetAll(schoolId uint) (*[]domains.Subject, error) {
 
 	return &result, nil
 }
+
+func (r *Subject) Update(subjectId uint, data domains.Subject) (*domains.Subject, error) {
+	subject := data.ToModel()
+	if err := r.db.Model(&subject).Where("id = ?", subjectId).Updates(&subject).Error; err != nil {
+		return nil, err
+	}
+
+	return domains.FromSubjectModel(subject), nil
+}

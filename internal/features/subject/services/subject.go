@@ -45,3 +45,20 @@ func (s *Subject) GetAll(schoolId uint) (*responses.GetAllSubjects, error) {
 		Subjects: *subjects,
 	}, nil
 }
+
+func (s *Subject) Update(subjectId uint, req requests.UpdateSubject) (
+	*responses.UpdateSubject, error,
+) {
+	subject := domains.Subject{
+		Name: req.Name,
+	}
+
+	result, err := s.subjectRepo.Update(subjectId, subject)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.UpdateSubject{
+		Subject: *result,
+	}, nil
+}
