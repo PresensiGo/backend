@@ -8,6 +8,7 @@ import (
 	"api/internal/features/data"
 	"api/internal/features/major"
 	"api/internal/features/student"
+	"api/internal/features/subject"
 	"api/internal/features/user"
 	"api/pkg/http/middleware"
 	"github.com/gin-contrib/cors"
@@ -43,6 +44,7 @@ func NewServer() {
 		classroom.RegisterClassroom(authorized)
 		student.RegisterStudent(authorized)
 		data.RegisterData(authorized)
+		subject.RegisterSubject(authorized)
 	}
 
 	// swagger

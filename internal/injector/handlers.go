@@ -4,68 +4,77 @@
 package injector
 
 import (
-	"api/internal/features/attendance/injector"
-	injector2 "api/internal/features/batch/injector"
-	injector4 "api/internal/features/classroom/injector"
-	injector6 "api/internal/features/data/injector"
-	injector3 "api/internal/features/major/injector"
-	injector5 "api/internal/features/student/injector"
-	injector7 "api/internal/features/user/injector"
+	attendance "api/internal/features/attendance/injector"
+	batch "api/internal/features/batch/injector"
+	classroom "api/internal/features/classroom/injector"
+	data "api/internal/features/data/injector"
+	major "api/internal/features/major/injector"
+	student "api/internal/features/student/injector"
+	subject "api/internal/features/subject/injector"
+	user "api/internal/features/user/injector"
 	"github.com/google/wire"
 )
 
-func InitAttendanceHandlers() *injector.AttendanceHandlers {
+func InitAttendanceHandlers() *attendance.AttendanceHandlers {
 	wire.Build(
-		injector.NewAttendanceHandlers,
-		injector.AttendanceSet,
+		attendance.NewAttendanceHandlers,
+		attendance.AttendanceSet,
 	)
 	return nil
 }
 
-func InitBatchHandlers() *injector2.BatchHandlers {
+func InitBatchHandlers() *batch.BatchHandlers {
 	wire.Build(
-		injector2.NewBatchHandlers,
-		injector2.BatchSet,
+		batch.NewBatchHandlers,
+		batch.BatchSet,
 	)
 	return nil
 }
 
-func InitMajorHandlers() *injector3.MajorHandlers {
+func InitMajorHandlers() *major.MajorHandlers {
 	wire.Build(
-		injector3.NewMajorHandlers,
-		injector3.MajorSet,
+		major.NewMajorHandlers,
+		major.MajorSet,
 	)
 	return nil
 }
 
-func InitClassroomHandlers() *injector4.ClassroomHandlers {
+func InitClassroomHandlers() *classroom.ClassroomHandlers {
 	wire.Build(
-		injector4.NewClassroomHandlers,
-		injector4.ClassroomSet,
+		classroom.NewClassroomHandlers,
+		classroom.ClassroomSet,
 	)
 	return nil
 }
 
-func InitStudentHandlers() *injector5.StudentHandlers {
+func InitStudentHandlers() *student.StudentHandlers {
 	wire.Build(
-		injector5.NewStudentHandlers,
-		injector5.StudentSet,
+		student.NewStudentHandlers,
+		student.StudentSet,
 	)
 	return nil
 }
 
-func InitDataHandlers() *injector6.DataHandlers {
+func InitDataHandlers() *data.DataHandlers {
 	wire.Build(
-		injector6.NewDataHandlers,
-		injector6.DataSet,
+		data.NewDataHandlers,
+		data.DataSet,
 	)
 	return nil
 }
 
-func InitUserHandlers() *injector7.UserHandlers {
+func InitUserHandlers() *user.UserHandlers {
 	wire.Build(
-		injector7.NewUserHandlers,
-		injector7.UserSet,
+		user.NewUserHandlers,
+		user.UserSet,
+	)
+	return nil
+}
+
+func InitSubjectHandlers() *subject.SubjectHandlers {
+	wire.Build(
+		subject.NewSubjectHandlers,
+		subject.SubjectSet,
 	)
 	return nil
 }

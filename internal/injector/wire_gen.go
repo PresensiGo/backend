@@ -32,6 +32,8 @@ import (
 	injector5 "api/internal/features/student/injector"
 	repositories3 "api/internal/features/student/repositories"
 	services5 "api/internal/features/student/services"
+	handlers8 "api/internal/features/subject/handlers"
+	injector8 "api/internal/features/subject/injector"
 	handlers7 "api/internal/features/user/handlers"
 	injector7 "api/internal/features/user/injector"
 	"api/internal/features/user/repositories"
@@ -137,4 +139,10 @@ func InitUserHandlers() *injector7.UserHandlers {
 	handlersAuth := handlers7.NewAuth(auth)
 	userHandlers := injector7.NewUserHandlers(handlersAuth)
 	return userHandlers
+}
+
+func InitSubjectHandlers() *injector8.SubjectHandlers {
+	subject := handlers8.NewSubject()
+	subjectHandlers := injector8.NewSubjectHandlers(subject)
+	return subjectHandlers
 }
