@@ -457,6 +457,15 @@ definitions:
     required:
     - data
     type: object
+  responses.GetAllClassroomsByMajorId:
+    properties:
+      classrooms:
+        items:
+          $ref: '#/definitions/domains.Classroom'
+        type: array
+    required:
+    - classrooms
+    type: object
   responses.GetAllGeneralAttendances:
     properties:
       general_attendances:
@@ -787,6 +796,21 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.GetAllClassroomWithMajors'
+      tags:
+      - classroom
+  /api/v1/classrooms/major/{major_id}:
+    get:
+      parameters:
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllClassroomsByMajorId'
       tags:
       - classroom
   /api/v1/excel/import:

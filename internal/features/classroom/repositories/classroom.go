@@ -26,6 +26,22 @@ func (r *Classroom) CreateInTx(tx *gorm.DB, data domains.Classroom) (*uint, erro
 	return &classroom.ID, nil
 }
 
+func (r *Classroom) GetAllByMajorId(majorId uint) (*[]domains.Classroom, error) {
+	var classrooms []models.Classroom
+	if err := r.db.Where(
+		"major_id = ?", majorId,
+	).Order("lower(name) asc").Find(&classrooms).Error; err != nil {
+		return nil, err
+	}
+
+	result := make([]domains.Classroom, len(classrooms))
+	for i, v := range classrooms {
+		result[i] = *domains.FromClassroomModel(&v)
+	}
+
+	return &result, nil
+}
+
 func (r *Classroom) GetManyByMajorId(majorIds []uint) ([]domains.Classroom, error) {
 	var classes []models.Classroom
 	if err := r.db.Where("major_id in ?", majorIds).

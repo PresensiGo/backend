@@ -14,6 +14,10 @@ type GetAll struct {
 	Classrooms []domains.Classroom `json:"classrooms" validate:"required"`
 }
 
+type GetAllClassroomsByMajorId struct {
+	Classrooms []domains.Classroom `json:"classrooms" validate:"required"`
+}
+
 type GetAllClassroomWithMajors struct {
 	Data []ClassroomMajor `json:"data" validate:"required"`
 }

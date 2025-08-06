@@ -389,6 +389,30 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/classrooms/major/{major_id}": {
+            "get": {
+                "tags": [
+                    "classroom"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllClassroomsByMajorId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/excel/import": {
             "post": {
                 "tags": [
@@ -1613,6 +1637,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/responses.ClassroomMajor"
+                    }
+                }
+            }
+        },
+        "responses.GetAllClassroomsByMajorId": {
+            "type": "object",
+            "required": [
+                "classrooms"
+            ],
+            "properties": {
+                "classrooms": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domains.Classroom"
                     }
                 }
             }

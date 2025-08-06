@@ -57,6 +57,17 @@ func (s *Classroom) GetAll(schoolId uint) (*responses.GetAll, error) {
 	}, nil
 }
 
+func (s *Classroom) GetAllByMajorId(majorId uint) (*responses.GetAllClassroomsByMajorId, error) {
+	classrooms, err := s.classroomRepo.GetAllByMajorId(majorId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.GetAllClassroomsByMajorId{
+		Classrooms: *classrooms,
+	}, nil
+}
+
 func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWithMajors, error) {
 	majors, err := s.majorRepo.GetAllByBatchId(batchId)
 	if err != nil {

@@ -37,6 +37,26 @@ func (h *Classroom) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// @tags		classroom
+// @param 		major_id path int true "major id"
+// @success		200	{object} responses.GetAllClassroomsByMajorId
+// @router		/api/v1/classrooms/major/{major_id} [get]
+func (h *Classroom) GetAllByMajorId(c *gin.Context) {
+	majorId, err := strconv.Atoi(c.Param("major_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.GetAllByMajorId(uint(majorId))
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 // @Id			getAllClassroomWithMajors
 // @Tags		classroom
 // @Param 		batch_id path int true "Batch Id"
