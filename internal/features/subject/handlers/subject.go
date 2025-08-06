@@ -92,3 +92,24 @@ func (h *Subject) Update(c *gin.Context) {
 
 	c.JSON(http.StatusOK, result)
 }
+
+// @id 			deleteSubject
+// @tags 		subject
+// @param 		subject_id path int true "subject id"
+// @success 	200 {object} responses.DeleteSubject
+// @router 		/api/v1/subjects/{subject_id} [delete]
+func (h *Subject) Delete(c *gin.Context) {
+	subjectId, err := strconv.Atoi(c.Param("subject_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Delete(uint(subjectId))
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}

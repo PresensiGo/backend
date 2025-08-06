@@ -62,3 +62,13 @@ func (s *Subject) Update(subjectId uint, req requests.UpdateSubject) (
 		Subject: *result,
 	}, nil
 }
+
+func (s *Subject) Delete(subjectId uint) (*responses.DeleteSubject, error) {
+	if err := s.subjectRepo.Delete(subjectId); err != nil {
+		return nil, err
+	}
+
+	return &responses.DeleteSubject{
+		Message: "ok",
+	}, nil
+}

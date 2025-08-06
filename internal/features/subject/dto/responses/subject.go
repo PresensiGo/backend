@@ -13,3 +13,7 @@ type GetAllSubjects struct {
 type UpdateSubject struct {
 	Subject domains.Subject `json:"subject" validate:"required"`
 }
+
+type DeleteSubject struct {
+	Message string `json:"message" validate:"required"`
+}

@@ -47,3 +47,7 @@ func (r *Subject) Update(subjectId uint, data domains.Subject) (*domains.Subject
 
 	return domains.FromSubjectModel(subject), nil
 }
+
+func (r *Subject) Delete(subjectId uint) error {
+	return r.db.Where("id = ?", subjectId).Unscoped().Delete(&domains.Subject{}).Error
+}
