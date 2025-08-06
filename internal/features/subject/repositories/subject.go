@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"api/internal/features/subject/domains"
+	"api/internal/features/subject/models"
 	"gorm.io/gorm"
 )
 
@@ -20,4 +21,20 @@ func (r *Subject) Create(data domains.Subject) (*domains.Subject, error) {
 	}
 
 	return domains.FromSubjectModel(subject), nil
+}
+
+func (r *Subject) GetAll(schoolId uint) (*[]domains.Subject, error) {
+	var subjects []models.Subject
+	if err := r.db.Where(
+		"school_id = ?", schoolId,
+	).Order("name asc").Find(&subjects).Error; err != nil {
+		return nil, err
+	}
+
+	result := make([]domains.Subject, len(subjects))
+	for i, v := range subjects {
+		result[i] = *domains.FromSubjectModel(&v)
+	}
+
+	return &result, nil
 }

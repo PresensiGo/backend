@@ -43,3 +43,23 @@ func (h *Subject) Create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, result)
 }
+
+// @id 			getAllSubjects
+// @tags 		subject
+// @success 	200 {object} responses.GetAllSubjects
+// @router 		/api/v1/subjects [get]
+func (h *Subject) GetAll(c *gin.Context) {
+	authUser := authentication.GetAuthenticatedUser(c)
+	if authUser.SchoolId == 0 {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	result, err := h.service.GetAll(authUser.SchoolId)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}

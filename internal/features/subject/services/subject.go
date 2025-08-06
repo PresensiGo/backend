@@ -34,3 +34,14 @@ func (s *Subject) Create(schoolId uint, req requests.CreateSubject) (
 		Subject: *result,
 	}, nil
 }
+
+func (s *Subject) GetAll(schoolId uint) (*responses.GetAllSubjects, error) {
+	subjects, err := s.subjectRepo.GetAll(schoolId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.GetAllSubjects{
+		Subjects: *subjects,
+	}, nil
+}
