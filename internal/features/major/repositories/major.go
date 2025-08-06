@@ -35,7 +35,7 @@ func (r *Major) CreateInTx(tx *gorm.DB, data domains.Major) (*uint, error) {
 	return &major.ID, nil
 }
 
-func (r *Major) GetAllByBatchId(batchId uint) ([]domains.Major, error) {
+func (r *Major) GetAllByBatchId(batchId uint) (*[]domains.Major, error) {
 	var majors []models.Major
 	if err := r.db.Model(&models.Major{}).
 		Where("batch_id = ?", batchId).
@@ -44,17 +44,12 @@ func (r *Major) GetAllByBatchId(batchId uint) ([]domains.Major, error) {
 		return nil, err
 	}
 
-	var mappedMajors []domains.Major
-	for _, major := range majors {
-		mappedMajors = append(
-			mappedMajors, domains.Major{
-				Id:   major.ID,
-				Name: major.Name,
-			},
-		)
+	result := make([]domains.Major, len(majors))
+	for i, v := range majors {
+		result[i] = *domains.FromMajorModel(&v)
 	}
 
-	return mappedMajors, nil
+	return &result, nil
 }
 
 func (r *Major) GetManyByIds(majorIds []uint) (*[]domains.Major, error) {

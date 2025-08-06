@@ -772,6 +772,22 @@ paths:
             $ref: '#/definitions/domains.Batch'
       tags:
       - batch
+  /api/v1/batches/{batch_id}/majors:
+    get:
+      operationId: getAllMajorsByBatchId
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllMajorsByBatchId'
+      tags:
+      - major
   /api/v1/classrooms:
     get:
       operationId: getAllClassrooms
@@ -1027,22 +1043,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domains.Major'
-      tags:
-      - major
-  /api/v1/majors/batch/{batch_id}:
-    get:
-      operationId: getAllMajorsByBatchId
-      parameters:
-      - description: Batch Id
-        in: path
-        name: batch_id
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.GetAllMajorsByBatchId'
       tags:
       - major
   /api/v1/reset:

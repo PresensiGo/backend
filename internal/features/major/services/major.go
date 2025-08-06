@@ -5,7 +5,6 @@ import (
 	"api/internal/features/major/domains"
 	"api/internal/features/major/dto/requests"
 	"api/internal/features/major/dto/responses"
-	"api/internal/features/major/models"
 	"api/internal/features/major/repositories"
 	"gorm.io/gorm"
 )
@@ -48,26 +47,14 @@ func (s *Major) GetAllMajors(schoolId uint) (*[]domains.Major, error) {
 	return majors, nil
 }
 
-func (s *Major) GetAllMajorsByBatchId(batchId uint64) (*responses.GetAllMajorsByBatchId, error) {
-	var majors []models.Major
-	if err := s.db.Where("batch_id = ?", batchId).
-		Find(&majors).
-		Error; err != nil {
+func (s *Major) GetAllMajorsByBatchId(batchId uint) (*responses.GetAllMajorsByBatchId, error) {
+	majors, err := s.majorRepo.GetAllByBatchId(batchId)
+	if err != nil {
 		return nil, err
 	}
 
-	var mappedMajors []domains.Major
-	for _, major := range majors {
-		mappedMajors = append(
-			mappedMajors, domains.Major{
-				Id:   major.ID,
-				Name: major.Name,
-			},
-		)
-	}
-
 	return &responses.GetAllMajorsByBatchId{
-		Majors: mappedMajors,
+		Majors: *majors,
 	}, nil
 }
 

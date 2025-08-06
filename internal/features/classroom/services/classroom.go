@@ -75,12 +75,12 @@ func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWit
 	}
 
 	majorMap := make(map[uint]majorDomain.Major)
-	for _, major := range majors {
+	for _, major := range *majors {
 		majorMap[major.Id] = major
 	}
 
 	var majorIds []uint
-	for _, major := range majors {
+	for _, major := range *majors {
 		majorIds = append(majorIds, major.Id)
 	}
 

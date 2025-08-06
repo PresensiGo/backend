@@ -59,19 +59,19 @@ func (h *Major) GetAllMajors(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-// @Id			getAllMajorsByBatchId
-// @Tags		major
-// @Param		batch_id	path		int	true	"Batch Id"
-// @Success		200			{object}	responses.GetAllMajorsByBatchId
-// @Router		/api/v1/majors/batch/{batch_id} [get]
+// @id			getAllMajorsByBatchId
+// @tags		major
+// @param		batch_id path int true "batch id"
+// @success		200 {object} responses.GetAllMajorsByBatchId
+// @router		/api/v1/batches/{batch_id}/majors [get]
 func (h *Major) GetAllByBatchId(c *gin.Context) {
-	batchId, err := strconv.ParseUint(c.Param("batch_id"), 10, 64)
+	batchId, err := strconv.Atoi(c.Param("batch_id"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	response, err := h.service.GetAllMajorsByBatchId(batchId)
+	response, err := h.service.GetAllMajorsByBatchId(uint(batchId))
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

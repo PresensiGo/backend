@@ -348,6 +348,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}/majors": {
+            "get": {
+                "tags": [
+                    "major"
+                ],
+                "operationId": "getAllMajorsByBatchId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllMajorsByBatchId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/classrooms": {
             "get": {
                 "tags": [
@@ -687,31 +712,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/domains.Major"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/majors/batch/{batch_id}": {
-            "get": {
-                "tags": [
-                    "major"
-                ],
-                "operationId": "getAllMajorsByBatchId",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Batch Id",
-                        "name": "batch_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.GetAllMajorsByBatchId"
                         }
                     }
                 }

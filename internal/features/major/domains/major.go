@@ -10,11 +10,11 @@ type Major struct {
 	BatchId uint   `json:"batch_id" validate:"required"`
 }
 
-func FromMajorModel(model *models.Major) *Major {
+func FromMajorModel(m *models.Major) *Major {
 	return &Major{
-		Id:      model.ID,
-		Name:    model.Name,
-		BatchId: model.BatchId,
+		Id:      m.ID,
+		Name:    m.Name,
+		BatchId: m.BatchId,
 	}
 }
 
