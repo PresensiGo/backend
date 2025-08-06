@@ -815,6 +815,104 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/subjects": {
+            "get": {
+                "tags": [
+                    "subject"
+                ],
+                "operationId": "getAllSubjects",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllSubjects"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "subject"
+                ],
+                "operationId": "createSubject",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateSubject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateSubject"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/subjects/{subject_id}": {
+            "put": {
+                "tags": [
+                    "subject"
+                ],
+                "operationId": "updateSubject",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "subject id",
+                        "name": "subject_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateSubject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.UpdateSubject"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "subject"
+                ],
+                "operationId": "deleteSubject",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "subject id",
+                        "name": "subject_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.DeleteSubject"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1245,6 +1343,25 @@ const docTemplate = `{
                 }
             }
         },
+        "domains.Subject": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "school_id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.AttendanceStatus": {
             "type": "string",
             "enum": [
@@ -1267,6 +1384,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "note": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.CreateSubject": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
                     "type": "string"
                 }
             }
@@ -1333,6 +1461,17 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.UpdateSubject": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.ClassroomMajor": {
             "type": "object",
             "required": [
@@ -1359,8 +1498,30 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.CreateSubject": {
+            "type": "object",
+            "required": [
+                "subject"
+            ],
+            "properties": {
+                "subject": {
+                    "$ref": "#/definitions/domains.Subject"
+                }
+            }
+        },
         "responses.DeleteGeneralAttendance": {
             "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.DeleteSubject": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
             "properties": {
                 "message": {
                     "type": "string"
@@ -1437,6 +1598,20 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.GetAllSubjects": {
+            "type": "object",
+            "required": [
+                "subjects"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domains.Subject"
+                    }
+                }
+            }
+        },
         "responses.GetGeneralAttendance": {
             "type": "object",
             "required": [
@@ -1504,6 +1679,17 @@ const docTemplate = `{
             "properties": {
                 "general_attendance": {
                     "$ref": "#/definitions/domains.GeneralAttendance"
+                }
+            }
+        },
+        "responses.UpdateSubject": {
+            "type": "object",
+            "required": [
+                "subject"
+            ],
+            "properties": {
+                "subject": {
+                    "$ref": "#/definitions/domains.Subject"
                 }
             }
         }

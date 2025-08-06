@@ -11,6 +11,7 @@ import (
 	major "api/internal/features/major/models"
 	school "api/internal/features/school/models"
 	student "api/internal/features/student/models"
+	subject "api/internal/features/subject/models"
 	user "api/internal/features/user/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -62,6 +63,7 @@ func New() *gorm.DB {
 
 				&attendance.GeneralAttendance{},
 				&attendance.GeneralAttendanceItem{},
+				&subject.Subject{},
 			)
 
 			dbInstance = db

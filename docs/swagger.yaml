@@ -285,6 +285,19 @@ definitions:
     - major
     - student
     type: object
+  domains.Subject:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      school_id:
+        type: integer
+    required:
+    - id
+    - name
+    - school_id
+    type: object
   models.AttendanceStatus:
     enum:
     - hadir
@@ -303,6 +316,13 @@ definitions:
         type: string
       note:
         type: string
+    type: object
+  requests.CreateSubject:
+    properties:
+      name:
+        type: string
+    required:
+    - name
     type: object
   requests.Login:
     properties:
@@ -345,6 +365,13 @@ definitions:
       note:
         type: string
     type: object
+  requests.UpdateSubject:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
   responses.ClassroomMajor:
     properties:
       classroom:
@@ -362,10 +389,24 @@ definitions:
     required:
     - general_attendance
     type: object
+  responses.CreateSubject:
+    properties:
+      subject:
+        $ref: '#/definitions/domains.Subject'
+    required:
+    - subject
+    type: object
   responses.DeleteGeneralAttendance:
     properties:
       message:
         type: string
+    type: object
+  responses.DeleteSubject:
+    properties:
+      message:
+        type: string
+    required:
+    - message
     type: object
   responses.GetAll:
     properties:
@@ -412,6 +453,15 @@ definitions:
     required:
     - majors
     type: object
+  responses.GetAllSubjects:
+    properties:
+      subjects:
+        items:
+          $ref: '#/definitions/domains.Subject'
+        type: array
+    required:
+    - subjects
+    type: object
   responses.GetGeneralAttendance:
     properties:
       general_attendance:
@@ -457,6 +507,13 @@ definitions:
         $ref: '#/definitions/domains.GeneralAttendance'
     required:
     - general_attendance
+    type: object
+  responses.UpdateSubject:
+    properties:
+      subject:
+        $ref: '#/definitions/domains.Subject'
+    required:
+    - subject
     type: object
 info:
   contact: {}
@@ -975,4 +1032,67 @@ paths:
             $ref: '#/definitions/GetAllStudentsByClassroomIdRes'
       tags:
       - student
+  /api/v1/subjects:
+    get:
+      operationId: getAllSubjects
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllSubjects'
+      tags:
+      - subject
+    post:
+      operationId: createSubject
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateSubject'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.CreateSubject'
+      tags:
+      - subject
+  /api/v1/subjects/{subject_id}:
+    delete:
+      operationId: deleteSubject
+      parameters:
+      - description: subject id
+        in: path
+        name: subject_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DeleteSubject'
+      tags:
+      - subject
+    put:
+      operationId: updateSubject
+      parameters:
+      - description: subject id
+        in: path
+        name: subject_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateSubject'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UpdateSubject'
+      tags:
+      - subject
 swagger: "2.0"
