@@ -75,3 +75,15 @@ func (s *GeneralAttendance) Update(
 		GeneralAttendance: *result,
 	}, nil
 }
+
+func (s *GeneralAttendance) Delete(generalAttendanceId uint) (
+	*responses.DeleteGeneralAttendance, error,
+) {
+	if err := s.generalAttendanceRepo.Delete(generalAttendanceId); err != nil {
+		return nil, err
+	}
+
+	return &responses.DeleteGeneralAttendance{
+		Message: "ok",
+	}, nil
+}

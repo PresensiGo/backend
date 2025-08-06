@@ -13,3 +13,7 @@ type GetAllGeneralAttendances struct {
 type UpdateGeneralAttendance struct {
 	GeneralAttendance domains.GeneralAttendance `json:"general_attendance" validate:"required"`
 }
+
+type DeleteGeneralAttendance struct {
+	Message string `json:"message"`
+}

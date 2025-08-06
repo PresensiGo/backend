@@ -362,6 +362,11 @@ definitions:
     required:
     - general_attendance
     type: object
+  responses.DeleteGeneralAttendance:
+    properties:
+      message:
+        type: string
+    type: object
   responses.GetAll:
     properties:
       classrooms:
@@ -726,8 +731,23 @@ paths:
       tags:
       - attendance
   /api/v1/general_attendances/{general_attendance_id}:
+    delete:
+      operationId: deleteGeneralAttendance
+      parameters:
+      - description: general attendance id
+        in: path
+        name: general_attendance_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DeleteGeneralAttendance'
+      tags:
+      - attendance
     put:
-      operationId: updateGeneralAttendances
+      operationId: updateGeneralAttendance
       parameters:
       - description: general attendance id
         in: path

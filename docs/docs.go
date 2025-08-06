@@ -451,7 +451,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
-                "operationId": "updateGeneralAttendances",
+                "operationId": "updateGeneralAttendance",
                 "parameters": [
                     {
                         "type": "integer",
@@ -475,6 +475,29 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.UpdateGeneralAttendance"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "deleteGeneralAttendance",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "general attendance id",
+                        "name": "general_attendance_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.DeleteGeneralAttendance"
                         }
                     }
                 }
@@ -1310,6 +1333,14 @@ const docTemplate = `{
             "properties": {
                 "general_attendance": {
                     "$ref": "#/definitions/domains.GeneralAttendance"
+                }
+            }
+        },
+        "responses.DeleteGeneralAttendance": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         },

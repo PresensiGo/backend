@@ -65,7 +65,7 @@ func (h *GeneralAttendance) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-// @id 			updateGeneralAttendances
+// @id 			updateGeneralAttendance
 // @tags 		attendance
 // @param 		general_attendance_id path int true "general attendance id"
 // @param 		body body requests.UpdateGeneralAttendance true "body"
@@ -85,6 +85,27 @@ func (h *GeneralAttendance) Update(c *gin.Context) {
 	}
 
 	result, err := h.service.Update(uint(generalAttendanceId), req)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+// @id 			deleteGeneralAttendance
+// @tags 		attendance
+// @param 		general_attendance_id path int true "general attendance id"
+// @success 	200 {object} responses.DeleteGeneralAttendance
+// @router 		/api/v1/general_attendances/{general_attendance_id} [delete]
+func (h *GeneralAttendance) Delete(c *gin.Context) {
+	generalAttendanceId, err := strconv.Atoi(c.Param("general_attendance_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Delete(uint(generalAttendanceId))
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

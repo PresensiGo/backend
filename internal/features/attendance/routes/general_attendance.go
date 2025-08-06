@@ -11,4 +11,5 @@ func RegisterGeneralAttendance(g *gin.RouterGroup, handler *handlers.GeneralAtte
 	group.POST("", handler.Create)
 	group.GET("", handler.GetAll)
 	group.PUT("/:general_attendance_id", handler.Update)
+	group.DELETE("/:general_attendance_id", handler.Delete)
 }

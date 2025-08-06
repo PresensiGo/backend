@@ -53,3 +53,9 @@ func (r *GeneralAttendance) Update(
 
 	return domains.FromGeneralAttendanceModel(generalAttendance), nil
 }
+
+func (r *GeneralAttendance) Delete(generalAttendanceId uint) error {
+	return r.db.Where(
+		"id = ?", generalAttendanceId,
+	).Unscoped().Delete(&models.GeneralAttendance{}).Error
+}
