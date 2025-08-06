@@ -4,9 +4,10 @@ import (
 	"api/internal/features/attendance/handlers"
 	"api/internal/features/attendance/repositories"
 	"api/internal/features/attendance/services"
-	repositories4 "api/internal/features/classroom/repositories"
-	repositories3 "api/internal/features/major/repositories"
-	repositories2 "api/internal/features/student/repositories"
+	batch "api/internal/features/batch/repositories"
+	classroom "api/internal/features/classroom/repositories"
+	major "api/internal/features/major/repositories"
+	student "api/internal/features/student/repositories"
 	"api/pkg/database"
 	"github.com/google/wire"
 )
@@ -16,16 +17,18 @@ type AttendanceHandlers struct {
 	Lateness   *handlers.Lateness
 
 	GeneralAttendance *handlers.GeneralAttendance
+	SubjectAttendance *handlers.SubjectAttendance
 }
 
 func NewAttendanceHandlers(
 	attendance *handlers.Attendance, lateness *handlers.Lateness,
-	generalAttendance *handlers.GeneralAttendance,
+	generalAttendance *handlers.GeneralAttendance, subjectAttendance *handlers.SubjectAttendance,
 ) *AttendanceHandlers {
 	return &AttendanceHandlers{
 		Attendance:        attendance,
 		Lateness:          lateness,
 		GeneralAttendance: generalAttendance,
+		SubjectAttendance: subjectAttendance,
 	}
 }
 
@@ -34,19 +37,23 @@ var (
 		handlers.NewAttendance,
 		handlers.NewLateness,
 		handlers.NewGeneralAttendance,
+		handlers.NewSubjectAttendance,
 
 		services.NewAttendance,
 		services.NewLateness,
 		services.NewGeneralAttendance,
+		services.NewSubjectAttendance,
 
 		repositories.NewGeneralAttendance,
 		repositories.NewAttendance,
 		repositories.NewAttendanceStudent,
-		repositories2.NewStudent,
+		student.NewStudent,
 		repositories.NewLateness,
 		repositories.NewLatenessDetail,
-		repositories3.NewMajor,
-		repositories4.NewClassroom,
+		batch.NewBatch,
+		major.NewMajor,
+		classroom.NewClassroom,
+		repositories.NewSubjectAttendance,
 
 		database.New,
 	)

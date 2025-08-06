@@ -13,4 +13,5 @@ func RegisterAttendance(g *gin.RouterGroup) {
 	routes.RegisterLateness(g, handlers.Lateness)
 
 	routes.RegisterGeneralAttendance(g, handlers.GeneralAttendance)
+	routes.RegisterSubjectAttendance(g, handlers.SubjectAttendance)
 }
