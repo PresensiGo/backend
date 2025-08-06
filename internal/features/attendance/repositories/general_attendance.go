@@ -29,7 +29,7 @@ func (r *GeneralAttendance) GetAllBySchoolId(schoolId uint) (*[]domains.GeneralA
 	var generalAttendances []models.GeneralAttendance
 	if err := r.db.Model(&models.GeneralAttendance{}).Where(
 		"school_id = ?", schoolId,
-	).Order("date desc").Find(&generalAttendances).Error; err != nil {
+	).Order("date_time desc").Find(&generalAttendances).Error; err != nil {
 		return nil, err
 	}
 
