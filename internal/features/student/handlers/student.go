@@ -18,11 +18,13 @@ func NewStudent(service *services.Student) *Student {
 	return &Student{service}
 }
 
-// @Id			getAllStudentsByClassroomId
-// @Tags		student
-// @Param		classroom_id path int true "Classroom Id"
-// @Success		200	{object} responses.GetAllStudentsByClassroomId
-// @Router		/api/v1/students/classrooms/{classroom_id} [get]
+// @id			getAllStudentsByClassroomId
+// @tags		student
+// @param		batch_id path int true "batch id"
+// @param		major_id path int true "major id"
+// @param		classroom_id path int true "classroom id"
+// @success		200	{object} responses.GetAllStudentsByClassroomId
+// @router		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students [get]
 func (h *Student) GetAllByClassroomId(c *gin.Context) {
 	classroomId, err := strconv.Atoi(c.Param("classroom_id"))
 	if err != nil {

@@ -813,6 +813,32 @@ paths:
             $ref: '#/definitions/responses.GetAllClassroomsByMajorId'
       tags:
       - classroom
+  /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students:
+    get:
+      operationId: getAllStudentsByClassroomId
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAllStudentsByClassroomIdRes'
+      tags:
+      - student
   /api/v1/classrooms:
     get:
       operationId: getAllClassrooms
@@ -1079,22 +1105,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/GetAllStudentsRes'
-      tags:
-      - student
-  /api/v1/students/classrooms/{classroom_id}:
-    get:
-      operationId: getAllStudentsByClassroomId
-      parameters:
-      - description: Classroom Id
-        in: path
-        name: classroom_id
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/GetAllStudentsByClassroomIdRes'
       tags:
       - student
   /api/v1/subject-attendances:
