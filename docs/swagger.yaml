@@ -387,6 +387,13 @@ definitions:
         default: password
         type: string
     type: object
+  requests.UpdateClassroom:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
   requests.UpdateGeneralAttendance:
     properties:
       datetime:
@@ -554,6 +561,13 @@ definitions:
     required:
     - access_token
     - refresh_token
+    type: object
+  responses.UpdateClassroom:
+    properties:
+      classroom:
+        $ref: '#/definitions/domains.Classroom'
+    required:
+    - classroom
     type: object
   responses.UpdateGeneralAttendance:
     properties:
@@ -855,6 +869,42 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.CreateClassroom'
+      tags:
+      - classroom
+  /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}:
+    put:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateClassroom'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UpdateClassroom'
       tags:
       - classroom
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students:

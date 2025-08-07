@@ -456,6 +456,60 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}": {
+            "put": {
+                "tags": [
+                    "classroom"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateClassroom"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.UpdateClassroom"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students": {
             "get": {
                 "tags": [
@@ -1605,6 +1659,17 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.UpdateClassroom": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.UpdateGeneralAttendance": {
             "type": "object",
             "properties": {
@@ -1862,6 +1927,17 @@ const docTemplate = `{
                 },
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.UpdateClassroom": {
+            "type": "object",
+            "required": [
+                "classroom"
+            ],
+            "properties": {
+                "classroom": {
+                    "$ref": "#/definitions/domains.Classroom"
                 }
             }
         },

@@ -25,3 +25,7 @@ type GetAllClassroomsByMajorId struct {
 type GetAllClassroomWithMajors struct {
 	Data []ClassroomMajor `json:"data" validate:"required"`
 }
+
+type UpdateClassroom struct {
+	Classroom domains.Classroom `json:"classroom" validate:"required"`
+}

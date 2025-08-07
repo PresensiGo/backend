@@ -121,3 +121,20 @@ func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWit
 		Data: result,
 	}, nil
 }
+
+func (s *Classroom) Update(
+	classroomId uint, req requests.UpdateClassroom,
+) (*responses.UpdateClassroom, error) {
+	classroom := domains.Classroom{
+		Name: req.Name,
+	}
+
+	result, err := s.classroomRepo.Update(classroomId, classroom)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.UpdateClassroom{
+		Classroom: *result,
+	}, nil
+}
