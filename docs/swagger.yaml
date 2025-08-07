@@ -332,6 +332,13 @@ definitions:
     - AttendancePermission
     - AttendanceSick
     - AttendanceAlpha
+  requests.CreateClassroom:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
   requests.CreateGeneralAttendance:
     properties:
       datetime:
@@ -403,6 +410,13 @@ definitions:
     required:
     - classroom
     - major
+    type: object
+  responses.CreateClassroom:
+    properties:
+      classroom:
+        $ref: '#/definitions/domains.Classroom'
+    required:
+    - classroom
     type: object
   responses.CreateGeneralAttendance:
     properties:
@@ -811,6 +825,36 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.GetAllClassroomsByMajorId'
+      tags:
+      - classroom
+    post:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateClassroom'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.CreateClassroom'
       tags:
       - classroom
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students:

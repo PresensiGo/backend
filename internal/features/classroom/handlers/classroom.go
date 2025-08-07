@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"api/internal/features/classroom/dto/requests"
 	"api/internal/features/classroom/services"
 	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,35 @@ type Classroom struct {
 
 func NewClassroom(service *services.Classroom) *Classroom {
 	return &Classroom{service}
+}
+
+// @tags		classroom
+// @param 		batch_id path int true "batch id"
+// @param 		major_id path int true "major id"
+// @param 		major_id path int true "major id"
+// @param 		body body requests.CreateClassroom true "body"
+// @success		200	{object} responses.CreateClassroom
+// @router		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms [post]
+func (h *Classroom) Create(c *gin.Context) {
+	majorId, err := strconv.Atoi(c.Param("major_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var req requests.CreateClassroom
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Create(uint(majorId), req)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
 }
 
 // @id 			getAllClassrooms

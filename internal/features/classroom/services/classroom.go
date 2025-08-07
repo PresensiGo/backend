@@ -2,6 +2,8 @@ package services
 
 import (
 	batchRepo "api/internal/features/batch/repositories"
+	"api/internal/features/classroom/domains"
+	"api/internal/features/classroom/dto/requests"
 	"api/internal/features/classroom/dto/responses"
 	"api/internal/features/classroom/repositories"
 	majorDomain "api/internal/features/major/domains"
@@ -24,6 +26,24 @@ func NewClassroom(
 		majorRepo,
 		classroomRepo,
 	}
+}
+
+func (s *Classroom) Create(majorId uint, req requests.CreateClassroom) (
+	*responses.CreateClassroom, error,
+) {
+	classroom := domains.Classroom{
+		Name:    req.Name,
+		MajorId: majorId,
+	}
+
+	result, err := s.classroomRepo.Create(classroom)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.CreateClassroom{
+		Classroom: *result,
+	}, nil
 }
 
 func (s *Classroom) GetAll(schoolId uint) (*responses.GetAll, error) {

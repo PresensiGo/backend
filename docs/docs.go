@@ -409,6 +409,51 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "classroom"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateClassroom"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateClassroom"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students": {
@@ -1476,6 +1521,17 @@ const docTemplate = `{
                 "AttendanceAlpha"
             ]
         },
+        "requests.CreateClassroom": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.CreateGeneralAttendance": {
             "type": "object",
             "properties": {
@@ -1583,6 +1639,17 @@ const docTemplate = `{
                 },
                 "major": {
                     "$ref": "#/definitions/domains.Major"
+                }
+            }
+        },
+        "responses.CreateClassroom": {
+            "type": "object",
+            "required": [
+                "classroom"
+            ],
+            "properties": {
+                "classroom": {
+                    "$ref": "#/definitions/domains.Classroom"
                 }
             }
         },

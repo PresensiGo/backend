@@ -10,6 +10,10 @@ type ClassroomMajor struct {
 	Major     majorDomain.Major `json:"major" validate:"required"`
 }
 
+type CreateClassroom struct {
+	Classroom domains.Classroom `json:"classroom" validate:"required"`
+}
+
 type GetAll struct {
 	Classrooms []domains.Classroom `json:"classrooms" validate:"required"`
 }
