@@ -98,3 +98,14 @@ func (s *SubjectAttendance) GetAll(classroomId uint) (*responses.GetAllSubjectAt
 		Items: result,
 	}, nil
 }
+
+func (s *SubjectAttendance) Get(subjectAttendanceId uint) (*responses.GetSubjectAttendance, error) {
+	result, err := s.subjectAttendanceRepo.Get(subjectAttendanceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.GetSubjectAttendance{
+		SubjectAttendance: *result,
+	}, nil
+}

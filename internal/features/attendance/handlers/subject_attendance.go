@@ -69,3 +69,26 @@ func (h *SubjectAttendance) GetAll(c *gin.Context) {
 
 	c.JSON(http.StatusOK, result)
 }
+
+// @tags 		attendance
+// @param 		batch_id path int true "batch id"
+// @param 		major_id path int true "major id"
+// @param 		classroom_id path int true "classroom id"
+// @param 		subject_attendance_id path int true "subject attendance id"
+// @success 	200 {object} responses.GetSubjectAttendance
+// @router 		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id} [get]
+func (h *SubjectAttendance) Get(c *gin.Context) {
+	subjectAttendanceId, err := strconv.Atoi(c.Param("subject_attendance_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Get(uint(subjectAttendanceId))
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}

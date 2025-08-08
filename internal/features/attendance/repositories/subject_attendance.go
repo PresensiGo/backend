@@ -44,3 +44,16 @@ func (r *SubjectAttendance) GetAllByClassroomId(classroomIds uint) (
 
 	return &result, nil
 }
+
+func (r *SubjectAttendance) Get(subjectAttendanceId uint) (
+	*domains.SubjectAttendance, error,
+) {
+	var subjectAttendance models.SubjectAttendance
+	if err := r.db.Where(
+		"id = ?", subjectAttendanceId,
+	).First(&subjectAttendance).Error; err != nil {
+		return nil, err
+	}
+
+	return domains.FromSubjectAttendanceModel(&subjectAttendance), nil
+}

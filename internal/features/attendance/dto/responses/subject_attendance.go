@@ -9,6 +9,10 @@ type GetAllSubjectAttendances struct {
 	Items []shared.SubjectAttendanceSubject `json:"items" validate:"required"`
 }
 
+type GetSubjectAttendance struct {
+	SubjectAttendance domains.SubjectAttendance `json:"subject_attendance" validate:"required"`
+}
+
 type CreateSubjectAttendance struct {
 	SubjectAttendance domains.SubjectAttendance `json:"subject_attendance" validate:"required"`
 }

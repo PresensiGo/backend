@@ -654,6 +654,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "subject attendance id",
+                        "name": "subject_attendance_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetSubjectAttendance"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/classrooms": {
             "get": {
                 "tags": [
@@ -2024,6 +2069,17 @@ const docTemplate = `{
             "properties": {
                 "general_attendance": {
                     "$ref": "#/definitions/domains.GeneralAttendance"
+                }
+            }
+        },
+        "responses.GetSubjectAttendance": {
+            "type": "object",
+            "required": [
+                "subject_attendance"
+            ],
+            "properties": {
+                "subject_attendance": {
+                    "$ref": "#/definitions/domains.SubjectAttendance"
                 }
             }
         },
