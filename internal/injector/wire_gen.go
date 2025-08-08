@@ -27,14 +27,14 @@ import (
 	injector3 "api/internal/features/major/injector"
 	repositories4 "api/internal/features/major/repositories"
 	services3 "api/internal/features/major/services"
-	repositories7 "api/internal/features/school/repositories"
+	repositories8 "api/internal/features/school/repositories"
 	handlers5 "api/internal/features/student/handlers"
 	injector5 "api/internal/features/student/injector"
 	repositories3 "api/internal/features/student/repositories"
 	services5 "api/internal/features/student/services"
 	handlers8 "api/internal/features/subject/handlers"
 	injector8 "api/internal/features/subject/injector"
-	repositories8 "api/internal/features/subject/repositories"
+	repositories7 "api/internal/features/subject/repositories"
 	services8 "api/internal/features/subject/services"
 	handlers7 "api/internal/features/user/handlers"
 	injector7 "api/internal/features/user/injector"
@@ -72,7 +72,8 @@ func InitAttendanceHandlers() *injector.AttendanceHandlers {
 	handlersGeneralAttendance := handlers.NewGeneralAttendance(servicesGeneralAttendance)
 	batch := repositories6.NewBatch(db)
 	subjectAttendance := repositories2.NewSubjectAttendance(db)
-	servicesSubjectAttendance := services.NewSubjectAttendance(batch, major, classroom, subjectAttendance)
+	subject := repositories7.NewSubject(db)
+	servicesSubjectAttendance := services.NewSubjectAttendance(batch, major, classroom, subjectAttendance, subject)
 	handlersSubjectAttendance := handlers.NewSubjectAttendance(servicesSubjectAttendance)
 	attendanceHandlers := injector.NewAttendanceHandlers(handlersAttendance, handlersLateness, handlersGeneralAttendance, handlersSubjectAttendance)
 	return attendanceHandlers
@@ -140,7 +141,7 @@ func InitUserHandlers() *injector7.UserHandlers {
 	db := database.New()
 	user := repositories.NewUser(db)
 	userToken := repositories.NewUserToken(db)
-	school := repositories7.NewSchool(db)
+	school := repositories8.NewSchool(db)
 	auth := services7.NewAuth(user, userToken, school, db)
 	handlersAuth := handlers7.NewAuth(auth)
 	userHandlers := injector7.NewUserHandlers(handlersAuth)
@@ -149,7 +150,7 @@ func InitUserHandlers() *injector7.UserHandlers {
 
 func InitSubjectHandlers() *injector8.SubjectHandlers {
 	db := database.New()
-	subject := repositories8.NewSubject(db)
+	subject := repositories7.NewSubject(db)
 	servicesSubject := services8.NewSubjectRepo(subject)
 	handlersSubject := handlers8.NewSubject(servicesSubject)
 	subjectHandlers := injector8.NewSubjectHandlers(handlersSubject)

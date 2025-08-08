@@ -39,6 +39,20 @@ func (r *Subject) GetAll(schoolId uint) (*[]domains.Subject, error) {
 	return &result, nil
 }
 
+func (r *Subject) GetMany(subjectIds []uint) (*[]domains.Subject, error) {
+	var subjects []models.Subject
+	if err := r.db.Where("id in ?", subjectIds).Find(&subjects).Error; err != nil {
+		return nil, err
+	}
+
+	result := make([]domains.Subject, len(subjects))
+	for i, v := range subjects {
+		result[i] = *domains.FromSubjectModel(&v)
+	}
+
+	return &result, nil
+}
+
 func (r *Subject) Update(subjectId uint, data domains.Subject) (*domains.Subject, error) {
 	subject := data.ToModel()
 	if err := r.db.Model(&subject).Where("id = ?", subjectId).Updates(&subject).Error; err != nil {

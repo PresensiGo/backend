@@ -572,6 +572,42 @@ const docTemplate = `{
             }
         },
         "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllSubjectAttendances"
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "attendance"
@@ -1031,22 +1067,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/GetAllStudentsRes"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/subject-attendances": {
-            "get": {
-                "tags": [
-                    "attendance"
-                ],
-                "operationId": "getAllSubjectAttendances",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.GetAllSubjectAttendances"
                         }
                     }
                 }
@@ -1610,6 +1630,21 @@ const docTemplate = `{
                 }
             }
         },
+        "domains.SubjectAttendanceSubject": {
+            "type": "object",
+            "required": [
+                "subject",
+                "subject_attendance"
+            ],
+            "properties": {
+                "subject": {
+                    "$ref": "#/definitions/domains.Subject"
+                },
+                "subject_attendance": {
+                    "$ref": "#/definitions/domains.SubjectAttendance"
+                }
+            }
+        },
         "dto.BatchInfo": {
             "type": "object",
             "required": [
@@ -1945,13 +1980,13 @@ const docTemplate = `{
         "responses.GetAllSubjectAttendances": {
             "type": "object",
             "required": [
-                "subject_attendances"
+                "items"
             ],
             "properties": {
-                "subject_attendances": {
+                "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.SubjectAttendance"
+                        "$ref": "#/definitions/domains.SubjectAttendanceSubject"
                     }
                 }
             }

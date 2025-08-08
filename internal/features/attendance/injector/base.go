@@ -8,6 +8,7 @@ import (
 	classroom "api/internal/features/classroom/repositories"
 	major "api/internal/features/major/repositories"
 	student "api/internal/features/student/repositories"
+	subject "api/internal/features/subject/repositories"
 	"api/pkg/database"
 	"github.com/google/wire"
 )
@@ -54,6 +55,7 @@ var (
 		major.NewMajor,
 		classroom.NewClassroom,
 		repositories.NewSubjectAttendance,
+		subject.NewSubject,
 
 		database.New,
 	)

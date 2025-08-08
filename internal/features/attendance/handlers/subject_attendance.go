@@ -6,7 +6,6 @@ import (
 
 	"api/internal/features/attendance/dto/requests"
 	"api/internal/features/attendance/services"
-	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 )
 
@@ -49,18 +48,20 @@ func (h *SubjectAttendance) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-// @id 			getAllSubjectAttendances
 // @tags 		attendance
+// @param 		batch_id path int true "batch id"
+// @param 		major_id path int true "major id"
+// @param 		classroom_id path int true "classroom id"
 // @success 	200 {object} responses.GetAllSubjectAttendances
-// @router 		/api/v1/subject-attendances [get]
+// @router 		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances [get]
 func (h *SubjectAttendance) GetAll(c *gin.Context) {
-	authUser := authentication.GetAuthenticatedUser(c)
-	if authUser.SchoolId == 0 {
-		c.AbortWithStatus(http.StatusForbidden)
+	classroomId, err := strconv.Atoi(c.Param("classroom_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	result, err := h.service.GetAll(authUser.SchoolId)
+	result, err := h.service.GetAll(uint(classroomId))
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

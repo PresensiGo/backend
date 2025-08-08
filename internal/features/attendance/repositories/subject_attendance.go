@@ -27,12 +27,12 @@ func (r *SubjectAttendance) Create(data domains.SubjectAttendance) (
 	return domains.FromSubjectAttendanceModel(subjectAttendance), nil
 }
 
-func (r *SubjectAttendance) GetManyByClassroomIds(classroomIds []uint) (
+func (r *SubjectAttendance) GetAllByClassroomId(classroomIds uint) (
 	*[]domains.SubjectAttendance, error,
 ) {
 	var subjectAttendances []models.SubjectAttendance
 	if err := r.db.Where(
-		"classroom_id in ?", classroomIds,
+		"classroom_id = ?", classroomIds,
 	).Order("date_time desc").Find(&subjectAttendances).Error; err != nil {
 		return nil, err
 	}

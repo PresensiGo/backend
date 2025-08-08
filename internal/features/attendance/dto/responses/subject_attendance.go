@@ -1,9 +1,12 @@
 package responses
 
-import "api/internal/features/attendance/domains"
+import (
+	"api/internal/features/attendance/domains"
+	shared "api/internal/shared/domains"
+)
 
 type GetAllSubjectAttendances struct {
-	SubjectAttendances []domains.SubjectAttendance `json:"subject_attendances" validate:"required"`
+	Items []shared.SubjectAttendanceSubject `json:"items" validate:"required"`
 }
 
 type CreateSubjectAttendance struct {

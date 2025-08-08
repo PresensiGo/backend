@@ -8,6 +8,9 @@ import (
 	batch "api/internal/features/batch/repositories"
 	classroom "api/internal/features/classroom/repositories"
 	major "api/internal/features/major/repositories"
+	subjectDomain "api/internal/features/subject/domains"
+	subjectRepo "api/internal/features/subject/repositories"
+	shared "api/internal/shared/domains"
 	"api/pkg/utils"
 	"github.com/google/uuid"
 )
@@ -17,6 +20,7 @@ type SubjectAttendance struct {
 	majorRepo             *major.Major
 	classroomRepo         *classroom.Classroom
 	subjectAttendanceRepo *repositories.SubjectAttendance
+	subjectRepo           *subjectRepo.Subject
 }
 
 func NewSubjectAttendance(
@@ -24,12 +28,14 @@ func NewSubjectAttendance(
 	majorRepo *major.Major,
 	classroomRepo *classroom.Classroom,
 	subjectAttendanceRepo *repositories.SubjectAttendance,
+	subjectRepo *subjectRepo.Subject,
 ) *SubjectAttendance {
 	return &SubjectAttendance{
 		batchRepo:             batchRepo,
 		majorRepo:             majorRepo,
 		classroomRepo:         classroomRepo,
 		subjectAttendanceRepo: subjectAttendanceRepo,
+		subjectRepo:           subjectRepo,
 	}
 }
 
@@ -59,43 +65,36 @@ func (s *SubjectAttendance) Create(classroomId uint, req requests.CreateSubjectA
 	}, nil
 }
 
-func (s *SubjectAttendance) GetAll(schoolId uint) (*responses.GetAllSubjectAttendances, error) {
-	batches, err := s.batchRepo.GetAllBySchoolId(schoolId)
+func (s *SubjectAttendance) GetAll(classroomId uint) (*responses.GetAllSubjectAttendances, error) {
+	subjectAttendances, err := s.subjectAttendanceRepo.GetAllByClassroomId(classroomId)
 	if err != nil {
 		return nil, err
 	}
 
-	batchIds := make([]uint, len(*batches))
-	for i, v := range *batches {
-		batchIds[i] = v.Id
+	subjectIds := make([]uint, len(*subjectAttendances))
+	for i, v := range *subjectAttendances {
+		subjectIds[i] = v.SubjectId
 	}
 
-	majors, err := s.majorRepo.GetManyByBatchIds(batchIds)
+	subject, err := s.subjectRepo.GetMany(subjectIds)
 	if err != nil {
 		return nil, err
 	}
 
-	majorIds := make([]uint, len(*majors))
-	for i, v := range *majors {
-		majorIds[i] = v.Id
+	mapSubject := make(map[uint]*subjectDomain.Subject)
+	for _, v := range *subject {
+		mapSubject[v.Id] = &v
 	}
 
-	classrooms, err := s.classroomRepo.GetManyByMajorId(majorIds)
-	if err != nil {
-		return nil, err
-	}
-
-	classroomIds := make([]uint, len(classrooms))
-	for i, v := range classrooms {
-		classroomIds[i] = v.Id
-	}
-
-	subjectAttendances, err := s.subjectAttendanceRepo.GetManyByClassroomIds(classroomIds)
-	if err != nil {
-		return nil, err
+	result := make([]shared.SubjectAttendanceSubject, len(*subjectAttendances))
+	for i, v := range *subjectAttendances {
+		result[i] = shared.SubjectAttendanceSubject{
+			SubjectAttendance: v,
+			Subject:           *mapSubject[v.SubjectId],
+		}
 	}
 
 	return &responses.GetAllSubjectAttendances{
-		SubjectAttendances: *subjectAttendances,
+		Items: result,
 	}, nil
 }

@@ -307,6 +307,16 @@ definitions:
     - note
     - subject_id
     type: object
+  domains.SubjectAttendanceSubject:
+    properties:
+      subject:
+        $ref: '#/definitions/domains.Subject'
+      subject_attendance:
+        $ref: '#/definitions/domains.SubjectAttendance'
+    required:
+    - subject
+    - subject_attendance
+    type: object
   dto.BatchInfo:
     properties:
       batch:
@@ -527,12 +537,12 @@ definitions:
     type: object
   responses.GetAllSubjectAttendances:
     properties:
-      subject_attendances:
+      items:
         items:
-          $ref: '#/definitions/domains.SubjectAttendance'
+          $ref: '#/definitions/domains.SubjectAttendanceSubject'
         type: array
     required:
-    - subject_attendances
+    - items
     type: object
   responses.GetAllSubjects:
     properties:
@@ -975,6 +985,30 @@ paths:
       tags:
       - student
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances:
+    get:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllSubjectAttendances'
+      tags:
+      - attendance
     post:
       parameters:
       - description: batch id
@@ -1273,16 +1307,6 @@ paths:
             $ref: '#/definitions/GetAllStudentsRes'
       tags:
       - student
-  /api/v1/subject-attendances:
-    get:
-      operationId: getAllSubjectAttendances
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.GetAllSubjectAttendances'
-      tags:
-      - attendance
   /api/v1/subjects:
     get:
       operationId: getAllSubjects
