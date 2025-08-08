@@ -1,11 +1,15 @@
 package services
 
 import (
+	"api/internal/features/attendance/domains"
+	"api/internal/features/attendance/dto/requests"
 	"api/internal/features/attendance/dto/responses"
 	"api/internal/features/attendance/repositories"
 	batch "api/internal/features/batch/repositories"
 	classroom "api/internal/features/classroom/repositories"
 	major "api/internal/features/major/repositories"
+	"api/pkg/utils"
+	"github.com/google/uuid"
 )
 
 type SubjectAttendance struct {
@@ -27,6 +31,32 @@ func NewSubjectAttendance(
 		classroomRepo:         classroomRepo,
 		subjectAttendanceRepo: subjectAttendanceRepo,
 	}
+}
+
+func (s *SubjectAttendance) Create(classroomId uint, req requests.CreateSubjectAttendance) (
+	*responses.CreateSubjectAttendance, error,
+) {
+	parsedDatetime, err := utils.GetParsedDateTime(req.DateTime)
+	if err != nil {
+		return nil, err
+	}
+
+	subjectAttendance := domains.SubjectAttendance{
+		DateTime:    *parsedDatetime,
+		Code:        uuid.NewString(),
+		Note:        req.Note,
+		ClassroomId: classroomId,
+		SubjectId:   req.SubjectId,
+	}
+
+	result, err := s.subjectAttendanceRepo.Create(subjectAttendance)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.CreateSubjectAttendance{
+		SubjectAttendance: *result,
+	}, nil
 }
 
 func (s *SubjectAttendance) GetAll(schoolId uint) (*responses.GetAllSubjectAttendances, error) {

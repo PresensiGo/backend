@@ -16,6 +16,17 @@ func NewSubjectAttendance(db *gorm.DB) *SubjectAttendance {
 	}
 }
 
+func (r *SubjectAttendance) Create(data domains.SubjectAttendance) (
+	*domains.SubjectAttendance, error,
+) {
+	subjectAttendance := data.ToModel()
+	if err := r.db.Create(&subjectAttendance).Error; err != nil {
+		return nil, err
+	}
+
+	return domains.FromSubjectAttendanceModel(subjectAttendance), nil
+}
+
 func (r *SubjectAttendance) GetManyByClassroomIds(classroomIds []uint) (
 	*[]domains.SubjectAttendance, error,
 ) {

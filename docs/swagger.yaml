@@ -353,6 +353,19 @@ definitions:
     required:
     - name
     type: object
+  requests.CreateSubjectAttendance:
+    properties:
+      datetime:
+        type: string
+      note:
+        type: string
+      subject_id:
+        type: integer
+    required:
+    - datetime
+    - note
+    - subject_id
+    type: object
   requests.Login:
     properties:
       email:
@@ -438,6 +451,13 @@ definitions:
         $ref: '#/definitions/domains.Subject'
     required:
     - subject
+    type: object
+  responses.CreateSubjectAttendance:
+    properties:
+      subject_attendance:
+        $ref: '#/definitions/domains.SubjectAttendance'
+    required:
+    - subject_attendance
     type: object
   responses.DeleteGeneralAttendance:
     properties:
@@ -787,7 +807,6 @@ paths:
       tags:
       - batch
     get:
-      operationId: getBatch
       parameters:
       - description: batch id
         in: path
@@ -955,6 +974,37 @@ paths:
             $ref: '#/definitions/GetAllStudentsByClassroomIdRes'
       tags:
       - student
+  /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances:
+    post:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateSubjectAttendance'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.CreateSubjectAttendance'
+      tags:
+      - attendance
   /api/v1/classrooms:
     get:
       operationId: getAllClassrooms

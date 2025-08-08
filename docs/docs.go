@@ -296,7 +296,6 @@ const docTemplate = `{
                 "tags": [
                     "batch"
                 ],
-                "operationId": "getBatch",
                 "parameters": [
                     {
                         "type": "integer",
@@ -567,6 +566,53 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/GetAllStudentsByClassroomIdRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances": {
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateSubjectAttendance"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateSubjectAttendance"
                         }
                     }
                 }
@@ -1631,6 +1677,25 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.CreateSubjectAttendance": {
+            "type": "object",
+            "required": [
+                "datetime",
+                "note",
+                "subject_id"
+            ],
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "subject_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "requests.Login": {
             "type": "object",
             "properties": {
@@ -1760,6 +1825,17 @@ const docTemplate = `{
             "properties": {
                 "subject": {
                     "$ref": "#/definitions/domains.Subject"
+                }
+            }
+        },
+        "responses.CreateSubjectAttendance": {
+            "type": "object",
+            "required": [
+                "subject_attendance"
+            ],
+            "properties": {
+                "subject_attendance": {
+                    "$ref": "#/definitions/domains.SubjectAttendance"
                 }
             }
         },
