@@ -292,6 +292,29 @@ const docTemplate = `{
             }
         },
         "/api/v1/batches/{batch_id}": {
+            "get": {
+                "tags": [
+                    "batch"
+                ],
+                "operationId": "getBatch",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetBatch"
+                        }
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "batch"
@@ -1365,25 +1388,6 @@ const docTemplate = `{
                 }
             }
         },
-        "domains.BatchInfo": {
-            "type": "object",
-            "required": [
-                "batch",
-                "classrooms_count",
-                "majors_count"
-            ],
-            "properties": {
-                "batch": {
-                    "$ref": "#/definitions/domains.Batch"
-                },
-                "classrooms_count": {
-                    "type": "integer"
-                },
-                "majors_count": {
-                    "type": "integer"
-                }
-            }
-        },
         "domains.Classroom": {
             "type": "object",
             "required": [
@@ -1556,6 +1560,25 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "subject_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.BatchInfo": {
+            "type": "object",
+            "required": [
+                "batch",
+                "classrooms_count",
+                "majors_count"
+            ],
+            "properties": {
+                "batch": {
+                    "$ref": "#/definitions/domains.Batch"
+                },
+                "classrooms_count": {
+                    "type": "integer"
+                },
+                "majors_count": {
                     "type": "integer"
                 }
             }
@@ -1782,7 +1805,7 @@ const docTemplate = `{
                 "batches": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.BatchInfo"
+                        "$ref": "#/definitions/dto.BatchInfo"
                     }
                 }
             }
@@ -1868,6 +1891,17 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/domains.Subject"
                     }
+                }
+            }
+        },
+        "responses.GetBatch": {
+            "type": "object",
+            "required": [
+                "batch"
+            ],
+            "properties": {
+                "batch": {
+                    "$ref": "#/definitions/domains.Batch"
                 }
             }
         },

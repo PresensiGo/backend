@@ -54,6 +54,18 @@ func (r *Batch) GetAllBySchoolId(schoolId uint) (*[]domains.Batch, error) {
 	return &mappedBatches, nil
 }
 
+func (r *Batch) Get(batchId uint) (*domains.Batch, error) {
+	var batch models.Batch
+	if err := r.db.Model(&models.Batch{}).
+		Where("id = ?", batchId).
+		First(&batch).
+		Error; err != nil {
+		return nil, err
+	}
+
+	return domains.FromBatchModel(&batch), nil
+}
+
 func (r *Batch) Update(domain domains.Batch) (*domains.Batch, error) {
 	model := domain.ToModel()
 	if err := r.db.Model(&model).Where("id = ?", domain.Id).Updates(&model).Error; err != nil {

@@ -185,19 +185,6 @@ definitions:
     - name
     - school_id
     type: object
-  domains.BatchInfo:
-    properties:
-      batch:
-        $ref: '#/definitions/domains.Batch'
-      classrooms_count:
-        type: integer
-      majors_count:
-        type: integer
-    required:
-    - batch
-    - classrooms_count
-    - majors_count
-    type: object
   domains.Classroom:
     properties:
       id:
@@ -319,6 +306,19 @@ definitions:
     - id
     - note
     - subject_id
+    type: object
+  dto.BatchInfo:
+    properties:
+      batch:
+        $ref: '#/definitions/domains.Batch'
+      classrooms_count:
+        type: integer
+      majors_count:
+        type: integer
+    required:
+    - batch
+    - classrooms_count
+    - majors_count
     type: object
   models.AttendanceStatus:
     enum:
@@ -464,7 +464,7 @@ definitions:
     properties:
       batches:
         items:
-          $ref: '#/definitions/domains.BatchInfo'
+          $ref: '#/definitions/dto.BatchInfo'
         type: array
     required:
     - batches
@@ -522,6 +522,13 @@ definitions:
         type: array
     required:
     - subjects
+    type: object
+  responses.GetBatch:
+    properties:
+      batch:
+        $ref: '#/definitions/domains.Batch'
+    required:
+    - batch
     type: object
   responses.GetGeneralAttendance:
     properties:
@@ -777,6 +784,21 @@ paths:
           description: OK
           schema:
             type: string
+      tags:
+      - batch
+    get:
+      operationId: getBatch
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetBatch'
       tags:
       - batch
     put:

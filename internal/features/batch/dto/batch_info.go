@@ -1,4 +1,4 @@
-package domains
+package dto
 
 import (
 	"api/internal/features/batch/domains"

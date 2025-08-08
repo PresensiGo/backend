@@ -2,26 +2,26 @@ package services
 
 import (
 	"api/internal/features/batch/domains"
+	"api/internal/features/batch/dto"
 	"api/internal/features/batch/dto/requests"
 	"api/internal/features/batch/dto/responses"
-	repositories2 "api/internal/features/batch/repositories"
-	"api/internal/features/classroom/repositories"
-	domains2 "api/internal/features/major/domains"
-	repositories3 "api/internal/features/major/repositories"
-	domains3 "api/internal/shared/domains"
+	"api/internal/features/batch/repositories"
+	classroomRepo "api/internal/features/classroom/repositories"
+	majorDomain "api/internal/features/major/domains"
+	majorRepo "api/internal/features/major/repositories"
 	"gorm.io/gorm"
 )
 
 type Batch struct {
 	db            *gorm.DB
-	batchRepo     *repositories2.Batch
-	majorRepo     *repositories3.Major
-	classroomRepo *repositories.Classroom
+	batchRepo     *repositories.Batch
+	majorRepo     *majorRepo.Major
+	classroomRepo *classroomRepo.Classroom
 }
 
 func NewBatch(
-	db *gorm.DB, batchRepo *repositories2.Batch, majorRepo *repositories3.Major,
-	classroomRepo *repositories.Classroom,
+	db *gorm.DB, batchRepo *repositories.Batch, majorRepo *majorRepo.Major,
+	classroomRepo *classroomRepo.Classroom,
 ) *Batch {
 	return &Batch{db, batchRepo, majorRepo, classroomRepo}
 }
@@ -48,7 +48,7 @@ func (s *Batch) GetAllBySchoolId(schoolId uint) (*responses.GetAllBatches, error
 
 	// map to store batch, majors, and classrooms
 	mapBatches := make(map[uint]domains.Batch)
-	mapMajors := make(map[uint]domains2.Major)
+	mapMajors := make(map[uint]majorDomain.Major)
 
 	mapBatchNameAndMajorName := make(map[string]map[string]bool) // batchName: { majorName: _ }
 
@@ -97,12 +97,12 @@ func (s *Batch) GetAllBySchoolId(schoolId uint) (*responses.GetAllBatches, error
 	}
 
 	// mapping all data
-	mappedBatches := make([]domains3.BatchInfo, len(*batches))
+	mappedBatches := make([]dto.BatchInfo, len(*batches))
 	for i, v := range *batches {
 		mapMajorName := mapBatchNameAndMajorName[v.Name]
 		classroomCount := mapBatchIdAndClassroomCount[v.Id]
 
-		mappedBatches[i] = domains3.BatchInfo{
+		mappedBatches[i] = dto.BatchInfo{
 			Batch:           v,
 			MajorsCount:     len(mapMajorName),
 			ClassroomsCount: classroomCount,
@@ -111,6 +111,17 @@ func (s *Batch) GetAllBySchoolId(schoolId uint) (*responses.GetAllBatches, error
 
 	return &responses.GetAllBatches{
 		Batches: mappedBatches,
+	}, nil
+}
+
+func (s *Batch) Get(batchId uint) (*responses.GetBatch, error) {
+	batch, err := s.batchRepo.Get(batchId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responses.GetBatch{
+		Batch: *batch,
 	}, nil
 }
 
