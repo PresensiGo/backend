@@ -52,6 +52,15 @@ func (r *GeneralAttendance) Get(generalAttendanceId uint) (*domains.GeneralAtten
 	return domains.FromGeneralAttendanceModel(&generalAttendance), nil
 }
 
+func (r *GeneralAttendance) GetByCode(code string) (*domains.GeneralAttendance, error) {
+	var generalAttendance models.GeneralAttendance
+	if err := r.db.Where("code = ?", code).First(&generalAttendance).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromGeneralAttendanceModel(&generalAttendance), nil
+	}
+}
+
 func (r *GeneralAttendance) Update(
 	generalAttendanceId uint, data domains.GeneralAttendance,
 ) (*domains.GeneralAttendance, error) {

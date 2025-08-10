@@ -7,14 +7,25 @@ import (
 	"api/internal/features/attendance/repositories"
 	"api/pkg/utils"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type GeneralAttendance struct {
-	generalAttendanceRepo *repositories.GeneralAttendance
+	db                          *gorm.DB
+	generalAttendanceRepo       *repositories.GeneralAttendance
+	generalAttendanceRecordRepo *repositories.GeneralAttendanceRecord
 }
 
-func NewGeneralAttendance(generalAttendanceRepo *repositories.GeneralAttendance) *GeneralAttendance {
-	return &GeneralAttendance{generalAttendanceRepo: generalAttendanceRepo}
+func NewGeneralAttendance(
+	db *gorm.DB,
+	generalAttendanceRepo *repositories.GeneralAttendance,
+	generalAttendanceRecordRepo *repositories.GeneralAttendanceRecord,
+) *GeneralAttendance {
+	return &GeneralAttendance{
+		db:                          db,
+		generalAttendanceRepo:       generalAttendanceRepo,
+		generalAttendanceRecordRepo: generalAttendanceRecordRepo,
+	}
 }
 
 func (s *GeneralAttendance) Create(
@@ -39,6 +50,45 @@ func (s *GeneralAttendance) Create(
 
 	return &responses.CreateGeneralAttendance{
 		GeneralAttendance: *result,
+	}, nil
+}
+
+func (s *GeneralAttendance) CreateGeneralAttendanceRecordStudent(
+	studentId uint, req requests.CreateGeneralAttendanceRecordStudent,
+) (*responses.CreateGeneralAttendanceRecordStudent, error) {
+	generalAttendance, err := s.generalAttendanceRepo.GetByCode(req.Code)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.db.Transaction(
+		func(tx *gorm.DB) error {
+			// hapus record lama jika sudah ada
+			if err := s.generalAttendanceRecordRepo.DeleteByAttendanceIdStudentIdInTx(
+				tx, generalAttendance.Id, studentId,
+			); err != nil {
+				return err
+			}
+
+			// create record baru
+			generalAttendanceRecord := domains.GeneralAttendanceRecord{
+				GeneralAttendanceId: generalAttendance.Id,
+				StudentId:           studentId,
+			}
+			if _, err := s.generalAttendanceRecordRepo.CreateInTx(
+				tx, generalAttendanceRecord,
+			); err != nil {
+				return err
+			}
+
+			return nil
+		},
+	); err != nil {
+		return nil, err
+	}
+
+	return &responses.CreateGeneralAttendanceRecordStudent{
+		Message: "ok",
 	}, nil
 }
 

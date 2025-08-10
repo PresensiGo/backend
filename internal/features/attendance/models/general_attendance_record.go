@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type GeneralAttendanceItem struct {
+type GeneralAttendanceRecord struct {
 	gorm.Model
 
 	GeneralAttendanceId uint

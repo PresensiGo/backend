@@ -56,6 +56,7 @@ var (
 		classroom.NewClassroom,
 		repositories.NewSubjectAttendance,
 		subject.NewSubject,
+		repositories.NewGeneralAttendanceRecord,
 
 		database.New,
 	)

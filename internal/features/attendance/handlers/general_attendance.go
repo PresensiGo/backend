@@ -45,6 +45,32 @@ func (h *GeneralAttendance) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// @tags 		attendance
+// @param 		body body requests.CreateGeneralAttendanceRecordStudent true "body"
+// @success 	200 {object} responses.CreateGeneralAttendanceRecordStudent
+// @router 		/api/v1/general-attendances/records/student [post]
+func (h *GeneralAttendance) CreateGeneralAttendanceRecordStudent(c *gin.Context) {
+	studentClaim := authentication.GetAuthenticatedStudent(c)
+	if studentClaim.SchoolId == 0 {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	var req requests.CreateGeneralAttendanceRecordStudent
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.CreateGeneralAttendanceRecordStudent(studentClaim.SchoolId, req)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 // @id 			getAllGeneralAttendances
 // @tags 		attendance
 // @success 	200 {object} responses.GetAllGeneralAttendances

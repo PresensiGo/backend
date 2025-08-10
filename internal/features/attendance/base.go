@@ -9,9 +9,6 @@ import (
 func RegisterAttendance(g *gin.RouterGroup) {
 	handlers := injector.InitAttendanceHandlers()
 
-	routes.RegisterAttendance(g, handlers.Attendance)
-	routes.RegisterLateness(g, handlers.Lateness)
-
 	routes.RegisterGeneralAttendance(g, handlers.GeneralAttendance)
 	routes.RegisterSubjectAttendance(g, handlers.SubjectAttendance)
 }

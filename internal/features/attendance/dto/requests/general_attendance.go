@@ -9,3 +9,7 @@ type UpdateGeneralAttendance struct {
 	DateTime string `json:"datetime"`
 	Note     string `json:"note"`
 }
+
+type CreateGeneralAttendanceRecordStudent struct {
+	Code string `json:"code" validate:"required"`
+}
