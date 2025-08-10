@@ -103,3 +103,12 @@ func (r *Student) GetBySchoolIdNIS(schoolId uint, nis string) (*domains.Student,
 		return domains.FromStudentModel(&student), nil
 	}
 }
+
+func (r *Student) Get(studentId uint) (*domains.Student, error) {
+	var student models.Student
+	if err := r.db.Where("id = ?", studentId).First(&student).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromStudentModel(&student), nil
+	}
+}

@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	schoolRepo "api/internal/features/school/repositories"
@@ -75,16 +76,11 @@ func (s *StudentAuth) Login(req requests.StudentLogin) (*responses.StudentLogin,
 				StudentId:    student.Id,
 				DeviceId:     req.DeviceId,
 				RefreshToken: refreshToken,
-				TTL:          time.Now(),
+				TTL:          time.Now().Add(time.Hour * 24 * 30),
 			}
 
-			if accessToken, err := authentication.GenerateStudentJWT(
-				claims.Student{
-					Id:       student.Id,
-					Name:     student.Name,
-					NIS:      student.NIS,
-					SchoolId: student.SchoolId,
-				},
+			if accessToken, err := s.generateAccessToken(
+				student.Id, student.Name, student.NIS, student.SchoolId,
 			); err != nil {
 				return err
 			} else {
@@ -108,4 +104,58 @@ func (s *StudentAuth) Login(req requests.StudentLogin) (*responses.StudentLogin,
 	} else {
 		return &response, err
 	}
+}
+
+func (s *StudentAuth) RefreshToken(req requests.StudentRefreshToken) (
+	*responses.StudentRefreshToken, error,
+) {
+	oldStudentToken, err := s.studentTokenRepo.GetByRefreshToken(req.RefreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	if time.Now().After(oldStudentToken.TTL) {
+		return nil, fmt.Errorf("refresh token expired")
+	}
+
+	currentStudent, err := s.studentRepo.Get(oldStudentToken.StudentId)
+	if err != nil {
+		return nil, err
+	}
+
+	// generate user token
+	accessToken, err := s.generateAccessToken(
+		currentStudent.Id, currentStudent.Name, currentStudent.NIS, currentStudent.SchoolId,
+	)
+	if err != nil {
+		return nil, err
+	}
+	refreshToken := uuid.New().String()
+
+	// store new token into database
+	if _, err := s.studentTokenRepo.UpdateByRefreshToken(
+		req.RefreshToken, domains.StudentToken{
+			RefreshToken: refreshToken,
+		},
+	); err != nil {
+		return nil, err
+	}
+
+	return &responses.StudentRefreshToken{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}, nil
+}
+
+func (s *StudentAuth) generateAccessToken(
+	id uint, name string, nis string, schoolId uint,
+) (string, error) {
+	return authentication.GenerateStudentJWT(
+		claims.Student{
+			Id:       id,
+			Name:     name,
+			NIS:      nis,
+			SchoolId: schoolId,
+		},
+	)
 }

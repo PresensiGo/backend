@@ -619,6 +619,16 @@ definitions:
     - access_token
     - refresh_token
     type: object
+  responses.StudentRefreshToken:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
   responses.UpdateClassroom:
     properties:
       classroom:
@@ -801,6 +811,15 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.StudentLogin'
+      tags:
+      - student
+  /api/v1/auth/students/refresh-token:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.StudentRefreshToken'
       tags:
       - student
   /api/v1/batches:

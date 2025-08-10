@@ -265,6 +265,21 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/auth/students/refresh-token": {
+            "post": {
+                "tags": [
+                    "student"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.StudentRefreshToken"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/batches": {
             "get": {
                 "tags": [
@@ -2151,6 +2166,21 @@ const docTemplate = `{
             }
         },
         "responses.StudentLogin": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.StudentRefreshToken": {
             "type": "object",
             "required": [
                 "access_token",

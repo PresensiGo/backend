@@ -5,3 +5,7 @@ type StudentLogin struct {
 	NIS        string `json:"nis" validate:"required"`
 	DeviceId   string `json:"device_id" validate:"required"`
 }
+
+type StudentRefreshToken struct {
+	RefreshToken string `json:"refresh_token" validate:"required"`
+}
