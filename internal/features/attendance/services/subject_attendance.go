@@ -13,29 +13,36 @@ import (
 	shared "api/internal/shared/domains"
 	"api/pkg/utils"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type SubjectAttendance struct {
-	batchRepo             *batch.Batch
-	majorRepo             *major.Major
-	classroomRepo         *classroom.Classroom
-	subjectAttendanceRepo *repositories.SubjectAttendance
-	subjectRepo           *subjectRepo.Subject
+	db                          *gorm.DB
+	batchRepo                   *batch.Batch
+	majorRepo                   *major.Major
+	classroomRepo               *classroom.Classroom
+	subjectAttendanceRepo       *repositories.SubjectAttendance
+	subjectAttendanceRecordRepo *repositories.SubjectAttendanceRecord
+	subjectRepo                 *subjectRepo.Subject
 }
 
 func NewSubjectAttendance(
+	db *gorm.DB,
 	batchRepo *batch.Batch,
 	majorRepo *major.Major,
 	classroomRepo *classroom.Classroom,
 	subjectAttendanceRepo *repositories.SubjectAttendance,
+	subjectAttendanceRecordRepo *repositories.SubjectAttendanceRecord,
 	subjectRepo *subjectRepo.Subject,
 ) *SubjectAttendance {
 	return &SubjectAttendance{
-		batchRepo:             batchRepo,
-		majorRepo:             majorRepo,
-		classroomRepo:         classroomRepo,
-		subjectAttendanceRepo: subjectAttendanceRepo,
-		subjectRepo:           subjectRepo,
+		db:                          db,
+		batchRepo:                   batchRepo,
+		majorRepo:                   majorRepo,
+		classroomRepo:               classroomRepo,
+		subjectAttendanceRepo:       subjectAttendanceRepo,
+		subjectAttendanceRecordRepo: subjectAttendanceRecordRepo,
+		subjectRepo:                 subjectRepo,
 	}
 }
 
@@ -62,6 +69,47 @@ func (s *SubjectAttendance) Create(classroomId uint, req requests.CreateSubjectA
 
 	return &responses.CreateSubjectAttendance{
 		SubjectAttendance: *result,
+	}, nil
+}
+
+func (s *SubjectAttendance) CreateRecordStudent(
+	studentId uint, req requests.CreateSubjectAttendanceRecordStudent,
+) (
+	*responses.CreateSubjectAttendanceRecordStudent, error,
+) {
+	subjectAttendance, err := s.subjectAttendanceRepo.GetByCode(req.Code)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.db.Transaction(
+		func(tx *gorm.DB) error {
+			// hapus semua record yang sudah ada
+			if err := s.subjectAttendanceRecordRepo.DeleteByAttendanceIdStudentIdInTx(
+				tx, subjectAttendance.Id, studentId,
+			); err != nil {
+				return err
+			}
+
+			// buat record baru untuk student
+			subjectAttendanceRecord := domains.SubjectAttendanceRecord{
+				SubjectAttendanceId: subjectAttendance.Id,
+				StudentId:           studentId,
+			}
+			if _, err := s.subjectAttendanceRecordRepo.CreateInTx(
+				tx, subjectAttendanceRecord,
+			); err != nil {
+				return err
+			}
+
+			return nil
+		},
+	); err != nil {
+		return nil, err
+	}
+
+	return &responses.CreateSubjectAttendanceRecordStudent{
+		Message: "ok",
 	}, nil
 }
 

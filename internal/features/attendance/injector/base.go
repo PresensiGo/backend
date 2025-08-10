@@ -43,6 +43,7 @@ var (
 		repositories.NewSubjectAttendance,
 		subject.NewSubject,
 		repositories.NewGeneralAttendanceRecord,
+		repositories.NewSubjectAttendanceRecord,
 
 		database.New,
 	)

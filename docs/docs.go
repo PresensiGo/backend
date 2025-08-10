@@ -15,106 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/attendances": {
-            "post": {
-                "tags": [
-                    "attendance"
-                ],
-                "operationId": "createAttendance",
-                "parameters": [
-                    {
-                        "description": "Body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/CreateAttendanceReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/attendances/classrooms/{classroom_id}": {
-            "get": {
-                "tags": [
-                    "attendance"
-                ],
-                "operationId": "getAllAttendances",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Classroom Id",
-                        "name": "classroom_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/GetAllAttendancesRes"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/attendances/{attendance_id}": {
-            "get": {
-                "tags": [
-                    "attendance"
-                ],
-                "operationId": "getAttendance",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Attendance Id",
-                        "name": "attendance_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/GetAttendanceRes"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "attendance"
-                ],
-                "operationId": "deleteAttendance",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Attendance Id",
-                        "name": "attendance_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/auth/login": {
             "post": {
                 "tags": [
@@ -684,6 +584,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/records/student": {
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateSubjectAttendanceRecordStudent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateSubjectAttendanceRecordStudent"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}": {
             "get": {
                 "tags": [
@@ -781,6 +728,32 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/general-attendances/records/student": {
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateGeneralAttendanceRecordStudent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateGeneralAttendanceRecordStudent"
                         }
                     }
                 }
@@ -902,104 +875,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.DeleteGeneralAttendance"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/latenesses": {
-            "get": {
-                "tags": [
-                    "lateness"
-                ],
-                "operationId": "getAllLatenesses",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/GetAllLatenessesRes"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "lateness"
-                ],
-                "operationId": "createLateness",
-                "parameters": [
-                    {
-                        "description": "Payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/CreateLatenessReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/latenesses/{lateness_id}": {
-            "get": {
-                "tags": [
-                    "lateness"
-                ],
-                "operationId": "getLateness",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Lateness ID",
-                        "name": "lateness_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/GetLatenessRes"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "lateness"
-                ],
-                "operationId": "createLatenessDetail",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Payload",
-                        "name": "lateness_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Payload",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/CreateLatenessDetailReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }
@@ -1247,90 +1122,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "CreateAttendanceItemReq": {
-            "type": "object",
-            "properties": {
-                "note": {
-                    "type": "string"
-                },
-                "status": {
-                    "$ref": "#/definitions/models.AttendanceStatus"
-                },
-                "student_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "CreateAttendanceReq": {
-            "type": "object",
-            "properties": {
-                "attendance_students": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/CreateAttendanceItemReq"
-                    }
-                },
-                "classroom_id": {
-                    "type": "integer"
-                },
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "CreateLatenessDetailReq": {
-            "type": "object",
-            "required": [
-                "student_ids"
-            ],
-            "properties": {
-                "student_ids": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
-        "CreateLatenessReq": {
-            "type": "object",
-            "required": [
-                "date"
-            ],
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "GetAllAttendancesRes": {
-            "type": "object",
-            "required": [
-                "attendances"
-            ],
-            "properties": {
-                "attendances": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domains.Attendance"
-                    }
-                }
-            }
-        },
-        "GetAllLatenessesRes": {
-            "type": "object",
-            "required": [
-                "latenesses"
-            ],
-            "properties": {
-                "latenesses": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domains.Lateness"
-                    }
-                }
-            }
-        },
         "GetAllStudentsByClassroomIdRes": {
             "type": "object",
             "required": [
@@ -1356,57 +1147,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/domains.StudentMajorClassroom"
                     }
-                }
-            }
-        },
-        "GetAttendanceItemRes": {
-            "type": "object",
-            "required": [
-                "attendanceStudent",
-                "student"
-            ],
-            "properties": {
-                "attendanceStudent": {
-                    "$ref": "#/definitions/domains.AttendanceDetail"
-                },
-                "student": {
-                    "$ref": "#/definitions/domains.Student"
-                }
-            }
-        },
-        "GetAttendanceRes": {
-            "type": "object",
-            "required": [
-                "attendance",
-                "items"
-            ],
-            "properties": {
-                "attendance": {
-                    "$ref": "#/definitions/domains.Attendance"
-                },
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/GetAttendanceItemRes"
-                    }
-                }
-            }
-        },
-        "GetLatenessRes": {
-            "type": "object",
-            "required": [
-                "items",
-                "lateness"
-            ],
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domains.StudentMajorClassroom"
-                    }
-                },
-                "lateness": {
-                    "$ref": "#/definitions/domains.Lateness"
                 }
             }
         },
@@ -1461,52 +1201,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "domains.Attendance": {
-            "type": "object",
-            "required": [
-                "classroom_id",
-                "date",
-                "id"
-            ],
-            "properties": {
-                "classroom_id": {
-                    "type": "integer"
-                },
-                "date": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "domains.AttendanceDetail": {
-            "type": "object",
-            "required": [
-                "attendance_id",
-                "id",
-                "note",
-                "status",
-                "student_id"
-            ],
-            "properties": {
-                "attendance_id": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "note": {
-                    "type": "string"
-                },
-                "status": {
-                    "$ref": "#/definitions/models.AttendanceStatus"
-                },
-                "student_id": {
-                    "type": "integer"
                 }
             }
         },
@@ -1569,25 +1263,6 @@ const docTemplate = `{
                 },
                 "note": {
                     "type": "string"
-                },
-                "school_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "domains.Lateness": {
-            "type": "object",
-            "required": [
-                "date",
-                "id",
-                "school_id"
-            ],
-            "properties": {
-                "date": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "school_id": {
                     "type": "integer"
@@ -1743,21 +1418,6 @@ const docTemplate = `{
                 }
             }
         },
-        "models.AttendanceStatus": {
-            "type": "string",
-            "enum": [
-                "hadir",
-                "izin",
-                "sakit",
-                "alpha"
-            ],
-            "x-enum-varnames": [
-                "AttendancePresent",
-                "AttendancePermission",
-                "AttendanceSick",
-                "AttendanceAlpha"
-            ]
-        },
         "requests.CreateClassroom": {
             "type": "object",
             "required": [
@@ -1776,6 +1436,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "note": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.CreateGeneralAttendanceRecordStudent": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
                     "type": "string"
                 }
             }
@@ -1807,6 +1478,17 @@ const docTemplate = `{
                 },
                 "subject_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "requests.CreateSubjectAttendanceRecordStudent": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
                 }
             }
         },
@@ -1931,6 +1613,17 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.CreateGeneralAttendanceRecordStudent": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.CreateSubject": {
             "type": "object",
             "required": [
@@ -1950,6 +1643,17 @@ const docTemplate = `{
             "properties": {
                 "subject_attendance": {
                     "$ref": "#/definitions/domains.SubjectAttendance"
+                }
+            }
+        },
+        "responses.CreateSubjectAttendanceRecordStudent": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         },

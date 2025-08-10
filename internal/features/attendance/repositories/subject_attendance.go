@@ -57,3 +57,12 @@ func (r *SubjectAttendance) Get(subjectAttendanceId uint) (
 
 	return domains.FromSubjectAttendanceModel(&subjectAttendance), nil
 }
+
+func (r *SubjectAttendance) GetByCode(code string) (*domains.SubjectAttendance, error) {
+	var subjectAttendance models.SubjectAttendance
+	if err := r.db.Where("code = ?", code).First(&subjectAttendance).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromSubjectAttendanceModel(&subjectAttendance), nil
+	}
+}

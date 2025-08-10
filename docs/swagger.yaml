@@ -1,58 +1,4 @@
 definitions:
-  CreateAttendanceItemReq:
-    properties:
-      note:
-        type: string
-      status:
-        $ref: '#/definitions/models.AttendanceStatus'
-      student_id:
-        type: integer
-    type: object
-  CreateAttendanceReq:
-    properties:
-      attendance_students:
-        items:
-          $ref: '#/definitions/CreateAttendanceItemReq'
-        type: array
-      classroom_id:
-        type: integer
-      date:
-        type: string
-    type: object
-  CreateLatenessDetailReq:
-    properties:
-      student_ids:
-        items:
-          type: integer
-        type: array
-    required:
-    - student_ids
-    type: object
-  CreateLatenessReq:
-    properties:
-      date:
-        type: string
-    required:
-    - date
-    type: object
-  GetAllAttendancesRes:
-    properties:
-      attendances:
-        items:
-          $ref: '#/definitions/domains.Attendance'
-        type: array
-    required:
-    - attendances
-    type: object
-  GetAllLatenessesRes:
-    properties:
-      latenesses:
-        items:
-          $ref: '#/definitions/domains.Lateness'
-        type: array
-    required:
-    - latenesses
-    type: object
   GetAllStudentsByClassroomIdRes:
     properties:
       students:
@@ -70,40 +16,6 @@ definitions:
         type: array
     required:
     - students
-    type: object
-  GetAttendanceItemRes:
-    properties:
-      attendanceStudent:
-        $ref: '#/definitions/domains.AttendanceDetail'
-      student:
-        $ref: '#/definitions/domains.Student'
-    required:
-    - attendanceStudent
-    - student
-    type: object
-  GetAttendanceRes:
-    properties:
-      attendance:
-        $ref: '#/definitions/domains.Attendance'
-      items:
-        items:
-          $ref: '#/definitions/GetAttendanceItemRes'
-        type: array
-    required:
-    - attendance
-    - items
-    type: object
-  GetLatenessRes:
-    properties:
-      items:
-        items:
-          $ref: '#/definitions/domains.StudentMajorClassroom'
-        type: array
-      lateness:
-        $ref: '#/definitions/domains.Lateness'
-    required:
-    - items
-    - lateness
     type: object
   RefreshTokenTTLReq:
     properties:
@@ -139,38 +51,6 @@ definitions:
     required:
     - batch_id
     - name
-    type: object
-  domains.Attendance:
-    properties:
-      classroom_id:
-        type: integer
-      date:
-        type: string
-      id:
-        type: integer
-    required:
-    - classroom_id
-    - date
-    - id
-    type: object
-  domains.AttendanceDetail:
-    properties:
-      attendance_id:
-        type: integer
-      id:
-        type: integer
-      note:
-        type: string
-      status:
-        $ref: '#/definitions/models.AttendanceStatus'
-      student_id:
-        type: integer
-    required:
-    - attendance_id
-    - id
-    - note
-    - status
-    - student_id
     type: object
   domains.Batch:
     properties:
@@ -215,19 +95,6 @@ definitions:
     - datetime
     - id
     - note
-    - school_id
-    type: object
-  domains.Lateness:
-    properties:
-      date:
-        type: string
-      id:
-        type: integer
-      school_id:
-        type: integer
-    required:
-    - date
-    - id
     - school_id
     type: object
   domains.Major:
@@ -333,18 +200,6 @@ definitions:
     - classrooms_count
     - majors_count
     type: object
-  models.AttendanceStatus:
-    enum:
-    - hadir
-    - izin
-    - sakit
-    - alpha
-    type: string
-    x-enum-varnames:
-    - AttendancePresent
-    - AttendancePermission
-    - AttendanceSick
-    - AttendanceAlpha
   requests.CreateClassroom:
     properties:
       name:
@@ -358,6 +213,13 @@ definitions:
         type: string
       note:
         type: string
+    type: object
+  requests.CreateGeneralAttendanceRecordStudent:
+    properties:
+      code:
+        type: string
+    required:
+    - code
     type: object
   requests.CreateSubject:
     properties:
@@ -378,6 +240,13 @@ definitions:
     - datetime
     - note
     - subject_id
+    type: object
+  requests.CreateSubjectAttendanceRecordStudent:
+    properties:
+      code:
+        type: string
+    required:
+    - code
     type: object
   requests.Login:
     properties:
@@ -458,6 +327,13 @@ definitions:
     required:
     - general_attendance
     type: object
+  responses.CreateGeneralAttendanceRecordStudent:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
   responses.CreateSubject:
     properties:
       subject:
@@ -471,6 +347,13 @@ definitions:
         $ref: '#/definitions/domains.SubjectAttendance'
     required:
     - subject_attendance
+    type: object
+  responses.CreateSubjectAttendanceRecordStudent:
+    properties:
+      message:
+        type: string
+    required:
+    - message
     type: object
   responses.DeleteGeneralAttendance:
     properties:
@@ -655,70 +538,6 @@ info:
   title: PresensiGo API
   version: "1.0"
 paths:
-  /api/v1/attendances:
-    post:
-      operationId: createAttendance
-      parameters:
-      - description: Body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/CreateAttendanceReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - attendance
-  /api/v1/attendances/{attendance_id}:
-    delete:
-      operationId: deleteAttendance
-      parameters:
-      - description: Attendance Id
-        in: path
-        name: attendance_id
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - attendance
-    get:
-      operationId: getAttendance
-      parameters:
-      - description: Attendance Id
-        in: path
-        name: attendance_id
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/GetAttendanceRes'
-      tags:
-      - attendance
-  /api/v1/attendances/classrooms/{classroom_id}:
-    get:
-      operationId: getAllAttendances
-      parameters:
-      - description: Classroom Id
-        in: path
-        name: classroom_id
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/GetAllAttendancesRes'
-      tags:
-      - attendance
   /api/v1/auth/login:
     post:
       operationId: login
@@ -1117,6 +936,37 @@ paths:
             $ref: '#/definitions/responses.GetSubjectAttendance'
       tags:
       - attendance
+  /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/records/student:
+    post:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateSubjectAttendanceRecordStudent'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.CreateSubjectAttendanceRecordStudent'
+      tags:
+      - attendance
   /api/v1/classrooms:
     get:
       operationId: getAllClassrooms
@@ -1153,6 +1003,22 @@ paths:
             type: string
       tags:
       - excel
+  /api/v1/general-attendances/records/student:
+    post:
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateGeneralAttendanceRecordStudent'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.CreateGeneralAttendanceRecordStudent'
+      tags:
+      - attendance
   /api/v1/general_attendances:
     get:
       operationId: getAllGeneralAttendances
@@ -1231,69 +1097,6 @@ paths:
             $ref: '#/definitions/responses.UpdateGeneralAttendance'
       tags:
       - attendance
-  /api/v1/latenesses:
-    get:
-      operationId: getAllLatenesses
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/GetAllLatenessesRes'
-      tags:
-      - lateness
-    post:
-      operationId: createLateness
-      parameters:
-      - description: Payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/CreateLatenessReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - lateness
-  /api/v1/latenesses/{lateness_id}:
-    get:
-      operationId: getLateness
-      parameters:
-      - description: Lateness ID
-        in: path
-        name: lateness_id
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/GetLatenessRes'
-      tags:
-      - lateness
-    post:
-      operationId: createLatenessDetail
-      parameters:
-      - description: Payload
-        in: path
-        name: lateness_id
-        required: true
-        type: integer
-      - description: Payload
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/CreateLatenessDetailReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - lateness
   /api/v1/majors:
     get:
       operationId: getAllMajors
