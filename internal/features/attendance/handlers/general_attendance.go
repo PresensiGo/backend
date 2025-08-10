@@ -62,7 +62,7 @@ func (h *GeneralAttendance) CreateGeneralAttendanceRecordStudent(c *gin.Context)
 		return
 	}
 
-	result, err := h.service.CreateGeneralAttendanceRecordStudent(studentClaim.SchoolId, req)
+	result, err := h.service.CreateGeneralAttendanceRecordStudent(studentClaim.Id, req)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
