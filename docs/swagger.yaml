@@ -253,11 +253,14 @@ definitions:
         type: string
       nis:
         type: string
+      school_id:
+        type: integer
     required:
     - classroom_id
     - id
     - name
     - nis
+    - school_id
     type: object
   domains.StudentMajorClassroom:
     properties:
@@ -606,6 +609,16 @@ definitions:
     - access_token
     - refresh_token
     type: object
+  responses.StudentLogin:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
   responses.UpdateClassroom:
     properties:
       classroom:
@@ -781,6 +794,15 @@ paths:
             $ref: '#/definitions/responses.Register'
       tags:
       - auth
+  /api/v1/auth/students/login:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.StudentLogin'
+      tags:
+      - student
   /api/v1/batches:
     get:
       operationId: getAllBatches

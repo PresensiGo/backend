@@ -92,3 +92,14 @@ func (r *Student) GetManyById(studentIds []uint) (*[]domains.Student, error) {
 
 	return &mappedStudents, nil
 }
+
+func (r *Student) GetBySchoolIdNIS(schoolId uint, nis string) (*domains.Student, error) {
+	var student models.Student
+	if err := r.db.Where(
+		"school_id = ? and nis = ?", schoolId, nis,
+	).First(&student).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromStudentModel(&student), nil
+	}
+}

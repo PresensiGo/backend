@@ -10,7 +10,7 @@ import (
 	"api/internal/features/student"
 	"api/internal/features/subject"
 	"api/internal/features/user"
-	"api/pkg/http/middleware"
+	"api/pkg/http/middlewares"
 	"github.com/gin-contrib/cors"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -33,16 +33,16 @@ func NewServer() {
 	v1 := router.Group("/api/v1")
 
 	user.RegisterUser(v1)
+	student.RegisterStudent(v1)
 
 	// protected routes
 	authorized := v1.Group("/")
-	authorized.Use(middleware.AuthMiddleware())
+	authorized.Use(middlewares.AuthMiddleware())
 	{
 		attendance.RegisterAttendance(authorized)
 		batch.RegisterBatch(authorized)
 		major.RegisterMajor(authorized)
 		classroom.RegisterClassroom(authorized)
-		student.RegisterStudent(authorized)
 		data.RegisterData(authorized)
 		subject.RegisterSubject(authorized)
 	}

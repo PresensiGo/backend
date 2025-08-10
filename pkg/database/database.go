@@ -65,6 +65,7 @@ func New() *gorm.DB {
 				&attendance.GeneralAttendanceItem{},
 				&attendance.SubjectAttendance{},
 				&subject.Subject{},
+				&student.StudentToken{},
 			)
 
 			dbInstance = db

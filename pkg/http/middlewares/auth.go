@@ -1,9 +1,10 @@
-package middleware
+package middlewares
 
 import (
-	"api/pkg/authentication"
 	"fmt"
 	"net/http"
+
+	"api/pkg/authentication"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,15 +32,17 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("token", authentication.JWTClaim{
-			ID:         claims.ID,
-			Name:       claims.Name,
-			Email:      claims.Email,
-			Role:       claims.Role,
-			SchoolId:   claims.SchoolId,
-			SchoolName: claims.SchoolName,
-			SchoolCode: claims.SchoolCode,
-		})
+		ctx.Set(
+			"token", authentication.JWTClaim{
+				ID:         claims.ID,
+				Name:       claims.Name,
+				Email:      claims.Email,
+				Role:       claims.Role,
+				SchoolId:   claims.SchoolId,
+				SchoolName: claims.SchoolName,
+				SchoolCode: claims.SchoolCode,
+			},
+		)
 
 		ctx.Next()
 	}

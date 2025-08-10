@@ -1,32 +1,44 @@
 package injector
 
 import (
-	repositories2 "api/internal/features/classroom/repositories"
-	"api/internal/features/major/repositories"
+	classroomRepo "api/internal/features/classroom/repositories"
+	majorRepo "api/internal/features/major/repositories"
+	schoolRepo "api/internal/features/school/repositories"
 	"api/internal/features/student/handlers"
-	repositories3 "api/internal/features/student/repositories"
+	"api/internal/features/student/repositories"
 	"api/internal/features/student/services"
 	"api/pkg/database"
 	"github.com/google/wire"
 )
 
 type StudentHandlers struct {
-	Student *handlers.Student
+	Student     *handlers.Student
+	StudentAuth *handlers.StudentAuth
 }
 
-func NewStudentHandlers(student *handlers.Student) *StudentHandlers {
+func NewStudentHandlers(
+	student *handlers.Student, studentAuth *handlers.StudentAuth,
+) *StudentHandlers {
 	return &StudentHandlers{
-		Student: student,
+		Student:     student,
+		StudentAuth: studentAuth,
 	}
 }
 
 var (
 	StudentSet = wire.NewSet(
 		handlers.NewStudent,
+		handlers.NewStudentAuth,
+
 		services.NewStudent,
-		repositories.NewMajor,
-		repositories2.NewClassroom,
-		repositories3.NewStudent,
+		services.NewStudentAuth,
+
+		majorRepo.NewMajor,
+		classroomRepo.NewClassroom,
+		repositories.NewStudent,
+		repositories.NewStudentToken,
+		schoolRepo.NewSchool,
+
 		database.New,
 	)
 )

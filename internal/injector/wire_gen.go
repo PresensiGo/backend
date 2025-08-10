@@ -118,7 +118,11 @@ func InitStudentHandlers() *injector5.StudentHandlers {
 	student := repositories3.NewStudent(db)
 	servicesStudent := services5.NewStudent(major, classroom, student)
 	handlersStudent := handlers5.NewStudent(servicesStudent)
-	studentHandlers := injector5.NewStudentHandlers(handlersStudent)
+	school := repositories8.NewSchool(db)
+	studentToken := repositories3.NewStudentToken(db)
+	studentAuth := services5.NewStudentAuth(db, school, student, studentToken)
+	handlersStudentAuth := handlers5.NewStudentAuth(studentAuth)
+	studentHandlers := injector5.NewStudentHandlers(handlersStudent, handlersStudentAuth)
 	return studentHandlers
 }
 

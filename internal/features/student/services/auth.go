@@ -1,0 +1,111 @@
+package services
+
+import (
+	"errors"
+	"time"
+
+	schoolRepo "api/internal/features/school/repositories"
+	"api/internal/features/student/domains"
+	"api/internal/features/student/dto/requests"
+	"api/internal/features/student/dto/responses"
+	"api/internal/features/student/repositories"
+	"api/pkg/authentication"
+	"api/pkg/authentication/claims"
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
+
+type StudentAuth struct {
+	db               *gorm.DB
+	schoolRepo       *schoolRepo.School
+	studentRepo      *repositories.Student
+	studentTokenRepo *repositories.StudentToken
+}
+
+func NewStudentAuth(
+	db *gorm.DB,
+	schoolRepo *schoolRepo.School,
+	studentRepo *repositories.Student,
+	studentTokenRepo *repositories.StudentToken,
+) *StudentAuth {
+	return &StudentAuth{
+		db:               db,
+		schoolRepo:       schoolRepo,
+		studentRepo:      studentRepo,
+		studentTokenRepo: studentTokenRepo,
+	}
+}
+
+func (s *StudentAuth) Login(req requests.StudentLogin) (*responses.StudentLogin, error) {
+	school, err := s.schoolRepo.GetByCode(req.SchoolCode)
+	if err != nil {
+		return nil, err
+	}
+
+	student, err := s.studentRepo.GetBySchoolIdNIS(school.Id, req.NIS)
+	if err != nil {
+		return nil, err
+	}
+
+	// mendapatkan token student
+	isTokenRegistered := true
+	oldStudentToken, err := s.studentTokenRepo.GetByStudentId(student.Id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			isTokenRegistered = false
+		} else {
+			return nil, err
+		}
+	}
+
+	if isTokenRegistered {
+		// validasi id perangkat jika token sudah terdaftar
+		if req.DeviceId != oldStudentToken.DeviceId {
+			return nil, errors.New("id perangkat tidak sesuai dengan yang sudah terdaftar")
+		}
+	}
+
+	var response responses.StudentLogin
+	if err := s.db.Transaction(
+		func(tx *gorm.DB) error {
+			refreshToken := uuid.NewString()
+
+			// buat token baru
+			studentToken := domains.StudentToken{
+				StudentId:    student.Id,
+				DeviceId:     req.DeviceId,
+				RefreshToken: refreshToken,
+				TTL:          time.Now(),
+			}
+
+			if accessToken, err := authentication.GenerateStudentJWT(
+				claims.Student{
+					Id:       student.Id,
+					Name:     student.Name,
+					NIS:      student.NIS,
+					SchoolId: student.SchoolId,
+				},
+			); err != nil {
+				return err
+			} else {
+				response.AccessToken = accessToken
+				response.RefreshToken = refreshToken
+			}
+
+			// hapus token lama berdasarkan student id
+			if err := s.studentTokenRepo.DeleteByStudentIdInTx(tx, student.Id); err != nil {
+				return err
+			}
+
+			if _, err := s.studentTokenRepo.CreateInTx(tx, studentToken); err != nil {
+				return err
+			}
+
+			return nil
+		},
+	); err != nil {
+		return nil, err
+	} else {
+		return &response, err
+	}
+}

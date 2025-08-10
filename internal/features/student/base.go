@@ -10,4 +10,5 @@ func RegisterStudent(g *gin.RouterGroup) {
 	handlers := injector.InitStudentHandlers()
 
 	routes.RegisterStudent(g, handlers.Student)
+	routes.RegisterStudentAuth(g, handlers.StudentAuth)
 }

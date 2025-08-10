@@ -250,6 +250,21 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/auth/students/login": {
+            "post": {
+                "tags": [
+                    "student"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.StudentLogin"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/batches": {
             "get": {
                 "tags": [
@@ -1589,7 +1604,8 @@ const docTemplate = `{
                 "classroom_id",
                 "id",
                 "name",
-                "nis"
+                "nis",
+                "school_id"
             ],
             "properties": {
                 "classroom_id": {
@@ -1603,6 +1619,9 @@ const docTemplate = `{
                 },
                 "nis": {
                     "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -2117,6 +2136,21 @@ const docTemplate = `{
             }
         },
         "responses.Register": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.StudentLogin": {
             "type": "object",
             "required": [
                 "access_token",
