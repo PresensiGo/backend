@@ -1,7 +1,6 @@
 package injector
 
 import (
-	repositories5 "api/internal/features/attendance/repositories"
 	"api/internal/features/batch/repositories"
 	repositories3 "api/internal/features/classroom/repositories"
 	"api/internal/features/data/handlers"
@@ -36,7 +35,6 @@ var (
 		repositories2.NewMajor,
 		repositories3.NewClassroom,
 		repositories4.NewStudent,
-		repositories5.NewLateness,
 
 		database.New,
 	)

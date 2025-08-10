@@ -14,20 +14,14 @@ import (
 )
 
 type AttendanceHandlers struct {
-	Attendance *handlers.Attendance
-	Lateness   *handlers.Lateness
-
 	GeneralAttendance *handlers.GeneralAttendance
 	SubjectAttendance *handlers.SubjectAttendance
 }
 
 func NewAttendanceHandlers(
-	attendance *handlers.Attendance, lateness *handlers.Lateness,
 	generalAttendance *handlers.GeneralAttendance, subjectAttendance *handlers.SubjectAttendance,
 ) *AttendanceHandlers {
 	return &AttendanceHandlers{
-		Attendance:        attendance,
-		Lateness:          lateness,
 		GeneralAttendance: generalAttendance,
 		SubjectAttendance: subjectAttendance,
 	}
@@ -35,22 +29,14 @@ func NewAttendanceHandlers(
 
 var (
 	AttendanceSet = wire.NewSet(
-		handlers.NewAttendance,
-		handlers.NewLateness,
 		handlers.NewGeneralAttendance,
 		handlers.NewSubjectAttendance,
 
-		services.NewAttendance,
-		services.NewLateness,
 		services.NewGeneralAttendance,
 		services.NewSubjectAttendance,
 
 		repositories.NewGeneralAttendance,
-		repositories.NewAttendance,
-		repositories.NewAttendanceStudent,
 		student.NewStudent,
-		repositories.NewLateness,
-		repositories.NewLatenessDetail,
 		batch.NewBatch,
 		major.NewMajor,
 		classroom.NewClassroom,

@@ -56,10 +56,6 @@ func New() *gorm.DB {
 				&major.Major{},
 				&classroom.Classroom{},
 				&student.Student{},
-				&attendance.Attendance{},
-				&attendance.AttendanceDetail{},
-				&attendance.Lateness{},
-				&attendance.LatenessDetail{},
 
 				&attendance.GeneralAttendance{},
 				&attendance.GeneralAttendanceRecord{},
