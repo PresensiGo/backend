@@ -1,0 +1,12 @@
+package routes
+
+import (
+	"api/internal/features/user/handlers"
+	"api/pkg/http/middlewares"
+	"github.com/gin-gonic/gin"
+)
+
+func RegisterUser(g *gin.RouterGroup, handler *handlers.User) {
+	group := g.Group("/accounts").Use(middlewares.AuthMiddleware())
+	group.GET("", handler.GetAll)
+}

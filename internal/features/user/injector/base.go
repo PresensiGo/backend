@@ -12,12 +12,16 @@ import (
 type UserHandlers struct {
 	Auth  *handlers.Auth
 	Admin *handlers.Admin
+	User  *handlers.User
 }
 
-func NewUserHandlers(auth *handlers.Auth, admin *handlers.Admin) *UserHandlers {
+func NewUserHandlers(
+	auth *handlers.Auth, admin *handlers.Admin, user *handlers.User,
+) *UserHandlers {
 	return &UserHandlers{
 		Auth:  auth,
 		Admin: admin,
+		User:  user,
 	}
 }
 
@@ -25,9 +29,11 @@ var (
 	UserSet = wire.NewSet(
 		handlers.NewAuth,
 		handlers.NewAdmin,
+		handlers.NewUser,
 
 		services.NewAuth,
 		services.NewAdmin,
+		services.NewUser,
 
 		repositories.NewUser,
 		repositories.NewUserToken,

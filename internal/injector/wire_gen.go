@@ -145,7 +145,9 @@ func InitUserHandlers() *injector7.UserHandlers {
 	handlersAuth := handlers7.NewAuth(auth)
 	admin := services7.NewAdmin(db, user, school)
 	handlersAdmin := handlers7.NewAdmin(admin)
-	userHandlers := injector7.NewUserHandlers(handlersAuth, handlersAdmin)
+	servicesUser := services7.NewUser(user)
+	handlersUser := handlers7.NewUser(servicesUser)
+	userHandlers := injector7.NewUserHandlers(handlersAuth, handlersAdmin, handlersUser)
 	return userHandlers
 }
 

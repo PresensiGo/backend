@@ -51,6 +51,21 @@ func (r *User) CreateBatch(data []domains.User) (*[]domains.User, error) {
 	}
 }
 
+func (r *User) GetAll(schoolId uint) (*[]domains.User, error) {
+	var users []models.User
+	if err := r.db.Where("school_id = ?", schoolId).
+		Find(&users).
+		Error; err != nil {
+		return nil, err
+	} else {
+		result := make([]domains.User, len(users))
+		for i, v := range users {
+			result[i] = *domains.FromUserModel(&v)
+		}
+		return &result, nil
+	}
+}
+
 func (r *User) GetByID(id uint) (*domains.User, error) {
 	var user models.User
 	if err := r.db.Where("id = ?", id).

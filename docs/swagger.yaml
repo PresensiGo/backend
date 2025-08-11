@@ -187,6 +187,28 @@ definitions:
     - subject
     - subject_attendance
     type: object
+  domains.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+      school_id:
+        type: integer
+    required:
+    - email
+    - id
+    - name
+    - password
+    - role
+    - school_id
+    type: object
   dto.BatchInfo:
     properties:
       batch:
@@ -439,6 +461,15 @@ definitions:
     required:
     - subjects
     type: object
+  responses.GetAllUsers:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/domains.User'
+        type: array
+    required:
+    - users
+    type: object
   responses.GetBatch:
     properties:
       batch:
@@ -545,6 +576,15 @@ info:
   title: PresensiGo API
   version: "1.0"
 paths:
+  /api/v1/accounts:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllUsers'
+      tags:
+      - account
   /api/v1/auth/login:
     post:
       operationId: login

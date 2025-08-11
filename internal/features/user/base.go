@@ -11,6 +11,7 @@ import (
 func RegisterUser(g *gin.RouterGroup) {
 	handlers := injector.InitUserHandlers()
 
+	routes.RegisterUser(g, handlers.User)
 	routes.RegisterAuth(g, handlers.Auth)
 
 	// helpers
