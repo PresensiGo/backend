@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"io"
 
@@ -10,6 +11,7 @@ import (
 	domains4 "api/internal/features/classroom/domains"
 	models4 "api/internal/features/classroom/models"
 	repositories4 "api/internal/features/classroom/repositories"
+	"api/internal/features/data/dto/responses"
 	domains2 "api/internal/features/major/domains"
 	models3 "api/internal/features/major/models"
 	repositories3 "api/internal/features/major/repositories"
@@ -45,6 +47,132 @@ func NewExcel(
 	}
 }
 
+func (s *Excel) ImportDataV3(schoolId uint, reader io.Reader) (*responses.ImportData, error) {
+	file, err := excelize.OpenReader(reader)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	sheets := file.GetSheetList()
+
+	if err := s.db.Transaction(
+		func(tx *gorm.DB) error {
+			for _, sheet := range sheets {
+				rows, err := file.GetRows(sheet)
+				if err != nil {
+					return err
+				}
+
+				if len(rows) < 5 {
+					return fmt.Errorf("rows length less than 5")
+				}
+
+				var batch domains.Batch
+				var major domains2.Major
+				var classroom domains4.Classroom
+				var students []domains3.Student
+
+				for i, row := range rows {
+					if i == 0 {
+						// batch
+						batchName := row[1]
+
+						if result, err := s.batchRepo.GetBySchoolIdNameInTx(
+							tx, schoolId, batchName,
+						); err != nil {
+							if errors.Is(err, gorm.ErrRecordNotFound) {
+								// jika angkatan belum ada, maka buat baru
+								if result, err := s.batchRepo.CreateInTx2(
+									tx, domains.Batch{
+										Name:     batchName,
+										SchoolId: schoolId,
+									},
+								); err != nil {
+									return err
+								} else {
+									batch = *result
+								}
+							} else {
+								return err
+							}
+						} else {
+							batch = *result
+						}
+					} else if i == 1 {
+						// major
+						majorName := row[1]
+
+						if result, err := s.majorRepo.GetByBatchIdNameInTx(
+							tx, batch.Id, majorName,
+						); err != nil {
+							if errors.Is(err, gorm.ErrRecordNotFound) {
+								// jika jurusan belum ada, maka buat baru
+								if result, err := s.majorRepo.CreateInTx2(
+									tx, domains2.Major{
+										Name:    majorName,
+										BatchId: batch.Id,
+									},
+								); err != nil {
+									return err
+								} else {
+									major = *result
+								}
+							} else {
+								return err
+							}
+						} else {
+							major = *result
+						}
+					} else if i == 2 {
+						// classroom
+						// untuk classroom tidak perlu ada pengecekan duplikasi, karena
+						// setiap sheet artinya setiap classroom
+						classroomName := row[1]
+
+						if result, err := s.classroomRepo.CreateInTx2(
+							tx, domains4.Classroom{
+								Name:    classroomName,
+								MajorId: major.Id,
+							},
+						); err != nil {
+							return err
+						} else {
+							classroom = *result
+						}
+					} else if i >= 5 {
+						studentNIS := row[0]
+						studentName := row[1]
+
+						students = append(
+							students, domains3.Student{
+								NIS:         studentNIS,
+								Name:        studentName,
+								SchoolId:    schoolId,
+								ClassroomId: classroom.Id,
+							},
+						)
+					}
+				}
+
+				// simpan data siswa
+				if _, err := s.studentRepo.CreateBatchInTx2(tx, students); err != nil {
+					return err
+				}
+			}
+
+			return nil
+		},
+	); err != nil {
+		return nil, err
+	} else {
+		return &responses.ImportData{
+			Message: "ok",
+		}, nil
+	}
+}
+
+// @deprecated
 func (s *Excel) ImportData(schoolId uint, reader io.Reader) error {
 	file, err := excelize.OpenReader(reader)
 	if err != nil {
@@ -170,6 +298,7 @@ func (s *Excel) ImportData(schoolId uint, reader io.Reader) error {
 	)
 }
 
+// @deprecated
 func (s *Excel) Import(reader io.Reader) (any, error) {
 	file, err := excelize.OpenReader(reader)
 	if err != nil {

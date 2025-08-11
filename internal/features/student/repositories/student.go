@@ -30,6 +30,26 @@ func (r *Student) CreateBatchInTx(tx *gorm.DB, data []domains.Student) error {
 	return tx.Create(&students).Error
 }
 
+func (r *Student) CreateBatchInTx2(tx *gorm.DB, data []domains.Student) (
+	*[]domains.Student, error,
+) {
+	students := make([]models.Student, len(data))
+	for i, v := range data {
+		students[i] = *v.ToModel()
+	}
+
+	if err := tx.Create(&students).Error; err != nil {
+		return nil, err
+	} else {
+		result := make([]domains.Student, len(students))
+		for i, v := range students {
+			result[i] = *domains.FromStudentModel(&v)
+		}
+
+		return &result, nil
+	}
+}
+
 func (r *Student) GetAll(keyword string) (*[]domains.Student, error) {
 	keyword = fmt.Sprintf("%%%s%%", strings.ToLower(keyword))
 

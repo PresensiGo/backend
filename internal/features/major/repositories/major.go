@@ -35,6 +35,15 @@ func (r *Major) CreateInTx(tx *gorm.DB, data domains.Major) (*uint, error) {
 	return &major.ID, nil
 }
 
+func (r *Major) CreateInTx2(tx *gorm.DB, data domains.Major) (*domains.Major, error) {
+	major := data.ToModel()
+	if err := tx.Create(&major).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromMajorModel(major), nil
+	}
+}
+
 func (r *Major) GetAllByBatchId(batchId uint) (*[]domains.Major, error) {
 	var majors []models.Major
 	if err := r.db.Model(&models.Major{}).
@@ -84,6 +93,19 @@ func (r *Major) GetManyByBatchIds(batchIds []uint) (*[]domains.Major, error) {
 	}
 
 	return &mappedMajors, nil
+}
+
+func (r *Major) GetByBatchIdNameInTx(
+	tx *gorm.DB, batchId uint, name string,
+) (*domains.Major, error) {
+	var major models.Major
+	if err := tx.Model(&models.Major{}).Where(
+		"batch_id = ? AND name = ?", batchId, name,
+	).First(&major).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromMajorModel(&major), nil
+	}
 }
 
 func (r *Major) Update(majorId uint, data domains.Major) (*domains.Major, error) {

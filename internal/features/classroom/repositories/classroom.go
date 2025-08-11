@@ -35,6 +35,15 @@ func (r *Classroom) CreateInTx(tx *gorm.DB, data domains.Classroom) (*uint, erro
 	return &classroom.ID, nil
 }
 
+func (r *Classroom) CreateInTx2(tx *gorm.DB, data domains.Classroom) (*domains.Classroom, error) {
+	classroom := data.ToModel()
+	if err := tx.Create(&classroom).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromClassroomModel(classroom), nil
+	}
+}
+
 func (r *Classroom) GetAllByMajorId(majorId uint) (*[]domains.Classroom, error) {
 	var classrooms []models.Classroom
 	if err := r.db.Where(

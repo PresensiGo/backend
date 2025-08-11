@@ -36,6 +36,15 @@ func (r *Batch) CreateInTx(tx *gorm.DB, data domains.Batch) (*uint, error) {
 	return &batch.ID, nil
 }
 
+func (r *Batch) CreateInTx2(tx *gorm.DB, data domains.Batch) (*domains.Batch, error) {
+	batch := data.ToModel()
+	if err := tx.Create(&batch).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromBatchModel(batch), nil
+	}
+}
+
 func (r *Batch) GetAllBySchoolId(schoolId uint) (*[]domains.Batch, error) {
 	var batches []models.Batch
 	if err := r.db.Model(&models.Batch{}).
@@ -64,6 +73,19 @@ func (r *Batch) Get(batchId uint) (*domains.Batch, error) {
 	}
 
 	return domains.FromBatchModel(&batch), nil
+}
+
+func (r *Batch) GetBySchoolIdNameInTx(tx *gorm.DB, schoolId uint, name string) (
+	*domains.Batch, error,
+) {
+	var batch models.Batch
+	if err := tx.Model(&models.Batch{}).Where(
+		"school_id = ? AND name = ?", schoolId, name,
+	).First(&batch).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromBatchModel(&batch), nil
+	}
 }
 
 func (r *Batch) Update(domain domains.Batch) (*domains.Batch, error) {

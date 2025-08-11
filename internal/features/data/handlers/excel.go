@@ -17,6 +17,41 @@ func NewExcel(service *services.Excel) *Excel {
 	return &Excel{service}
 }
 
+func (h *Excel) ImportDataV3(c *gin.Context) {
+	user := authentication.GetAuthenticatedUser(c)
+	if user.SchoolId == 0 {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	file, err := c.FormFile("file")
+	if file == nil || err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	ext := filepath.Ext(file.Filename)
+	if ext != ".xlsx" && ext != ".xls" {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	src, err := file.Open()
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	defer src.Close()
+
+	result, err := h.service.ImportDataV3(user.SchoolId, src)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 func (h *Excel) ImportDataV2(c *gin.Context) {
 	authUser := authentication.GetAuthenticatedUser(c)
 	if authUser.SchoolId == 0 {
