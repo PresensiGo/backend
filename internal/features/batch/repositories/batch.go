@@ -14,6 +14,15 @@ func NewBatch(db *gorm.DB) *Batch {
 	return &Batch{db}
 }
 
+func (r *Batch) GetOrCreateInTx(tx *gorm.DB, data domains.Batch) (*domains.Batch, error) {
+	var batch models.Batch
+	if err := tx.FirstOrCreate(&batch, data.ToModel()).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromBatchModel(&batch), nil
+	}
+}
+
 func (r *Batch) Create(domain domains.Batch) (*domains.Batch, error) {
 	batch := domain.ToModel()
 	if err := r.db.Create(&batch).Error; err != nil {

@@ -17,6 +17,15 @@ func NewStudent(db *gorm.DB) *Student {
 	return &Student{db}
 }
 
+func (r *Student) GetOrCreateInTx(tx *gorm.DB, data domains.Student) (*domains.Student, error) {
+	var student models.Student
+	if err := tx.FirstOrCreate(&student, data.ToModel()).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromStudentModel(&student), nil
+	}
+}
+
 func (r *Student) CreateBatchInTx(tx *gorm.DB, data []domains.Student) error {
 	students := make([]models.Student, len(data))
 	for i, student := range data {

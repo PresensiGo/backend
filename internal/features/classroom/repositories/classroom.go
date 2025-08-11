@@ -14,6 +14,17 @@ func NewClassroom(db *gorm.DB) *Classroom {
 	return &Classroom{db}
 }
 
+func (r *Classroom) GetOrCreateInTx(tx *gorm.DB, data domains.Classroom) (
+	*domains.Classroom, error,
+) {
+	var classroom models.Classroom
+	if err := tx.FirstOrCreate(&classroom, data.ToModel()).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromClassroomModel(&classroom), nil
+	}
+}
+
 func (r *Classroom) Create(data domains.Classroom) (*domains.Classroom, error) {
 	classroom := data.ToModel()
 	if err := r.db.Create(&classroom).Error; err != nil {
