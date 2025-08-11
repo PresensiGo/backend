@@ -128,7 +128,7 @@ func (s *Excel) ImportDataV3(schoolId uint, reader io.Reader) (*responses.Import
 	}
 }
 
-// @deprecated
+// deprecated
 func (s *Excel) ImportData(schoolId uint, reader io.Reader) error {
 	file, err := excelize.OpenReader(reader)
 	if err != nil {
@@ -254,7 +254,7 @@ func (s *Excel) ImportData(schoolId uint, reader io.Reader) error {
 	)
 }
 
-// @deprecated
+// deprecated
 func (s *Excel) Import(reader io.Reader) (any, error) {
 	file, err := excelize.OpenReader(reader)
 	if err != nil {
