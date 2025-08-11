@@ -460,6 +460,13 @@ definitions:
     required:
     - subject_attendance
     type: object
+  responses.ImportTeacher:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
   responses.Login:
     properties:
       access_token:
@@ -1251,4 +1258,19 @@ paths:
             $ref: '#/definitions/responses.UpdateSubject'
       tags:
       - subject
+  /api/v1/teachers/import:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ImportTeacher'
 swagger: "2.0"

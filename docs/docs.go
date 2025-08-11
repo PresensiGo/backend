@@ -1119,6 +1119,30 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/teachers/import": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ImportTeacher"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1818,6 +1842,17 @@ const docTemplate = `{
             "properties": {
                 "subject_attendance": {
                     "$ref": "#/definitions/domains.SubjectAttendance"
+                }
+            }
+        },
+        "responses.ImportTeacher": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         },
