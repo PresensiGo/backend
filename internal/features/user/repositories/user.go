@@ -14,17 +14,23 @@ func NewUser(db *gorm.DB) *User {
 	return &User{db}
 }
 
-func (r *User) Create(tx *gorm.DB, data domains.User) (uint, error) {
-	user := models.User{
-		Name:     data.Name,
-		Email:    data.Email,
-		Password: data.Password,
-	}
+// @deprecated
+func (r *User) Create(tx *gorm.DB, data domains.User) (*domains.User, error) {
+	user := data.ToModel()
 	if err := tx.Create(&user).Error; err != nil {
-		return 0, err
+		return nil, err
+	} else {
+		return domains.FromUserModel(user), nil
 	}
+}
 
-	return user.ID, nil
+func (r *User) CreateInTx(tx *gorm.DB, data domains.User) (*domains.User, error) {
+	user := data.ToModel()
+	if err := tx.Create(&user).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromUserModel(user), nil
+	}
 }
 
 func (r *User) GetByID(id uint) (*domains.User, error) {
@@ -33,16 +39,9 @@ func (r *User) GetByID(id uint) (*domains.User, error) {
 		First(&user).
 		Error; err != nil {
 		return nil, err
+	} else {
+		return domains.FromUserModel(&user), nil
 	}
-
-	return &domains.User{
-		Id:       user.ID,
-		Name:     user.Name,
-		Email:    user.Email,
-		Password: user.Password,
-		Role:     user.Role,
-		SchoolId: user.SchoolId,
-	}, nil
 }
 
 func (r *User) GetByEmail(email string) (*domains.User, error) {
@@ -51,14 +50,7 @@ func (r *User) GetByEmail(email string) (*domains.User, error) {
 		First(&user).
 		Error; err != nil {
 		return nil, err
+	} else {
+		return domains.FromUserModel(&user), nil
 	}
-
-	return &domains.User{
-		Id:       user.ID,
-		Name:     user.Name,
-		Email:    user.Email,
-		Password: user.Password,
-		Role:     user.Role,
-		SchoolId: user.SchoolId,
-	}, nil
 }

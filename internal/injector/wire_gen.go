@@ -140,7 +140,9 @@ func InitUserHandlers() *injector7.UserHandlers {
 	school := repositories8.NewSchool(db)
 	auth := services7.NewAuth(user, userToken, school, db)
 	handlersAuth := handlers7.NewAuth(auth)
-	userHandlers := injector7.NewUserHandlers(handlersAuth)
+	admin := services7.NewAdmin(db, user, school)
+	handlersAdmin := handlers7.NewAdmin(admin)
+	userHandlers := injector7.NewUserHandlers(handlersAuth, handlersAdmin)
 	return userHandlers
 }
 

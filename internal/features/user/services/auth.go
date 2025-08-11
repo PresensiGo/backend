@@ -57,7 +57,7 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 
 	// generate token
 	accessToken, err := s.generateAccessToken(
-		currentUser.Id, currentUser.Name, currentUser.Email, currentUser.Role,
+		currentUser.Id, currentUser.Name, currentUser.Email, string(currentUser.Role),
 		school.Id, school.Name, school.Code,
 	)
 	if err != nil {
@@ -109,7 +109,7 @@ func (s *Auth) Register(req requests.Register) (*responses.Register, error) {
 				return err
 			}
 
-			userID, err := s.userRepo.Create(
+			result, err := s.userRepo.Create(
 				tx, domains.User{
 					Name:     req.Name,
 					Email:    req.Email,
@@ -123,7 +123,7 @@ func (s *Auth) Register(req requests.Register) (*responses.Register, error) {
 
 			// generate user token
 			accessToken, err := s.generateAccessToken(
-				userID, req.Name, req.Email, "teacher",
+				result.Id, req.Name, req.Email, "teacher",
 				school.Id, school.Name, school.Code,
 			)
 			if err != nil {
@@ -135,7 +135,7 @@ func (s *Auth) Register(req requests.Register) (*responses.Register, error) {
 			if err := s.userTokenRepo.Create(
 				tx, domains.UserToken{
 					RefreshToken: refreshToken,
-					UserId:       userID,
+					UserId:       result.Id,
 					TTL:          time.Now().Add(time.Hour * 24 * 30),
 				},
 			); err != nil {
@@ -186,7 +186,7 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 
 	// generate user token
 	accessToken, err := s.generateAccessToken(
-		currentUser.Id, currentUser.Name, currentUser.Email, currentUser.Role,
+		currentUser.Id, currentUser.Name, currentUser.Email, string(currentUser.Role),
 		school.Id, school.Name, school.Code,
 	)
 	if err != nil {

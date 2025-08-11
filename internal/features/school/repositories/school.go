@@ -14,28 +14,39 @@ func NewSchool(db *gorm.DB) *School {
 	return &School{db}
 }
 
-func (s *School) GetById(id uint) (*domains.School, error) {
-	var school models.School
-	if err := s.db.Where("id = ?", id).First(&school).Error; err != nil {
-		return nil, err
-	}
+func (r *School) CreateInTx(tx *gorm.DB, data domains.School) (*domains.School, error) {
+	school := data.ToModel()
 
-	return &domains.School{
-		Id:   school.ID,
-		Name: school.Name,
-		Code: school.Code,
-	}, nil
+	if err := tx.Create(&school).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromSchoolModel(school), nil
+	}
 }
 
-func (s *School) GetByCode(code string) (*domains.School, error) {
+func (r *School) GetById(id uint) (*domains.School, error) {
 	var school models.School
-	if err := s.db.Where("code = ?", code).First(&school).Error; err != nil {
+	if err := r.db.Where("id = ?", id).First(&school).Error; err != nil {
 		return nil, err
+	} else {
+		return domains.FromSchoolModel(&school), nil
 	}
+}
 
-	return &domains.School{
-		Id:   school.ID,
-		Name: school.Name,
-		Code: school.Code,
-	}, nil
+func (r *School) GetByCode(code string) (*domains.School, error) {
+	var school models.School
+	if err := r.db.Where("code = ?", code).First(&school).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromSchoolModel(&school), nil
+	}
+}
+
+func (r *School) GetByCodeInTx(tx *gorm.DB, code string) (*domains.School, error) {
+	var school models.School
+	if err := tx.Where("code = ?", code).First(&school).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromSchoolModel(&school), nil
+	}
 }
