@@ -38,12 +38,12 @@ const docTemplate = `{
                 "operationId": "login",
                 "parameters": [
                     {
-                        "description": "Login request",
+                        "description": "body",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.Login"
+                            "$ref": "#/definitions/LoginReq"
                         }
                     }
                 ],
@@ -51,7 +51,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.Login"
+                            "$ref": "#/definitions/LoginRes"
                         }
                     }
                 }
@@ -70,7 +70,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.Logout"
+                            "$ref": "#/definitions/LogoutReq"
                         }
                     }
                 ],
@@ -97,7 +97,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.RefreshToken"
+                            "$ref": "#/definitions/RefreshTokenReq"
                         }
                     }
                 ],
@@ -105,7 +105,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.RefreshToken"
+                            "$ref": "#/definitions/RefreshTokenRes"
                         }
                     }
                 }
@@ -138,43 +138,28 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/auth/register": {
-            "post": {
-                "tags": [
-                    "auth"
-                ],
-                "operationId": "register",
-                "parameters": [
-                    {
-                        "description": "Login request",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.Register"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.Register"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/auth/students/login": {
             "post": {
                 "tags": [
                     "student"
                 ],
+                "operationId": "loginStudent",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/LoginStudentReq"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.StudentLogin"
+                            "$ref": "#/definitions/LoginStudentRes"
                         }
                     }
                 }
@@ -185,11 +170,23 @@ const docTemplate = `{
                 "tags": [
                     "student"
                 ],
+                "operationId": "refreshTokenStudent",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/RefreshTokenStudentReq"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.StudentRefreshToken"
+                            "$ref": "#/definitions/RefreshTokenStudentRes"
                         }
                     }
                 }
@@ -732,22 +729,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/excel/import": {
-            "post": {
-                "tags": [
-                    "excel"
-                ],
-                "operationId": "importData",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/general-attendances/records/student": {
             "post": {
                 "tags": [
@@ -1189,6 +1170,127 @@ const docTemplate = `{
                 }
             }
         },
+        "LoginReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "default": "email@email.com"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "LoginRes": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "LoginStudentReq": {
+            "type": "object",
+            "required": [
+                "device_id",
+                "nis",
+                "school_code"
+            ],
+            "properties": {
+                "device_id": {
+                    "type": "string"
+                },
+                "nis": {
+                    "type": "string"
+                },
+                "school_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "LoginStudentRes": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "LogoutReq": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "RefreshTokenReq": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "RefreshTokenRes": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "RefreshTokenStudentReq": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "RefreshTokenStudentRes": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
         "RefreshTokenTTLReq": {
             "type": "object",
             "properties": {
@@ -1562,57 +1664,6 @@ const docTemplate = `{
                 }
             }
         },
-        "requests.Login": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "default": "email@email.com"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.Logout": {
-            "type": "object",
-            "required": [
-                "refresh_token"
-            ],
-            "properties": {
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.RefreshToken": {
-            "type": "object",
-            "properties": {
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.Register": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string",
-                    "default": "email@email.com"
-                },
-                "name": {
-                    "type": "string",
-                    "default": "John Doe"
-                },
-                "password": {
-                    "type": "string",
-                    "default": "password"
-                }
-            }
-        },
         "requests.UpdateClassroom": {
             "type": "object",
             "required": [
@@ -1916,83 +1967,8 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.Login": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
         "responses.Logout": {
             "type": "object"
-        },
-        "responses.RefreshToken": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.Register": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.StudentLogin": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.StudentRefreshToken": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
         },
         "responses.UpdateClassroom": {
             "type": "object",

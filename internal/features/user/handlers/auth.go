@@ -5,6 +5,7 @@ import (
 
 	"api/internal/features/user/dto/requests"
 	"api/internal/features/user/services"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,11 +17,11 @@ func NewAuth(service *services.Auth) *Auth {
 	return &Auth{service}
 }
 
-// @Id			login
-// @Tags		auth
-// @Param		body	body		requests.Login	true	"Login request"
-// @Success		200		{object}	responses.Login
-// @Router		/api/v1/auth/login [post]
+// @id			login
+// @tags		auth
+// @param		body body requests.Login true "body"
+// @success		200 {object} responses.Login
+// @router		/api/v1/auth/login [post]
 func (h *Auth) Login(c *gin.Context) {
 	var request requests.Login
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -49,21 +50,21 @@ func (h *Auth) Login(c *gin.Context) {
 // @Param		body body		requests.Register	true	"Login request"
 // @Success		200	{object}	responses.Register
 // @Router		/api/v1/auth/register [post]
-func (h *Auth) Register(c *gin.Context) {
-	var request requests.Register
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, err)
-		return
-	}
-
-	response, err := h.service.Register(request)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, response)
-}
+// func (h *Auth) Register(c *gin.Context) {
+// 	var request requests.Register
+// 	if err := c.ShouldBindJSON(&request); err != nil {
+// 		c.JSON(http.StatusBadRequest, err)
+// 		return
+// 	}
+//
+// 	response, err := h.service.Register(request)
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, err)
+// 		return
+// 	}
+//
+// 	c.JSON(http.StatusOK, response)
+// }
 
 // @Id			logout
 // @Tags		auth
@@ -86,11 +87,11 @@ func (h *Auth) Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Id			refreshToken
-// @Tags		auth
-// @Param		body	body		requests.RefreshToken	true	"Refresh token req"
-// @Success		200		{object}	responses.RefreshToken
-// @Router		/api/v1/auth/refresh-token [post]
+// @id			refreshToken
+// @tags		auth
+// @param		body body requests.RefreshToken true "Refresh token req"
+// @success		200 {object} responses.RefreshToken
+// @router		/api/v1/auth/refresh-token [post]
 func (h *Auth) RefreshToken(c *gin.Context) {
 	var request requests.RefreshToken
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -112,6 +113,7 @@ func (h *Auth) RefreshToken(c *gin.Context) {
 // @Param		body	body		requests.RefreshTokenTTL	true	"Refresh token req"
 // @Success		200		{string}	string
 // @Router		/api/v1/auth/refresh-token-ttl [post]
+// deprecated
 func (h *Auth) RefreshTokenTTL(c *gin.Context) {
 	var req requests.RefreshTokenTTL
 	if err := c.ShouldBindJSON(&req); err != nil {

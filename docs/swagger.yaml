@@ -17,6 +17,86 @@ definitions:
     required:
     - students
     type: object
+  LoginReq:
+    properties:
+      email:
+        default: email@email.com
+        type: string
+      password:
+        type: string
+    type: object
+  LoginRes:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
+  LoginStudentReq:
+    properties:
+      device_id:
+        type: string
+      nis:
+        type: string
+      school_code:
+        type: string
+    required:
+    - device_id
+    - nis
+    - school_code
+    type: object
+  LoginStudentRes:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
+  LogoutReq:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  RefreshTokenReq:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  RefreshTokenRes:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
+  RefreshTokenStudentReq:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  RefreshTokenStudentRes:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
   RefreshTokenTTLReq:
     properties:
       refresh_token:
@@ -270,40 +350,6 @@ definitions:
     required:
     - code
     type: object
-  requests.Login:
-    properties:
-      email:
-        default: email@email.com
-        type: string
-      password:
-        type: string
-    type: object
-  requests.Logout:
-    properties:
-      refresh_token:
-        type: string
-    required:
-    - refresh_token
-    type: object
-  requests.RefreshToken:
-    properties:
-      refresh_token:
-        type: string
-    type: object
-  requests.Register:
-    properties:
-      code:
-        type: string
-      email:
-        default: email@email.com
-        type: string
-      name:
-        default: John Doe
-        type: string
-      password:
-        default: password
-        type: string
-    type: object
   requests.UpdateClassroom:
     properties:
       name:
@@ -498,57 +544,7 @@ definitions:
     required:
     - message
     type: object
-  responses.Login:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - refresh_token
-    type: object
   responses.Logout:
-    type: object
-  responses.RefreshToken:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - refresh_token
-    type: object
-  responses.Register:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - refresh_token
-    type: object
-  responses.StudentLogin:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - refresh_token
-    type: object
-  responses.StudentRefreshToken:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - refresh_token
     type: object
   responses.UpdateClassroom:
     properties:
@@ -589,17 +585,17 @@ paths:
     post:
       operationId: login
       parameters:
-      - description: Login request
+      - description: body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.Login'
+          $ref: '#/definitions/LoginReq'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.Login'
+            $ref: '#/definitions/LoginRes'
       tags:
       - auth
   /api/v1/auth/logout:
@@ -611,7 +607,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.Logout'
+          $ref: '#/definitions/LogoutReq'
       responses:
         "200":
           description: OK
@@ -628,12 +624,12 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.RefreshToken'
+          $ref: '#/definitions/RefreshTokenReq'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.RefreshToken'
+            $ref: '#/definitions/RefreshTokenRes'
       tags:
       - auth
   /api/v1/auth/refresh-token-ttl:
@@ -653,39 +649,38 @@ paths:
             type: string
       tags:
       - auth
-  /api/v1/auth/register:
+  /api/v1/auth/students/login:
     post:
-      operationId: register
+      operationId: loginStudent
       parameters:
-      - description: Login request
+      - description: body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.Register'
+          $ref: '#/definitions/LoginStudentReq'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.Register'
-      tags:
-      - auth
-  /api/v1/auth/students/login:
-    post:
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.StudentLogin'
+            $ref: '#/definitions/LoginStudentRes'
       tags:
       - student
   /api/v1/auth/students/refresh-token:
     post:
+      operationId: refreshTokenStudent
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/RefreshTokenStudentReq'
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.StudentRefreshToken'
+            $ref: '#/definitions/RefreshTokenStudentRes'
       tags:
       - student
   /api/v1/batches:
@@ -1040,16 +1035,6 @@ paths:
             $ref: '#/definitions/responses.GetAllClassroomWithMajors'
       tags:
       - classroom
-  /api/v1/excel/import:
-    post:
-      operationId: importData
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - excel
   /api/v1/general-attendances/records/student:
     post:
       parameters:

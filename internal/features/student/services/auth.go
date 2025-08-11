@@ -37,7 +37,7 @@ func NewStudentAuth(
 	}
 }
 
-func (s *StudentAuth) Login(req requests.StudentLogin) (*responses.StudentLogin, error) {
+func (s *StudentAuth) Login(req requests.LoginStudent) (*responses.LoginStudent, error) {
 	school, err := s.schoolRepo.GetByCode(req.SchoolCode)
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func (s *StudentAuth) Login(req requests.StudentLogin) (*responses.StudentLogin,
 		}
 	}
 
-	var response responses.StudentLogin
+	var response responses.LoginStudent
 	if err := s.db.Transaction(
 		func(tx *gorm.DB) error {
 			refreshToken := uuid.NewString()
@@ -106,8 +106,8 @@ func (s *StudentAuth) Login(req requests.StudentLogin) (*responses.StudentLogin,
 	}
 }
 
-func (s *StudentAuth) RefreshToken(req requests.StudentRefreshToken) (
-	*responses.StudentRefreshToken, error,
+func (s *StudentAuth) RefreshToken(req requests.RefreshTokenStudent) (
+	*responses.RefreshTokenStudent, error,
 ) {
 	oldStudentToken, err := s.studentTokenRepo.GetByRefreshToken(req.RefreshToken)
 	if err != nil {
@@ -141,7 +141,7 @@ func (s *StudentAuth) RefreshToken(req requests.StudentRefreshToken) (
 		return nil, err
 	}
 
-	return &responses.StudentRefreshToken{
+	return &responses.RefreshTokenStudent{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}, nil
