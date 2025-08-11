@@ -33,6 +33,24 @@ func (r *User) CreateInTx(tx *gorm.DB, data domains.User) (*domains.User, error)
 	}
 }
 
+func (r *User) CreateBatch(data []domains.User) (*[]domains.User, error) {
+	users := make([]models.User, len(data))
+	for i, v := range data {
+		users[i] = *v.ToModel()
+	}
+
+	if err := r.db.Create(&users).Error; err != nil {
+		return nil, err
+	} else {
+		result := make([]domains.User, len(users))
+		for i, v := range users {
+			result[i] = *domains.FromUserModel(&v)
+		}
+
+		return &result, nil
+	}
+}
+
 func (r *User) GetByID(id uint) (*domains.User, error) {
 	var user models.User
 	if err := r.db.Where("id = ?", id).

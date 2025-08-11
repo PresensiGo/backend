@@ -11,6 +11,7 @@ import (
 	major "api/internal/features/major/injector"
 	student "api/internal/features/student/injector"
 	subject "api/internal/features/subject/injector"
+	teacher "api/internal/features/teacher/injector"
 	user "api/internal/features/user/injector"
 	"github.com/google/wire"
 )
@@ -75,6 +76,14 @@ func InitSubjectHandlers() *subject.SubjectHandlers {
 	wire.Build(
 		subject.NewSubjectHandlers,
 		subject.SubjectSet,
+	)
+	return nil
+}
+
+func InitTeacherHandlers() *teacher.TeacherHandlers {
+	wire.Build(
+		teacher.NewTeacherHandlers,
+		teacher.Set,
 	)
 	return nil
 }

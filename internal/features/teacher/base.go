@@ -2,9 +2,12 @@ package teacher
 
 import (
 	"api/internal/features/teacher/routes"
+	"api/internal/injector"
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterModule(g *gin.RouterGroup) {
-	routes.RegisterAuth(g, nil)
+	handlers := injector.InitTeacherHandlers()
+
+	routes.RegisterTeacher(g, handlers.Teacher)
 }

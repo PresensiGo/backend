@@ -9,6 +9,7 @@ import (
 	"api/internal/features/major"
 	"api/internal/features/student"
 	"api/internal/features/subject"
+	"api/internal/features/teacher"
 	"api/internal/features/user"
 	"api/pkg/http/middlewares"
 	"github.com/gin-contrib/cors"
@@ -35,6 +36,7 @@ func NewServer() {
 	user.RegisterUser(v1)
 	student.RegisterStudent(v1)
 	attendance.RegisterAttendance(v1)
+	teacher.RegisterModule(v1)
 
 	// protected routes
 	authorized := v1.Group("/")
