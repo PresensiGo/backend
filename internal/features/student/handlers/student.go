@@ -41,11 +41,34 @@ func (h *Student) GetAllByClassroomId(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @tags		student
+// @param		batch_id path int true "batch id"
+// @param		major_id path int true "major id"
+// @param		classroom_id path int true "classroom id"
+// @success		200	{object} responses.GetAllStudentAccountsByClassroomId
+// @router		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/student-accounts [get]
+func (h *Student) GetAllAccountsByClassroomId(c *gin.Context) {
+	classroomId, err := strconv.Atoi(c.Param("classroom_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.GetAllAccountsByClassroomId(uint(classroomId))
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 // @id 			getAllStudents
 // @tags 		student
 // @param 		keyword query string true "Keyword"
 // @success 	200 {object} responses.GetAllStudents
 // @router 		/api/v1/students [get]
+// deprecated
 func (h *Student) GetAll(c *gin.Context) {
 	keyword := c.Query("keyword")
 	if len(keyword) == 0 {

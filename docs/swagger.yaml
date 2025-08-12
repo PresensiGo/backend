@@ -222,6 +222,25 @@ definitions:
     - major
     - student
     type: object
+  domains.StudentToken:
+    properties:
+      device_id:
+        type: string
+      id:
+        type: integer
+      refresh_token:
+        type: string
+      student_id:
+        type: integer
+      ttl:
+        type: string
+    required:
+    - device_id
+    - id
+    - refresh_token
+    - student_id
+    - ttl
+    type: object
   domains.Subject:
     properties:
       id:
@@ -301,6 +320,16 @@ definitions:
     - batch
     - classrooms_count
     - majors_count
+    type: object
+  dto.StudentAccount:
+    properties:
+      student:
+        $ref: '#/definitions/domains.Student'
+      student_token:
+        $ref: '#/definitions/domains.StudentToken'
+    required:
+    - student
+    - student_token
     type: object
   requests.CreateClassroom:
     properties:
@@ -488,6 +517,15 @@ definitions:
         type: array
     required:
     - majors
+    type: object
+  responses.GetAllStudentAccountsByClassroomId:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.StudentAccount'
+        type: array
+    required:
+    - items
     type: object
   responses.GetAllSubjectAttendances:
     properties:
@@ -867,6 +905,31 @@ paths:
             $ref: '#/definitions/responses.UpdateClassroom'
       tags:
       - classroom
+  /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/student-accounts:
+    get:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllStudentAccountsByClassroomId'
+      tags:
+      - student
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students:
     get:
       operationId: getAllStudentsByClassroomId

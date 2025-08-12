@@ -7,10 +7,13 @@ import (
 )
 
 func RegisterStudent(g *gin.RouterGroup, handler *handlers.Student) {
-	newGroup := g.Group("/batches/:batch_id/majors/:major_id/classrooms/:classroom_id/students").Use(middlewares.AuthMiddleware())
-	newGroup.GET("", handler.GetAllByClassroomId)
+	relativePath := "/batches/:batch_id/majors/:major_id/classrooms/:classroom_id"
+	group := g.Group(relativePath).Use(middlewares.AuthMiddleware())
+
+	group.GET("/students", handler.GetAllByClassroomId)
+	group.GET("/student-accounts", handler.GetAllAccountsByClassroomId)
 
 	// old
-	group := g.Group("/students")
-	group.GET("", handler.GetAll)
+	oldGroup := g.Group("/students")
+	oldGroup.GET("", handler.GetAll)
 }

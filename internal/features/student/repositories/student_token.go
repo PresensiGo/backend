@@ -27,6 +27,19 @@ func (r *StudentToken) CreateInTx(tx *gorm.DB, data domains.StudentToken) (
 	}
 }
 
+func (r *StudentToken) GetManyByStudentIds(studentIds []uint) (*[]domains.StudentToken, error) {
+	var studentTokens []models.StudentToken
+	if err := r.db.Where("student_id IN ?", studentIds).Find(&studentTokens).Error; err != nil {
+		return nil, err
+	} else {
+		result := make([]domains.StudentToken, len(studentTokens))
+		for i, v := range studentTokens {
+			result[i] = *domains.FromStudentTokenModel(&v)
+		}
+		return &result, nil
+	}
+}
+
 func (r *StudentToken) GetByStudentId(studentId uint) (*domains.StudentToken, error) {
 	var studentToken models.StudentToken
 	if err := r.db.Where("student_id = ?", studentId).First(&studentToken).Error; err != nil {

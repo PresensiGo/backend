@@ -474,6 +474,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/student-accounts": {
+            "get": {
+                "tags": [
+                    "student"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllStudentAccountsByClassroomId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students": {
             "get": {
                 "tags": [
@@ -1475,6 +1513,33 @@ const docTemplate = `{
                 }
             }
         },
+        "domains.StudentToken": {
+            "type": "object",
+            "required": [
+                "device_id",
+                "id",
+                "refresh_token",
+                "student_id",
+                "ttl"
+            ],
+            "properties": {
+                "device_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "student_id": {
+                    "type": "integer"
+                },
+                "ttl": {
+                    "type": "string"
+                }
+            }
+        },
         "domains.Subject": {
             "type": "object",
             "required": [
@@ -1587,6 +1652,21 @@ const docTemplate = `{
                 },
                 "majors_count": {
                     "type": "integer"
+                }
+            }
+        },
+        "dto.StudentAccount": {
+            "type": "object",
+            "required": [
+                "student",
+                "student_token"
+            ],
+            "properties": {
+                "student": {
+                    "$ref": "#/definitions/domains.Student"
+                },
+                "student_token": {
+                    "$ref": "#/definitions/domains.StudentToken"
                 }
             }
         },
@@ -1877,6 +1957,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domains.Major"
+                    }
+                }
+            }
+        },
+        "responses.GetAllStudentAccountsByClassroomId": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.StudentAccount"
                     }
                 }
             }
