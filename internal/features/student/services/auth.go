@@ -172,7 +172,7 @@ func (s *StudentAuth) RefreshToken(req requests.RefreshTokenStudent) (
 }
 
 func (s *StudentAuth) Eject(studentTokenId uint) (*responses.EjectStudentToken, error) {
-	if _, err := s.studentTokenRepo.UpdateDeviceId(studentTokenId, ""); err != nil {
+	if err := s.studentTokenRepo.Delete(studentTokenId); err != nil {
 		return nil, err
 	} else {
 		return &responses.EjectStudentToken{

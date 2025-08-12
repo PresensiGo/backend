@@ -20,7 +20,7 @@ func (r *StudentToken) CreateInTx(tx *gorm.DB, data domains.StudentToken) (
 	*domains.StudentToken, error,
 ) {
 	studentToken := data.ToModel()
-	if err := r.db.Create(&studentToken).Error; err != nil {
+	if err := tx.Create(&studentToken).Error; err != nil {
 		return nil, err
 	} else {
 		return domains.FromStudentTokenModel(studentToken), nil
@@ -71,18 +71,18 @@ func (r *StudentToken) GetByRefreshToken(refreshToken string) (*domains.StudentT
 	}
 }
 
-func (r *StudentToken) UpdateDeviceId(
-	studentTokenId uint, deviceId string,
-) (*domains.StudentToken, error) {
-	var studentToken models.StudentToken
-	if err := r.db.Model(&studentToken).Where("id = ?", studentTokenId).Update(
-		"device_id", deviceId,
-	).Error; err != nil {
-		return nil, err
-	} else {
-		return domains.FromStudentTokenModel(&studentToken), nil
-	}
-}
+// func (r *StudentToken) UpdateDeviceId(
+// 	studentTokenId uint, deviceId string,
+// ) (*domains.StudentToken, error) {
+// 	var studentToken models.StudentToken
+// 	if err := r.db.Model(&studentToken).Where("id = ?", studentTokenId).Update(
+// 		"device_id", deviceId,
+// 	).Error; err != nil {
+// 		return nil, err
+// 	} else {
+// 		return domains.FromStudentTokenModel(&studentToken), nil
+// 	}
+// }
 
 func (r *StudentToken) UpdateByRefreshToken(
 	refreshToken string, data domains.StudentToken,
@@ -95,6 +95,10 @@ func (r *StudentToken) UpdateByRefreshToken(
 	} else {
 		return domains.FromStudentTokenModel(studentToken), nil
 	}
+}
+
+func (r *StudentToken) Delete(studentTokenId uint) error {
+	return r.db.Where("id = ?", studentTokenId).Unscoped().Delete(&models.StudentToken{}).Error
 }
 
 func (r *StudentToken) DeleteByStudentIdInTx(tx *gorm.DB, studentId uint) error {
