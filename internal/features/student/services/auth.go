@@ -147,6 +147,16 @@ func (s *StudentAuth) RefreshToken(req requests.RefreshTokenStudent) (
 	}, nil
 }
 
+func (s *StudentAuth) Eject(studentTokenId uint) (*responses.EjectStudentToken, error) {
+	if _, err := s.studentTokenRepo.UpdateDeviceId(studentTokenId, ""); err != nil {
+		return nil, err
+	} else {
+		return &responses.EjectStudentToken{
+			Message: "ok",
+		}, nil
+	}
+}
+
 func (s *StudentAuth) generateAccessToken(
 	id uint, name string, nis string, schoolId uint,
 ) (string, error) {

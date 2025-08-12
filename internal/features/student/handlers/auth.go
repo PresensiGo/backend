@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"api/internal/features/student/dto/requests"
 	_ "api/internal/features/student/dto/responses"
@@ -53,6 +54,26 @@ func (h *StudentAuth) RefreshToken(c *gin.Context) {
 	}
 
 	result, err := h.service.RefreshToken(req)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+// @tags 		student
+// @param 		student_token_id path int true "student token id"
+// @success 	200 {object} responses.EjectStudentToken
+// @router 		/api/v1/auth/students/accounts/{student_token_id}/eject [post]
+func (h *StudentAuth) Eject(c *gin.Context) {
+	studentTokenId, err := strconv.Atoi(c.Param("student_token_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Eject(uint(studentTokenId))
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

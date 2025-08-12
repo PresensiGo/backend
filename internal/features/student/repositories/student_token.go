@@ -58,6 +58,19 @@ func (r *StudentToken) GetByRefreshToken(refreshToken string) (*domains.StudentT
 	}
 }
 
+func (r *StudentToken) UpdateDeviceId(
+	studentTokenId uint, deviceId string,
+) (*domains.StudentToken, error) {
+	var studentToken models.StudentToken
+	if err := r.db.Model(&studentToken).Where("id = ?", studentTokenId).Update(
+		"device_id", deviceId,
+	).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromStudentTokenModel(&studentToken), nil
+	}
+}
+
 func (r *StudentToken) UpdateByRefreshToken(
 	refreshToken string, data domains.StudentToken,
 ) (*domains.StudentToken, error) {

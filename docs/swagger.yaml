@@ -464,6 +464,13 @@ definitions:
     required:
     - message
     type: object
+  responses.EjectStudentToken:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
   responses.GetAll:
     properties:
       classrooms:
@@ -687,6 +694,21 @@ paths:
             type: string
       tags:
       - auth
+  /api/v1/auth/students/accounts/{student_token_id}/eject:
+    post:
+      parameters:
+      - description: student token id
+        in: path
+        name: student_token_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.EjectStudentToken'
+      tags:
+      - student
   /api/v1/auth/students/login:
     post:
       operationId: loginStudent

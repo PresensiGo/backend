@@ -138,6 +138,30 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/auth/students/accounts/{student_token_id}/eject": {
+            "post": {
+                "tags": [
+                    "student"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "student token id",
+                        "name": "student_token_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.EjectStudentToken"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/auth/students/login": {
             "post": {
                 "tags": [
@@ -1867,6 +1891,17 @@ const docTemplate = `{
             }
         },
         "responses.DeleteSubject": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.EjectStudentToken": {
             "type": "object",
             "required": [
                 "message"
