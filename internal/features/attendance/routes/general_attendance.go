@@ -7,12 +7,13 @@ import (
 )
 
 func RegisterGeneralAttendance(g *gin.RouterGroup, handler *handlers.GeneralAttendance) {
-	relativePath := "/general_attendance"
+	relativePath := "/general-attendances"
 	{
 		group := g.Group(relativePath).Use(middlewares.AuthMiddleware())
 
 		group.POST("", handler.Create)
 		group.GET("", handler.GetAll)
+		group.GET("/:general_attendance_id/students", handler.GetAllStudents)
 		group.GET("/:general_attendance_id", handler.Get)
 		group.PUT("/:general_attendance_id", handler.Update)
 		group.DELETE("/:general_attendance_id", handler.Delete)

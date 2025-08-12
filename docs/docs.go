@@ -744,34 +744,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/general-attendances/records/student": {
-            "post": {
-                "tags": [
-                    "attendance"
-                ],
-                "operationId": "createGeneralAttendanceRecordStudent",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/CreateGeneralAttendanceRecordStudentReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.CreateGeneralAttendanceRecordStudent"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/general_attendances": {
+        "/api/v1/general-attendances": {
             "get": {
                 "tags": [
                     "attendance"
@@ -812,7 +785,34 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/general_attendances/{general_attendance_id}": {
+        "/api/v1/general-attendances/records/student": {
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "createGeneralAttendanceRecordStudent",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateGeneralAttendanceRecordStudentReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateGeneralAttendanceRecordStudent"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/general-attendances/{general_attendance_id}": {
             "get": {
                 "tags": [
                     "attendance"
@@ -835,7 +835,33 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/v1/general-attendances/{general_attendance_id}/students": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "general attendance id",
+                        "name": "general_attendance_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllGeneralAttendanceStudents"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/general_attendances/{general_attendance_id}": {
             "put": {
                 "tags": [
                     "attendance"
@@ -1475,6 +1501,29 @@ const docTemplate = `{
                 }
             }
         },
+        "domains.GeneralAttendanceRecord": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "general_attendance_id",
+                "id",
+                "student_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "general_attendance_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "student_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "domains.Major": {
             "type": "object",
             "required": [
@@ -1679,6 +1728,21 @@ const docTemplate = `{
                 },
                 "majors_count": {
                     "type": "integer"
+                }
+            }
+        },
+        "dto.GeneralAttendanceStudentItem": {
+            "type": "object",
+            "required": [
+                "record",
+                "student"
+            ],
+            "properties": {
+                "record": {
+                    "$ref": "#/definitions/domains.GeneralAttendanceRecord"
+                },
+                "student": {
+                    "$ref": "#/definitions/domains.Student"
                 }
             }
         },
@@ -1945,6 +2009,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domains.Classroom"
+                    }
+                }
+            }
+        },
+        "responses.GetAllGeneralAttendanceStudents": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.GeneralAttendanceStudentItem"
                     }
                 }
             }

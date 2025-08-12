@@ -191,6 +191,22 @@ definitions:
     - note
     - school_id
     type: object
+  domains.GeneralAttendanceRecord:
+    properties:
+      created_at:
+        type: string
+      general_attendance_id:
+        type: integer
+      id:
+        type: integer
+      student_id:
+        type: integer
+    required:
+    - created_at
+    - general_attendance_id
+    - id
+    - student_id
+    type: object
   domains.Major:
     properties:
       batch_id:
@@ -334,6 +350,16 @@ definitions:
     - batch
     - classrooms_count
     - majors_count
+    type: object
+  dto.GeneralAttendanceStudentItem:
+    properties:
+      record:
+        $ref: '#/definitions/domains.GeneralAttendanceRecord'
+      student:
+        $ref: '#/definitions/domains.Student'
+    required:
+    - record
+    - student
     type: object
   dto.StudentAccount:
     properties:
@@ -506,6 +532,15 @@ definitions:
         type: array
     required:
     - classrooms
+    type: object
+  responses.GetAllGeneralAttendanceStudents:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.GeneralAttendanceStudentItem'
+        type: array
+    required:
+    - items
     type: object
   responses.GetAllGeneralAttendances:
     properties:
@@ -1089,24 +1124,7 @@ paths:
             $ref: '#/definitions/responses.GetAllClassroomWithMajors'
       tags:
       - classroom
-  /api/v1/general-attendances/records/student:
-    post:
-      operationId: createGeneralAttendanceRecordStudent
-      parameters:
-      - description: body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/CreateGeneralAttendanceRecordStudentReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.CreateGeneralAttendanceRecordStudent'
-      tags:
-      - attendance
-  /api/v1/general_attendances:
+  /api/v1/general-attendances:
     get:
       operationId: getAllGeneralAttendances
       responses:
@@ -1132,6 +1150,54 @@ paths:
             $ref: '#/definitions/responses.CreateGeneralAttendance'
       tags:
       - attendance
+  /api/v1/general-attendances/{general_attendance_id}:
+    get:
+      operationId: getGeneralAttendance
+      parameters:
+      - description: general attendance id
+        in: path
+        name: general_attendance_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetGeneralAttendance'
+      tags:
+      - attendance
+  /api/v1/general-attendances/{general_attendance_id}/students:
+    get:
+      parameters:
+      - description: general attendance id
+        in: path
+        name: general_attendance_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllGeneralAttendanceStudents'
+      tags:
+      - attendance
+  /api/v1/general-attendances/records/student:
+    post:
+      operationId: createGeneralAttendanceRecordStudent
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGeneralAttendanceRecordStudentReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.CreateGeneralAttendanceRecordStudent'
+      tags:
+      - attendance
   /api/v1/general_attendances/{general_attendance_id}:
     delete:
       operationId: deleteGeneralAttendance
@@ -1146,21 +1212,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.DeleteGeneralAttendance'
-      tags:
-      - attendance
-    get:
-      operationId: getGeneralAttendance
-      parameters:
-      - description: general attendance id
-        in: path
-        name: general_attendance_id
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.GetGeneralAttendance'
       tags:
       - attendance
     put:

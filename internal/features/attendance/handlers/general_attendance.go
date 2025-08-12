@@ -6,6 +6,7 @@ import (
 
 	"api/internal/features/attendance/dto/requests"
 	"api/internal/features/attendance/services"
+	"api/internal/shared/dto/responses"
 	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +23,7 @@ func NewGeneralAttendance(service *services.GeneralAttendance) *GeneralAttendanc
 // @tags 		attendance
 // @param 		body body requests.CreateGeneralAttendance true "body"
 // @success 	200 {object} responses.CreateGeneralAttendance
-// @router 		/api/v1/general_attendances [post]
+// @router 		/api/v1/general-attendances [post]
 func (h *GeneralAttendance) Create(c *gin.Context) {
 	authUser := authentication.GetAuthenticatedUser(c)
 	if authUser.SchoolId == 0 {
@@ -75,7 +76,7 @@ func (h *GeneralAttendance) CreateRecordStudent(c *gin.Context) {
 // @id 			getAllGeneralAttendances
 // @tags 		attendance
 // @success 	200 {object} responses.GetAllGeneralAttendances
-// @router 		/api/v1/general_attendances [get]
+// @router 		/api/v1/general-attendances [get]
 func (h *GeneralAttendance) GetAll(c *gin.Context) {
 	authUser := authentication.GetAuthenticatedUser(c)
 	if authUser.SchoolId == 0 {
@@ -96,7 +97,7 @@ func (h *GeneralAttendance) GetAll(c *gin.Context) {
 // @tags 		attendance
 // @param 		general_attendance_id path int true "general attendance id"
 // @success 	200 {object} responses.GetGeneralAttendance
-// @router 		/api/v1/general_attendances/{general_attendance_id} [get]
+// @router 		/api/v1/general-attendances/{general_attendance_id} [get]
 func (h *GeneralAttendance) Get(c *gin.Context) {
 	generalAttendanceId, err := strconv.Atoi(c.Param("general_attendance_id"))
 	if err != nil {
@@ -111,6 +112,28 @@ func (h *GeneralAttendance) Get(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, result)
+}
+
+// @tags 		attendance
+// @param 		general_attendance_id path int true "general attendance id"
+// @success 	200 {object} responses.GetAllGeneralAttendanceStudents
+// @router 		/api/v1/general-attendances/{general_attendance_id}/students [get]
+func (h *GeneralAttendance) GetAllStudents(c *gin.Context) {
+	generalAttendanceId, err := strconv.Atoi(c.Param("general_attendance_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if result, err := h.service.GetAllStudents(uint(generalAttendanceId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, result)
+	}
 }
 
 // @id 			updateGeneralAttendance

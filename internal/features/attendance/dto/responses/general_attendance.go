@@ -1,6 +1,9 @@
 package responses
 
-import "api/internal/features/attendance/domains"
+import (
+	"api/internal/features/attendance/domains"
+	"api/internal/features/attendance/dto"
+)
 
 type CreateGeneralAttendance struct {
 	GeneralAttendance domains.GeneralAttendance `json:"general_attendance" validate:"required"`
@@ -16,6 +19,10 @@ type GetAllGeneralAttendances struct {
 
 type GetGeneralAttendance struct {
 	GeneralAttendance domains.GeneralAttendance `json:"general_attendance" validate:"required"`
+}
+
+type GetAllGeneralAttendanceStudents struct {
+	Items []dto.GeneralAttendanceStudentItem `json:"items" validate:"required"`
 }
 
 type UpdateGeneralAttendance struct {

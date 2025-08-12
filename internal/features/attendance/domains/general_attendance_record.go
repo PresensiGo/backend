@@ -1,11 +1,16 @@
 package domains
 
-import "api/internal/features/attendance/models"
+import (
+	"time"
+
+	"api/internal/features/attendance/models"
+)
 
 type GeneralAttendanceRecord struct {
-	Id                  uint `json:"id" validate:"required"`
-	GeneralAttendanceId uint `json:"general_attendance_id" validate:"required"`
-	StudentId           uint `json:"student_id" validate:"required"`
+	Id                  uint      `json:"id" validate:"required"`
+	GeneralAttendanceId uint      `json:"general_attendance_id" validate:"required"`
+	StudentId           uint      `json:"student_id" validate:"required"`
+	CreatedAt           time.Time `json:"created_at" validate:"required"`
 }
 
 func FromGeneralAttendanceRecordModel(m *models.GeneralAttendanceRecord) *GeneralAttendanceRecord {
@@ -13,6 +18,7 @@ func FromGeneralAttendanceRecordModel(m *models.GeneralAttendanceRecord) *Genera
 		Id:                  m.ID,
 		GeneralAttendanceId: m.GeneralAttendanceId,
 		StudentId:           m.StudentId,
+		CreatedAt:           m.CreatedAt,
 	}
 }
 

@@ -2,9 +2,13 @@ package services
 
 import (
 	"api/internal/features/attendance/domains"
+	"api/internal/features/attendance/dto"
 	"api/internal/features/attendance/dto/requests"
 	"api/internal/features/attendance/dto/responses"
 	"api/internal/features/attendance/repositories"
+	studentDomain "api/internal/features/student/domains"
+	studentRepo "api/internal/features/student/repositories"
+	"api/pkg/http/failure"
 	"api/pkg/utils"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -12,17 +16,20 @@ import (
 
 type GeneralAttendance struct {
 	db                          *gorm.DB
+	studentRepo                 *studentRepo.Student
 	generalAttendanceRepo       *repositories.GeneralAttendance
 	generalAttendanceRecordRepo *repositories.GeneralAttendanceRecord
 }
 
 func NewGeneralAttendance(
 	db *gorm.DB,
+	studentRepo *studentRepo.Student,
 	generalAttendanceRepo *repositories.GeneralAttendance,
 	generalAttendanceRecordRepo *repositories.GeneralAttendanceRecord,
 ) *GeneralAttendance {
 	return &GeneralAttendance{
 		db:                          db,
+		studentRepo:                 studentRepo,
 		generalAttendanceRepo:       generalAttendanceRepo,
 		generalAttendanceRecordRepo: generalAttendanceRecordRepo,
 	}
@@ -100,6 +107,42 @@ func (s *GeneralAttendance) GetAll(schoolId uint) (*responses.GetAllGeneralAtten
 
 	return &responses.GetAllGeneralAttendances{
 		GeneralAttendances: *result,
+	}, nil
+}
+
+func (s *GeneralAttendance) GetAllStudents(generalAttendanceId uint) (
+	*responses.GetAllGeneralAttendanceStudents, *failure.App,
+) {
+	records, err := s.generalAttendanceRecordRepo.GetAll(generalAttendanceId)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	studentIds := make([]uint, len(*records))
+	for i, v := range *records {
+		studentIds[i] = v.StudentId
+	}
+
+	students, err := s.studentRepo.GetManyById(studentIds)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	mapStudents := make(map[uint]*studentDomain.Student)
+	for _, student := range *students {
+		mapStudents[student.Id] = &student
+	}
+
+	result := make([]dto.GeneralAttendanceStudentItem, len(*records))
+	for i, v := range *records {
+		result[i] = dto.GeneralAttendanceStudentItem{
+			Student: *mapStudents[v.StudentId],
+			Record:  v,
+		}
+	}
+
+	return &responses.GetAllGeneralAttendanceStudents{
+		Items: result,
 	}, nil
 }
 
