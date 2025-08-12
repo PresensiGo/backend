@@ -21,7 +21,7 @@ func GenerateJWT(user JWTClaim) (string, error) {
 			RegisteredClaims: jwt.RegisteredClaims{
 				Issuer:    "API Presensi Sekolah",
 				IssuedAt:  jwt.NewNumericDate(time.Now()),
-				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 1)),
 			},
 		},
 	)
@@ -44,7 +44,7 @@ func GenerateStudentJWT(claim claims.Student) (string, error) {
 			RegisteredClaims: jwt.RegisteredClaims{
 				Issuer:    "API Presensi Sekolah",
 				IssuedAt:  jwt.NewNumericDate(time.Now()),
-				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 1)),
 			},
 		},
 	)

@@ -1,7 +1,7 @@
 package services
 
 import (
-	"fmt"
+	"net/http"
 	"time"
 
 	repositories2 "api/internal/features/school/repositories"
@@ -10,6 +10,7 @@ import (
 	"api/internal/features/user/dto/responses"
 	repositories3 "api/internal/features/user/repositories"
 	"api/pkg/authentication"
+	"api/pkg/http/failure"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -164,24 +165,24 @@ func (s *Auth) Logout(refreshToken string) (*responses.Logout, error) {
 	return &responses.Logout{}, nil
 }
 
-func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, error) {
+func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, *failure.App) {
 	oldUserToken, err := s.userTokenRepo.GetByRefreshToken(oldRefreshToken)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 
 	if time.Now().After(oldUserToken.TTL) {
-		return nil, fmt.Errorf("refresh token expired")
+		return nil, failure.NewApp(http.StatusUnauthorized, "Token sudah kadaluarsa", nil)
 	}
 
 	currentUser, err := s.userRepo.GetByID(oldUserToken.UserId)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 
 	school, err := s.schoolRepo.GetById(currentUser.SchoolId)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 
 	// generate user token
@@ -190,28 +191,24 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, er
 		school.Id, school.Name, school.Code,
 	)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 	refreshToken := uuid.New().String()
 
 	// store new token into database
-	if err := s.userTokenRepo.UpdateByRefreshToken(
+	if _, err := s.userTokenRepo.UpdateByRefreshToken(
 		oldRefreshToken, domains.UserToken{
-			UserId:       currentUser.Id,
 			RefreshToken: refreshToken,
+			TTL:          time.Now().Add(time.Hour * 24 * 30),
 		},
 	); err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.RefreshToken{
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
+		}, nil
 	}
-
-	return &responses.RefreshToken{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-	}, nil
-}
-
-func (s *Auth) RefreshTokenTTL(refreshToken string) error {
-	return s.userTokenRepo.UpdateTTLByRefreshToken(refreshToken)
 }
 
 func (s *Auth) generateAccessToken(

@@ -111,11 +111,6 @@ definitions:
     - access_token
     - refresh_token
     type: object
-  RefreshTokenTTLReq:
-    properties:
-      refresh_token:
-        type: string
-    type: object
   api_internal_features_batch_dto_requests.Create:
     properties:
       name:
@@ -734,7 +729,7 @@ paths:
     post:
       operationId: refreshToken
       parameters:
-      - description: Refresh token req
+      - description: body
         in: body
         name: body
         required: true
@@ -745,23 +740,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/RefreshTokenRes'
-      tags:
-      - auth
-  /api/v1/auth/refresh-token-ttl:
-    post:
-      operationId: refreshTokenTTL
-      parameters:
-      - description: Refresh token req
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/RefreshTokenTTLReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
       tags:
       - auth
   /api/v1/auth/students/accounts/{student_token_id}/eject:

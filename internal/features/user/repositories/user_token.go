@@ -45,11 +45,18 @@ func (r *UserToken) GetByRefreshToken(refreshToken string) (*domains.UserToken, 
 	}, nil
 }
 
-func (r *UserToken) UpdateByRefreshToken(oldRefreshToken string, token domains.UserToken) error {
-	return r.db.Model(&models.UserToken{}).
-		Where("refresh_token = ?", oldRefreshToken).
-		Update("refresh_token", token.RefreshToken).
-		Error
+func (r *UserToken) UpdateByRefreshToken(
+	refreshToken string, data domains.UserToken,
+) (*domains.UserToken, error) {
+	userToken := data.ToModel()
+
+	if err := r.db.Where(
+		"refresh_token = ?", refreshToken,
+	).Updates(&userToken).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromUserTokenModel(userToken), nil
+	}
 }
 
 func (r *UserToken) UpdateTTLByRefreshToken(refreshToken string) error {

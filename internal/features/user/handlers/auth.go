@@ -5,6 +5,7 @@ import (
 
 	"api/internal/features/user/dto/requests"
 	"api/internal/features/user/services"
+	"api/internal/shared/dto/responses"
 
 	"github.com/gin-gonic/gin"
 )
@@ -45,27 +46,6 @@ func (h *Auth) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Id			register
-// @Tags		auth
-// @Param		body body		requests.Register	true	"Login request"
-// @Success		200	{object}	responses.Register
-// @Router		/api/v1/auth/register [post]
-// func (h *Auth) Register(c *gin.Context) {
-// 	var request requests.Register
-// 	if err := c.ShouldBindJSON(&request); err != nil {
-// 		c.JSON(http.StatusBadRequest, err)
-// 		return
-// 	}
-//
-// 	response, err := h.service.Register(request)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, err)
-// 		return
-// 	}
-//
-// 	c.JSON(http.StatusOK, response)
-// }
-
 // @Id			logout
 // @Tags		auth
 // @Param		body body requests.Logout true "Logout Request"
@@ -89,7 +69,7 @@ func (h *Auth) Logout(c *gin.Context) {
 
 // @id			refreshToken
 // @tags		auth
-// @param		body body requests.RefreshToken true "Refresh token req"
+// @param		body body requests.RefreshToken true "body"
 // @success		200 {object} responses.RefreshToken
 // @router		/api/v1/auth/refresh-token [post]
 func (h *Auth) RefreshToken(c *gin.Context) {
@@ -99,32 +79,13 @@ func (h *Auth) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	response, err := h.service.RefreshToken(request.RefreshToken)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.RefreshToken(request.RefreshToken); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, response)
-}
-
-// @Id			refreshTokenTTL
-// @Tags		auth
-// @Param		body	body		requests.RefreshTokenTTL	true	"Refresh token req"
-// @Success		200		{string}	string
-// @Router		/api/v1/auth/refresh-token-ttl [post]
-// deprecated
-func (h *Auth) RefreshTokenTTL(c *gin.Context) {
-	var req requests.RefreshTokenTTL
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	if err := h.service.RefreshTokenTTL(req.RefreshToken); err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"success": true})
 }

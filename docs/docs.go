@@ -92,7 +92,7 @@ const docTemplate = `{
                 "operationId": "refreshToken",
                 "parameters": [
                     {
-                        "description": "Refresh token req",
+                        "description": "body",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -106,33 +106,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/RefreshTokenRes"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/auth/refresh-token-ttl": {
-            "post": {
-                "tags": [
-                    "auth"
-                ],
-                "operationId": "refreshTokenTTL",
-                "parameters": [
-                    {
-                        "description": "Refresh token req",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/RefreshTokenTTLReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }
@@ -1422,14 +1395,6 @@ const docTemplate = `{
                 "access_token": {
                     "type": "string"
                 },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "RefreshTokenTTLReq": {
-            "type": "object",
-            "properties": {
                 "refresh_token": {
                     "type": "string"
                 }
