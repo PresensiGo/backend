@@ -7,6 +7,8 @@ import (
 	"api/internal/features/student/dto/requests"
 	_ "api/internal/features/student/dto/responses"
 	"api/internal/features/student/services"
+	"api/internal/shared/dto/responses"
+	_ "api/internal/shared/dto/responses"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +36,11 @@ func (h *StudentAuth) Login(c *gin.Context) {
 
 	result, err := h.service.Login(req)
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
 		return
 	}
 

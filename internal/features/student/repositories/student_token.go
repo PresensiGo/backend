@@ -42,7 +42,20 @@ func (r *StudentToken) GetManyByStudentIds(studentIds []uint) (*[]domains.Studen
 
 func (r *StudentToken) GetByStudentId(studentId uint) (*domains.StudentToken, error) {
 	var studentToken models.StudentToken
-	if err := r.db.Where("student_id = ?", studentId).First(&studentToken).Error; err != nil {
+	if err := r.db.Where(
+		"student_id = ?", studentId,
+	).First(&studentToken).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromStudentTokenModel(&studentToken), nil
+	}
+}
+
+func (r *StudentToken) GetByDeviceId(deviceId string) (*domains.StudentToken, error) {
+	var studentToken models.StudentToken
+	if err := r.db.Where(
+		"device_id = ?", deviceId,
+	).First(&studentToken).Error; err != nil {
 		return nil, err
 	} else {
 		return domains.FromStudentTokenModel(&studentToken), nil

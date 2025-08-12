@@ -471,6 +471,13 @@ definitions:
     required:
     - message
     type: object
+  responses.Error:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
   responses.GetAll:
     properties:
       classrooms:
@@ -724,6 +731,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/LoginStudentRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.Error'
       tags:
       - student
   /api/v1/auth/students/refresh-token:

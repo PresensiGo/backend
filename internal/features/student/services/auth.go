@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"time"
 
 	schoolRepo "api/internal/features/school/repositories"
@@ -12,6 +13,7 @@ import (
 	"api/internal/features/student/repositories"
 	"api/pkg/authentication"
 	"api/pkg/authentication/claims"
+	"api/pkg/http/failure"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -37,32 +39,54 @@ func NewStudentAuth(
 	}
 }
 
-func (s *StudentAuth) Login(req requests.LoginStudent) (*responses.LoginStudent, error) {
+func (s *StudentAuth) Login(req requests.LoginStudent) (*responses.LoginStudent, *failure.App) {
 	school, err := s.schoolRepo.GetByCode(req.SchoolCode)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewApp(
+				http.StatusNotFound, "Sekolah dengan id tersebut tidak ditemukan!", nil,
+			)
+		}
+		return nil, failure.NewInternal(err)
 	}
 
 	student, err := s.studentRepo.GetBySchoolIdNIS(school.Id, req.NIS)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewApp(
+				http.StatusNotFound, "Siswa dengan NIS tersebut tidak ditemukan!", nil,
+			)
+		}
+		return nil, failure.NewInternal(err)
 	}
 
-	// mendapatkan token student
-	isTokenRegistered := true
-	oldStudentToken, err := s.studentTokenRepo.GetByStudentId(student.Id)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			isTokenRegistered = false
-		} else {
-			return nil, err
+	// cek berdasarkan id siswa
+	if result, err := s.studentTokenRepo.GetByStudentId(student.Id); err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewInternal(err)
+		}
+	} else {
+		if result.DeviceId != req.DeviceId {
+			return nil, failure.NewApp(
+				http.StatusConflict,
+				"Perangkat dengan NIS tidak valid! Silahkan hubungi admin sekolah",
+				nil,
+			)
 		}
 	}
 
-	if isTokenRegistered {
-		// validasi id perangkat jika token sudah terdaftar
-		if req.DeviceId != oldStudentToken.DeviceId {
-			return nil, errors.New("id perangkat tidak sesuai dengan yang sudah terdaftar")
+	// cek berdasarkan id perangkat
+	if result, err := s.studentTokenRepo.GetByDeviceId(req.DeviceId); err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewInternal(err)
+		}
+	} else {
+		if result.StudentId != student.Id {
+			return nil, failure.NewApp(
+				http.StatusConflict,
+				"Perangkat dengan NIS tidak valid! Silahkan hubungi admin sekolah",
+				nil,
+			)
 		}
 	}
 
@@ -100,9 +124,9 @@ func (s *StudentAuth) Login(req requests.LoginStudent) (*responses.LoginStudent,
 			return nil
 		},
 	); err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	} else {
-		return &response, err
+		return &response, nil
 	}
 }
 

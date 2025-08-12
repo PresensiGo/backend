@@ -185,6 +185,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/LoginStudentRes"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.Error"
+                        }
                     }
                 }
             }
@@ -1902,6 +1908,17 @@ const docTemplate = `{
             }
         },
         "responses.EjectStudentToken": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.Error": {
             "type": "object",
             "required": [
                 "message"
