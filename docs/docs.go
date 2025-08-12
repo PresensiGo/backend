@@ -703,6 +703,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}/records": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "subject attendance id",
+                        "name": "subject_attendance_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetAllSubjectAttendanceRecords"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/classrooms": {
             "get": {
                 "tags": [
@@ -1666,6 +1711,29 @@ const docTemplate = `{
                 }
             }
         },
+        "domains.SubjectAttendanceRecord": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "student_id",
+                "subject_attendance_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "student_id": {
+                    "type": "integer"
+                },
+                "subject_attendance_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "domains.SubjectAttendanceSubject": {
             "type": "object",
             "required": [
@@ -1758,6 +1826,21 @@ const docTemplate = `{
                 },
                 "student_token": {
                     "$ref": "#/definitions/domains.StudentToken"
+                }
+            }
+        },
+        "dto.SubjectAttendanceRecordItem": {
+            "type": "object",
+            "required": [
+                "record",
+                "student"
+            ],
+            "properties": {
+                "record": {
+                    "$ref": "#/definitions/domains.SubjectAttendanceRecord"
+                },
+                "student": {
+                    "$ref": "#/definitions/domains.Student"
                 }
             }
         },
@@ -2065,6 +2148,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.StudentAccount"
+                    }
+                }
+            }
+        },
+        "responses.GetAllSubjectAttendanceRecords": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.SubjectAttendanceRecordItem"
                     }
                 }
             }

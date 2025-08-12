@@ -27,6 +27,23 @@ func (r *SubjectAttendanceRecord) CreateInTx(
 	}
 }
 
+func (r *SubjectAttendanceRecord) GetAllByAttendanceId(subjectAttendanceId uint) (
+	*[]domains.SubjectAttendanceRecord, error,
+) {
+	var records []models.SubjectAttendanceRecord
+	if err := r.db.Where(
+		"subject_attendance_id = ?", subjectAttendanceId,
+	).Find(&records).Error; err != nil {
+		return nil, err
+	} else {
+		result := make([]domains.SubjectAttendanceRecord, len(records))
+		for i, v := range records {
+			result[i] = *domains.FromSubjectAttendanceRecordModel(&v)
+		}
+		return &result, nil
+	}
+}
+
 func (r *SubjectAttendanceRecord) DeleteByAttendanceIdStudentIdInTx(
 	tx *gorm.DB, attendanceId, studentId uint,
 ) error {

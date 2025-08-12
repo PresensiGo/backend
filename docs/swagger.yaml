@@ -306,6 +306,22 @@ definitions:
     - note
     - subject_id
     type: object
+  domains.SubjectAttendanceRecord:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      student_id:
+        type: integer
+      subject_attendance_id:
+        type: integer
+    required:
+    - created_at
+    - id
+    - student_id
+    - subject_attendance_id
+    type: object
   domains.SubjectAttendanceSubject:
     properties:
       subject:
@@ -370,6 +386,16 @@ definitions:
     required:
     - student
     - student_token
+    type: object
+  dto.SubjectAttendanceRecordItem:
+    properties:
+      record:
+        $ref: '#/definitions/domains.SubjectAttendanceRecord'
+      student:
+        $ref: '#/definitions/domains.Student'
+    required:
+    - record
+    - student
     type: object
   requests.CreateClassroom:
     properties:
@@ -565,6 +591,15 @@ definitions:
       items:
         items:
           $ref: '#/definitions/dto.StudentAccount'
+        type: array
+    required:
+    - items
+    type: object
+  responses.GetAllSubjectAttendanceRecords:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.SubjectAttendanceRecordItem'
         type: array
     required:
     - items
@@ -1096,6 +1131,36 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.GetSubjectAttendance'
+      tags:
+      - attendance
+  /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}/records:
+    get:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      - description: subject attendance id
+        in: path
+        name: subject_attendance_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetAllSubjectAttendanceRecords'
       tags:
       - attendance
   /api/v1/classrooms:

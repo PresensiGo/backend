@@ -2,15 +2,18 @@ package services
 
 import (
 	"api/internal/features/attendance/domains"
+	"api/internal/features/attendance/dto"
 	"api/internal/features/attendance/dto/requests"
 	"api/internal/features/attendance/dto/responses"
 	"api/internal/features/attendance/repositories"
 	batch "api/internal/features/batch/repositories"
 	classroom "api/internal/features/classroom/repositories"
 	major "api/internal/features/major/repositories"
+	studentRepo "api/internal/features/student/repositories"
 	subjectDomain "api/internal/features/subject/domains"
 	subjectRepo "api/internal/features/subject/repositories"
 	shared "api/internal/shared/domains"
+	"api/pkg/http/failure"
 	"api/pkg/utils"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -21,6 +24,7 @@ type SubjectAttendance struct {
 	batchRepo                   *batch.Batch
 	majorRepo                   *major.Major
 	classroomRepo               *classroom.Classroom
+	studentRepo                 *studentRepo.Student
 	subjectAttendanceRepo       *repositories.SubjectAttendance
 	subjectAttendanceRecordRepo *repositories.SubjectAttendanceRecord
 	subjectRepo                 *subjectRepo.Subject
@@ -31,6 +35,7 @@ func NewSubjectAttendance(
 	batchRepo *batch.Batch,
 	majorRepo *major.Major,
 	classroomRepo *classroom.Classroom,
+	studentRepo *studentRepo.Student,
 	subjectAttendanceRepo *repositories.SubjectAttendance,
 	subjectAttendanceRecordRepo *repositories.SubjectAttendanceRecord,
 	subjectRepo *subjectRepo.Subject,
@@ -40,6 +45,7 @@ func NewSubjectAttendance(
 		batchRepo:                   batchRepo,
 		majorRepo:                   majorRepo,
 		classroomRepo:               classroomRepo,
+		studentRepo:                 studentRepo,
 		subjectAttendanceRepo:       subjectAttendanceRepo,
 		subjectAttendanceRecordRepo: subjectAttendanceRecordRepo,
 		subjectRepo:                 subjectRepo,
@@ -143,6 +149,46 @@ func (s *SubjectAttendance) GetAll(classroomId uint) (*responses.GetAllSubjectAt
 	}
 
 	return &responses.GetAllSubjectAttendances{
+		Items: result,
+	}, nil
+}
+
+func (s *SubjectAttendance) GetAllSubjectAttendanceRecords(
+	classroomId uint, subjectAttendanceId uint,
+) (
+	*responses.GetAllSubjectAttendanceRecords, *failure.App,
+) {
+	students, err := s.studentRepo.GetAllByClassroomId(classroomId)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	records, err := s.subjectAttendanceRecordRepo.GetAllByAttendanceId(subjectAttendanceId)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	mapRecords := make(map[uint]*domains.SubjectAttendanceRecord)
+	for _, record := range *records {
+		mapRecords[record.StudentId] = &record
+	}
+
+	result := make([]dto.SubjectAttendanceRecordItem, len(students))
+	for i, student := range students {
+		var record *domains.SubjectAttendanceRecord
+		if r, ok := mapRecords[student.Id]; ok {
+			record = r
+		} else {
+			record = &domains.SubjectAttendanceRecord{}
+		}
+
+		result[i] = dto.SubjectAttendanceRecordItem{
+			Student: student,
+			Record:  *record,
+		}
+	}
+
+	return &responses.GetAllSubjectAttendanceRecords{
 		Items: result,
 	}, nil
 }
