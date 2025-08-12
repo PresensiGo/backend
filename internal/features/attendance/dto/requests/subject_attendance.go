@@ -8,4 +8,4 @@ type CreateSubjectAttendance struct {
 
 type CreateSubjectAttendanceRecordStudent struct {
 	Code string `json:"code" validate:"required"`
-}
+} // @name CreateSubjectAttendanceRecordStudentReq

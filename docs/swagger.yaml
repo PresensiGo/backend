@@ -1,4 +1,18 @@
 definitions:
+  CreateGeneralAttendanceRecordStudentReq:
+    properties:
+      code:
+        type: string
+    required:
+    - code
+    type: object
+  CreateSubjectAttendanceRecordStudentReq:
+    properties:
+      code:
+        type: string
+    required:
+    - code
+    type: object
   GetAllStudentsByClassroomIdRes:
     properties:
       students:
@@ -345,13 +359,6 @@ definitions:
       note:
         type: string
     type: object
-  requests.CreateGeneralAttendanceRecordStudent:
-    properties:
-      code:
-        type: string
-    required:
-    - code
-    type: object
   requests.CreateSubject:
     properties:
       name:
@@ -371,13 +378,6 @@ definitions:
     - datetime
     - note
     - subject_id
-    type: object
-  requests.CreateSubjectAttendanceRecordStudent:
-    properties:
-      code:
-        type: string
-    required:
-    - code
     type: object
   requests.UpdateClassroom:
     properties:
@@ -465,13 +465,6 @@ definitions:
     - message
     type: object
   responses.EjectStudentToken:
-    properties:
-      message:
-        type: string
-    required:
-    - message
-    type: object
-  responses.Error:
     properties:
       message:
         type: string
@@ -731,10 +724,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/LoginStudentRes'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/responses.Error'
       tags:
       - student
   /api/v1/auth/students/refresh-token:
@@ -1074,37 +1063,6 @@ paths:
             $ref: '#/definitions/responses.GetSubjectAttendance'
       tags:
       - attendance
-  /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/records/student:
-    post:
-      parameters:
-      - description: batch id
-        in: path
-        name: batch_id
-        required: true
-        type: integer
-      - description: major id
-        in: path
-        name: major_id
-        required: true
-        type: integer
-      - description: classroom id
-        in: path
-        name: classroom_id
-        required: true
-        type: integer
-      - description: body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/requests.CreateSubjectAttendanceRecordStudent'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.CreateSubjectAttendanceRecordStudent'
-      tags:
-      - attendance
   /api/v1/classrooms:
     get:
       operationId: getAllClassrooms
@@ -1133,13 +1091,14 @@ paths:
       - classroom
   /api/v1/general-attendances/records/student:
     post:
+      operationId: createGeneralAttendanceRecordStudent
       parameters:
       - description: body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.CreateGeneralAttendanceRecordStudent'
+          $ref: '#/definitions/CreateGeneralAttendanceRecordStudentReq'
       responses:
         "200":
           description: OK
@@ -1316,6 +1275,23 @@ paths:
             $ref: '#/definitions/GetAllStudentsRes'
       tags:
       - student
+  /api/v1/subject-attendances/records/student:
+    post:
+      operationId: createSubjectAttendanceRecordStudent
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateSubjectAttendanceRecordStudentReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.CreateSubjectAttendanceRecordStudent'
+      tags:
+      - attendance
   /api/v1/subjects:
     get:
       operationId: getAllSubjects

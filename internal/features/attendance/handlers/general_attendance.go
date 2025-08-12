@@ -45,11 +45,12 @@ func (h *GeneralAttendance) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// @id 			createGeneralAttendanceRecordStudent
 // @tags 		attendance
 // @param 		body body requests.CreateGeneralAttendanceRecordStudent true "body"
 // @success 	200 {object} responses.CreateGeneralAttendanceRecordStudent
 // @router 		/api/v1/general-attendances/records/student [post]
-func (h *GeneralAttendance) CreateGeneralAttendanceRecordStudent(c *gin.Context) {
+func (h *GeneralAttendance) CreateRecordStudent(c *gin.Context) {
 	studentClaim := authentication.GetAuthenticatedStudent(c)
 	if studentClaim.SchoolId == 0 {
 		c.AbortWithStatus(http.StatusForbidden)

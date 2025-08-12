@@ -185,12 +185,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/LoginStudentRes"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/responses.Error"
-                        }
                     }
                 }
             }
@@ -664,53 +658,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/records/student": {
-            "post": {
-                "tags": [
-                    "attendance"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "batch id",
-                        "name": "batch_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "major id",
-                        "name": "major_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "classroom id",
-                        "name": "classroom_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.CreateSubjectAttendanceRecordStudent"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.CreateSubjectAttendanceRecordStudent"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}": {
             "get": {
                 "tags": [
@@ -802,6 +749,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
+                "operationId": "createGeneralAttendanceRecordStudent",
                 "parameters": [
                     {
                         "description": "body",
@@ -809,7 +757,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.CreateGeneralAttendanceRecordStudent"
+                            "$ref": "#/definitions/CreateGeneralAttendanceRecordStudentReq"
                         }
                     }
                 ],
@@ -1086,6 +1034,33 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/subject-attendances/records/student": {
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "createSubjectAttendanceRecordStudent",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateSubjectAttendanceRecordStudentReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateSubjectAttendanceRecordStudent"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/subjects": {
             "get": {
                 "tags": [
@@ -1210,6 +1185,28 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "CreateGeneralAttendanceRecordStudentReq": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                }
+            }
+        },
+        "CreateSubjectAttendanceRecordStudentReq": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                }
+            }
+        },
         "GetAllStudentsByClassroomIdRes": {
             "type": "object",
             "required": [
@@ -1722,17 +1719,6 @@ const docTemplate = `{
                 }
             }
         },
-        "requests.CreateGeneralAttendanceRecordStudent": {
-            "type": "object",
-            "required": [
-                "code"
-            ],
-            "properties": {
-                "code": {
-                    "type": "string"
-                }
-            }
-        },
         "requests.CreateSubject": {
             "type": "object",
             "required": [
@@ -1760,17 +1746,6 @@ const docTemplate = `{
                 },
                 "subject_id": {
                     "type": "integer"
-                }
-            }
-        },
-        "requests.CreateSubjectAttendanceRecordStudent": {
-            "type": "object",
-            "required": [
-                "code"
-            ],
-            "properties": {
-                "code": {
-                    "type": "string"
                 }
             }
         },
@@ -1908,17 +1883,6 @@ const docTemplate = `{
             }
         },
         "responses.EjectStudentToken": {
-            "type": "object",
-            "required": [
-                "message"
-            ],
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.Error": {
             "type": "object",
             "required": [
                 "message"
