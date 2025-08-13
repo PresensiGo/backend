@@ -61,14 +61,14 @@ func (r *Classroom) GetAllByMajorId(majorId uint) (*[]domains.Classroom, error) 
 		"major_id = ?", majorId,
 	).Order("lower(name) asc").Find(&classrooms).Error; err != nil {
 		return nil, err
-	}
+	} else {
+		result := make([]domains.Classroom, len(classrooms))
+		for i, classroom := range classrooms {
+			result[i] = *domains.FromClassroomModel(&classroom)
+		}
 
-	result := make([]domains.Classroom, len(classrooms))
-	for i, v := range classrooms {
-		result[i] = *domains.FromClassroomModel(&v)
+		return &result, nil
 	}
-
-	return &result, nil
 }
 
 func (r *Classroom) GetManyByMajorId(majorIds []uint) ([]domains.Classroom, error) {

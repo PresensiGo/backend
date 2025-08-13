@@ -339,18 +339,12 @@ const docTemplate = `{
                 "tags": [
                     "classroom"
                 ],
+                "operationId": "getAllClassroomsByMajorId",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "batch id",
                         "name": "batch_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "major id",
-                        "name": "major_id",
                         "in": "path",
                         "required": true
                     },
@@ -1465,7 +1459,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domains.Classroom": {
+        "classroom": {
             "type": "object",
             "required": [
                 "id",
@@ -1570,7 +1564,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "classroom": {
-                    "$ref": "#/definitions/domains.Classroom"
+                    "$ref": "#/definitions/classroom"
                 },
                 "major": {
                     "$ref": "#/definitions/major"
@@ -1883,7 +1877,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "classroom": {
-                    "$ref": "#/definitions/domains.Classroom"
+                    "$ref": "#/definitions/classroom"
                 },
                 "major": {
                     "$ref": "#/definitions/major"
@@ -1897,7 +1891,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "classroom": {
-                    "$ref": "#/definitions/domains.Classroom"
+                    "$ref": "#/definitions/classroom"
                 }
             }
         },
@@ -1995,7 +1989,7 @@ const docTemplate = `{
                 "classrooms": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.Classroom"
+                        "$ref": "#/definitions/classroom"
                     }
                 }
             }
@@ -2037,7 +2031,7 @@ const docTemplate = `{
                 "classrooms": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.Classroom"
+                        "$ref": "#/definitions/classroom"
                     }
                 }
             }
@@ -2208,7 +2202,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "classroom": {
-                    "$ref": "#/definitions/domains.Classroom"
+                    "$ref": "#/definitions/classroom"
                 }
             }
         },

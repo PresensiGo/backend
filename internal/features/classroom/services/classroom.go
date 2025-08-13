@@ -8,6 +8,7 @@ import (
 	"api/internal/features/classroom/repositories"
 	majorDomain "api/internal/features/major/domains"
 	majorRepo "api/internal/features/major/repositories"
+	"api/pkg/http/failure"
 )
 
 type Classroom struct {
@@ -77,15 +78,16 @@ func (s *Classroom) GetAll(schoolId uint) (*responses.GetAll, error) {
 	}, nil
 }
 
-func (s *Classroom) GetAllByMajorId(majorId uint) (*responses.GetAllClassroomsByMajorId, error) {
-	classrooms, err := s.classroomRepo.GetAllByMajorId(majorId)
-	if err != nil {
-		return nil, err
+func (s *Classroom) GetAllClassroomsByMajorId(majorId uint) (
+	*responses.GetAllClassroomsByMajorId, *failure.App,
+) {
+	if classrooms, err := s.classroomRepo.GetAllByMajorId(majorId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetAllClassroomsByMajorId{
+			Classrooms: *classrooms,
+		}, nil
 	}
-
-	return &responses.GetAllClassroomsByMajorId{
-		Classrooms: *classrooms,
-	}, nil
 }
 
 func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWithMajors, error) {

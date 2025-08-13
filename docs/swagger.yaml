@@ -154,7 +154,7 @@ definitions:
     - name
     - school_id
     type: object
-  domains.Classroom:
+  classroom:
     properties:
       id:
         type: integer
@@ -224,7 +224,7 @@ definitions:
   domains.StudentMajorClassroom:
     properties:
       classroom:
-        $ref: '#/definitions/domains.Classroom'
+        $ref: '#/definitions/classroom'
       major:
         $ref: '#/definitions/major'
       student:
@@ -437,7 +437,7 @@ definitions:
   responses.ClassroomMajor:
     properties:
       classroom:
-        $ref: '#/definitions/domains.Classroom'
+        $ref: '#/definitions/classroom'
       major:
         $ref: '#/definitions/major'
     required:
@@ -447,7 +447,7 @@ definitions:
   responses.CreateClassroom:
     properties:
       classroom:
-        $ref: '#/definitions/domains.Classroom'
+        $ref: '#/definitions/classroom'
     required:
     - classroom
     type: object
@@ -509,7 +509,7 @@ definitions:
     properties:
       classrooms:
         items:
-          $ref: '#/definitions/domains.Classroom'
+          $ref: '#/definitions/classroom'
         type: array
     required:
     - classrooms
@@ -536,7 +536,7 @@ definitions:
     properties:
       classrooms:
         items:
-          $ref: '#/definitions/domains.Classroom'
+          $ref: '#/definitions/classroom'
         type: array
     required:
     - classrooms
@@ -646,7 +646,7 @@ definitions:
   responses.UpdateClassroom:
     properties:
       classroom:
-        $ref: '#/definitions/domains.Classroom'
+        $ref: '#/definitions/classroom'
     required:
     - classroom
     type: object
@@ -873,15 +873,11 @@ paths:
       - major
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms:
     get:
+      operationId: getAllClassroomsByMajorId
       parameters:
       - description: batch id
         in: path
         name: batch_id
-        required: true
-        type: integer
-      - description: major id
-        in: path
-        name: major_id
         required: true
         type: integer
       - description: major id

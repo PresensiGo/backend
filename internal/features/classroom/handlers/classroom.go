@@ -6,6 +6,7 @@ import (
 
 	"api/internal/features/classroom/dto/requests"
 	"api/internal/features/classroom/services"
+	"api/internal/shared/dto/responses"
 	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 )
@@ -67,26 +68,28 @@ func (h *Classroom) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// @id			getAllClassroomsByMajorId
 // @tags		classroom
 // @param 		batch_id path int true "batch id"
 // @param 		major_id path int true "major id"
-// @param 		major_id path int true "major id"
 // @success		200	{object} responses.GetAllClassroomsByMajorId
 // @router		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms [get]
-func (h *Classroom) GetAllByMajorId(c *gin.Context) {
+func (h *Classroom) GetAllClassroomsByMajorId(c *gin.Context) {
 	majorId, err := strconv.Atoi(c.Param("major_id"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	result, err := h.service.GetAllByMajorId(uint(majorId))
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.GetAllClassroomsByMajorId(uint(majorId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }
 
 // @Id			getAllClassroomWithMajors

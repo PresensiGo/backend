@@ -35,6 +35,7 @@ func NewServer() {
 
 	batch.RegisterBatch(v1)
 	major.RegisterMajor(v1)
+	classroom.RegisterClassroom(v1)
 	attendance.RegisterAttendance(v1)
 	user.RegisterUser(v1)
 	student.RegisterStudent(v1)
@@ -44,7 +45,6 @@ func NewServer() {
 	authorized := v1.Group("/")
 	authorized.Use(middlewares.AuthMiddleware())
 	{
-		classroom.RegisterClassroom(authorized)
 		data.RegisterData(authorized)
 		subject.RegisterSubject(authorized)
 	}
