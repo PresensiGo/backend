@@ -174,7 +174,7 @@ func (s *SubjectAttendance) GetAllSubjectAttendanceRecords(
 		mapRecords[record.StudentId] = &record
 	}
 
-	result := make([]dto.SubjectAttendanceRecordItem, len(students))
+	result := make([]dto.GetAllSubjectAttendanceRecordsItem, len(students))
 	for i, student := range students {
 		var record *domains.SubjectAttendanceRecord
 		if r, ok := mapRecords[student.Id]; ok {
@@ -183,7 +183,7 @@ func (s *SubjectAttendance) GetAllSubjectAttendanceRecords(
 			record = &domains.SubjectAttendanceRecord{}
 		}
 
-		result[i] = dto.SubjectAttendanceRecordItem{
+		result[i] = dto.GetAllSubjectAttendanceRecordsItem{
 			Student: student,
 			Record:  *record,
 		}

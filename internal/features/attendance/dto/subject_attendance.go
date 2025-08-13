@@ -7,10 +7,10 @@ import (
 	subject "api/internal/features/subject/domains"
 )
 
-type SubjectAttendanceRecordItem struct {
+type GetAllSubjectAttendanceRecordsItem struct {
 	Student studentDomain.Student           `json:"student" validate:"required"`
 	Record  domains.SubjectAttendanceRecord `json:"record" validate:"required"`
-}
+} // @name GetAllSubjectAttendanceRecordsItem
 
 type GetAllSubjectAttendancesItem struct {
 	SubjectAttendance attendance.SubjectAttendance `json:"subject_attendance" validate:"required"`

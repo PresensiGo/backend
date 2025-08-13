@@ -102,6 +102,7 @@ func (h *SubjectAttendance) GetAllSubjectAttendances(c *gin.Context) {
 	}
 }
 
+// @id 			GetAllSubjectAttendanceRecords
 // @tags 		attendance
 // @param 		batch_id path int true "batch id"
 // @param 		major_id path int true "major id"

@@ -668,6 +668,7 @@
                 "tags": [
                     "attendance"
                 ],
+                "operationId": "GetAllSubjectAttendanceRecords",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1266,6 +1267,21 @@
                 }
             }
         },
+        "GetAllSubjectAttendanceRecordsItem": {
+            "type": "object",
+            "required": [
+                "record",
+                "student"
+            ],
+            "properties": {
+                "record": {
+                    "$ref": "#/definitions/domains.SubjectAttendanceRecord"
+                },
+                "student": {
+                    "$ref": "#/definitions/domains.Student"
+                }
+            }
+        },
         "GetAllSubjectAttendancesItem": {
             "type": "object",
             "required": [
@@ -1743,21 +1759,6 @@
                 }
             }
         },
-        "dto.SubjectAttendanceRecordItem": {
-            "type": "object",
-            "required": [
-                "record",
-                "student"
-            ],
-            "properties": {
-                "record": {
-                    "$ref": "#/definitions/domains.SubjectAttendanceRecord"
-                },
-                "student": {
-                    "$ref": "#/definitions/domains.Student"
-                }
-            }
-        },
         "major": {
             "type": "object",
             "required": [
@@ -2094,7 +2095,7 @@
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.SubjectAttendanceRecordItem"
+                        "$ref": "#/definitions/GetAllSubjectAttendanceRecordsItem"
                     }
                 }
             }

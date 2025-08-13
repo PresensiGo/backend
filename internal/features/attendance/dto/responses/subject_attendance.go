@@ -10,7 +10,7 @@ type GetAllSubjectAttendances struct {
 }
 
 type GetAllSubjectAttendanceRecords struct {
-	Items []dto.SubjectAttendanceRecordItem `json:"items" validate:"required"`
+	Items []dto.GetAllSubjectAttendanceRecordsItem `json:"items" validate:"required"`
 }
 
 type GetSubjectAttendance struct {

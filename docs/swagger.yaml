@@ -31,6 +31,16 @@ definitions:
     required:
     - students
     type: object
+  GetAllSubjectAttendanceRecordsItem:
+    properties:
+      record:
+        $ref: '#/definitions/domains.SubjectAttendanceRecord'
+      student:
+        $ref: '#/definitions/domains.Student'
+    required:
+    - record
+    - student
+    type: object
   GetAllSubjectAttendancesItem:
     properties:
       subject:
@@ -356,16 +366,6 @@ definitions:
     - student
     - student_token
     type: object
-  dto.SubjectAttendanceRecordItem:
-    properties:
-      record:
-        $ref: '#/definitions/domains.SubjectAttendanceRecord'
-      student:
-        $ref: '#/definitions/domains.Student'
-    required:
-    - record
-    - student
-    type: object
   major:
     properties:
       batch_id:
@@ -581,7 +581,7 @@ definitions:
     properties:
       items:
         items:
-          $ref: '#/definitions/dto.SubjectAttendanceRecordItem'
+          $ref: '#/definitions/GetAllSubjectAttendanceRecordsItem'
         type: array
     required:
     - items
@@ -1098,6 +1098,7 @@ paths:
       - attendance
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}/records:
     get:
+      operationId: GetAllSubjectAttendanceRecords
       parameters:
       - description: batch id
         in: path
