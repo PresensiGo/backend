@@ -36,7 +36,7 @@ definitions:
       subject:
         $ref: '#/definitions/domains.Subject'
       subject_attendance:
-        $ref: '#/definitions/domains.SubjectAttendance'
+        $ref: '#/definitions/SubjectAttendance'
     required:
     - subject
     - subject_attendance
@@ -120,6 +120,28 @@ definitions:
     required:
     - access_token
     - refresh_token
+    type: object
+  SubjectAttendance:
+    properties:
+      classroom_id:
+        type: integer
+      code:
+        type: string
+      date_time:
+        type: string
+      id:
+        type: integer
+      note:
+        type: string
+      subject_id:
+        type: integer
+    required:
+    - classroom_id
+    - code
+    - date_time
+    - id
+    - note
+    - subject_id
     type: object
   api_internal_features_batch_dto_requests.Create:
     properties:
@@ -275,28 +297,6 @@ definitions:
     - id
     - name
     - school_id
-    type: object
-  domains.SubjectAttendance:
-    properties:
-      classroom_id:
-        type: integer
-      code:
-        type: string
-      date_time:
-        type: string
-      id:
-        type: integer
-      note:
-        type: string
-      subject_id:
-        type: integer
-    required:
-    - classroom_id
-    - code
-    - date_time
-    - id
-    - note
-    - subject_id
     type: object
   domains.SubjectAttendanceRecord:
     properties:
@@ -475,7 +475,7 @@ definitions:
   responses.CreateSubjectAttendance:
     properties:
       subject_attendance:
-        $ref: '#/definitions/domains.SubjectAttendance'
+        $ref: '#/definitions/SubjectAttendance'
     required:
     - subject_attendance
     type: object
@@ -630,7 +630,7 @@ definitions:
   responses.GetSubjectAttendance:
     properties:
       subject_attendance:
-        $ref: '#/definitions/domains.SubjectAttendance'
+        $ref: '#/definitions/SubjectAttendance'
     required:
     - subject_attendance
     type: object
@@ -1067,6 +1067,7 @@ paths:
       - attendance
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}:
     get:
+      operationId: GetSubjectAttendance
       parameters:
       - description: batch id
         in: path

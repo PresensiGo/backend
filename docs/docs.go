@@ -631,6 +631,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
+                "operationId": "GetSubjectAttendance",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1285,7 +1286,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/domains.Subject"
                 },
                 "subject_attendance": {
-                    "$ref": "#/definitions/domains.SubjectAttendance"
+                    "$ref": "#/definitions/SubjectAttendance"
                 }
             }
         },
@@ -1407,6 +1408,37 @@ const docTemplate = `{
                 },
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "SubjectAttendance": {
+            "type": "object",
+            "required": [
+                "classroom_id",
+                "code",
+                "date_time",
+                "id",
+                "note",
+                "subject_id"
+            ],
+            "properties": {
+                "classroom_id": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "date_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "subject_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -1632,37 +1664,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "school_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "domains.SubjectAttendance": {
-            "type": "object",
-            "required": [
-                "classroom_id",
-                "code",
-                "date_time",
-                "id",
-                "note",
-                "subject_id"
-            ],
-            "properties": {
-                "classroom_id": {
-                    "type": "integer"
-                },
-                "code": {
-                    "type": "string"
-                },
-                "date_time": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "note": {
-                    "type": "string"
-                },
-                "subject_id": {
                     "type": "integer"
                 }
             }
@@ -1936,7 +1937,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "subject_attendance": {
-                    "$ref": "#/definitions/domains.SubjectAttendance"
+                    "$ref": "#/definitions/SubjectAttendance"
                 }
             }
         },
@@ -2178,7 +2179,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "subject_attendance": {
-                    "$ref": "#/definitions/domains.SubjectAttendance"
+                    "$ref": "#/definitions/SubjectAttendance"
                 }
             }
         },

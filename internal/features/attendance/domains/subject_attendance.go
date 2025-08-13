@@ -13,7 +13,7 @@ type SubjectAttendance struct {
 	Note        string    `json:"note" validate:"required"`
 	ClassroomId uint      `json:"classroom_id" validate:"required"`
 	SubjectId   uint      `json:"subject_id" validate:"required"`
-}
+} // @name SubjectAttendance
 
 func FromSubjectAttendanceModel(m *models.SubjectAttendance) *SubjectAttendance {
 	return &SubjectAttendance{

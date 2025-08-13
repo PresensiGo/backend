@@ -194,13 +194,14 @@ func (s *SubjectAttendance) GetAllSubjectAttendanceRecords(
 	}, nil
 }
 
-func (s *SubjectAttendance) Get(subjectAttendanceId uint) (*responses.GetSubjectAttendance, error) {
-	result, err := s.subjectAttendanceRepo.Get(subjectAttendanceId)
-	if err != nil {
+func (s *SubjectAttendance) GetSubjectAttendance(subjectAttendanceId uint) (
+	*responses.GetSubjectAttendance, error,
+) {
+	if result, err := s.subjectAttendanceRepo.Get(subjectAttendanceId); err != nil {
 		return nil, err
+	} else {
+		return &responses.GetSubjectAttendance{
+			SubjectAttendance: *result,
+		}, nil
 	}
-
-	return &responses.GetSubjectAttendance{
-		SubjectAttendance: *result,
-	}, nil
 }
