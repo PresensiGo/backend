@@ -13,7 +13,7 @@ func RegisterGeneralAttendance(g *gin.RouterGroup, handler *handlers.GeneralAtte
 
 		group.POST("", handler.Create)
 		group.GET("", handler.GetAllGeneralAttendances)
-		group.GET("/:general_attendance_id/students", handler.GetAllStudents)
+		group.GET("/:general_attendance_id/records", handler.GetAllGeneralAttendanceRecords)
 		group.GET("/:general_attendance_id", handler.GetGeneralAttendance)
 		group.PUT("/:general_attendance_id", handler.Update)
 		group.DELETE("/:general_attendance_id", handler.Delete)

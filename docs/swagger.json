@@ -843,11 +843,12 @@
                 }
             }
         },
-        "/api/v1/general-attendances/{general_attendance_id}/students": {
+        "/api/v1/general-attendances/{general_attendance_id}/records": {
             "get": {
                 "tags": [
                     "attendance"
                 ],
+                "operationId": "GetAllGeneralAttendanceRecords",
                 "parameters": [
                     {
                         "type": "integer",
@@ -861,7 +862,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllGeneralAttendanceStudents"
+                            "$ref": "#/definitions/responses.GetAllGeneralAttendanceRecords"
                         }
                     }
                 }
@@ -1263,6 +1264,21 @@
                 },
                 "school_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "GetAllGeneralAttendanceRecordsItem": {
+            "type": "object",
+            "required": [
+                "record",
+                "student"
+            ],
+            "properties": {
+                "record": {
+                    "$ref": "#/definitions/domains.GeneralAttendanceRecord"
+                },
+                "student": {
+                    "$ref": "#/definitions/domains.Student"
                 }
             }
         },
@@ -1729,21 +1745,6 @@
                 }
             }
         },
-        "dto.GeneralAttendanceStudentItem": {
-            "type": "object",
-            "required": [
-                "record",
-                "student"
-            ],
-            "properties": {
-                "record": {
-                    "$ref": "#/definitions/domains.GeneralAttendanceRecord"
-                },
-                "student": {
-                    "$ref": "#/definitions/domains.Student"
-                }
-            }
-        },
         "dto.StudentAccount": {
             "type": "object",
             "required": [
@@ -2030,7 +2031,7 @@
                 }
             }
         },
-        "responses.GetAllGeneralAttendanceStudents": {
+        "responses.GetAllGeneralAttendanceRecords": {
             "type": "object",
             "required": [
                 "items"
@@ -2039,7 +2040,7 @@
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.GeneralAttendanceStudentItem"
+                        "$ref": "#/definitions/GetAllGeneralAttendanceRecordsItem"
                     }
                 }
             }

@@ -111,8 +111,8 @@ func (s *GeneralAttendance) GetAllGeneralAttendances(schoolId uint) (
 	}
 }
 
-func (s *GeneralAttendance) GetAllStudents(generalAttendanceId uint) (
-	*responses.GetAllGeneralAttendanceStudents, *failure.App,
+func (s *GeneralAttendance) GetAllGeneralAttendanceRecords(generalAttendanceId uint) (
+	*responses.GetAllGeneralAttendanceRecords, *failure.App,
 ) {
 	records, err := s.generalAttendanceRecordRepo.GetAll(generalAttendanceId)
 	if err != nil {
@@ -134,15 +134,15 @@ func (s *GeneralAttendance) GetAllStudents(generalAttendanceId uint) (
 		mapStudents[student.Id] = &student
 	}
 
-	result := make([]dto.GeneralAttendanceStudentItem, len(*records))
+	result := make([]dto.GetAllGeneralAttendanceRecordsItem, len(*records))
 	for i, v := range *records {
-		result[i] = dto.GeneralAttendanceStudentItem{
+		result[i] = dto.GetAllGeneralAttendanceRecordsItem{
 			Student: *mapStudents[v.StudentId],
 			Record:  v,
 		}
 	}
 
-	return &responses.GetAllGeneralAttendanceStudents{
+	return &responses.GetAllGeneralAttendanceRecords{
 		Items: result,
 	}, nil
 }

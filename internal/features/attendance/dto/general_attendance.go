@@ -5,7 +5,7 @@ import (
 	studentDomain "api/internal/features/student/domains"
 )
 
-type GeneralAttendanceStudentItem struct {
+type GetAllGeneralAttendanceRecordsItem struct {
 	Student studentDomain.Student           `json:"student" validate:"required"`
 	Record  domains.GeneralAttendanceRecord `json:"record" validate:"required"`
-}
+} // @name GetAllGeneralAttendanceRecordsItem

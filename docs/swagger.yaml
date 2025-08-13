@@ -32,6 +32,16 @@ definitions:
     - note
     - school_id
     type: object
+  GetAllGeneralAttendanceRecordsItem:
+    properties:
+      record:
+        $ref: '#/definitions/domains.GeneralAttendanceRecord'
+      student:
+        $ref: '#/definitions/domains.Student'
+    required:
+    - record
+    - student
+    type: object
   GetAllStudentsByClassroomIdRes:
     properties:
       students:
@@ -346,16 +356,6 @@ definitions:
     - role
     - school_id
     type: object
-  dto.GeneralAttendanceStudentItem:
-    properties:
-      record:
-        $ref: '#/definitions/domains.GeneralAttendanceRecord'
-      student:
-        $ref: '#/definitions/domains.Student'
-    required:
-    - record
-    - student
-    type: object
   dto.StudentAccount:
     properties:
       student:
@@ -541,11 +541,11 @@ definitions:
     required:
     - classrooms
     type: object
-  responses.GetAllGeneralAttendanceStudents:
+  responses.GetAllGeneralAttendanceRecords:
     properties:
       items:
         items:
-          $ref: '#/definitions/dto.GeneralAttendanceStudentItem'
+          $ref: '#/definitions/GetAllGeneralAttendanceRecordsItem'
         type: array
     required:
     - items
@@ -1195,8 +1195,9 @@ paths:
             $ref: '#/definitions/responses.GetGeneralAttendance'
       tags:
       - attendance
-  /api/v1/general-attendances/{general_attendance_id}/students:
+  /api/v1/general-attendances/{general_attendance_id}/records:
     get:
+      operationId: GetAllGeneralAttendanceRecords
       parameters:
       - description: general attendance id
         in: path
@@ -1207,7 +1208,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllGeneralAttendanceStudents'
+            $ref: '#/definitions/responses.GetAllGeneralAttendanceRecords'
       tags:
       - attendance
   /api/v1/general-attendances/records/student:

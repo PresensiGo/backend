@@ -852,11 +852,12 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/general-attendances/{general_attendance_id}/students": {
+        "/api/v1/general-attendances/{general_attendance_id}/records": {
             "get": {
                 "tags": [
                     "attendance"
                 ],
+                "operationId": "GetAllGeneralAttendanceRecords",
                 "parameters": [
                     {
                         "type": "integer",
@@ -870,7 +871,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllGeneralAttendanceStudents"
+                            "$ref": "#/definitions/responses.GetAllGeneralAttendanceRecords"
                         }
                     }
                 }
@@ -1272,6 +1273,21 @@ const docTemplate = `{
                 },
                 "school_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "GetAllGeneralAttendanceRecordsItem": {
+            "type": "object",
+            "required": [
+                "record",
+                "student"
+            ],
+            "properties": {
+                "record": {
+                    "$ref": "#/definitions/domains.GeneralAttendanceRecord"
+                },
+                "student": {
+                    "$ref": "#/definitions/domains.Student"
                 }
             }
         },
@@ -1738,21 +1754,6 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.GeneralAttendanceStudentItem": {
-            "type": "object",
-            "required": [
-                "record",
-                "student"
-            ],
-            "properties": {
-                "record": {
-                    "$ref": "#/definitions/domains.GeneralAttendanceRecord"
-                },
-                "student": {
-                    "$ref": "#/definitions/domains.Student"
-                }
-            }
-        },
         "dto.StudentAccount": {
             "type": "object",
             "required": [
@@ -2039,7 +2040,7 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.GetAllGeneralAttendanceStudents": {
+        "responses.GetAllGeneralAttendanceRecords": {
             "type": "object",
             "required": [
                 "items"
@@ -2048,7 +2049,7 @@ const docTemplate = `{
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.GeneralAttendanceStudentItem"
+                        "$ref": "#/definitions/GetAllGeneralAttendanceRecordsItem"
                     }
                 }
             }

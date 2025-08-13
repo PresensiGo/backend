@@ -118,25 +118,26 @@ func (h *GeneralAttendance) GetGeneralAttendance(c *gin.Context) {
 	}
 }
 
+// @id 			GetAllGeneralAttendanceRecords
 // @tags 		attendance
 // @param 		general_attendance_id path int true "general attendance id"
-// @success 	200 {object} responses.GetAllGeneralAttendanceStudents
-// @router 		/api/v1/general-attendances/{general_attendance_id}/students [get]
-func (h *GeneralAttendance) GetAllStudents(c *gin.Context) {
+// @success 	200 {object} responses.GetAllGeneralAttendanceRecords
+// @router 		/api/v1/general-attendances/{general_attendance_id}/records [get]
+func (h *GeneralAttendance) GetAllGeneralAttendanceRecords(c *gin.Context) {
 	generalAttendanceId, err := strconv.Atoi(c.Param("general_attendance_id"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	if result, err := h.service.GetAllStudents(uint(generalAttendanceId)); err != nil {
+	if response, err := h.service.GetAllGeneralAttendanceRecords(uint(generalAttendanceId)); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,
 			},
 		)
 	} else {
-		c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, response)
 	}
 }
 

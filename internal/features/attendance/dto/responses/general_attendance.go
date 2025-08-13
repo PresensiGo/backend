@@ -21,8 +21,8 @@ type GetGeneralAttendance struct {
 	GeneralAttendance domains.GeneralAttendance `json:"general_attendance" validate:"required"`
 }
 
-type GetAllGeneralAttendanceStudents struct {
-	Items []dto.GeneralAttendanceStudentItem `json:"items" validate:"required"`
+type GetAllGeneralAttendanceRecords struct {
+	Items []dto.GetAllGeneralAttendanceRecordsItem `json:"items" validate:"required"`
 }
 
 type UpdateGeneralAttendance struct {
