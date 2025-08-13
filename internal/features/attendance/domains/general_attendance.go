@@ -12,7 +12,7 @@ type GeneralAttendance struct {
 	Note     string    `json:"note" validate:"required"`
 	SchoolId uint      `json:"school_id" validate:"required"`
 	Code     string    `json:"code" validate:"required"`
-}
+} // @name GeneralAttendance
 
 func FromGeneralAttendanceModel(m *models.GeneralAttendance) *GeneralAttendance {
 	return &GeneralAttendance{

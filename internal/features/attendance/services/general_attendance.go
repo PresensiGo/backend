@@ -99,15 +99,16 @@ func (s *GeneralAttendance) CreateGeneralAttendanceRecordStudent(
 	}, nil
 }
 
-func (s *GeneralAttendance) GetAll(schoolId uint) (*responses.GetAllGeneralAttendances, error) {
-	result, err := s.generalAttendanceRepo.GetAllBySchoolId(schoolId)
-	if err != nil {
-		return nil, err
+func (s *GeneralAttendance) GetAllGeneralAttendances(schoolId uint) (
+	*responses.GetAllGeneralAttendances, *failure.App,
+) {
+	if result, err := s.generalAttendanceRepo.GetAllBySchoolId(schoolId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetAllGeneralAttendances{
+			GeneralAttendances: *result,
+		}, nil
 	}
-
-	return &responses.GetAllGeneralAttendances{
-		GeneralAttendances: *result,
-	}, nil
 }
 
 func (s *GeneralAttendance) GetAllStudents(generalAttendanceId uint) (

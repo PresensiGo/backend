@@ -13,6 +13,25 @@ definitions:
     required:
     - code
     type: object
+  GeneralAttendance:
+    properties:
+      code:
+        type: string
+      datetime:
+        type: string
+      id:
+        type: integer
+      note:
+        type: string
+      school_id:
+        type: integer
+    required:
+    - code
+    - datetime
+    - id
+    - note
+    - school_id
+    type: object
   GetAllStudentsByClassroomIdRes:
     properties:
       students:
@@ -208,25 +227,6 @@ definitions:
     - id
     - major_id
     - name
-    type: object
-  domains.GeneralAttendance:
-    properties:
-      code:
-        type: string
-      datetime:
-        type: string
-      id:
-        type: integer
-      note:
-        type: string
-      school_id:
-        type: integer
-    required:
-    - code
-    - datetime
-    - id
-    - note
-    - school_id
     type: object
   domains.GeneralAttendanceRecord:
     properties:
@@ -454,7 +454,7 @@ definitions:
   responses.CreateGeneralAttendance:
     properties:
       general_attendance:
-        $ref: '#/definitions/domains.GeneralAttendance'
+        $ref: '#/definitions/GeneralAttendance'
     required:
     - general_attendance
     type: object
@@ -554,7 +554,7 @@ definitions:
     properties:
       general_attendances:
         items:
-          $ref: '#/definitions/domains.GeneralAttendance'
+          $ref: '#/definitions/GeneralAttendance'
         type: array
     required:
     - general_attendances
@@ -623,7 +623,7 @@ definitions:
   responses.GetGeneralAttendance:
     properties:
       general_attendance:
-        $ref: '#/definitions/domains.GeneralAttendance'
+        $ref: '#/definitions/GeneralAttendance'
     required:
     - general_attendance
     type: object
@@ -653,7 +653,7 @@ definitions:
   responses.UpdateGeneralAttendance:
     properties:
       general_attendance:
-        $ref: '#/definitions/domains.GeneralAttendance'
+        $ref: '#/definitions/GeneralAttendance'
     required:
     - general_attendance
     type: object
@@ -1155,7 +1155,7 @@ paths:
       - classroom
   /api/v1/general-attendances:
     get:
-      operationId: getAllGeneralAttendances
+      operationId: GetAllGeneralAttendances
       responses:
         "200":
           description: OK

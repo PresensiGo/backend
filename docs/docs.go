@@ -764,7 +764,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
-                "operationId": "getAllGeneralAttendances",
+                "operationId": "GetAllGeneralAttendances",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1248,6 +1248,33 @@ const docTemplate = `{
                 }
             }
         },
+        "GeneralAttendance": {
+            "type": "object",
+            "required": [
+                "code",
+                "datetime",
+                "id",
+                "note",
+                "school_id"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "datetime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "GetAllStudentsByClassroomIdRes": {
             "type": "object",
             "required": [
@@ -1539,33 +1566,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "domains.GeneralAttendance": {
-            "type": "object",
-            "required": [
-                "code",
-                "datetime",
-                "id",
-                "note",
-                "school_id"
-            ],
-            "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "datetime": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "note": {
-                    "type": "string"
-                },
-                "school_id": {
-                    "type": "integer"
                 }
             }
         },
@@ -1905,7 +1905,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "general_attendance": {
-                    "$ref": "#/definitions/domains.GeneralAttendance"
+                    "$ref": "#/definitions/GeneralAttendance"
                 }
             }
         },
@@ -2062,7 +2062,7 @@ const docTemplate = `{
                 "general_attendances": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.GeneralAttendance"
+                        "$ref": "#/definitions/GeneralAttendance"
                     }
                 }
             }
@@ -2169,7 +2169,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "general_attendance": {
-                    "$ref": "#/definitions/domains.GeneralAttendance"
+                    "$ref": "#/definitions/GeneralAttendance"
                 }
             }
         },
@@ -2216,7 +2216,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "general_attendance": {
-                    "$ref": "#/definitions/domains.GeneralAttendance"
+                    "$ref": "#/definitions/GeneralAttendance"
                 }
             }
         },

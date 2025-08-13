@@ -73,24 +73,26 @@ func (h *GeneralAttendance) CreateRecordStudent(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-// @id 			getAllGeneralAttendances
+// @id 			GetAllGeneralAttendances
 // @tags 		attendance
 // @success 	200 {object} responses.GetAllGeneralAttendances
 // @router 		/api/v1/general-attendances [get]
-func (h *GeneralAttendance) GetAll(c *gin.Context) {
+func (h *GeneralAttendance) GetAllGeneralAttendances(c *gin.Context) {
 	authUser := authentication.GetAuthenticatedUser(c)
 	if authUser.SchoolId == 0 {
 		c.AbortWithStatus(http.StatusForbidden)
 		return
 	}
 
-	result, err := h.service.GetAll(authUser.SchoolId)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.GetAllGeneralAttendances(authUser.SchoolId); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }
 
 // @id 			getGeneralAttendance
