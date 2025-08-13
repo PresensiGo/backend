@@ -1344,7 +1344,7 @@
             ],
             "properties": {
                 "subject": {
-                    "$ref": "#/definitions/domains.Subject"
+                    "$ref": "#/definitions/Subject"
                 },
                 "subject_attendance": {
                     "$ref": "#/definitions/SubjectAttendance"
@@ -1469,6 +1469,25 @@
                 },
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "Subject": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "school_id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -1657,25 +1676,6 @@
                 },
                 "ttl": {
                     "type": "string"
-                }
-            }
-        },
-        "domains.Subject": {
-            "type": "object",
-            "required": [
-                "id",
-                "name",
-                "school_id"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "school_id": {
-                    "type": "integer"
                 }
             }
         },
@@ -1896,7 +1896,7 @@
             ],
             "properties": {
                 "subject": {
-                    "$ref": "#/definitions/domains.Subject"
+                    "$ref": "#/definitions/Subject"
                 }
             }
         },
@@ -2101,7 +2101,7 @@
                 "subjects": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.Subject"
+                        "$ref": "#/definitions/Subject"
                     }
                 }
             }
@@ -2204,7 +2204,7 @@
             ],
             "properties": {
                 "subject": {
-                    "$ref": "#/definitions/domains.Subject"
+                    "$ref": "#/definitions/Subject"
                 }
             }
         }

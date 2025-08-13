@@ -1353,7 +1353,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "subject": {
-                    "$ref": "#/definitions/domains.Subject"
+                    "$ref": "#/definitions/Subject"
                 },
                 "subject_attendance": {
                     "$ref": "#/definitions/SubjectAttendance"
@@ -1478,6 +1478,25 @@ const docTemplate = `{
                 },
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "Subject": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "school_id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -1666,25 +1685,6 @@ const docTemplate = `{
                 },
                 "ttl": {
                     "type": "string"
-                }
-            }
-        },
-        "domains.Subject": {
-            "type": "object",
-            "required": [
-                "id",
-                "name",
-                "school_id"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "school_id": {
-                    "type": "integer"
                 }
             }
         },
@@ -1905,7 +1905,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "subject": {
-                    "$ref": "#/definitions/domains.Subject"
+                    "$ref": "#/definitions/Subject"
                 }
             }
         },
@@ -2110,7 +2110,7 @@ const docTemplate = `{
                 "subjects": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.Subject"
+                        "$ref": "#/definitions/Subject"
                     }
                 }
             }
@@ -2213,7 +2213,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "subject": {
-                    "$ref": "#/definitions/domains.Subject"
+                    "$ref": "#/definitions/Subject"
                 }
             }
         }

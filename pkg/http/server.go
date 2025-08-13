@@ -40,13 +40,13 @@ func NewServer() {
 	user.RegisterUser(v1)
 	student.RegisterStudent(v1)
 	teacher.RegisterModule(v1)
+	subject.RegisterSubject(v1)
 
 	// protected routes
 	authorized := v1.Group("/")
 	authorized.Use(middlewares.AuthMiddleware())
 	{
 		data.RegisterData(authorized)
-		subject.RegisterSubject(authorized)
 	}
 
 	// swagger

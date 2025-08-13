@@ -6,6 +6,7 @@ import (
 
 	"api/internal/features/subject/dto/requests"
 	"api/internal/features/subject/services"
+	"api/internal/shared/dto/responses"
 	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 )
@@ -49,20 +50,22 @@ func (h *Subject) Create(c *gin.Context) {
 // @tags 		subject
 // @success 	200 {object} responses.GetAllSubjects
 // @router 		/api/v1/subjects [get]
-func (h *Subject) GetAll(c *gin.Context) {
+func (h *Subject) GetAllSubjects(c *gin.Context) {
 	authUser := authentication.GetAuthenticatedUser(c)
 	if authUser.SchoolId == 0 {
 		c.AbortWithStatus(http.StatusForbidden)
 		return
 	}
 
-	result, err := h.service.GetAll(authUser.SchoolId)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.GetAllSubjects(authUser.SchoolId); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }
 
 // @id 			updateSubject

@@ -5,6 +5,7 @@ import (
 	"api/internal/features/subject/dto/requests"
 	"api/internal/features/subject/dto/responses"
 	"api/internal/features/subject/repositories"
+	"api/pkg/http/failure"
 )
 
 type Subject struct {
@@ -35,15 +36,14 @@ func (s *Subject) Create(schoolId uint, req requests.CreateSubject) (
 	}, nil
 }
 
-func (s *Subject) GetAll(schoolId uint) (*responses.GetAllSubjects, error) {
-	subjects, err := s.subjectRepo.GetAll(schoolId)
-	if err != nil {
-		return nil, err
+func (s *Subject) GetAllSubjects(schoolId uint) (*responses.GetAllSubjects, *failure.App) {
+	if subjects, err := s.subjectRepo.GetAll(schoolId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetAllSubjects{
+			Subjects: *subjects,
+		}, nil
 	}
-
-	return &responses.GetAllSubjects{
-		Subjects: *subjects,
-	}, nil
 }
 
 func (s *Subject) Update(subjectId uint, req requests.UpdateSubject) (

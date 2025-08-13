@@ -80,7 +80,7 @@ definitions:
   GetAllSubjectAttendancesItem:
     properties:
       subject:
-        $ref: '#/definitions/domains.Subject'
+        $ref: '#/definitions/Subject'
       subject_attendance:
         $ref: '#/definitions/SubjectAttendance'
     required:
@@ -166,6 +166,19 @@ definitions:
     required:
     - access_token
     - refresh_token
+    type: object
+  Subject:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      school_id:
+        type: integer
+    required:
+    - id
+    - name
+    - school_id
     type: object
   SubjectAttendance:
     properties:
@@ -296,19 +309,6 @@ definitions:
     - refresh_token
     - student_id
     - ttl
-    type: object
-  domains.Subject:
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-      school_id:
-        type: integer
-    required:
-    - id
-    - name
-    - school_id
     type: object
   domains.SubjectAttendanceRecord:
     properties:
@@ -453,7 +453,7 @@ definitions:
   responses.CreateSubject:
     properties:
       subject:
-        $ref: '#/definitions/domains.Subject'
+        $ref: '#/definitions/Subject'
     required:
     - subject
     type: object
@@ -584,7 +584,7 @@ definitions:
     properties:
       subjects:
         items:
-          $ref: '#/definitions/domains.Subject'
+          $ref: '#/definitions/Subject'
         type: array
     required:
     - subjects
@@ -650,7 +650,7 @@ definitions:
   responses.UpdateSubject:
     properties:
       subject:
-        $ref: '#/definitions/domains.Subject'
+        $ref: '#/definitions/Subject'
     required:
     - subject
     type: object
