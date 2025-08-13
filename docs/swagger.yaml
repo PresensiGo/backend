@@ -1181,7 +1181,7 @@ paths:
       - attendance
   /api/v1/general-attendances/{general_attendance_id}:
     get:
-      operationId: getGeneralAttendance
+      operationId: GetGeneralAttendance
       parameters:
       - description: general attendance id
         in: path

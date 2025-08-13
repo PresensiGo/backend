@@ -147,17 +147,16 @@ func (s *GeneralAttendance) GetAllStudents(generalAttendanceId uint) (
 	}, nil
 }
 
-func (s *GeneralAttendance) Get(generalAttendanceId uint) (
-	*responses.GetGeneralAttendance, error,
+func (s *GeneralAttendance) GetGeneralAttendance(generalAttendanceId uint) (
+	*responses.GetGeneralAttendance, *failure.App,
 ) {
-	result, err := s.generalAttendanceRepo.Get(generalAttendanceId)
-	if err != nil {
-		return nil, err
+	if result, err := s.generalAttendanceRepo.Get(generalAttendanceId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetGeneralAttendance{
+			GeneralAttendance: *result,
+		}, nil
 	}
-
-	return &responses.GetGeneralAttendance{
-		GeneralAttendance: *result,
-	}, nil
 }
 
 func (s *GeneralAttendance) Update(

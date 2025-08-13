@@ -832,7 +832,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
-                "operationId": "getGeneralAttendance",
+                "operationId": "GetGeneralAttendance",
                 "parameters": [
                     {
                         "type": "integer",
