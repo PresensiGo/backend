@@ -33,16 +33,16 @@ func NewServer() {
 
 	v1 := router.Group("/api/v1")
 
+	batch.RegisterBatch(v1)
+	attendance.RegisterAttendance(v1)
 	user.RegisterUser(v1)
 	student.RegisterStudent(v1)
-	attendance.RegisterAttendance(v1)
 	teacher.RegisterModule(v1)
 
 	// protected routes
 	authorized := v1.Group("/")
 	authorized.Use(middlewares.AuthMiddleware())
 	{
-		batch.RegisterBatch(authorized)
 		major.RegisterMajor(authorized)
 		classroom.RegisterClassroom(authorized)
 		data.RegisterData(authorized)

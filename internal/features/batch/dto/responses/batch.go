@@ -2,11 +2,10 @@ package responses
 
 import (
 	"api/internal/features/batch/domains"
-	"api/internal/features/batch/dto"
 )
 
 type GetAllBatches struct {
-	Batches []dto.BatchInfo `json:"batches" validate:"required"`
+	Batches []domains.Batch `json:"batches" validate:"required"`
 }
 
 type GetBatch struct {

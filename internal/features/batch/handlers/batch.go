@@ -6,6 +6,7 @@ import (
 
 	"api/internal/features/batch/dto/requests"
 	"api/internal/features/batch/services"
+	"api/internal/shared/dto/responses"
 	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 )
@@ -45,24 +46,26 @@ func (h *Batch) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Id			getAllBatches
-// @Tags		batch
-// @Success		200	{object} responses.GetAllBatches
-// @Router		/api/v1/batches [get]
-func (h *Batch) GetAll(c *gin.Context) {
-	authUser := authentication.GetAuthenticatedUser(c)
-	if authUser.SchoolId == 0 {
-		c.AbortWithStatus(http.StatusBadRequest)
+// @id			getAllBatches
+// @tags		batch
+// @success		200	{object} responses.GetAllBatches
+// @router		/api/v1/batches [get]
+func (h *Batch) GetAllBatches(c *gin.Context) {
+	user := authentication.GetAuthenticatedUser(c)
+	if user.SchoolId == 0 {
+		c.AbortWithStatus(http.StatusForbidden)
 		return
 	}
 
-	response, err := h.service.GetAllBySchoolId(authUser.SchoolId)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.GetAllBatches(user.SchoolId); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, response)
 }
 
 // @tags		batch

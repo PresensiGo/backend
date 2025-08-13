@@ -224,7 +224,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Batch"
+                            "$ref": "#/definitions/batch"
                         }
                     }
                 }
@@ -280,7 +280,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Batch"
+                            "$ref": "#/definitions/batch"
                         }
                     }
                 }
@@ -1446,7 +1446,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domains.Batch": {
+        "batch": {
             "type": "object",
             "required": [
                 "id",
@@ -1745,25 +1745,6 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.BatchInfo": {
-            "type": "object",
-            "required": [
-                "batch",
-                "classrooms_count",
-                "majors_count"
-            ],
-            "properties": {
-                "batch": {
-                    "$ref": "#/definitions/domains.Batch"
-                },
-                "classrooms_count": {
-                    "type": "integer"
-                },
-                "majors_count": {
-                    "type": "integer"
-                }
-            }
-        },
         "dto.GeneralAttendanceStudentItem": {
             "type": "object",
             "required": [
@@ -2028,7 +2009,7 @@ const docTemplate = `{
                 "batches": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.BatchInfo"
+                        "$ref": "#/definitions/batch"
                     }
                 }
             }
@@ -2180,7 +2161,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "batch": {
-                    "$ref": "#/definitions/domains.Batch"
+                    "$ref": "#/definitions/batch"
                 }
             }
         },

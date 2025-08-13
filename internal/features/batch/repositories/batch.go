@@ -56,20 +56,18 @@ func (r *Batch) CreateInTx2(tx *gorm.DB, data domains.Batch) (*domains.Batch, er
 
 func (r *Batch) GetAllBySchoolId(schoolId uint) (*[]domains.Batch, error) {
 	var batches []models.Batch
-	if err := r.db.Model(&models.Batch{}).
-		Where("school_id = ?", schoolId).
-		Order("name asc").
-		Find(&batches).
-		Error; err != nil {
+	if err := r.db.Model(&models.Batch{}).Where(
+		"school_id = ?", schoolId,
+	).Order("name asc").Find(&batches).Error; err != nil {
 		return nil, err
-	}
+	} else {
+		result := make([]domains.Batch, len(batches))
+		for i, batch := range batches {
+			result[i] = *domains.FromBatchModel(&batch)
+		}
 
-	mappedBatches := make([]domains.Batch, len(batches))
-	for i, v := range batches {
-		mappedBatches[i] = *domains.FromBatchModel(&v)
+		return &result, nil
 	}
-
-	return &mappedBatches, nil
 }
 
 func (r *Batch) Get(batchId uint) (*domains.Batch, error) {

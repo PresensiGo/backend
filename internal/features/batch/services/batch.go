@@ -2,13 +2,12 @@ package services
 
 import (
 	"api/internal/features/batch/domains"
-	"api/internal/features/batch/dto"
 	"api/internal/features/batch/dto/requests"
 	"api/internal/features/batch/dto/responses"
 	"api/internal/features/batch/repositories"
 	classroomRepo "api/internal/features/classroom/repositories"
-	majorDomain "api/internal/features/major/domains"
 	majorRepo "api/internal/features/major/repositories"
+	"api/pkg/http/failure"
 	"gorm.io/gorm"
 )
 
@@ -40,78 +39,14 @@ func (s *Batch) Create(schoolId uint, req requests.Create) (*domains.Batch, erro
 	return result, nil
 }
 
-func (s *Batch) GetAllBySchoolId(schoolId uint) (*responses.GetAllBatches, error) {
-	batches, err := s.batchRepo.GetAllBySchoolId(schoolId)
-	if err != nil {
-		return nil, err
+func (s *Batch) GetAllBatches(schoolId uint) (*responses.GetAllBatches, *failure.App) {
+	if batches, err := s.batchRepo.GetAllBySchoolId(schoolId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetAllBatches{
+			Batches: *batches,
+		}, nil
 	}
-
-	// map to store batch, majors, and classrooms
-	mapBatches := make(map[uint]domains.Batch)
-	mapMajors := make(map[uint]majorDomain.Major)
-
-	mapBatchNameAndMajorName := make(map[string]map[string]bool) // batchName: { majorName: _ }
-
-	// get majors
-	batchIds := make([]uint, len(*batches))
-	for i, v := range *batches {
-		batchIds[i] = v.Id
-		mapBatches[v.Id] = v
-	}
-
-	majors, err := s.majorRepo.GetManyByBatchIds(batchIds)
-	if err != nil {
-		return nil, err
-	}
-
-	majorIds := make([]uint, len(*majors))
-	for i, v := range *majors {
-		majorIds[i] = v.Id
-		mapMajors[v.Id] = v
-
-		batch := mapBatches[v.BatchId]
-		if _, ok := mapBatchNameAndMajorName[batch.Name]; !ok {
-			mapBatchNameAndMajorName[batch.Name] = make(map[string]bool)
-		}
-
-		if _, ok := mapBatchNameAndMajorName[batch.Name][v.Name]; !ok {
-			mapBatchNameAndMajorName[batch.Name][v.Name] = true
-		}
-	}
-
-	classrooms, err := s.classroomRepo.GetManyByMajorId(majorIds)
-	if err != nil {
-		return nil, err
-	}
-
-	mapBatchIdAndClassroomCount := make(map[uint]int)
-	for _, v := range classrooms {
-		major := mapMajors[v.MajorId]
-		batch := mapBatches[major.BatchId]
-
-		if count, ok := mapBatchIdAndClassroomCount[batch.Id]; !ok {
-			mapBatchIdAndClassroomCount[batch.Id] = 1
-		} else {
-			mapBatchIdAndClassroomCount[batch.Id] = count + 1
-		}
-	}
-
-	// mapping all data
-	mappedBatches := make([]dto.BatchInfo, len(*batches))
-	for i, v := range *batches {
-		mapMajorName := mapBatchNameAndMajorName[v.Name]
-		classroomCount := mapBatchIdAndClassroomCount[v.Id]
-
-		mappedBatches[i] = dto.BatchInfo{
-			Batch:           v,
-			MajorsCount:     len(mapMajorName),
-			ClassroomsCount: classroomCount,
-		}
-	}
-
-	return &responses.GetAllBatches{
-		Batches: mappedBatches,
-	}, nil
 }
 
 func (s *Batch) Get(batchId uint) (*responses.GetBatch, error) {

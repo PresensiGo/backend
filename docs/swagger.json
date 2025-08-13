@@ -215,7 +215,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Batch"
+                            "$ref": "#/definitions/batch"
                         }
                     }
                 }
@@ -271,7 +271,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Batch"
+                            "$ref": "#/definitions/batch"
                         }
                     }
                 }
@@ -1437,7 +1437,7 @@
                 }
             }
         },
-        "domains.Batch": {
+        "batch": {
             "type": "object",
             "required": [
                 "id",
@@ -1736,25 +1736,6 @@
                 }
             }
         },
-        "dto.BatchInfo": {
-            "type": "object",
-            "required": [
-                "batch",
-                "classrooms_count",
-                "majors_count"
-            ],
-            "properties": {
-                "batch": {
-                    "$ref": "#/definitions/domains.Batch"
-                },
-                "classrooms_count": {
-                    "type": "integer"
-                },
-                "majors_count": {
-                    "type": "integer"
-                }
-            }
-        },
         "dto.GeneralAttendanceStudentItem": {
             "type": "object",
             "required": [
@@ -2019,7 +2000,7 @@
                 "batches": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.BatchInfo"
+                        "$ref": "#/definitions/batch"
                     }
                 }
             }
@@ -2171,7 +2152,7 @@
             ],
             "properties": {
                 "batch": {
-                    "$ref": "#/definitions/domains.Batch"
+                    "$ref": "#/definitions/batch"
                 }
             }
         },
