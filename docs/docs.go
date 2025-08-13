@@ -216,7 +216,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/CreateGeneralAttendanceReq"
+                            "$ref": "#/definitions/requests.CreateBatch"
                         }
                     }
                 ],
@@ -272,7 +272,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api_internal_features_batch_dto_requests.Update"
+                            "$ref": "#/definitions/requests.UpdateBatch"
                         }
                     }
                 ],
@@ -329,6 +329,109 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.GetAllMajorsByBatchId"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "major"
+                ],
+                "operationId": "createMajor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateMajor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/major"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/batches/{batch_id}/majors/{major_id}": {
+            "put": {
+                "tags": [
+                    "major"
+                ],
+                "operationId": "updateMajor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateMajor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/major"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "major"
+                ],
+                "operationId": "deleteMajor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -952,88 +1055,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "tags": [
-                    "major"
-                ],
-                "operationId": "createMajor",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/CreateGeneralAttendanceReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/major"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/majors/{major_id}": {
-            "put": {
-                "tags": [
-                    "major"
-                ],
-                "operationId": "updateMajor",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "major id",
-                        "name": "major_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/api_internal_features_major_dto_requests.Update"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/major"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "major"
-                ],
-                "operationId": "deleteMajor",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "major id",
-                        "name": "major_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
             }
         },
         "/api/v1/reset": {
@@ -1551,29 +1572,6 @@ const docTemplate = `{
                 }
             }
         },
-        "api_internal_features_batch_dto_requests.Update": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "api_internal_features_major_dto_requests.Update": {
-            "type": "object",
-            "required": [
-                "batch_id",
-                "name"
-            ],
-            "properties": {
-                "batch_id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "batch": {
             "type": "object",
             "required": [
@@ -1796,7 +1794,26 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.CreateBatch": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.CreateClassroom": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.CreateMajor": {
             "type": "object",
             "required": [
                 "name"
@@ -1812,6 +1829,14 @@ const docTemplate = `{
             "required": [
                 "name"
             ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.UpdateBatch": {
+            "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
@@ -1836,6 +1861,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "note": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.UpdateMajor": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
                     "type": "string"
                 }
             }

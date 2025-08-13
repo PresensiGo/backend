@@ -25,7 +25,7 @@ func NewBatch(
 	return &Batch{db, batchRepo, majorRepo, classroomRepo}
 }
 
-func (s *Batch) Create(schoolId uint, req requests.Create) (*domains.Batch, error) {
+func (s *Batch) Create(schoolId uint, req requests.CreateBatch) (*domains.Batch, error) {
 	batch := domains.Batch{
 		Name:     req.Name,
 		SchoolId: schoolId,
@@ -60,7 +60,7 @@ func (s *Batch) Get(batchId uint) (*responses.GetBatch, error) {
 	}, nil
 }
 
-func (s *Batch) Update(batchId uint, req requests.Update) (*domains.Batch, error) {
+func (s *Batch) Update(batchId uint, req requests.UpdateBatch) (*domains.Batch, error) {
 	batch := domains.Batch{
 		Id:   batchId,
 		Name: req.Name,

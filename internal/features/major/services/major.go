@@ -20,10 +20,10 @@ func NewMajor(db *gorm.DB, batchRepo *batchRepo.Batch, majorRepo *repositories.M
 	return &Major{db, batchRepo, majorRepo}
 }
 
-func (s *Major) Create(req requests.Create) (*domains.Major, error) {
+func (s *Major) Create(batchId uint, req requests.CreateMajor) (*domains.Major, error) {
 	major := domains.Major{
 		Name:    req.Name,
-		BatchId: req.BatchId,
+		BatchId: batchId,
 	}
 
 	return s.majorRepo.Create(major)
@@ -60,10 +60,9 @@ func (s *Major) GetAllMajorsByBatchId(batchId uint) (
 	}
 }
 
-func (s *Major) Update(majorId uint, req requests.Update) (*domains.Major, error) {
+func (s *Major) Update(majorId uint, req requests.UpdateMajor) (*domains.Major, error) {
 	major := domains.Major{
-		Name:    req.Name,
-		BatchId: req.BatchId,
+		Name: req.Name,
 	}
 
 	return s.majorRepo.Update(majorId, major)

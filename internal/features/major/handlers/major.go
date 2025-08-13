@@ -21,17 +21,24 @@ func NewMajor(service *services.Major) *Major {
 
 // @id 			createMajor
 // @tags 		major
-// @param		body body requests.CreateGeneralAttendance true "body"
+// @param		batch_id path int true "batch id"
+// @param		body body requests.CreateMajor true "body"
 // @success 	200 {object} domains.Major
-// @router 		/api/v1/majors [post]
+// @router 		/api/v1/batches/{batch_id}/majors [post]
 func (h *Major) Create(c *gin.Context) {
-	var req requests.Create
+	batchId, err := strconv.Atoi(c.Param("batch_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var req requests.CreateMajor
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	result, err := h.service.Create(req)
+	result, err := h.service.Create(uint(batchId), req)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -85,10 +92,11 @@ func (h *Major) GetAllMajorsByBatchId(c *gin.Context) {
 
 // @id 			updateMajor
 // @tags 		major
+// @param		batch_id path int true "batch id"
 // @param		major_id path int true "major id"
-// @param		body body requests.Update true "body"
+// @param		body body requests.UpdateMajor true "body"
 // @success 	200 {object} domains.Major
-// @router 		/api/v1/majors/{major_id} [put]
+// @router 		/api/v1/batches/{batch_id}/majors/{major_id} [put]
 func (h *Major) Update(c *gin.Context) {
 	majorId, err := strconv.Atoi(c.Param("major_id"))
 	if err != nil {
@@ -96,7 +104,7 @@ func (h *Major) Update(c *gin.Context) {
 		return
 	}
 
-	var req requests.Update
+	var req requests.UpdateMajor
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
@@ -113,9 +121,10 @@ func (h *Major) Update(c *gin.Context) {
 
 // @id 			deleteMajor
 // @tags 		major
+// @param		batch_id path int true "batch id"
 // @param		major_id path int true "major id"
 // @success 	200 {string} string
-// @router 		/api/v1/majors/{major_id} [delete]
+// @router 		/api/v1/batches/{batch_id}/majors/{major_id} [delete]
 func (h *Major) Delete(c *gin.Context) {
 	majorId, err := strconv.Atoi(c.Param("major_id"))
 	if err != nil {

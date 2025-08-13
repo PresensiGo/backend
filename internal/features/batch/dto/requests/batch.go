@@ -1,9 +1,9 @@
 package requests
 
-type Create struct {
+type CreateBatch struct {
 	Name string `json:"name"`
 }
 
-type Update struct {
+type UpdateBatch struct {
 	Name string `json:"name"`
 }

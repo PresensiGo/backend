@@ -215,21 +215,6 @@ definitions:
     - note
     - subject_id
     type: object
-  api_internal_features_batch_dto_requests.Update:
-    properties:
-      name:
-        type: string
-    type: object
-  api_internal_features_major_dto_requests.Update:
-    properties:
-      batch_id:
-        type: integer
-      name:
-        type: string
-    required:
-    - batch_id
-    - name
-    type: object
   batch:
     properties:
       id:
@@ -384,7 +369,19 @@ definitions:
     - id
     - name
     type: object
+  requests.CreateBatch:
+    properties:
+      name:
+        type: string
+    type: object
   requests.CreateClassroom:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  requests.CreateMajor:
     properties:
       name:
         type: string
@@ -397,6 +394,11 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  requests.UpdateBatch:
+    properties:
+      name:
+        type: string
     type: object
   requests.UpdateClassroom:
     properties:
@@ -411,6 +413,13 @@ definitions:
         type: string
       note:
         type: string
+    type: object
+  requests.UpdateMajor:
+    properties:
+      name:
+        type: string
+    required:
+    - name
     type: object
   requests.UpdateSubject:
     properties:
@@ -786,7 +795,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/CreateGeneralAttendanceReq'
+          $ref: '#/definitions/requests.CreateBatch'
       responses:
         "200":
           description: OK
@@ -837,7 +846,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/api_internal_features_batch_dto_requests.Update'
+          $ref: '#/definitions/requests.UpdateBatch'
       responses:
         "200":
           description: OK
@@ -859,6 +868,74 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.GetAllMajorsByBatchId'
+      tags:
+      - major
+    post:
+      operationId: createMajor
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateMajor'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/major'
+      tags:
+      - major
+  /api/v1/batches/{batch_id}/majors/{major_id}:
+    delete:
+      operationId: deleteMajor
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - major
+    put:
+      operationId: updateMajor
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateMajor'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/major'
       tags:
       - major
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms:
@@ -1266,59 +1343,6 @@ paths:
             items:
               $ref: '#/definitions/major'
             type: array
-      tags:
-      - major
-    post:
-      operationId: createMajor
-      parameters:
-      - description: body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/CreateGeneralAttendanceReq'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/major'
-      tags:
-      - major
-  /api/v1/majors/{major_id}:
-    delete:
-      operationId: deleteMajor
-      parameters:
-      - description: major id
-        in: path
-        name: major_id
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - major
-    put:
-      operationId: updateMajor
-      parameters:
-      - description: major id
-        in: path
-        name: major_id
-        required: true
-        type: integer
-      - description: body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/api_internal_features_major_dto_requests.Update'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/major'
       tags:
       - major
   /api/v1/reset:

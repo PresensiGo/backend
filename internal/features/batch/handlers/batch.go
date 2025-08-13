@@ -21,7 +21,7 @@ func NewBatch(service *services.Batch) *Batch {
 
 // @id 			createBatch
 // @tags 		batch
-// @param 		body body requests.CreateGeneralAttendance true "body"
+// @param 		body body requests.CreateBatch true "body"
 // @success 	200 {object} domains.Batch
 // @router 		/api/v1/batches [post]
 func (h *Batch) Create(c *gin.Context) {
@@ -31,7 +31,7 @@ func (h *Batch) Create(c *gin.Context) {
 		return
 	}
 
-	var req requests.Create
+	var req requests.CreateBatch
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
@@ -91,7 +91,7 @@ func (h *Batch) Get(c *gin.Context) {
 // @id 			updateBatch
 // @tags 		batch
 // @param 		batch_id path int true "batch id"
-// @param 		body body requests.Update true "body"
+// @param 		body body requests.UpdateBatch true "body"
 // @success 	200 {object} domains.Batch
 // @router 		/api/v1/batches/{batch_id} [put]
 func (h *Batch) Update(c *gin.Context) {
@@ -101,7 +101,7 @@ func (h *Batch) Update(c *gin.Context) {
 		return
 	}
 
-	var req requests.Update
+	var req requests.UpdateBatch
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return

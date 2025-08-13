@@ -11,15 +11,15 @@ func RegisterMajor(g *gin.RouterGroup, handler *handlers.Major) {
 		relativePath := "/batches/:batch_id/majors"
 		group := g.Group(relativePath).Use(middlewares.AuthMiddleware())
 
+		group.POST("", handler.Create)
 		group.GET("", handler.GetAllMajorsByBatchId)
+		group.PUT("/:major_id", handler.Update)
+		group.DELETE("/:major_id", handler.Delete)
 	}
 
 	{
 		group := g.Group("/majors").Use(middlewares.AuthMiddleware())
 
-		group.POST("", handler.Create)
 		group.GET("", handler.GetAllMajors)
-		group.PUT("/:major_id", handler.Update)
-		group.DELETE("/:major_id", handler.Delete)
 	}
 }
