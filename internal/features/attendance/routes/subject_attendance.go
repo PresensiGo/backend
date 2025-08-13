@@ -10,7 +10,7 @@ func RegisterSubjectAttendance(g *gin.RouterGroup, handler *handlers.SubjectAtte
 	relativePath := "/batches/:batch_id/majors/:major_id/classrooms/:classroom_id/subject-attendances"
 	{
 		group := g.Group(relativePath).Use(middlewares.AuthMiddleware())
-		group.POST("", handler.Create)
+		group.POST("", handler.CreateSubjectAttendance)
 		group.GET("", handler.GetAllSubjectAttendances)
 		group.GET("/:subject_attendance_id", handler.GetSubjectAttendance)
 		group.GET("/:subject_attendance_id/records", handler.GetAllSubjectAttendanceRecords)

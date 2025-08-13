@@ -575,6 +575,7 @@
                 "tags": [
                     "attendance"
                 ],
+                "operationId": "CreateSubjectAttendance",
                 "parameters": [
                     {
                         "type": "integer",
@@ -603,7 +604,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.CreateSubjectAttendance"
+                            "$ref": "#/definitions/CreateSubjectAttendanceReq"
                         }
                     }
                 ],
@@ -1251,6 +1252,25 @@
                 }
             }
         },
+        "CreateSubjectAttendanceReq": {
+            "type": "object",
+            "required": [
+                "datetime",
+                "note",
+                "subject_id"
+            ],
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "subject_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "GeneralAttendance": {
             "type": "object",
             "required": [
@@ -1786,25 +1806,6 @@
             "properties": {
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "requests.CreateSubjectAttendance": {
-            "type": "object",
-            "required": [
-                "datetime",
-                "note",
-                "subject_id"
-            ],
-            "properties": {
-                "datetime": {
-                    "type": "string"
-                },
-                "note": {
-                    "type": "string"
-                },
-                "subject_id": {
-                    "type": "integer"
                 }
             }
         },

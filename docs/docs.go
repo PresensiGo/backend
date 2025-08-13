@@ -584,6 +584,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
+                "operationId": "CreateSubjectAttendance",
                 "parameters": [
                     {
                         "type": "integer",
@@ -612,7 +613,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.CreateSubjectAttendance"
+                            "$ref": "#/definitions/CreateSubjectAttendanceReq"
                         }
                     }
                 ],
@@ -1260,6 +1261,25 @@ const docTemplate = `{
                 }
             }
         },
+        "CreateSubjectAttendanceReq": {
+            "type": "object",
+            "required": [
+                "datetime",
+                "note",
+                "subject_id"
+            ],
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "subject_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "GeneralAttendance": {
             "type": "object",
             "required": [
@@ -1795,25 +1815,6 @@ const docTemplate = `{
             "properties": {
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "requests.CreateSubjectAttendance": {
-            "type": "object",
-            "required": [
-                "datetime",
-                "note",
-                "subject_id"
-            ],
-            "properties": {
-                "datetime": {
-                    "type": "string"
-                },
-                "note": {
-                    "type": "string"
-                },
-                "subject_id": {
-                    "type": "integer"
                 }
             }
         },

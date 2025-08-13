@@ -1,6 +1,8 @@
 package services
 
 import (
+	"net/http"
+
 	"api/internal/features/attendance/domains"
 	"api/internal/features/attendance/dto"
 	"api/internal/features/attendance/dto/requests"
@@ -51,12 +53,14 @@ func NewSubjectAttendance(
 	}
 }
 
-func (s *SubjectAttendance) Create(classroomId uint, req requests.CreateSubjectAttendance) (
-	*responses.CreateSubjectAttendance, error,
+func (s *SubjectAttendance) CreateSubjectAttendance(
+	classroomId uint, req requests.CreateSubjectAttendance,
+) (
+	*responses.CreateSubjectAttendance, *failure.App,
 ) {
 	parsedDatetime, err := utils.GetParsedDateTime(req.DateTime)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewApp(http.StatusBadRequest, "Tanggal dan waktu tidak valid!", err)
 	}
 
 	subjectAttendance := domains.SubjectAttendance{
@@ -67,14 +71,13 @@ func (s *SubjectAttendance) Create(classroomId uint, req requests.CreateSubjectA
 		SubjectId:   req.SubjectId,
 	}
 
-	result, err := s.subjectAttendanceRepo.Create(subjectAttendance)
-	if err != nil {
-		return nil, err
+	if result, err := s.subjectAttendanceRepo.Create(subjectAttendance); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.CreateSubjectAttendance{
+			SubjectAttendance: *result,
+		}, nil
 	}
-
-	return &responses.CreateSubjectAttendance{
-		SubjectAttendance: *result,
-	}, nil
 }
 
 func (s *SubjectAttendance) CreateRecordStudent(
