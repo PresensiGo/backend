@@ -12,7 +12,6 @@ import (
 	studentRepo "api/internal/features/student/repositories"
 	subjectDomain "api/internal/features/subject/domains"
 	subjectRepo "api/internal/features/subject/repositories"
-	shared "api/internal/shared/domains"
 	"api/pkg/http/failure"
 	"api/pkg/utils"
 	"github.com/google/uuid"
@@ -119,10 +118,12 @@ func (s *SubjectAttendance) CreateRecordStudent(
 	}, nil
 }
 
-func (s *SubjectAttendance) GetAll(classroomId uint) (*responses.GetAllSubjectAttendances, error) {
+func (s *SubjectAttendance) GetAllSubjectAttendances(classroomId uint) (
+	*responses.GetAllSubjectAttendances, *failure.App,
+) {
 	subjectAttendances, err := s.subjectAttendanceRepo.GetAllByClassroomId(classroomId)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 
 	subjectIds := make([]uint, len(*subjectAttendances))
@@ -132,7 +133,7 @@ func (s *SubjectAttendance) GetAll(classroomId uint) (*responses.GetAllSubjectAt
 
 	subject, err := s.subjectRepo.GetMany(subjectIds)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 
 	mapSubject := make(map[uint]*subjectDomain.Subject)
@@ -140,9 +141,9 @@ func (s *SubjectAttendance) GetAll(classroomId uint) (*responses.GetAllSubjectAt
 		mapSubject[v.Id] = &v
 	}
 
-	result := make([]shared.SubjectAttendanceSubject, len(*subjectAttendances))
+	result := make([]dto.GetAllSubjectAttendancesItem, len(*subjectAttendances))
 	for i, v := range *subjectAttendances {
-		result[i] = shared.SubjectAttendanceSubject{
+		result[i] = dto.GetAllSubjectAttendancesItem{
 			SubjectAttendance: v,
 			Subject:           *mapSubject[v.SubjectId],
 		}

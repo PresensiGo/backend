@@ -31,6 +31,16 @@ definitions:
     required:
     - students
     type: object
+  GetAllSubjectAttendancesItem:
+    properties:
+      subject:
+        $ref: '#/definitions/domains.Subject'
+      subject_attendance:
+        $ref: '#/definitions/domains.SubjectAttendance'
+    required:
+    - subject
+    - subject_attendance
+    type: object
   LoginReq:
     properties:
       email:
@@ -303,16 +313,6 @@ definitions:
     - id
     - student_id
     - subject_attendance_id
-    type: object
-  domains.SubjectAttendanceSubject:
-    properties:
-      subject:
-        $ref: '#/definitions/domains.Subject'
-      subject_attendance:
-        $ref: '#/definitions/domains.SubjectAttendance'
-    required:
-    - subject
-    - subject_attendance
     type: object
   domains.User:
     properties:
@@ -590,7 +590,7 @@ definitions:
     properties:
       items:
         items:
-          $ref: '#/definitions/domains.SubjectAttendanceSubject'
+          $ref: '#/definitions/GetAllSubjectAttendancesItem'
         type: array
     required:
     - items
@@ -1011,6 +1011,7 @@ paths:
       - student
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances:
     get:
+      operationId: GetAllSubjectAttendances
       parameters:
       - description: batch id
         in: path

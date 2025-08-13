@@ -547,6 +547,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
+                "operationId": "GetAllSubjectAttendances",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1273,6 +1274,21 @@ const docTemplate = `{
                 }
             }
         },
+        "GetAllSubjectAttendancesItem": {
+            "type": "object",
+            "required": [
+                "subject",
+                "subject_attendance"
+            ],
+            "properties": {
+                "subject": {
+                    "$ref": "#/definitions/domains.Subject"
+                },
+                "subject_attendance": {
+                    "$ref": "#/definitions/domains.SubjectAttendance"
+                }
+            }
+        },
         "LoginReq": {
             "type": "object",
             "properties": {
@@ -1671,21 +1687,6 @@ const docTemplate = `{
                 },
                 "subject_attendance_id": {
                     "type": "integer"
-                }
-            }
-        },
-        "domains.SubjectAttendanceSubject": {
-            "type": "object",
-            "required": [
-                "subject",
-                "subject_attendance"
-            ],
-            "properties": {
-                "subject": {
-                    "$ref": "#/definitions/domains.Subject"
-                },
-                "subject_attendance": {
-                    "$ref": "#/definitions/domains.SubjectAttendance"
                 }
             }
         },
@@ -2115,7 +2116,7 @@ const docTemplate = `{
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.SubjectAttendanceSubject"
+                        "$ref": "#/definitions/GetAllSubjectAttendancesItem"
                     }
                 }
             }
