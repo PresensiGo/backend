@@ -939,7 +939,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domains.Major"
+                                "$ref": "#/definitions/major"
                             }
                         }
                     }
@@ -965,7 +965,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Major"
+                            "$ref": "#/definitions/major"
                         }
                     }
                 }
@@ -999,7 +999,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Major"
+                            "$ref": "#/definitions/major"
                         }
                     }
                 }
@@ -1525,25 +1525,6 @@
                 }
             }
         },
-        "domains.Major": {
-            "type": "object",
-            "required": [
-                "batch_id",
-                "id",
-                "name"
-            ],
-            "properties": {
-                "batch_id": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "domains.Student": {
             "type": "object",
             "required": [
@@ -1583,7 +1564,7 @@
                     "$ref": "#/definitions/domains.Classroom"
                 },
                 "major": {
-                    "$ref": "#/definitions/domains.Major"
+                    "$ref": "#/definitions/major"
                 },
                 "student": {
                     "$ref": "#/definitions/domains.Student"
@@ -1781,6 +1762,25 @@
                 }
             }
         },
+        "major": {
+            "type": "object",
+            "required": [
+                "batch_id",
+                "id",
+                "name"
+            ],
+            "properties": {
+                "batch_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.CreateClassroom": {
             "type": "object",
             "required": [
@@ -1877,7 +1877,7 @@
                     "$ref": "#/definitions/domains.Classroom"
                 },
                 "major": {
-                    "$ref": "#/definitions/domains.Major"
+                    "$ref": "#/definitions/major"
                 }
             }
         },
@@ -2070,7 +2070,7 @@
                 "majors": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.Major"
+                        "$ref": "#/definitions/major"
                     }
                 }
             }

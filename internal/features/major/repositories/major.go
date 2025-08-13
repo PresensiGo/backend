@@ -60,14 +60,14 @@ func (r *Major) GetAllByBatchId(batchId uint) (*[]domains.Major, error) {
 		Order("name asc").
 		Find(&majors).Error; err != nil {
 		return nil, err
-	}
+	} else {
+		result := make([]domains.Major, len(majors))
+		for i, major := range majors {
+			result[i] = *domains.FromMajorModel(&major)
+		}
 
-	result := make([]domains.Major, len(majors))
-	for i, v := range majors {
-		result[i] = *domains.FromMajorModel(&v)
+		return &result, nil
 	}
-
-	return &result, nil
 }
 
 func (r *Major) GetManyByIds(majorIds []uint) (*[]domains.Major, error) {

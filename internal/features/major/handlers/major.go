@@ -6,6 +6,7 @@ import (
 
 	"api/internal/features/major/dto/requests"
 	"api/internal/features/major/services"
+	"api/internal/shared/dto/responses"
 	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 )
@@ -64,20 +65,22 @@ func (h *Major) GetAllMajors(c *gin.Context) {
 // @param		batch_id path int true "batch id"
 // @success		200 {object} responses.GetAllMajorsByBatchId
 // @router		/api/v1/batches/{batch_id}/majors [get]
-func (h *Major) GetAllByBatchId(c *gin.Context) {
+func (h *Major) GetAllMajorsByBatchId(c *gin.Context) {
 	batchId, err := strconv.Atoi(c.Param("batch_id"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	response, err := h.service.GetAllMajorsByBatchId(uint(batchId))
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.GetAllMajorsByBatchId(uint(batchId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, response)
 }
 
 // @id 			updateMajor

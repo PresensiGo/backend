@@ -8,7 +8,7 @@ type Major struct {
 	Id      uint   `json:"id" validate:"required"`
 	Name    string `json:"name" validate:"required"`
 	BatchId uint   `json:"batch_id" validate:"required"`
-}
+} // @name major
 
 func FromMajorModel(m *models.Major) *Major {
 	return &Major{

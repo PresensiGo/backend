@@ -948,7 +948,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domains.Major"
+                                "$ref": "#/definitions/major"
                             }
                         }
                     }
@@ -974,7 +974,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Major"
+                            "$ref": "#/definitions/major"
                         }
                     }
                 }
@@ -1008,7 +1008,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Major"
+                            "$ref": "#/definitions/major"
                         }
                     }
                 }
@@ -1534,25 +1534,6 @@ const docTemplate = `{
                 }
             }
         },
-        "domains.Major": {
-            "type": "object",
-            "required": [
-                "batch_id",
-                "id",
-                "name"
-            ],
-            "properties": {
-                "batch_id": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "domains.Student": {
             "type": "object",
             "required": [
@@ -1592,7 +1573,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/domains.Classroom"
                 },
                 "major": {
-                    "$ref": "#/definitions/domains.Major"
+                    "$ref": "#/definitions/major"
                 },
                 "student": {
                     "$ref": "#/definitions/domains.Student"
@@ -1790,6 +1771,25 @@ const docTemplate = `{
                 }
             }
         },
+        "major": {
+            "type": "object",
+            "required": [
+                "batch_id",
+                "id",
+                "name"
+            ],
+            "properties": {
+                "batch_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.CreateClassroom": {
             "type": "object",
             "required": [
@@ -1886,7 +1886,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/domains.Classroom"
                 },
                 "major": {
-                    "$ref": "#/definitions/domains.Major"
+                    "$ref": "#/definitions/major"
                 }
             }
         },
@@ -2079,7 +2079,7 @@ const docTemplate = `{
                 "majors": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.Major"
+                        "$ref": "#/definitions/major"
                     }
                 }
             }

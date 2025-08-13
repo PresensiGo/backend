@@ -202,19 +202,6 @@ definitions:
     - id
     - student_id
     type: object
-  domains.Major:
-    properties:
-      batch_id:
-        type: integer
-      id:
-        type: integer
-      name:
-        type: string
-    required:
-    - batch_id
-    - id
-    - name
-    type: object
   domains.Student:
     properties:
       classroom_id:
@@ -239,7 +226,7 @@ definitions:
       classroom:
         $ref: '#/definitions/domains.Classroom'
       major:
-        $ref: '#/definitions/domains.Major'
+        $ref: '#/definitions/major'
       student:
         $ref: '#/definitions/domains.Student'
     required:
@@ -379,6 +366,19 @@ definitions:
     - record
     - student
     type: object
+  major:
+    properties:
+      batch_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - batch_id
+    - id
+    - name
+    type: object
   requests.CreateClassroom:
     properties:
       name:
@@ -439,7 +439,7 @@ definitions:
       classroom:
         $ref: '#/definitions/domains.Classroom'
       major:
-        $ref: '#/definitions/domains.Major'
+        $ref: '#/definitions/major'
     required:
     - classroom
     - major
@@ -563,7 +563,7 @@ definitions:
     properties:
       majors:
         items:
-          $ref: '#/definitions/domains.Major'
+          $ref: '#/definitions/major'
         type: array
     required:
     - majors
@@ -1273,7 +1273,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domains.Major'
+              $ref: '#/definitions/major'
             type: array
       tags:
       - major
@@ -1290,7 +1290,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domains.Major'
+            $ref: '#/definitions/major'
       tags:
       - major
   /api/v1/majors/{major_id}:
@@ -1327,7 +1327,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domains.Major'
+            $ref: '#/definitions/major'
       tags:
       - major
   /api/v1/reset:

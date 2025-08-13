@@ -6,6 +6,7 @@ import (
 	"api/internal/features/major/dto/requests"
 	"api/internal/features/major/dto/responses"
 	"api/internal/features/major/repositories"
+	"api/pkg/http/failure"
 	"gorm.io/gorm"
 )
 
@@ -47,15 +48,16 @@ func (s *Major) GetAllMajors(schoolId uint) (*[]domains.Major, error) {
 	return majors, nil
 }
 
-func (s *Major) GetAllMajorsByBatchId(batchId uint) (*responses.GetAllMajorsByBatchId, error) {
-	majors, err := s.majorRepo.GetAllByBatchId(batchId)
-	if err != nil {
-		return nil, err
+func (s *Major) GetAllMajorsByBatchId(batchId uint) (
+	*responses.GetAllMajorsByBatchId, *failure.App,
+) {
+	if majors, err := s.majorRepo.GetAllByBatchId(batchId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetAllMajorsByBatchId{
+			Majors: *majors,
+		}, nil
 	}
-
-	return &responses.GetAllMajorsByBatchId{
-		Majors: *majors,
-	}, nil
 }
 
 func (s *Major) Update(majorId uint, req requests.Update) (*domains.Major, error) {

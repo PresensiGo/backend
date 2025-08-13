@@ -34,6 +34,7 @@ func NewServer() {
 	v1 := router.Group("/api/v1")
 
 	batch.RegisterBatch(v1)
+	major.RegisterMajor(v1)
 	attendance.RegisterAttendance(v1)
 	user.RegisterUser(v1)
 	student.RegisterStudent(v1)
@@ -43,7 +44,6 @@ func NewServer() {
 	authorized := v1.Group("/")
 	authorized.Use(middlewares.AuthMiddleware())
 	{
-		major.RegisterMajor(authorized)
 		classroom.RegisterClassroom(authorized)
 		data.RegisterData(authorized)
 		subject.RegisterSubject(authorized)
