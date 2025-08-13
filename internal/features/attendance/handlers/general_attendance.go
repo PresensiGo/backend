@@ -19,12 +19,12 @@ func NewGeneralAttendance(service *services.GeneralAttendance) *GeneralAttendanc
 	return &GeneralAttendance{service: service}
 }
 
-// @id 			createGeneralAttendance
+// @id 			CreateGeneralAttendance
 // @tags 		attendance
 // @param 		body body requests.CreateGeneralAttendance true "body"
 // @success 	200 {object} responses.CreateGeneralAttendance
 // @router 		/api/v1/general-attendances [post]
-func (h *GeneralAttendance) Create(c *gin.Context) {
+func (h *GeneralAttendance) CreateGeneralAttendance(c *gin.Context) {
 	authUser := authentication.GetAuthenticatedUser(c)
 	if authUser.SchoolId == 0 {
 		c.AbortWithStatus(http.StatusForbidden)
@@ -37,13 +37,15 @@ func (h *GeneralAttendance) Create(c *gin.Context) {
 		return
 	}
 
-	result, err := h.service.Create(authUser.SchoolId, req)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.CreateGeneralAttendance(authUser.SchoolId, req); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }
 
 // @id 			createGeneralAttendanceRecordStudent

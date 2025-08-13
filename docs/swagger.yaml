@@ -6,6 +6,13 @@ definitions:
     required:
     - code
     type: object
+  CreateGeneralAttendanceReq:
+    properties:
+      datetime:
+        type: string
+      note:
+        type: string
+    type: object
   CreateSubjectAttendanceRecordStudentReq:
     properties:
       code:
@@ -182,25 +189,10 @@ definitions:
     - note
     - subject_id
     type: object
-  api_internal_features_batch_dto_requests.Create:
-    properties:
-      name:
-        type: string
-    type: object
   api_internal_features_batch_dto_requests.Update:
     properties:
       name:
         type: string
-    type: object
-  api_internal_features_major_dto_requests.Create:
-    properties:
-      batch_id:
-        type: integer
-      name:
-        type: string
-    required:
-    - batch_id
-    - name
     type: object
   api_internal_features_major_dto_requests.Update:
     properties:
@@ -385,13 +377,6 @@ definitions:
         type: string
     required:
     - name
-    type: object
-  requests.CreateGeneralAttendance:
-    properties:
-      datetime:
-        type: string
-      note:
-        type: string
     type: object
   requests.CreateSubject:
     properties:
@@ -801,7 +786,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/api_internal_features_batch_dto_requests.Create'
+          $ref: '#/definitions/CreateGeneralAttendanceReq'
       responses:
         "200":
           description: OK
@@ -1169,14 +1154,14 @@ paths:
       tags:
       - attendance
     post:
-      operationId: createGeneralAttendance
+      operationId: CreateGeneralAttendance
       parameters:
       - description: body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/requests.CreateGeneralAttendance'
+          $ref: '#/definitions/CreateGeneralAttendanceReq'
       responses:
         "200":
           description: OK
@@ -1290,7 +1275,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/api_internal_features_major_dto_requests.Create'
+          $ref: '#/definitions/CreateGeneralAttendanceReq'
       responses:
         "200":
           description: OK

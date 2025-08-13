@@ -21,7 +21,7 @@ func NewBatch(service *services.Batch) *Batch {
 
 // @id 			createBatch
 // @tags 		batch
-// @param 		body body requests.Create true "body"
+// @param 		body body requests.CreateGeneralAttendance true "body"
 // @success 	200 {object} domains.Batch
 // @router 		/api/v1/batches [post]
 func (h *Batch) Create(c *gin.Context) {

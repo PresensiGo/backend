@@ -3,7 +3,7 @@ package requests
 type CreateGeneralAttendance struct {
 	DateTime string `json:"datetime"`
 	Note     string `json:"note"`
-}
+} // @name CreateGeneralAttendanceReq
 
 type UpdateGeneralAttendance struct {
 	DateTime string `json:"datetime"`

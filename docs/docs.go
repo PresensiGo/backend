@@ -216,7 +216,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api_internal_features_batch_dto_requests.Create"
+                            "$ref": "#/definitions/CreateGeneralAttendanceReq"
                         }
                     }
                 ],
@@ -778,7 +778,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
-                "operationId": "createGeneralAttendance",
+                "operationId": "CreateGeneralAttendance",
                 "parameters": [
                     {
                         "description": "body",
@@ -786,7 +786,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.CreateGeneralAttendance"
+                            "$ref": "#/definitions/CreateGeneralAttendanceReq"
                         }
                     }
                 ],
@@ -964,7 +964,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api_internal_features_major_dto_requests.Create"
+                            "$ref": "#/definitions/CreateGeneralAttendanceReq"
                         }
                     }
                 ],
@@ -1238,6 +1238,17 @@ const docTemplate = `{
                 }
             }
         },
+        "CreateGeneralAttendanceReq": {
+            "type": "object",
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                }
+            }
+        },
         "CreateSubjectAttendanceRecordStudentReq": {
             "type": "object",
             "required": [
@@ -1501,32 +1512,9 @@ const docTemplate = `{
                 }
             }
         },
-        "api_internal_features_batch_dto_requests.Create": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "api_internal_features_batch_dto_requests.Update": {
             "type": "object",
             "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "api_internal_features_major_dto_requests.Create": {
-            "type": "object",
-            "required": [
-                "batch_id",
-                "name"
-            ],
-            "properties": {
-                "batch_id": {
-                    "type": "integer"
-                },
                 "name": {
                     "type": "string"
                 }
@@ -1795,17 +1783,6 @@ const docTemplate = `{
             ],
             "properties": {
                 "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.CreateGeneralAttendance": {
-            "type": "object",
-            "properties": {
-                "datetime": {
-                    "type": "string"
-                },
-                "note": {
                     "type": "string"
                 }
             }

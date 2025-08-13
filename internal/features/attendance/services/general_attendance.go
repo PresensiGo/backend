@@ -1,6 +1,9 @@
 package services
 
 import (
+	"fmt"
+	"net/http"
+
 	"api/internal/features/attendance/domains"
 	"api/internal/features/attendance/dto"
 	"api/internal/features/attendance/dto/requests"
@@ -35,12 +38,17 @@ func NewGeneralAttendance(
 	}
 }
 
-func (s *GeneralAttendance) Create(
+func (s *GeneralAttendance) CreateGeneralAttendance(
 	schoolId uint, req requests.CreateGeneralAttendance,
-) (*responses.CreateGeneralAttendance, error) {
+) (*responses.CreateGeneralAttendance, *failure.App) {
+	fmt.Println("datetime", req.DateTime)
 	parsedDateTime, err := utils.GetParsedDateTime(req.DateTime)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewApp(
+			http.StatusBadRequest,
+			"Tanggal dan waktu tidak valid!",
+			err,
+		)
 	}
 
 	generalAttendance := domains.GeneralAttendance{
@@ -50,14 +58,13 @@ func (s *GeneralAttendance) Create(
 		Code:     uuid.NewString(),
 	}
 
-	result, err := s.generalAttendanceRepo.Create(generalAttendance)
-	if err != nil {
-		return nil, err
+	if result, err := s.generalAttendanceRepo.Create(generalAttendance); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.CreateGeneralAttendance{
+			GeneralAttendance: *result,
+		}, nil
 	}
-
-	return &responses.CreateGeneralAttendance{
-		GeneralAttendance: *result,
-	}, nil
 }
 
 func (s *GeneralAttendance) CreateGeneralAttendanceRecordStudent(

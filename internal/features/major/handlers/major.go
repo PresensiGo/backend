@@ -21,7 +21,7 @@ func NewMajor(service *services.Major) *Major {
 
 // @id 			createMajor
 // @tags 		major
-// @param		body body requests.Create true "body"
+// @param		body body requests.CreateGeneralAttendance true "body"
 // @success 	200 {object} domains.Major
 // @router 		/api/v1/majors [post]
 func (h *Major) Create(c *gin.Context) {
