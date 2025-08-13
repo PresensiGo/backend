@@ -19,7 +19,7 @@ func NewAuth(service *services.Auth) *Auth {
 }
 
 // @id			login
-// @tags		auth
+// @tags		account
 // @param		body body requests.Login true "body"
 // @success		200 {object} responses.Login
 // @router		/api/v1/auth/login [post]
@@ -44,11 +44,11 @@ func (h *Auth) Login(c *gin.Context) {
 	}
 }
 
-// @Id			logout
-// @Tags		auth
-// @Param		body body requests.Logout true "Logout Request"
-// @Success		200	{object} responses.Logout
-// @Router		/api/v1/auth/logout [post]
+// @id			logout
+// @tags		account
+// @param		body body requests.Logout true "Logout Request"
+// @success		200	{object} responses.Logout
+// @router		/api/v1/auth/logout [post]
 func (h *Auth) Logout(c *gin.Context) {
 	var req requests.Logout
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -56,17 +56,19 @@ func (h *Auth) Logout(c *gin.Context) {
 		return
 	}
 
-	response, err := h.service.Logout(req.RefreshToken)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.Logout(req.RefreshToken); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, response)
 }
 
 // @id			refreshToken
-// @tags		auth
+// @tags		account
 // @param		body body requests.RefreshToken true "body"
 // @success		200 {object} responses.RefreshToken
 // @router		/api/v1/auth/refresh-token [post]

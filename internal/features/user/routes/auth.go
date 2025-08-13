@@ -8,15 +8,15 @@ import (
 )
 
 func RegisterAuth(g *gin.RouterGroup, handler *handlers.Auth) {
+	relativePath := "/auth"
 	{
-		group := g.Group("/auth")
+		group := g.Group(relativePath)
 
 		group.POST("/login", handler.Login)
 		group.POST("/refresh-token", handler.RefreshToken)
 	}
-
 	{
-		group := g.Group("/auth").Use(middlewares.AuthMiddleware())
+		group := g.Group(relativePath).Use(middlewares.AuthMiddleware())
 
 		group.POST("/logout", handler.Logout)
 	}

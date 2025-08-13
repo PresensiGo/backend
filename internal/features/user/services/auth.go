@@ -90,12 +90,14 @@ func (s *Auth) Login(email string, password string) (*responses.Login, *failure.
 	}
 }
 
-func (s *Auth) Logout(refreshToken string) (*responses.Logout, error) {
+func (s *Auth) Logout(refreshToken string) (*responses.Logout, *failure.App) {
 	if err := s.userTokenRepo.DeleteByRefreshToken(refreshToken); err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.Logout{
+			Message: "ok",
+		}, nil
 	}
-
-	return &responses.Logout{}, nil
 }
 
 func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, *failure.App) {

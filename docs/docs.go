@@ -33,7 +33,7 @@ const docTemplate = `{
         "/api/v1/auth/login": {
             "post": {
                 "tags": [
-                    "auth"
+                    "account"
                 ],
                 "operationId": "login",
                 "parameters": [
@@ -60,7 +60,7 @@ const docTemplate = `{
         "/api/v1/auth/logout": {
             "post": {
                 "tags": [
-                    "auth"
+                    "account"
                 ],
                 "operationId": "logout",
                 "parameters": [
@@ -87,7 +87,7 @@ const docTemplate = `{
         "/api/v1/auth/refresh-token": {
             "post": {
                 "tags": [
-                    "auth"
+                    "account"
                 ],
                 "operationId": "refreshToken",
                 "parameters": [
@@ -2197,7 +2197,15 @@ const docTemplate = `{
             }
         },
         "responses.Logout": {
-            "type": "object"
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
         },
         "responses.UpdateClassroom": {
             "type": "object",

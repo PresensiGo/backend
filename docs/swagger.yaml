@@ -642,6 +642,11 @@ definitions:
     - message
     type: object
   responses.Logout:
+    properties:
+      message:
+        type: string
+    required:
+    - message
     type: object
   responses.UpdateClassroom:
     properties:
@@ -694,7 +699,7 @@ paths:
           schema:
             $ref: '#/definitions/LoginRes'
       tags:
-      - auth
+      - account
   /api/v1/auth/logout:
     post:
       operationId: logout
@@ -711,7 +716,7 @@ paths:
           schema:
             $ref: '#/definitions/responses.Logout'
       tags:
-      - auth
+      - account
   /api/v1/auth/refresh-token:
     post:
       operationId: refreshToken
@@ -728,7 +733,7 @@ paths:
           schema:
             $ref: '#/definitions/RefreshTokenRes'
       tags:
-      - auth
+      - account
   /api/v1/auth/students/accounts/{student_token_id}/eject:
     post:
       parameters:
