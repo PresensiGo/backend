@@ -1,12 +1,12 @@
 package services
 
 import (
+	"errors"
 	"net/http"
 	"time"
 
 	repositories2 "api/internal/features/school/repositories"
 	"api/internal/features/user/domains"
-	"api/internal/features/user/dto/requests"
 	"api/internal/features/user/dto/responses"
 	repositories3 "api/internal/features/user/repositories"
 	"api/pkg/authentication"
@@ -37,10 +37,15 @@ func NewAuth(
 	}
 }
 
-func (s *Auth) Login(email string, password string) (*responses.Login, error) {
+func (s *Auth) Login(email string, password string) (*responses.Login, *failure.App) {
 	currentUser, err := s.userRepo.GetByEmail(email)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewApp(
+				http.StatusNotFound, "Alamat email atau kata sandi tidak valid", err,
+			)
+		}
+		return nil, failure.NewInternal(err)
 	}
 
 	// password validation
@@ -48,12 +53,14 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 		[]byte(currentUser.Password),
 		[]byte(password),
 	); err != nil {
-		return nil, err
+		return nil, failure.NewApp(
+			http.StatusNotFound, "Alamat email atau kata sandi tidak valid", err,
+		)
 	}
 
 	school, err := s.schoolRepo.GetById(currentUser.SchoolId)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 
 	// generate token
@@ -62,99 +69,25 @@ func (s *Auth) Login(email string, password string) (*responses.Login, error) {
 		school.Id, school.Name, school.Code,
 	)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 	refreshToken := uuid.New().String()
 
 	// store token into database
-	if err := s.db.Transaction(
-		func(tx *gorm.DB) error {
-			// create user token
-			if err := s.userTokenRepo.Create(
-				tx, domains.UserToken{
-					UserId:       currentUser.Id,
-					RefreshToken: refreshToken,
-					TTL:          time.Now().Add(time.Hour * 24 * 30),
-				},
-			); err != nil {
-				return err
-			}
-
-			return nil
+	if _, err := s.userTokenRepo.Create(
+		domains.UserToken{
+			UserId:       currentUser.Id,
+			RefreshToken: refreshToken,
+			TTL:          time.Now().Add(time.Hour * 24 * 30),
 		},
 	); err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.Login{
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
+		}, nil
 	}
-
-	return &responses.Login{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-	}, nil
-}
-
-func (s *Auth) Register(req requests.Register) (*responses.Register, error) {
-	// get school by code
-	school, err := s.schoolRepo.GetByCode(req.Code)
-	if err != nil {
-		return nil, err
-	}
-
-	var response responses.Register
-	if err := s.db.Transaction(
-		func(tx *gorm.DB) error {
-			// create new user
-			hashedPassword, err := bcrypt.GenerateFromPassword(
-				[]byte(req.Password), bcrypt.DefaultCost,
-			)
-			if err != nil {
-				return err
-			}
-
-			result, err := s.userRepo.Create(
-				tx, domains.User{
-					Name:     req.Name,
-					Email:    req.Email,
-					Password: string(hashedPassword),
-					Role:     "teacher",
-				},
-			)
-			if err != nil {
-				return err
-			}
-
-			// generate user token
-			accessToken, err := s.generateAccessToken(
-				result.Id, req.Name, req.Email, "teacher",
-				school.Id, school.Name, school.Code,
-			)
-			if err != nil {
-				return err
-			}
-			refreshToken := uuid.New().String()
-
-			// store token into database
-			if err := s.userTokenRepo.Create(
-				tx, domains.UserToken{
-					RefreshToken: refreshToken,
-					UserId:       result.Id,
-					TTL:          time.Now().Add(time.Hour * 24 * 30),
-				},
-			); err != nil {
-				return err
-			}
-
-			response = responses.Register{
-				AccessToken:  accessToken,
-				RefreshToken: refreshToken,
-			}
-
-			return nil
-		},
-	); err != nil {
-		return nil, err
-	}
-
-	return &response, nil
 }
 
 func (s *Auth) Logout(refreshToken string) (*responses.Logout, error) {

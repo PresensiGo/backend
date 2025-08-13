@@ -16,17 +16,13 @@ func NewUserToken(db *gorm.DB) *UserToken {
 	return &UserToken{db}
 }
 
-func (r *UserToken) Create(tx *gorm.DB, token domains.UserToken) error {
-	userToken := models.UserToken{
-		UserId:       token.UserId,
-		RefreshToken: token.RefreshToken,
-		TTL:          token.TTL,
+func (r *UserToken) Create(data domains.UserToken) (*domains.UserToken, error) {
+	userToken := data.ToModel()
+	if err := r.db.Create(&userToken).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromUserTokenModel(userToken), nil
 	}
-	if err := tx.Create(&userToken).Error; err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (r *UserToken) GetByRefreshToken(refreshToken string) (*domains.UserToken, error) {

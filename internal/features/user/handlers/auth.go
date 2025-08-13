@@ -30,20 +30,18 @@ func (h *Auth) Login(c *gin.Context) {
 		return
 	}
 
-	response, err := h.service.Login(
+	if response, err := h.service.Login(
 		request.Email,
 		request.Password,
-	)
-	if err != nil {
-		c.JSON(
-			http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
+	); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
 			},
 		)
-		return
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, response)
 }
 
 // @Id			logout
