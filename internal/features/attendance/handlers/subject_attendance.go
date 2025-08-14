@@ -58,9 +58,9 @@ func (h *SubjectAttendance) CreateSubjectAttendance(c *gin.Context) {
 // @param 		body body requests.CreateSubjectAttendanceRecordStudent true "body"
 // @success 	200 {object} responses.CreateSubjectAttendanceRecordStudent
 // @router 		/api/v1/subject-attendances/records/student [post]
-func (h *SubjectAttendance) CreateRecordStudent(c *gin.Context) {
-	studentClaims := authentication.GetAuthenticatedStudent(c)
-	if studentClaims.SchoolId == 0 {
+func (h *SubjectAttendance) CreateSubjectAttendanceRecordStudent(c *gin.Context) {
+	student := authentication.GetAuthenticatedStudent(c)
+	if student.SchoolId == 0 {
 		c.AbortWithStatus(http.StatusForbidden)
 		return
 	}
@@ -71,13 +71,17 @@ func (h *SubjectAttendance) CreateRecordStudent(c *gin.Context) {
 		return
 	}
 
-	result, err := h.service.CreateRecordStudent(studentClaims.Id, req)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.CreateSubjectAttendanceRecordStudent(
+		student.Id, req,
+	); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }
 
 // @id 			GetAllSubjectAttendances

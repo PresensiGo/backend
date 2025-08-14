@@ -7,9 +7,10 @@ import (
 )
 
 func RegisterSubjectAttendance(g *gin.RouterGroup, handler *handlers.SubjectAttendance) {
-	relativePath := "/batches/:batch_id/majors/:major_id/classrooms/:classroom_id/subject-attendances"
 	{
+		relativePath := "/batches/:batch_id/majors/:major_id/classrooms/:classroom_id/subject-attendances"
 		group := g.Group(relativePath).Use(middlewares.AuthMiddleware())
+
 		group.POST("", handler.CreateSubjectAttendance)
 		group.GET("", handler.GetAllSubjectAttendances)
 		group.GET("/:subject_attendance_id", handler.GetSubjectAttendance)
@@ -17,7 +18,9 @@ func RegisterSubjectAttendance(g *gin.RouterGroup, handler *handlers.SubjectAtte
 	}
 
 	{
-		group := g.Group("/subject-attendances").Use(middlewares.StudentMiddleware())
-		group.POST("/records/student", handler.CreateRecordStudent)
+		relativePath := "/subject-attendances"
+		group := g.Group(relativePath).Use(middlewares.StudentMiddleware())
+
+		group.POST("/records/student", handler.CreateSubjectAttendanceRecordStudent)
 	}
 }

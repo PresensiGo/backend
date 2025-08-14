@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"net/http"
 
 	"api/internal/features/attendance/domains"
@@ -80,14 +81,29 @@ func (s *SubjectAttendance) CreateSubjectAttendance(
 	}
 }
 
-func (s *SubjectAttendance) CreateRecordStudent(
+func (s *SubjectAttendance) CreateSubjectAttendanceRecordStudent(
 	studentId uint, req requests.CreateSubjectAttendanceRecordStudent,
 ) (
-	*responses.CreateSubjectAttendanceRecordStudent, error,
+	*responses.CreateSubjectAttendanceRecordStudent, *failure.App,
 ) {
 	subjectAttendance, err := s.subjectAttendanceRepo.GetByCode(req.Code)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewApp(http.StatusNotFound, "Kode akses tidak ditemukan!", err)
+		}
+		return nil, failure.NewInternal(err)
+	}
+
+	// validasi apakah siswa berasal dari kelas yang sama dengan subject attendance
+	student, err := s.studentRepo.Get(studentId)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		if student.ClassroomId != subjectAttendance.ClassroomId {
+			return nil, failure.NewApp(
+				http.StatusForbidden, "Anda tidak terdaftar di kelas ini!", err,
+			)
+		}
 	}
 
 	if err := s.db.Transaction(
@@ -113,12 +129,12 @@ func (s *SubjectAttendance) CreateRecordStudent(
 			return nil
 		},
 	); err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.CreateSubjectAttendanceRecordStudent{
+			Message: "ok",
+		}, nil
 	}
-
-	return &responses.CreateSubjectAttendanceRecordStudent{
-		Message: "ok",
-	}, nil
 }
 
 func (s *SubjectAttendance) GetAllSubjectAttendances(classroomId uint) (
