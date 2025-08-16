@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"api/pkg/cron"
@@ -10,11 +9,17 @@ import (
 )
 
 // @title		PresensiGo API
-// @version	1.0
+// @version		1.0
 func main() {
-	fmt.Println("appenv", os.Getenv("APP_ENV"))
-	if err := godotenv.Load(); err != nil {
-		fmt.Println("error loading .env file")
+	appEnv := os.Getenv("APP_ENV")
+	if appEnv == "" {
+		appEnv = "development"
+	}
+
+	if appEnv == "development" {
+		if err := godotenv.Load(); err != nil {
+			panic(err.Error())
+		}
 	}
 
 	cron.New()

@@ -118,7 +118,7 @@ func (h *Excel) ImportDataV3(c *gin.Context) {
 // 	}
 // 	defer src.Close()
 //
-// 	if _, err := h.service.Import(src); err != nil {
+// 	if _, err := h.service.ImportAccounts(src); err != nil {
 // 		c.AbortWithStatusJSON(
 // 			http.StatusInternalServerError, gin.H{
 // 				"message": err.Error(),

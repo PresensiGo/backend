@@ -8,5 +8,7 @@ import (
 
 func RegisterUser(g *gin.RouterGroup, handler *handlers.User) {
 	group := g.Group("/accounts").Use(middlewares.AuthMiddleware())
+
+	group.POST("/import", handler.ImportAccounts)
 	group.GET("", handler.GetAll)
 }

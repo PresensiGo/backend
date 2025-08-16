@@ -103,6 +103,11 @@ func (s *Auth) Logout(refreshToken string) (*responses.Logout, *failure.App) {
 func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, *failure.App) {
 	oldUserToken, err := s.userTokenRepo.GetByRefreshToken(oldRefreshToken)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewApp(
+				http.StatusUnauthorized, "Refresh token tidak ditemukan!", nil,
+			)
+		}
 		return nil, failure.NewInternal(err)
 	}
 
