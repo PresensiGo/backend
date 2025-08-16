@@ -88,6 +88,15 @@ func (r *User) GetByEmail(email string) (*domains.User, error) {
 	}
 }
 
+func (r *User) Update(id uint, data domains.User) (*domains.User, error) {
+	model := data.ToModel()
+	if err := r.db.Where("id = ?", id).Updates(&model).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromUserModel(model), nil
+	}
+}
+
 func (r *User) Delete(id uint) error {
 	return r.db.Where("id = ?", id).Unscoped().Delete(&models.User{}).Error
 }

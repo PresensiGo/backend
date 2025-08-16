@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"api/internal/features/user/dto/requests"
 	"api/internal/features/user/services"
 	"api/internal/shared/dto/responses"
 	"api/pkg/authentication"
@@ -71,6 +72,33 @@ func (h *User) ImportAccounts(c *gin.Context) {
 	defer src.Close()
 
 	if response, err := h.service.ImportAccounts(user.SchoolId, src); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
+// @tags 		account
+// @success 	200 {object} responses.UpdateAccountPassword
+// @router 		/api/v1/accounts/{account_id}/password [put]
+func (h *User) UpdateAccountPassword(c *gin.Context) {
+	accountId, err := strconv.Atoi(c.Param("account_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var req requests.UpdateAccountPassword
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.UpdateAccountPassword(c, uint(accountId), req); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,

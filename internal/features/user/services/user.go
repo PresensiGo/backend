@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"api/internal/features/user/domains"
+	"api/internal/features/user/dto/requests"
 	"api/internal/features/user/dto/responses"
 	"api/internal/features/user/repositories"
 	"api/pkg/authentication"
@@ -88,6 +89,39 @@ func (s *User) GetAll(schoolId uint) (*responses.GetAllUsers, error) {
 	} else {
 		return &responses.GetAllUsers{
 			Users: *result,
+		}, nil
+	}
+}
+
+func (s *User) UpdateAccountPassword(
+	c *gin.Context, userId uint, req requests.UpdateAccountPassword,
+) (
+	*responses.UpdateAccountPassword, *failure.App,
+) {
+	auth := authentication.GetAuthenticatedUser(c)
+	if auth.Role != "admin" {
+		return nil, failure.NewApp(
+			http.StatusForbidden, "Anda tidak memiliki akses untuk melakukan tindakan ini!", nil,
+		)
+	}
+
+	// hash password
+	hashedPassword, err := bcrypt.GenerateFromPassword(
+		[]byte(req.Password), bcrypt.DefaultCost,
+	)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	if user, err := s.userRepo.Update(
+		userId, domains.User{
+			Password: string(hashedPassword),
+		},
+	); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.UpdateAccountPassword{
+			User: *user,
 		}, nil
 	}
 }
