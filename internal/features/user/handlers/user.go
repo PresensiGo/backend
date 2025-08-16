@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"path/filepath"
+	"strconv"
 
 	"api/internal/features/user/services"
 	"api/internal/shared/dto/responses"
@@ -70,6 +71,27 @@ func (h *User) ImportAccounts(c *gin.Context) {
 	defer src.Close()
 
 	if response, err := h.service.ImportAccounts(user.SchoolId, src); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
+// @tags 		account
+// @success 	200 {object} responses.DeleteAccount
+// @router 		/api/v1/accounts/{account_id} [delete]
+func (h *User) DeleteAccount(c *gin.Context) {
+	accountId, err := strconv.Atoi(c.Param("account_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.DeleteAccount(c, uint(accountId)); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,

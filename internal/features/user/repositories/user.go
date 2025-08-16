@@ -87,3 +87,7 @@ func (r *User) GetByEmail(email string) (*domains.User, error) {
 		return domains.FromUserModel(&user), nil
 	}
 }
+
+func (r *User) Delete(id uint) error {
+	return r.db.Where("id = ?", id).Unscoped().Delete(&models.User{}).Error
+}

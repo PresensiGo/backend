@@ -7,7 +7,9 @@ import (
 	"api/internal/features/user/domains"
 	"api/internal/features/user/dto/responses"
 	"api/internal/features/user/repositories"
+	"api/pkg/authentication"
 	"api/pkg/http/failure"
+	"github.com/gin-gonic/gin"
 	"github.com/xuri/excelize/v2"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -86,6 +88,25 @@ func (s *User) GetAll(schoolId uint) (*responses.GetAllUsers, error) {
 	} else {
 		return &responses.GetAllUsers{
 			Users: *result,
+		}, nil
+	}
+}
+
+func (s *User) DeleteAccount(c *gin.Context, accountId uint) (
+	*responses.DeleteAccount, *failure.App,
+) {
+	auth := authentication.GetAuthenticatedUser(c)
+	if auth.Role != "admin" {
+		return nil, failure.NewApp(
+			http.StatusForbidden, "Anda tidak memiliki akses untuk melakukan tindakan ini!", nil,
+		)
+	}
+
+	if err := s.userRepo.Delete(accountId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.DeleteAccount{
+			Message: "ok",
 		}, nil
 	}
 }

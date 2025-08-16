@@ -9,3 +9,7 @@ type ImportAccounts struct {
 type GetAllUsers struct {
 	Users []domains.User `json:"users" validate:"required"`
 }
+
+type DeleteAccount struct {
+	Message string `json:"message" validate:"required"`
+}
