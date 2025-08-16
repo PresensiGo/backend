@@ -126,6 +126,31 @@ func (s *User) UpdateAccountPassword(
 	}
 }
 
+func (s *User) UpdateAccountRole(
+	c *gin.Context, userId uint, req requests.UpdateAccountRole,
+) (
+	*responses.UpdateAccountRole, *failure.App,
+) {
+	auth := authentication.GetAuthenticatedUser(c)
+	if auth.Role != "admin" {
+		return nil, failure.NewApp(
+			http.StatusForbidden, "Anda tidak memiliki akses untuk melakukan tindakan ini!", nil,
+		)
+	}
+
+	if user, err := s.userRepo.Update(
+		userId, domains.User{
+			Role: domains.UserRole(req.Role),
+		},
+	); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.UpdateAccountRole{
+			User: *user,
+		}, nil
+	}
+}
+
 func (s *User) DeleteAccount(c *gin.Context, accountId uint) (
 	*responses.DeleteAccount, *failure.App,
 ) {

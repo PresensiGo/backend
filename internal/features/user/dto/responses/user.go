@@ -14,6 +14,10 @@ type UpdateAccountPassword struct {
 	User domains.User `json:"user" validate:"required"`
 }
 
+type UpdateAccountRole struct {
+	User domains.User `json:"user" validate:"required"`
+}
+
 type DeleteAccount struct {
 	Message string `json:"message" validate:"required"`
 }

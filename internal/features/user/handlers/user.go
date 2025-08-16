@@ -110,6 +110,33 @@ func (h *User) UpdateAccountPassword(c *gin.Context) {
 }
 
 // @tags 		account
+// @success 	200 {object} responses.UpdateAccountRole
+// @router 		/api/v1/accounts/{account_id}/role [put]
+func (h *User) UpdateAccountRole(c *gin.Context) {
+	accountId, err := strconv.Atoi(c.Param("account_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var req requests.UpdateAccountRole
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.UpdateAccountRole(c, uint(accountId), req); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
+// @tags 		account
 // @success 	200 {object} responses.DeleteAccount
 // @router 		/api/v1/accounts/{account_id} [delete]
 func (h *User) DeleteAccount(c *gin.Context) {
