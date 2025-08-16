@@ -98,11 +98,8 @@ func (s *User) UpdateAccountPassword(
 ) (
 	*responses.UpdateAccountPassword, *failure.App,
 ) {
-	auth := authentication.GetAuthenticatedUser(c)
-	if auth.Role != "admin" {
-		return nil, failure.NewApp(
-			http.StatusForbidden, "Anda tidak memiliki akses untuk melakukan tindakan ini!", nil,
-		)
+	if err := authentication.ValidateAdmin(c); err != nil {
+		return nil, err
 	}
 
 	// hash password
@@ -131,11 +128,8 @@ func (s *User) UpdateAccountRole(
 ) (
 	*responses.UpdateAccountRole, *failure.App,
 ) {
-	auth := authentication.GetAuthenticatedUser(c)
-	if auth.Role != "admin" {
-		return nil, failure.NewApp(
-			http.StatusForbidden, "Anda tidak memiliki akses untuk melakukan tindakan ini!", nil,
-		)
+	if err := authentication.ValidateAdmin(c); err != nil {
+		return nil, err
 	}
 
 	if user, err := s.userRepo.Update(
@@ -154,11 +148,8 @@ func (s *User) UpdateAccountRole(
 func (s *User) DeleteAccount(c *gin.Context, accountId uint) (
 	*responses.DeleteAccount, *failure.App,
 ) {
-	auth := authentication.GetAuthenticatedUser(c)
-	if auth.Role != "admin" {
-		return nil, failure.NewApp(
-			http.StatusForbidden, "Anda tidak memiliki akses untuk melakukan tindakan ini!", nil,
-		)
+	if err := authentication.ValidateAdmin(c); err != nil {
+		return nil, err
 	}
 
 	if err := s.userRepo.Delete(accountId); err != nil {
