@@ -700,6 +700,12 @@ paths:
       - account
   /api/v1/accounts/{account_id}:
     delete:
+      parameters:
+      - description: account id
+        in: path
+        name: account_id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK
@@ -709,6 +715,12 @@ paths:
       - account
   /api/v1/accounts/{account_id}/password:
     put:
+      parameters:
+      - description: account id
+        in: path
+        name: account_id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK
@@ -718,6 +730,12 @@ paths:
       - account
   /api/v1/accounts/{account_id}/role:
     put:
+      parameters:
+      - description: account id
+        in: path
+        name: account_id
+        required: true
+        type: integer
       responses:
         "200":
           description: OK

@@ -83,6 +83,7 @@ func (h *User) ImportAccounts(c *gin.Context) {
 }
 
 // @tags 		account
+// @param 		account_id path int true "account id"
 // @success 	200 {object} responses.UpdateAccountPassword
 // @router 		/api/v1/accounts/{account_id}/password [put]
 func (h *User) UpdateAccountPassword(c *gin.Context) {
@@ -110,6 +111,7 @@ func (h *User) UpdateAccountPassword(c *gin.Context) {
 }
 
 // @tags 		account
+// @param 		account_id path int true "account id"
 // @success 	200 {object} responses.UpdateAccountRole
 // @router 		/api/v1/accounts/{account_id}/role [put]
 func (h *User) UpdateAccountRole(c *gin.Context) {
@@ -137,6 +139,7 @@ func (h *User) UpdateAccountRole(c *gin.Context) {
 }
 
 // @tags 		account
+// @param 		account_id path int true "account id"
 // @success 	200 {object} responses.DeleteAccount
 // @router 		/api/v1/accounts/{account_id} [delete]
 func (h *User) DeleteAccount(c *gin.Context) {

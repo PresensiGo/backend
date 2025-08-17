@@ -59,6 +59,15 @@ const docTemplate = `{
                 "tags": [
                     "account"
                 ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "account id",
+                        "name": "account_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -74,6 +83,15 @@ const docTemplate = `{
                 "tags": [
                     "account"
                 ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "account id",
+                        "name": "account_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -88,6 +106,15 @@ const docTemplate = `{
             "put": {
                 "tags": [
                     "account"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "account id",
+                        "name": "account_id",
+                        "in": "path",
+                        "required": true
+                    }
                 ],
                 "responses": {
                     "200": {
