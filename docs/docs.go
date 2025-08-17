@@ -90,6 +90,15 @@ const docTemplate = `{
                         "name": "account_id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateAccountPassword"
+                        }
                     }
                 ],
                 "responses": {
@@ -114,6 +123,15 @@ const docTemplate = `{
                         "name": "account_id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateAccountRole"
+                        }
                     }
                 ],
                 "responses": {
@@ -1903,6 +1921,28 @@ const docTemplate = `{
             ],
             "properties": {
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.UpdateAccountPassword": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.UpdateAccountRole": {
+            "type": "object",
+            "required": [
+                "role"
+            ],
+            "properties": {
+                "role": {
                     "type": "string"
                 }
             }
