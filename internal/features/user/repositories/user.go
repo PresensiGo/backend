@@ -33,21 +33,36 @@ func (r *User) CreateInTx(tx *gorm.DB, data domains.User) (*domains.User, error)
 	}
 }
 
-func (r *User) CreateBatch(data []domains.User) (*[]domains.User, error) {
-	users := make([]models.User, len(data))
-	for i, v := range data {
-		users[i] = *v.ToModel()
-	}
+// func (r *User) CreateBatch(data []domains.User) (*[]domains.User, error) {
+// 	users := make([]models.User, len(data))
+// 	for i, v := range data {
+// 		users[i] = *v.ToModel()
+// 	}
+//
+// 	if err := r.db.Create(&users).Error; err != nil {
+// 		return nil, err
+// 	} else {
+// 		result := make([]domains.User, len(users))
+// 		for i, v := range users {
+// 			result[i] = *domains.FromUserModel(&v)
+// 		}
+//
+// 		return &result, nil
+// 	}
+// }
 
-	if err := r.db.Create(&users).Error; err != nil {
+func (r *User) GetOrCreateInTx(tx *gorm.DB, data domains.User) (*domains.User, error) {
+	user := data.ToModel()
+	if err := tx.Where(
+		models.User{
+			Name:     data.Name,
+			Email:    data.Email,
+			SchoolId: data.SchoolId,
+		},
+	).Attrs(models.User{Password: data.Password}).FirstOrCreate(&user).Error; err != nil {
 		return nil, err
 	} else {
-		result := make([]domains.User, len(users))
-		for i, v := range users {
-			result[i] = *domains.FromUserModel(&v)
-		}
-
-		return &result, nil
+		return domains.FromUserModel(user), nil
 	}
 }
 

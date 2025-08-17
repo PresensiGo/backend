@@ -71,7 +71,7 @@ func (h *User) ImportAccounts(c *gin.Context) {
 	}
 	defer src.Close()
 
-	if response, err := h.service.ImportAccounts(user.SchoolId, src); err != nil {
+	if response, err := h.service.ImportAccounts(c, user.SchoolId, src); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,

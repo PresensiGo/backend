@@ -30,6 +30,75 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/accounts/import": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ImportAccounts"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/{account_id}": {
+            "delete": {
+                "tags": [
+                    "account"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.DeleteAccount"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/{account_id}/password": {
+            "put": {
+                "tags": [
+                    "account"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.UpdateAccountPassword"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/{account_id}/role": {
+            "put": {
+                "tags": [
+                    "account"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.UpdateAccountRole"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/auth/login": {
             "post": {
                 "tags": [
@@ -1222,30 +1291,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/api/v1/teachers/import": {
-            "post": {
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "file",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.ImportTeacher"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -1968,6 +2013,17 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.DeleteAccount": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.DeleteGeneralAttendance": {
             "type": "object",
             "properties": {
@@ -2199,7 +2255,7 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.ImportTeacher": {
+        "responses.ImportAccounts": {
             "type": "object",
             "required": [
                 "message"
@@ -2218,6 +2274,28 @@ const docTemplate = `{
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.UpdateAccountPassword": {
+            "type": "object",
+            "required": [
+                "user"
+            ],
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/domains.User"
+                }
+            }
+        },
+        "responses.UpdateAccountRole": {
+            "type": "object",
+            "required": [
+                "user"
+            ],
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/domains.User"
                 }
             }
         },

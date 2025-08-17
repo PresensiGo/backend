@@ -480,6 +480,13 @@ definitions:
     required:
     - message
     type: object
+  responses.DeleteAccount:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
   responses.DeleteGeneralAttendance:
     properties:
       message:
@@ -628,7 +635,7 @@ definitions:
     required:
     - subject_attendance
     type: object
-  responses.ImportTeacher:
+  responses.ImportAccounts:
     properties:
       message:
         type: string
@@ -641,6 +648,20 @@ definitions:
         type: string
     required:
     - message
+    type: object
+  responses.UpdateAccountPassword:
+    properties:
+      user:
+        $ref: '#/definitions/domains.User'
+    required:
+    - user
+    type: object
+  responses.UpdateAccountRole:
+    properties:
+      user:
+        $ref: '#/definitions/domains.User'
+    required:
+    - user
     type: object
   responses.UpdateClassroom:
     properties:
@@ -677,6 +698,48 @@ paths:
             $ref: '#/definitions/responses.GetAllUsers'
       tags:
       - account
+  /api/v1/accounts/{account_id}:
+    delete:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DeleteAccount'
+      tags:
+      - account
+  /api/v1/accounts/{account_id}/password:
+    put:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UpdateAccountPassword'
+      tags:
+      - account
+  /api/v1/accounts/{account_id}/role:
+    put:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UpdateAccountRole'
+      tags:
+      - account
+  /api/v1/accounts/import:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ImportAccounts'
   /api/v1/auth/login:
     post:
       operationId: login
@@ -1451,19 +1514,4 @@ paths:
             $ref: '#/definitions/responses.UpdateSubject'
       tags:
       - subject
-  /api/v1/teachers/import:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: file
-        in: formData
-        name: file
-        required: true
-        type: file
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.ImportTeacher'
 swagger: "2.0"

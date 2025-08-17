@@ -13,21 +13,31 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/xuri/excelize/v2"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type User struct {
+	db       *gorm.DB
 	userRepo *repositories.User
 }
 
-func NewUser(userRepo *repositories.User) *User {
+func NewUser(
+	db *gorm.DB,
+	userRepo *repositories.User,
+) *User {
 	return &User{
+		db:       db,
 		userRepo: userRepo,
 	}
 }
 
-func (s *User) ImportAccounts(schoolId uint, reader io.Reader) (
+func (s *User) ImportAccounts(c *gin.Context, schoolId uint, reader io.Reader) (
 	*responses.ImportAccounts, *failure.App,
 ) {
+	if err := authentication.ValidateAdmin(c); err != nil {
+		return nil, err
+	}
+
 	file, err := excelize.OpenReader(reader)
 	if err != nil {
 		return nil, failure.NewInternal(err)
@@ -49,31 +59,36 @@ func (s *User) ImportAccounts(schoolId uint, reader io.Reader) (
 		return nil, failure.NewApp(http.StatusBadRequest, "Jumlah baris tidak mencukupi!", err)
 	}
 
-	var users []domains.User
-	for _, v := range rows[1:] {
-		userName := v[0]
-		userEmail := v[1]
-		userPassword := v[2]
+	if err := s.db.Transaction(
+		func(tx *gorm.DB) error {
+			for _, v := range rows[1:] {
+				userName := v[0]
+				userEmail := v[1]
+				userPassword := v[2]
 
-		hashedPassword, err := bcrypt.GenerateFromPassword(
-			[]byte(userPassword), bcrypt.DefaultCost,
-		)
-		if err != nil {
-			return nil, failure.NewInternal(err)
-		}
+				hashedPassword, err := bcrypt.GenerateFromPassword(
+					[]byte(userPassword), bcrypt.DefaultCost,
+				)
+				if err != nil {
+					return err
+				}
 
-		users = append(
-			users, domains.User{
-				Name:     userName,
-				Email:    userEmail,
-				Password: string(hashedPassword),
-				Role:     domains.TeacherUserRole,
-				SchoolId: schoolId,
-			},
-		)
-	}
+				if _, err := s.userRepo.GetOrCreateInTx(
+					tx, domains.User{
+						Name:     userName,
+						Email:    userEmail,
+						Password: string(hashedPassword),
+						Role:     domains.TeacherUserRole,
+						SchoolId: schoolId,
+					},
+				); err != nil {
+					return err
+				}
+			}
 
-	if _, err = s.userRepo.CreateBatch(users); err != nil {
+			return nil
+		},
+	); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {
 		return &responses.ImportAccounts{
