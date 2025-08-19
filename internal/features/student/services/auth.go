@@ -14,6 +14,7 @@ import (
 	"api/pkg/authentication"
 	"api/pkg/authentication/claims"
 	"api/pkg/http/failure"
+
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
