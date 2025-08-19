@@ -189,14 +189,14 @@ func (s *GeneralAttendance) Update(
 	}, nil
 }
 
-func (s *GeneralAttendance) Delete(generalAttendanceId uint) (
-	*responses.DeleteGeneralAttendance, error,
+func (s *GeneralAttendance) DeleteGeneralAttendance(generalAttendanceId uint) (
+	*responses.DeleteGeneralAttendance, *failure.App,
 ) {
 	if err := s.generalAttendanceRepo.Delete(generalAttendanceId); err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.DeleteGeneralAttendance{
+			Message: "ok",
+		}, nil
 	}
-
-	return &responses.DeleteGeneralAttendance{
-		Message: "ok",
-	}, nil
 }

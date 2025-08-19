@@ -175,19 +175,21 @@ func (h *GeneralAttendance) Update(c *gin.Context) {
 // @tags 		attendance
 // @param 		general_attendance_id path int true "general attendance id"
 // @success 	200 {object} responses.DeleteGeneralAttendance
-// @router 		/api/v1/general_attendances/{general_attendance_id} [delete]
-func (h *GeneralAttendance) Delete(c *gin.Context) {
+// @router 		/api/v1/general-attendances/{general_attendance_id} [delete]
+func (h *GeneralAttendance) DeleteGeneralAttendance(c *gin.Context) {
 	generalAttendanceId, err := strconv.Atoi(c.Param("general_attendance_id"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	result, err := h.service.Delete(uint(generalAttendanceId))
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.DeleteGeneralAttendance(uint(generalAttendanceId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }

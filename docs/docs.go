@@ -1068,6 +1068,29 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "deleteGeneralAttendance",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "general attendance id",
+                        "name": "general_attendance_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.DeleteGeneralAttendance"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/general-attendances/{general_attendance_id}/records": {
@@ -1124,29 +1147,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.UpdateGeneralAttendance"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "attendance"
-                ],
-                "operationId": "deleteGeneralAttendance",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "general attendance id",
-                        "name": "general_attendance_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.DeleteGeneralAttendance"
                         }
                     }
                 }
