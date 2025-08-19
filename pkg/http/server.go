@@ -11,6 +11,7 @@ import (
 	"api/internal/features/subject"
 	"api/internal/features/user"
 	"api/pkg/http/middlewares"
+
 	"github.com/gin-contrib/cors"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -27,7 +28,6 @@ func NewServer() {
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 	corsConfig.AllowCredentials = true
-
 	router.Use(cors.New(corsConfig))
 
 	v1 := router.Group("/api/v1")

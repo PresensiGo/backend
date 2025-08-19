@@ -11,6 +11,7 @@ import (
 	repositories3 "api/internal/features/user/repositories"
 	"api/pkg/authentication"
 	"api/pkg/http/failure"
+
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -105,14 +106,14 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, *f
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, failure.NewApp(
-				http.StatusUnauthorized, "Refresh token tidak ditemukan!", nil,
+				http.StatusNotFound, "Refresh token tidak ditemukan!", nil,
 			)
 		}
 		return nil, failure.NewInternal(err)
 	}
 
 	if time.Now().After(oldUserToken.TTL) {
-		return nil, failure.NewApp(http.StatusUnauthorized, "Token sudah kadaluarsa", nil)
+		return nil, failure.NewApp(http.StatusNotFound, "Token sudah kadaluarsa", nil)
 	}
 
 	currentUser, err := s.userRepo.GetByID(oldUserToken.UserId)
