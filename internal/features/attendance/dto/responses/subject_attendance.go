@@ -23,6 +23,10 @@ type CreateSubjectAttendance struct {
 	SubjectAttendance domains.SubjectAttendance `json:"subject_attendance" validate:"required"`
 }
 
+type CreateSubjectAttendanceRecord struct {
+	SubjectAttendanceRecord domains.SubjectAttendanceRecord `json:"subject_attendance_record" validate:"required"`
+}
+
 type CreateSubjectAttendanceRecordStudent struct {
 	Message string `json:"message" validate:"required"`
 }

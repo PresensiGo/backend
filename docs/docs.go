@@ -1002,6 +1002,59 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "CreateSubjectAttendanceRecord",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "subject attendance id",
+                        "name": "subject_attendance_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateSubjectAttendanceRecordReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateSubjectAttendanceRecord"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/classrooms": {
@@ -1449,6 +1502,25 @@ const docTemplate = `{
                 },
                 "note": {
                     "type": "string"
+                }
+            }
+        },
+        "CreateSubjectAttendanceRecordReq": {
+            "type": "object",
+            "required": [
+                "datetime",
+                "status",
+                "student_id"
+            ],
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/constants.AttendanceStatus"
+                },
+                "student_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -2108,14 +2180,14 @@ const docTemplate = `{
         "domains.SubjectAttendanceRecord": {
             "type": "object",
             "required": [
-                "created_at",
+                "date_time",
                 "id",
                 "status",
                 "student_id",
                 "subject_attendance_id"
             ],
             "properties": {
-                "created_at": {
+                "date_time": {
                     "type": "string"
                 },
                 "id": {
@@ -2348,6 +2420,17 @@ const docTemplate = `{
             "properties": {
                 "subject_attendance": {
                     "$ref": "#/definitions/SubjectAttendance"
+                }
+            }
+        },
+        "responses.CreateSubjectAttendanceRecord": {
+            "type": "object",
+            "required": [
+                "subject_attendance_record"
+            ],
+            "properties": {
+                "subject_attendance_record": {
+                    "$ref": "#/definitions/domains.SubjectAttendanceRecord"
                 }
             }
         },

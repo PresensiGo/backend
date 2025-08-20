@@ -1,7 +1,9 @@
 package models
 
 import (
-	studentModel "api/internal/features/student/models"
+	"time"
+
+	student "api/internal/features/student/models"
 	"api/pkg/constants"
 	"gorm.io/gorm"
 )
@@ -9,9 +11,10 @@ import (
 type SubjectAttendanceRecord struct {
 	gorm.Model
 
+	DateTime            time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	SubjectAttendanceId uint
 	SubjectAttendance   SubjectAttendance `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	StudentId           uint
-	Student             studentModel.Student
+	Student             student.Student
 	Status              constants.AttendanceStatus
 }

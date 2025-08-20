@@ -95,6 +95,36 @@ func (s *SubjectAttendance) CreateSubjectAttendance(
 	}
 }
 
+func (s *SubjectAttendance) CreateSubjectAttendanceRecord(
+	c *gin.Context, subjectAttendanceId uint, req requests.CreateSubjectAttendanceRecord,
+) (
+	*responses.CreateSubjectAttendanceRecord, *failure.App,
+) {
+	if err := authentication.ValidateAdmin(c); err != nil {
+		return nil, err
+	}
+
+	parsedDateTime, err := utils.GetParsedDateTime(req.DateTime)
+	if err != nil {
+		return nil, failure.NewApp(http.StatusBadRequest, "Tanggal dan waktu tidak valid!", err)
+	}
+
+	if result, err := s.subjectAttendanceRecordRepo.FirstOrCreate(
+		domains.SubjectAttendanceRecord{
+			DateTime:            *parsedDateTime,
+			SubjectAttendanceId: subjectAttendanceId,
+			StudentId:           req.StudentId,
+			Status:              req.Status,
+		},
+	); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.CreateSubjectAttendanceRecord{
+			SubjectAttendanceRecord: *result,
+		}, nil
+	}
+}
+
 func (s *SubjectAttendance) CreateSubjectAttendanceRecordStudent(
 	studentId uint, req requests.CreateSubjectAttendanceRecordStudent,
 ) (

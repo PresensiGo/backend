@@ -53,6 +53,41 @@ func (h *SubjectAttendance) CreateSubjectAttendance(c *gin.Context) {
 	}
 }
 
+// @id 			CreateSubjectAttendanceRecord
+// @tags 		attendance
+// @param 		batch_id path int true "batch id"
+// @param 		major_id path int true "major id"
+// @param 		classroom_id path int true "classroom id"
+// @param 		subject_attendance_id path int true "subject attendance id"
+// @param 		body body requests.CreateSubjectAttendanceRecord true "body"
+// @success 	200 {object} responses.CreateSubjectAttendanceRecord
+// @router 		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}/records [post]
+func (h *SubjectAttendance) CreateSubjectAttendanceRecord(c *gin.Context) {
+	subjectAttendanceId, err := strconv.Atoi(c.Param("subject_attendance_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var req requests.CreateSubjectAttendanceRecord
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.CreateSubjectAttendanceRecord(
+		c, uint(subjectAttendanceId), req,
+	); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 // @id 			createSubjectAttendanceRecordStudent
 // @tags 		attendance
 // @param 		body body requests.CreateSubjectAttendanceRecordStudent true "body"
