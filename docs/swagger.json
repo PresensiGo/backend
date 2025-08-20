@@ -1573,7 +1573,7 @@
                     "$ref": "#/definitions/domains.GeneralAttendanceRecord"
                 },
                 "student": {
-                    "$ref": "#/definitions/domains.Student"
+                    "$ref": "#/definitions/Student"
                 }
             }
         },
@@ -1615,7 +1615,7 @@
                 "students": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.Student"
+                        "$ref": "#/definitions/Student"
                     }
                 }
             }
@@ -1645,7 +1645,7 @@
                     "$ref": "#/definitions/domains.SubjectAttendanceRecord"
                 },
                 "student": {
-                    "$ref": "#/definitions/domains.Student"
+                    "$ref": "#/definitions/Student"
                 }
             }
         },
@@ -1862,6 +1862,33 @@
                 }
             }
         },
+        "Student": {
+            "type": "object",
+            "required": [
+                "classroom_id",
+                "id",
+                "name",
+                "nis",
+                "school_id"
+            ],
+            "properties": {
+                "classroom_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nis": {
+                    "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "Subject": {
             "type": "object",
             "required": [
@@ -1985,6 +2012,21 @@
                 }
             }
         },
+        "constants.AttendanceStatus": {
+            "type": "string",
+            "enum": [
+                "hadir",
+                "alpha",
+                "sakit",
+                "izin"
+            ],
+            "x-enum-varnames": [
+                "AttendanceStatusPresent",
+                "AttendanceStatusAlpha",
+                "AttendanceStatusSick",
+                "AttendanceStatusPermission"
+            ]
+        },
         "domains.GeneralAttendanceRecord": {
             "type": "object",
             "required": [
@@ -2008,33 +2050,6 @@
                 }
             }
         },
-        "domains.Student": {
-            "type": "object",
-            "required": [
-                "classroom_id",
-                "id",
-                "name",
-                "nis",
-                "school_id"
-            ],
-            "properties": {
-                "classroom_id": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "nis": {
-                    "type": "string"
-                },
-                "school_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "domains.StudentMajorClassroom": {
             "type": "object",
             "required": [
@@ -2050,7 +2065,7 @@
                     "$ref": "#/definitions/major"
                 },
                 "student": {
-                    "$ref": "#/definitions/domains.Student"
+                    "$ref": "#/definitions/Student"
                 }
             }
         },
@@ -2086,6 +2101,7 @@
             "required": [
                 "created_at",
                 "id",
+                "status",
                 "student_id",
                 "subject_attendance_id"
             ],
@@ -2095,6 +2111,9 @@
                 },
                 "id": {
                     "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/constants.AttendanceStatus"
                 },
                 "student_id": {
                     "type": "integer"
@@ -2112,7 +2131,7 @@
             ],
             "properties": {
                 "student": {
-                    "$ref": "#/definitions/domains.Student"
+                    "$ref": "#/definitions/Student"
                 },
                 "student_token": {
                     "$ref": "#/definitions/domains.StudentToken"

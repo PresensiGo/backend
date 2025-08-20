@@ -10,7 +10,7 @@ type Student struct {
 	Name        string `json:"name" validate:"required"`
 	SchoolId    uint   `json:"school_id" validate:"required"`
 	ClassroomId uint   `json:"classroom_id" validate:"required"`
-}
+} // @name Student
 
 func FromStudentModel(model *models.Student) *Student {
 	return &Student{

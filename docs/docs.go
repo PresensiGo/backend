@@ -1582,7 +1582,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/domains.GeneralAttendanceRecord"
                 },
                 "student": {
-                    "$ref": "#/definitions/domains.Student"
+                    "$ref": "#/definitions/Student"
                 }
             }
         },
@@ -1624,7 +1624,7 @@ const docTemplate = `{
                 "students": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.Student"
+                        "$ref": "#/definitions/Student"
                     }
                 }
             }
@@ -1654,7 +1654,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/domains.SubjectAttendanceRecord"
                 },
                 "student": {
-                    "$ref": "#/definitions/domains.Student"
+                    "$ref": "#/definitions/Student"
                 }
             }
         },
@@ -1871,6 +1871,33 @@ const docTemplate = `{
                 }
             }
         },
+        "Student": {
+            "type": "object",
+            "required": [
+                "classroom_id",
+                "id",
+                "name",
+                "nis",
+                "school_id"
+            ],
+            "properties": {
+                "classroom_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nis": {
+                    "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "Subject": {
             "type": "object",
             "required": [
@@ -1994,6 +2021,21 @@ const docTemplate = `{
                 }
             }
         },
+        "constants.AttendanceStatus": {
+            "type": "string",
+            "enum": [
+                "hadir",
+                "alpha",
+                "sakit",
+                "izin"
+            ],
+            "x-enum-varnames": [
+                "AttendanceStatusPresent",
+                "AttendanceStatusAlpha",
+                "AttendanceStatusSick",
+                "AttendanceStatusPermission"
+            ]
+        },
         "domains.GeneralAttendanceRecord": {
             "type": "object",
             "required": [
@@ -2017,33 +2059,6 @@ const docTemplate = `{
                 }
             }
         },
-        "domains.Student": {
-            "type": "object",
-            "required": [
-                "classroom_id",
-                "id",
-                "name",
-                "nis",
-                "school_id"
-            ],
-            "properties": {
-                "classroom_id": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "nis": {
-                    "type": "string"
-                },
-                "school_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "domains.StudentMajorClassroom": {
             "type": "object",
             "required": [
@@ -2059,7 +2074,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/major"
                 },
                 "student": {
-                    "$ref": "#/definitions/domains.Student"
+                    "$ref": "#/definitions/Student"
                 }
             }
         },
@@ -2095,6 +2110,7 @@ const docTemplate = `{
             "required": [
                 "created_at",
                 "id",
+                "status",
                 "student_id",
                 "subject_attendance_id"
             ],
@@ -2104,6 +2120,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/constants.AttendanceStatus"
                 },
                 "student_id": {
                     "type": "integer"
@@ -2121,7 +2140,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "student": {
-                    "$ref": "#/definitions/domains.Student"
+                    "$ref": "#/definitions/Student"
                 },
                 "student_token": {
                     "$ref": "#/definitions/domains.StudentToken"
