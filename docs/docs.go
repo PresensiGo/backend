@@ -1463,6 +1463,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "code",
+                "creator_id",
                 "datetime",
                 "id",
                 "note",
@@ -1471,6 +1472,9 @@ const docTemplate = `{
             "properties": {
                 "code": {
                     "type": "string"
+                },
+                "creator_id": {
+                    "type": "integer"
                 },
                 "datetime": {
                     "type": "string"
@@ -1634,10 +1638,14 @@ const docTemplate = `{
         "GetAllSubjectAttendancesItem": {
             "type": "object",
             "required": [
+                "creator",
                 "subject",
                 "subject_attendance"
             ],
             "properties": {
+                "creator": {
+                    "$ref": "#/definitions/domains.User"
+                },
                 "subject": {
                     "$ref": "#/definitions/Subject"
                 },
@@ -1838,6 +1846,7 @@ const docTemplate = `{
             "required": [
                 "classroom_id",
                 "code",
+                "creator_id",
                 "date_time",
                 "id",
                 "note",
@@ -1849,6 +1858,9 @@ const docTemplate = `{
                 },
                 "code": {
                     "type": "string"
+                },
+                "creator_id": {
+                    "type": "integer"
                 },
                 "date_time": {
                     "type": "string"

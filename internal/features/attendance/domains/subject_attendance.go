@@ -13,6 +13,7 @@ type SubjectAttendance struct {
 	Note        string    `json:"note" validate:"required"`
 	ClassroomId uint      `json:"classroom_id" validate:"required"`
 	SubjectId   uint      `json:"subject_id" validate:"required"`
+	CreatorId   uint      `json:"creator_id" validate:"required"`
 } // @name SubjectAttendance
 
 func FromSubjectAttendanceModel(m *models.SubjectAttendance) *SubjectAttendance {
@@ -23,6 +24,7 @@ func FromSubjectAttendanceModel(m *models.SubjectAttendance) *SubjectAttendance 
 		Note:        m.Note,
 		ClassroomId: m.ClassroomId,
 		SubjectId:   m.SubjectId,
+		CreatorId:   m.CreatorId,
 	}
 }
 
@@ -33,5 +35,6 @@ func (s *SubjectAttendance) ToModel() *models.SubjectAttendance {
 		Note:        s.Note,
 		ClassroomId: s.ClassroomId,
 		SubjectId:   s.SubjectId,
+		CreatorId:   s.CreatorId,
 	}
 }

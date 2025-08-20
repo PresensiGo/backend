@@ -9,6 +9,7 @@ import (
 	major "api/internal/features/major/repositories"
 	student "api/internal/features/student/repositories"
 	subject "api/internal/features/subject/repositories"
+	userRepo "api/internal/features/user/repositories"
 	"api/pkg/database"
 	"github.com/google/wire"
 )
@@ -44,6 +45,7 @@ var (
 		subject.NewSubject,
 		repositories.NewGeneralAttendanceRecord,
 		repositories.NewSubjectAttendanceRecord,
+		userRepo.NewUser,
 
 		database.New,
 	)

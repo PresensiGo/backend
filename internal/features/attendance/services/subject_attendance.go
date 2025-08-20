@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"api/internal/features/attendance/domains"
@@ -15,6 +16,8 @@ import (
 	studentRepo "api/internal/features/student/repositories"
 	subjectDomain "api/internal/features/subject/domains"
 	subjectRepo "api/internal/features/subject/repositories"
+	userDomain "api/internal/features/user/domains"
+	userRepo "api/internal/features/user/repositories"
 	"api/pkg/http/failure"
 	"api/pkg/utils"
 	"github.com/google/uuid"
@@ -30,6 +33,7 @@ type SubjectAttendance struct {
 	subjectAttendanceRepo       *repositories.SubjectAttendance
 	subjectAttendanceRecordRepo *repositories.SubjectAttendanceRecord
 	subjectRepo                 *subjectRepo.Subject
+	userRepo                    *userRepo.User
 }
 
 func NewSubjectAttendance(
@@ -41,6 +45,7 @@ func NewSubjectAttendance(
 	subjectAttendanceRepo *repositories.SubjectAttendance,
 	subjectAttendanceRecordRepo *repositories.SubjectAttendanceRecord,
 	subjectRepo *subjectRepo.Subject,
+	userRepo *userRepo.User,
 ) *SubjectAttendance {
 	return &SubjectAttendance{
 		db:                          db,
@@ -51,6 +56,7 @@ func NewSubjectAttendance(
 		subjectAttendanceRepo:       subjectAttendanceRepo,
 		subjectAttendanceRecordRepo: subjectAttendanceRecordRepo,
 		subjectRepo:                 subjectRepo,
+		userRepo:                    userRepo,
 	}
 }
 
@@ -146,25 +152,48 @@ func (s *SubjectAttendance) GetAllSubjectAttendances(classroomId uint) (
 	}
 
 	subjectIds := make([]uint, len(*subjectAttendances))
+	creatorIds := make([]uint, len(*subjectAttendances))
 	for i, v := range *subjectAttendances {
 		subjectIds[i] = v.SubjectId
+		creatorIds[i] = v.CreatorId
 	}
 
-	subject, err := s.subjectRepo.GetMany(subjectIds)
-	if err != nil {
+	fmt.Println("creatorIds:", creatorIds)
+
+	mapSubjects := make(map[uint]*subjectDomain.Subject)
+	mapCreators := make(map[uint]*userDomain.User)
+
+	if subjects, err := s.subjectRepo.GetMany(subjectIds); err != nil {
 		return nil, failure.NewInternal(err)
+	} else {
+		for _, v := range *subjects {
+			mapSubjects[v.Id] = &v
+		}
 	}
 
-	mapSubject := make(map[uint]*subjectDomain.Subject)
-	for _, v := range *subject {
-		mapSubject[v.Id] = &v
+	if creators, err := s.userRepo.GetMany(creatorIds); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		for _, v := range *creators {
+			mapCreators[v.Id] = &v
+		}
+
+		fmt.Println("mapCreators:", mapCreators)
 	}
 
 	result := make([]dto.GetAllSubjectAttendancesItem, len(*subjectAttendances))
 	for i, v := range *subjectAttendances {
+		var creator userDomain.User
+		if v, ok := mapCreators[v.CreatorId]; ok {
+			creator = *v
+		} else {
+			creator = userDomain.User{}
+		}
+
 		result[i] = dto.GetAllSubjectAttendancesItem{
 			SubjectAttendance: v,
-			Subject:           *mapSubject[v.SubjectId],
+			Subject:           *mapSubjects[v.SubjectId],
+			Creator:           creator,
 		}
 	}
 

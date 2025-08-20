@@ -81,6 +81,21 @@ func (r *User) GetAll(schoolId uint) (*[]domains.User, error) {
 	}
 }
 
+func (r *User) GetMany(ids []uint) (*[]domains.User, error) {
+	var users []models.User
+	if err := r.db.Where("id IN ?", ids).
+		Find(&users).
+		Error; err != nil {
+		return nil, err
+	} else {
+		result := make([]domains.User, len(users))
+		for i, v := range users {
+			result[i] = *domains.FromUserModel(&v)
+		}
+		return &result, nil
+	}
+}
+
 func (r *User) GetByID(id uint) (*domains.User, error) {
 	var user models.User
 	if err := r.db.Where("id = ?", id).

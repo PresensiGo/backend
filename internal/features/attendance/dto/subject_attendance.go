@@ -5,6 +5,7 @@ import (
 	attendance "api/internal/features/attendance/domains"
 	studentDomain "api/internal/features/student/domains"
 	subject "api/internal/features/subject/domains"
+	user "api/internal/features/user/domains"
 )
 
 type GetAllSubjectAttendanceRecordsItem struct {
@@ -15,4 +16,5 @@ type GetAllSubjectAttendanceRecordsItem struct {
 type GetAllSubjectAttendancesItem struct {
 	SubjectAttendance attendance.SubjectAttendance `json:"subject_attendance" validate:"required"`
 	Subject           subject.Subject              `json:"subject" validate:"required"`
+	Creator           user.User                    `json:"creator" validate:"required"`
 } // @name GetAllSubjectAttendancesItem
