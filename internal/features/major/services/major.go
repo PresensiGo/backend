@@ -84,6 +84,18 @@ func (s *Major) GetAllMajorsByBatchId(batchId uint) (
 	}
 }
 
+func (s *Major) GetMajor(batchId uint) (
+	*responses.GetMajor, *failure.App,
+) {
+	if major, err := s.majorRepo.Get(batchId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetMajor{
+			Major: *major,
+		}, nil
+	}
+}
+
 func (s *Major) Update(majorId uint, req requests.UpdateMajor) (*domains.Major, error) {
 	major := domains.Major{
 		Name: req.Name,

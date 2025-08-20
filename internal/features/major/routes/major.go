@@ -13,6 +13,7 @@ func RegisterMajor(g *gin.RouterGroup, handler *handlers.Major) {
 
 		group.POST("", handler.Create)
 		group.GET("", handler.GetAllMajorsByBatchId)
+		group.GET("/:major_id", handler.GetMajor)
 		group.PUT("/:major_id", handler.Update)
 		group.DELETE("/:major_id", handler.Delete)
 	}

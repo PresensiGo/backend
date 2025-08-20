@@ -128,6 +128,17 @@ func (r *Major) GetCountByBatchId(batchId uint) (int64, error) {
 	}
 }
 
+func (r *Major) Get(majorId uint) (*domains.Major, error) {
+	var major models.Major
+	if err := r.db.Model(&models.Major{}).Where(
+		"id = ?", majorId,
+	).First(&major).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromMajorModel(&major), nil
+	}
+}
+
 func (r *Major) Update(majorId uint, data domains.Major) (*domains.Major, error) {
 	major := data.ToModel()
 	if err := r.db.Model(&models.Major{}).Where(

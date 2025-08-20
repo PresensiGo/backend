@@ -1,6 +1,7 @@
 package responses
 
 import (
+	"api/internal/features/major/domains"
 	"api/internal/features/major/dto"
 )
 
@@ -11,3 +12,7 @@ import (
 type GetAllMajorsByBatchId struct {
 	Items []dto.GetAllMajorsByBatchIdItem `json:"items" validate:"required"`
 } // @name GetAllMajorsByBatchIdRes
+
+type GetMajor struct {
+	Major domains.Major `json:"major" validate:"required"`
+} // @name GetMajorRes

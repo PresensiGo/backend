@@ -90,6 +90,30 @@ func (h *Major) GetAllMajorsByBatchId(c *gin.Context) {
 	}
 }
 
+// @id			getMajor
+// @tags		major
+// @param		batch_id path int true "batch id"
+// @param		major_id path int true "major id"
+// @success		200 {object} responses.GetMajor
+// @router		/api/v1/batches/{batch_id}/majors/{major_id} [get]
+func (h *Major) GetMajor(c *gin.Context) {
+	majorId, err := strconv.Atoi(c.Param("major_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.GetMajor(uint(majorId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 // @id 			updateMajor
 // @tags 		major
 // @param		batch_id path int true "batch id"

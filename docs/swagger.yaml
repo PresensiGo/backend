@@ -145,6 +145,13 @@ definitions:
     required:
     - batch
     type: object
+  GetMajorRes:
+    properties:
+      major:
+        $ref: '#/definitions/major'
+    required:
+    - major
+    type: object
   LoginReq:
     properties:
       email:
@@ -1038,6 +1045,26 @@ paths:
           description: OK
           schema:
             type: string
+      tags:
+      - major
+    get:
+      operationId: getMajor
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetMajorRes'
       tags:
       - major
     put:

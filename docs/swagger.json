@@ -473,6 +473,36 @@
             }
         },
         "/api/v1/batches/{batch_id}/majors/{major_id}": {
+            "get": {
+                "tags": [
+                    "major"
+                ],
+                "operationId": "getMajor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetMajorRes"
+                        }
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "major"
@@ -1549,6 +1579,17 @@
             "properties": {
                 "batch": {
                     "$ref": "#/definitions/batch"
+                }
+            }
+        },
+        "GetMajorRes": {
+            "type": "object",
+            "required": [
+                "major"
+            ],
+            "properties": {
+                "major": {
+                    "$ref": "#/definitions/major"
                 }
             }
         },
