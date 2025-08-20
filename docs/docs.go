@@ -1349,6 +1349,29 @@ const docTemplate = `{
             }
         },
         "/api/v1/subjects/{subject_id}": {
+            "get": {
+                "tags": [
+                    "subject"
+                ],
+                "operationId": "GetSubject",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "subject id",
+                        "name": "subject_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetSubjectRes"
+                        }
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "subject"
@@ -1713,6 +1736,17 @@ const docTemplate = `{
                 },
                 "subject_attendance": {
                     "$ref": "#/definitions/SubjectAttendance"
+                }
+            }
+        },
+        "GetSubjectRes": {
+            "type": "object",
+            "required": [
+                "subject"
+            ],
+            "properties": {
+                "subject": {
+                    "$ref": "#/definitions/Subject"
                 }
             }
         },

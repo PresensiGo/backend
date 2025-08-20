@@ -11,6 +11,7 @@ func RegisterSubject(g *gin.RouterGroup, handler *handlers.Subject) {
 
 	group.POST("", handler.Create)
 	group.GET("", handler.GetAllSubjects)
+	group.GET("/:subject_id", handler.GetSubject)
 	group.PUT("/:subject_id", handler.Update)
 	group.DELETE("/:subject_id", handler.Delete)
 }

@@ -53,6 +53,15 @@ func (r *Subject) GetMany(subjectIds []uint) (*[]domains.Subject, error) {
 	return &result, nil
 }
 
+func (r *Subject) Get(subjectId uint) (*domains.Subject, error) {
+	var subject models.Subject
+	if err := r.db.Where("id = ?", subjectId).First(&subject).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromSubjectModel(&subject), nil
+	}
+}
+
 func (r *Subject) Update(subjectId uint, data domains.Subject) (*domains.Subject, error) {
 	subject := data.ToModel()
 	if err := r.db.Model(&subject).Where("id = ?", subjectId).Updates(&subject).Error; err != nil {

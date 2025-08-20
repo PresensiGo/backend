@@ -46,6 +46,16 @@ func (s *Subject) GetAllSubjects(schoolId uint) (*responses.GetAllSubjects, *fai
 	}
 }
 
+func (s *Subject) GetSubject(subjectId uint) (*responses.GetSubject, *failure.App) {
+	if subject, err := s.subjectRepo.Get(subjectId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetSubject{
+			Subject: *subject,
+		}, nil
+	}
+}
+
 func (s *Subject) Update(subjectId uint, req requests.UpdateSubject) (
 	*responses.UpdateSubject, error,
 ) {

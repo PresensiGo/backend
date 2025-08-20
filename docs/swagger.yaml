@@ -203,6 +203,13 @@ definitions:
     - creator
     - subject_attendance
     type: object
+  GetSubjectRes:
+    properties:
+      subject:
+        $ref: '#/definitions/Subject'
+    required:
+    - subject
+    type: object
   LoginReq:
     properties:
       email:
@@ -1637,6 +1644,21 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.DeleteSubject'
+      tags:
+      - subject
+    get:
+      operationId: GetSubject
+      parameters:
+      - description: subject id
+        in: path
+        name: subject_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetSubjectRes'
       tags:
       - subject
     put:

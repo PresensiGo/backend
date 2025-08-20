@@ -68,6 +68,29 @@ func (h *Subject) GetAllSubjects(c *gin.Context) {
 	}
 }
 
+// @id 			GetSubject
+// @tags 		subject
+// @param 		subject_id path int true "subject id"
+// @success 	200 {object} responses.GetSubject
+// @router 		/api/v1/subjects/{subject_id} [get]
+func (h *Subject) GetSubject(c *gin.Context) {
+	subjectId, err := strconv.Atoi(c.Param("subject_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.GetSubject(uint(subjectId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 // @id 			updateSubject
 // @tags 		subject
 // @param 		subject_id path int true "subject id"
