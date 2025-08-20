@@ -349,6 +349,7 @@ const docTemplate = `{
                 "tags": [
                     "batch"
                 ],
+                "operationId": "getBatch",
                 "parameters": [
                     {
                         "type": "integer",
@@ -362,7 +363,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetBatch"
+                            "$ref": "#/definitions/GetBatchRes"
                         }
                     }
                 }
@@ -1520,6 +1521,17 @@ const docTemplate = `{
                 }
             }
         },
+        "GetBatchRes": {
+            "type": "object",
+            "required": [
+                "batch"
+            ],
+            "properties": {
+                "batch": {
+                    "$ref": "#/definitions/batch"
+                }
+            }
+        },
         "LoginReq": {
             "type": "object",
             "properties": {
@@ -2301,17 +2313,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/domains.User"
                     }
-                }
-            }
-        },
-        "responses.GetBatch": {
-            "type": "object",
-            "required": [
-                "batch"
-            ],
-            "properties": {
-                "batch": {
-                    "$ref": "#/definitions/batch"
                 }
             }
         },

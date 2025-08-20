@@ -11,4 +11,4 @@ type GetAllBatches struct {
 
 type GetBatch struct {
 	Batch domains.Batch `json:"batch" validate:"required"`
-}
+} // @name GetBatchRes

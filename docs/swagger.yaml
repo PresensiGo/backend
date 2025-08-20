@@ -119,6 +119,13 @@ definitions:
     - subject
     - subject_attendance
     type: object
+  GetBatchRes:
+    properties:
+      batch:
+        $ref: '#/definitions/batch'
+    required:
+    - batch
+    type: object
   LoginReq:
     properties:
       email:
@@ -638,13 +645,6 @@ definitions:
     required:
     - users
     type: object
-  responses.GetBatch:
-    properties:
-      batch:
-        $ref: '#/definitions/batch'
-    required:
-    - batch
-    type: object
   responses.GetGeneralAttendance:
     properties:
       general_attendance:
@@ -937,6 +937,7 @@ paths:
       tags:
       - batch
     get:
+      operationId: getBatch
       parameters:
       - description: batch id
         in: path
@@ -947,7 +948,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetBatch'
+            $ref: '#/definitions/GetBatchRes'
       tags:
       - batch
     put:

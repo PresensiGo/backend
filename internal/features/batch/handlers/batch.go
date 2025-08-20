@@ -68,24 +68,27 @@ func (h *Batch) GetAllBatches(c *gin.Context) {
 	}
 }
 
+// @id 			getBatch
 // @tags		batch
 // @param		batch_id path int true "batch id"
 // @success		200	{object} responses.GetBatch
 // @router		/api/v1/batches/{batch_id} [get]
-func (h *Batch) Get(c *gin.Context) {
+func (h *Batch) GetBatch(c *gin.Context) {
 	batchId, err := strconv.Atoi(c.Param("batch_id"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	result, err := h.service.Get(uint(batchId))
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.GetBatch(uint(batchId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }
 
 // @id 			updateBatch

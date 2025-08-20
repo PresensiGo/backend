@@ -340,6 +340,7 @@
                 "tags": [
                     "batch"
                 ],
+                "operationId": "getBatch",
                 "parameters": [
                     {
                         "type": "integer",
@@ -353,7 +354,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetBatch"
+                            "$ref": "#/definitions/GetBatchRes"
                         }
                     }
                 }
@@ -1511,6 +1512,17 @@
                 }
             }
         },
+        "GetBatchRes": {
+            "type": "object",
+            "required": [
+                "batch"
+            ],
+            "properties": {
+                "batch": {
+                    "$ref": "#/definitions/batch"
+                }
+            }
+        },
         "LoginReq": {
             "type": "object",
             "properties": {
@@ -2292,17 +2304,6 @@
                     "items": {
                         "$ref": "#/definitions/domains.User"
                     }
-                }
-            }
-        },
-        "responses.GetBatch": {
-            "type": "object",
-            "required": [
-                "batch"
-            ],
-            "properties": {
-                "batch": {
-                    "$ref": "#/definitions/batch"
                 }
             }
         },

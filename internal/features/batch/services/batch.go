@@ -63,15 +63,15 @@ func (s *Batch) GetAllBatches(schoolId uint) (*responses.GetAllBatches, *failure
 	}
 }
 
-func (s *Batch) Get(batchId uint) (*responses.GetBatch, error) {
+func (s *Batch) GetBatch(batchId uint) (*responses.GetBatch, *failure.App) {
 	batch, err := s.batchRepo.Get(batchId)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetBatch{
+			Batch: *batch,
+		}, nil
 	}
-
-	return &responses.GetBatch{
-		Batch: *batch,
-	}, nil
 }
 
 func (s *Batch) Update(batchId uint, req requests.UpdateBatch) (*domains.Batch, error) {
