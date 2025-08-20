@@ -13,6 +13,7 @@ func RegisterClassroom(g *gin.RouterGroup, handler *handlers.Classroom) {
 
 		group.POST("", handler.Create)
 		group.GET("", handler.GetAllClassroomsByMajorId)
+		group.GET("/:classroom_id", handler.GetClassroom)
 		group.PUT("/:classroom_id", handler.Update)
 	}
 	{

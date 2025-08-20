@@ -122,6 +122,15 @@ func (r *Classroom) GetManyByIds(classroomIds []uint) (*[]domains.Classroom, err
 	return &mappedClassrooms, nil
 }
 
+func (r *Classroom) Get(id uint) (*domains.Classroom, error) {
+	var classroom models.Classroom
+	if err := r.db.First(&classroom, id).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromClassroomModel(&classroom), nil
+	}
+}
+
 func (r *Classroom) Update(classroomId uint, data domains.Classroom) (*domains.Classroom, error) {
 	classroom := data.ToModel()
 	if err := r.db.Where("id = ?", classroomId).Updates(classroom).Error; err != nil {

@@ -142,6 +142,18 @@ func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWit
 	}, nil
 }
 
+func (s *Classroom) GetClassroom(classroomId uint) (
+	*responses.GetClassroom, *failure.App,
+) {
+	if classroom, err := s.classroomRepo.Get(classroomId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetClassroom{
+			Classroom: *classroom,
+		}, nil
+	}
+}
+
 func (s *Classroom) Update(
 	classroomId uint, req requests.UpdateClassroom,
 ) (*responses.UpdateClassroom, error) {

@@ -164,6 +164,13 @@ definitions:
     required:
     - batch
     type: object
+  GetClassroomRes:
+    properties:
+      classroom:
+        $ref: '#/definitions/classroom'
+    required:
+    - classroom
+    type: object
   GetMajorRes:
     properties:
       major:
@@ -1155,6 +1162,31 @@ paths:
       tags:
       - classroom
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}:
+    get:
+      operationId: getClassroom
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetClassroomRes'
+      tags:
+      - classroom
     put:
       parameters:
       - description: batch id

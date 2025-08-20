@@ -92,6 +92,31 @@ func (h *Classroom) GetAllClassroomsByMajorId(c *gin.Context) {
 	}
 }
 
+// @id			getClassroom
+// @tags		classroom
+// @param 		batch_id path int true "batch id"
+// @param 		major_id path int true "major id"
+// @param 		classroom_id path int true "classroom id"
+// @success		200	{object} responses.GetClassroom
+// @router		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id} [get]
+func (h *Classroom) GetClassroom(c *gin.Context) {
+	classroomId, err := strconv.Atoi(c.Param("classroom_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.GetClassroom(uint(classroomId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 // @Id			getAllClassroomWithMajors
 // @Tags		classroom
 // @Param 		batch_id path int true "Batch Id"
