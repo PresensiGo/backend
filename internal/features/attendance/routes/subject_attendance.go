@@ -17,6 +17,10 @@ func RegisterSubjectAttendance(g *gin.RouterGroup, handler *handlers.SubjectAtte
 		group.GET("", handler.GetAllSubjectAttendances)
 		group.GET("/:subject_attendance_id", handler.GetSubjectAttendance)
 		group.GET("/:subject_attendance_id/records", handler.GetAllSubjectAttendanceRecords)
+
+		group.DELETE(
+			"/:subject_attendance_id/records/:record_id", handler.DeleteSubjectAttendanceRecord,
+		)
 	}
 
 	{

@@ -30,3 +30,7 @@ type CreateSubjectAttendanceRecord struct {
 type CreateSubjectAttendanceRecordStudent struct {
 	Message string `json:"message" validate:"required"`
 }
+
+type DeleteSubjectAttendanceRecord struct {
+	Message string `json:"message" validate:"required"`
+}

@@ -1057,6 +1057,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}/records/{record_id}": {
+            "delete": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "DeleteSubjectAttendanceRecord",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "subject attendance id",
+                        "name": "subject_attendance_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "record id",
+                        "name": "record_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.DeleteSubjectAttendanceRecord"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/classrooms": {
             "get": {
                 "tags": [
@@ -2465,6 +2518,17 @@ const docTemplate = `{
             }
         },
         "responses.DeleteSubject": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.DeleteSubjectAttendanceRecord": {
             "type": "object",
             "required": [
                 "message"

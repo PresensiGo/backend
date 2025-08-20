@@ -72,3 +72,8 @@ func (r *SubjectAttendanceRecord) DeleteByAttendanceIdStudentIdInTx(
 		"subject_attendance_id = ? and student_id = ?", attendanceId, studentId,
 	).Unscoped().Delete(&models.SubjectAttendanceRecord{}).Error
 }
+
+func (r *SubjectAttendanceRecord) Delete(recordId uint) error {
+	return r.db.Where("id = ?", recordId).Unscoped().
+		Delete(&models.SubjectAttendanceRecord{}).Error
+}

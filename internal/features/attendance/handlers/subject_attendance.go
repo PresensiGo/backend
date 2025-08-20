@@ -203,3 +203,32 @@ func (h *SubjectAttendance) GetSubjectAttendance(c *gin.Context) {
 		c.JSON(http.StatusOK, response)
 	}
 }
+
+// @id 			DeleteSubjectAttendanceRecord
+// @tags 		attendance
+// @param 		batch_id path int true "batch id"
+// @param 		major_id path int true "major id"
+// @param 		classroom_id path int true "classroom id"
+// @param 		subject_attendance_id path int true "subject attendance id"
+// @param 		record_id path int true "record id"
+// @success 	200 {object} responses.DeleteSubjectAttendanceRecord
+// @router 		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}/records/{record_id} [delete]
+func (h *SubjectAttendance) DeleteSubjectAttendanceRecord(c *gin.Context) {
+	recordId, err := strconv.Atoi(c.Param("record_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.DeleteSubjectAttendanceRecord(
+		c, uint(recordId),
+	); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
