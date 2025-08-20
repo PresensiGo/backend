@@ -2,7 +2,9 @@ package services
 
 import (
 	batchRepo "api/internal/features/batch/repositories"
+	classroomRepo "api/internal/features/classroom/repositories"
 	"api/internal/features/major/domains"
+	"api/internal/features/major/dto"
 	"api/internal/features/major/dto/requests"
 	"api/internal/features/major/dto/responses"
 	"api/internal/features/major/repositories"
@@ -11,13 +13,22 @@ import (
 )
 
 type Major struct {
-	db        *gorm.DB
-	batchRepo *batchRepo.Batch
-	majorRepo *repositories.Major
+	db            *gorm.DB
+	batchRepo     *batchRepo.Batch
+	majorRepo     *repositories.Major
+	classroomRepo *classroomRepo.Classroom
 }
 
-func NewMajor(db *gorm.DB, batchRepo *batchRepo.Batch, majorRepo *repositories.Major) *Major {
-	return &Major{db, batchRepo, majorRepo}
+func NewMajor(
+	db *gorm.DB, batchRepo *batchRepo.Batch, majorRepo *repositories.Major,
+	classroomRepo *classroomRepo.Classroom,
+) *Major {
+	return &Major{
+		db:            db,
+		batchRepo:     batchRepo,
+		majorRepo:     majorRepo,
+		classroomRepo: classroomRepo,
+	}
 }
 
 func (s *Major) Create(batchId uint, req requests.CreateMajor) (*domains.Major, error) {
@@ -54,8 +65,21 @@ func (s *Major) GetAllMajorsByBatchId(batchId uint) (
 	if majors, err := s.majorRepo.GetAllByBatchId(batchId); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {
+		result := make([]dto.GetAllMajorsByBatchIdItem, len(*majors))
+
+		for i, major := range *majors {
+			if count, err := s.classroomRepo.GetCountByMajorId(major.Id); err != nil {
+				return nil, failure.NewInternal(err)
+			} else {
+				result[i] = dto.GetAllMajorsByBatchIdItem{
+					Major:          major,
+					ClassroomCount: count,
+				}
+			}
+		}
+
 		return &responses.GetAllMajorsByBatchId{
-			Majors: *majors,
+			Items: result,
 		}, nil
 	}
 }

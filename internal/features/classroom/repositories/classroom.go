@@ -25,6 +25,17 @@ func (r *Classroom) GetOrCreateInTx(tx *gorm.DB, data domains.Classroom) (
 	}
 }
 
+func (r *Classroom) GetCountByMajorId(majorId uint) (int64, error) {
+	var count int64
+	if err := r.db.Model(&models.Classroom{}).
+		Where("major_id = ?", majorId).
+		Count(&count).Error; err != nil {
+		return 0, err
+	} else {
+		return count, nil
+	}
+}
+
 func (r *Classroom) Create(data domains.Classroom) (*domains.Classroom, error) {
 	classroom := data.ToModel()
 	if err := r.db.Create(&classroom).Error; err != nil {

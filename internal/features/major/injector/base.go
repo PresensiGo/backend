@@ -1,7 +1,8 @@
 package injector
 
 import (
-	repositories2 "api/internal/features/batch/repositories"
+	batchRepo "api/internal/features/batch/repositories"
+	classroomRepo "api/internal/features/classroom/repositories"
 	"api/internal/features/major/handlers"
 	"api/internal/features/major/repositories"
 	"api/internal/features/major/services"
@@ -23,8 +24,9 @@ var (
 	MajorSet = wire.NewSet(
 		handlers.NewMajor,
 		services.NewMajor,
-		repositories2.NewBatch,
+		batchRepo.NewBatch,
 		repositories.NewMajor,
+		classroomRepo.NewClassroom,
 		database.New,
 	)
 )

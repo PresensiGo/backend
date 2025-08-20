@@ -443,7 +443,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllMajorsByBatchId"
+                            "$ref": "#/definitions/GetAllMajorsByBatchIdRes"
                         }
                     }
                 }
@@ -1463,6 +1463,35 @@ const docTemplate = `{
                 }
             }
         },
+        "GetAllMajorsByBatchIdItem": {
+            "type": "object",
+            "required": [
+                "classroom_count",
+                "major"
+            ],
+            "properties": {
+                "classroom_count": {
+                    "type": "integer"
+                },
+                "major": {
+                    "$ref": "#/definitions/major"
+                }
+            }
+        },
+        "GetAllMajorsByBatchIdRes": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAllMajorsByBatchIdItem"
+                    }
+                }
+            }
+        },
         "GetAllStudentsByClassroomIdRes": {
             "type": "object",
             "required": [
@@ -2228,20 +2257,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/GeneralAttendance"
-                    }
-                }
-            }
-        },
-        "responses.GetAllMajorsByBatchId": {
-            "type": "object",
-            "required": [
-                "majors"
-            ],
-            "properties": {
-                "majors": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/major"
                     }
                 }
             }

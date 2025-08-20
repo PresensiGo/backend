@@ -81,6 +81,25 @@ definitions:
     - record
     - student
     type: object
+  GetAllMajorsByBatchIdItem:
+    properties:
+      classroom_count:
+        type: integer
+      major:
+        $ref: '#/definitions/major'
+    required:
+    - classroom_count
+    - major
+    type: object
+  GetAllMajorsByBatchIdRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/GetAllMajorsByBatchIdItem'
+        type: array
+    required:
+    - items
+    type: object
   GetAllStudentsByClassroomIdRes:
     properties:
       students:
@@ -591,15 +610,6 @@ definitions:
     required:
     - general_attendances
     type: object
-  responses.GetAllMajorsByBatchId:
-    properties:
-      majors:
-        items:
-          $ref: '#/definitions/major'
-        type: array
-    required:
-    - majors
-    type: object
   responses.GetAllStudentAccountsByClassroomId:
     properties:
       items:
@@ -985,7 +995,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllMajorsByBatchId'
+            $ref: '#/definitions/GetAllMajorsByBatchIdRes'
       tags:
       - major
     post:
