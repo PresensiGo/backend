@@ -66,3 +66,9 @@ func (r *SubjectAttendance) GetByCode(code string) (*domains.SubjectAttendance, 
 		return domains.FromSubjectAttendanceModel(&subjectAttendance), nil
 	}
 }
+
+func (r *SubjectAttendance) Delete(subjectAttendanceId uint) error {
+	return r.db.Where(
+		"id = ?", subjectAttendanceId,
+	).Unscoped().Delete(&models.SubjectAttendance{}).Error
+}

@@ -305,6 +305,22 @@ func (s *SubjectAttendance) GetSubjectAttendance(subjectAttendanceId uint) (
 	}
 }
 
+func (s *SubjectAttendance) DeleteSubjectAttendance(
+	c *gin.Context, attendanceId uint,
+) (*responses.DeleteSubjectAttendance, *failure.App) {
+	if err := authentication.ValidateAdmin(c); err != nil {
+		return nil, err
+	}
+
+	if err := s.subjectAttendanceRepo.Delete(attendanceId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.DeleteSubjectAttendance{
+			Message: "ok",
+		}, nil
+	}
+}
+
 func (s *SubjectAttendance) DeleteSubjectAttendanceRecord(
 	c *gin.Context, recordId uint,
 ) (*responses.DeleteSubjectAttendanceRecord, *failure.App) {

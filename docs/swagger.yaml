@@ -661,6 +661,13 @@ definitions:
     required:
     - message
     type: object
+  responses.DeleteSubjectAttendance:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
   responses.DeleteSubjectAttendanceRecord:
     properties:
       message:
@@ -1392,6 +1399,36 @@ paths:
       tags:
       - attendance
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}:
+    delete:
+      operationId: DeleteSubjectAttendance
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      - description: subject attendance id
+        in: path
+        name: subject_attendance_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DeleteSubjectAttendance'
+      tags:
+      - attendance
     get:
       operationId: GetSubjectAttendance
       parameters:
