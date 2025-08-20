@@ -18,8 +18,10 @@ import (
 	subjectRepo "api/internal/features/subject/repositories"
 	userDomain "api/internal/features/user/domains"
 	userRepo "api/internal/features/user/repositories"
+	"api/pkg/authentication"
 	"api/pkg/http/failure"
 	"api/pkg/utils"
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -61,10 +63,15 @@ func NewSubjectAttendance(
 }
 
 func (s *SubjectAttendance) CreateSubjectAttendance(
-	classroomId uint, req requests.CreateSubjectAttendance,
+	c *gin.Context, classroomId uint, req requests.CreateSubjectAttendance,
 ) (
 	*responses.CreateSubjectAttendance, *failure.App,
 ) {
+	user := authentication.GetAuthenticatedUser(c)
+	if user.ID == 0 {
+		return nil, failure.NewApp(http.StatusForbidden, "Anda tidak memiliki akses!", nil)
+	}
+
 	parsedDatetime, err := utils.GetParsedDateTime(req.DateTime)
 	if err != nil {
 		return nil, failure.NewApp(http.StatusBadRequest, "Tanggal dan waktu tidak valid!", err)
@@ -76,6 +83,7 @@ func (s *SubjectAttendance) CreateSubjectAttendance(
 		Note:        req.Note,
 		ClassroomId: classroomId,
 		SubjectId:   req.SubjectId,
+		CreatorId:   user.ID,
 	}
 
 	if result, err := s.subjectAttendanceRepo.Create(subjectAttendance); err != nil {

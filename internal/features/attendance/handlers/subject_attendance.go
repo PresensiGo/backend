@@ -42,7 +42,7 @@ func (h *SubjectAttendance) CreateSubjectAttendance(c *gin.Context) {
 		return
 	}
 
-	if response, err := h.service.CreateSubjectAttendance(uint(classroomId), req); err != nil {
+	if response, err := h.service.CreateSubjectAttendance(c, uint(classroomId), req); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,
