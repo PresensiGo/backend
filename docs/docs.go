@@ -313,7 +313,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllBatches"
+                            "$ref": "#/definitions/GetAllBatchesRes"
                         }
                     }
                 }
@@ -1418,6 +1418,35 @@ const docTemplate = `{
                 }
             }
         },
+        "GetAllBatchesItem": {
+            "type": "object",
+            "required": [
+                "batch",
+                "major_count"
+            ],
+            "properties": {
+                "batch": {
+                    "$ref": "#/definitions/batch"
+                },
+                "major_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "GetAllBatchesRes": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAllBatchesItem"
+                    }
+                }
+            }
+        },
         "GetAllGeneralAttendanceRecordsItem": {
             "type": "object",
             "required": [
@@ -2131,20 +2160,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/classroom"
-                    }
-                }
-            }
-        },
-        "responses.GetAllBatches": {
-            "type": "object",
-            "required": [
-                "batches"
-            ],
-            "properties": {
-                "batches": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/batch"
                     }
                 }
             }

@@ -52,6 +52,25 @@ definitions:
     - note
     - school_id
     type: object
+  GetAllBatchesItem:
+    properties:
+      batch:
+        $ref: '#/definitions/batch'
+      major_count:
+        type: integer
+    required:
+    - batch
+    - major_count
+    type: object
+  GetAllBatchesRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/GetAllBatchesItem'
+        type: array
+    required:
+    - items
+    type: object
   GetAllGeneralAttendanceRecordsItem:
     properties:
       record:
@@ -529,15 +548,6 @@ definitions:
     required:
     - classrooms
     type: object
-  responses.GetAllBatches:
-    properties:
-      batches:
-        items:
-          $ref: '#/definitions/batch'
-        type: array
-    required:
-    - batches
-    type: object
   responses.GetAllClassroomWithMajors:
     properties:
       data:
@@ -891,7 +901,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllBatches'
+            $ref: '#/definitions/GetAllBatchesRes'
       tags:
       - batch
     post:

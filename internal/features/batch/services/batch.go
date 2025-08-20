@@ -2,6 +2,7 @@ package services
 
 import (
 	"api/internal/features/batch/domains"
+	"api/internal/features/batch/dto"
 	"api/internal/features/batch/dto/requests"
 	"api/internal/features/batch/dto/responses"
 	"api/internal/features/batch/repositories"
@@ -43,8 +44,21 @@ func (s *Batch) GetAllBatches(schoolId uint) (*responses.GetAllBatches, *failure
 	if batches, err := s.batchRepo.GetAllBySchoolId(schoolId); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {
+		result := make([]dto.GetAllBatchesItem, len(*batches))
+
+		for i, batch := range *batches {
+			if count, err := s.majorRepo.GetCountByBatchId(batch.Id); err != nil {
+				return nil, failure.NewInternal(err)
+			} else {
+				result[i] = dto.GetAllBatchesItem{
+					Batch:      batch,
+					MajorCount: count,
+				}
+			}
+		}
+
 		return &responses.GetAllBatches{
-			Batches: *batches,
+			Items: result,
 		}, nil
 	}
 }
