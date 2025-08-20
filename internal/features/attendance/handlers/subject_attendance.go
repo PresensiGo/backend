@@ -158,11 +158,13 @@ func (h *SubjectAttendance) GetSubjectAttendance(c *gin.Context) {
 		return
 	}
 
-	result, err := h.service.GetSubjectAttendance(uint(subjectAttendanceId))
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.GetSubjectAttendance(uint(subjectAttendanceId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }

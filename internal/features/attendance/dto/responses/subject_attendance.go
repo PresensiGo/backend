@@ -3,6 +3,7 @@ package responses
 import (
 	"api/internal/features/attendance/domains"
 	"api/internal/features/attendance/dto"
+	user "api/internal/features/user/domains"
 )
 
 type GetAllSubjectAttendances struct {
@@ -15,7 +16,8 @@ type GetAllSubjectAttendanceRecords struct {
 
 type GetSubjectAttendance struct {
 	SubjectAttendance domains.SubjectAttendance `json:"subject_attendance" validate:"required"`
-}
+	Creator           user.User                 `json:"creator" validate:"required"`
+} // @name GetSubjectAttendanceRes
 
 type CreateSubjectAttendance struct {
 	SubjectAttendance domains.SubjectAttendance `json:"subject_attendance" validate:"required"`

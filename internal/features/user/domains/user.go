@@ -16,7 +16,7 @@ type User struct {
 	Password string   `json:"password" validate:"required"`
 	Role     UserRole `json:"role" validate:"required"`
 	SchoolId uint     `json:"school_id" validate:"required"`
-}
+} // @name User
 
 func FromUserModel(m *models.User) *User {
 	return &User{

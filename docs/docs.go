@@ -952,7 +952,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetSubjectAttendance"
+                            "$ref": "#/definitions/GetSubjectAttendanceRes"
                         }
                     }
                 }
@@ -1644,7 +1644,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "creator": {
-                    "$ref": "#/definitions/domains.User"
+                    "$ref": "#/definitions/User"
                 },
                 "subject": {
                     "$ref": "#/definitions/Subject"
@@ -1698,6 +1698,21 @@ const docTemplate = `{
             "properties": {
                 "major": {
                     "$ref": "#/definitions/major"
+                }
+            }
+        },
+        "GetSubjectAttendanceRes": {
+            "type": "object",
+            "required": [
+                "creator",
+                "subject_attendance"
+            ],
+            "properties": {
+                "creator": {
+                    "$ref": "#/definitions/User"
+                },
+                "subject_attendance": {
+                    "$ref": "#/definitions/SubjectAttendance"
                 }
             }
         },
@@ -1876,6 +1891,37 @@ const docTemplate = `{
                 }
             }
         },
+        "User": {
+            "type": "object",
+            "required": [
+                "email",
+                "id",
+                "name",
+                "password",
+                "role",
+                "school_id"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "school_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "batch": {
             "type": "object",
             "required": [
@@ -2029,37 +2075,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "subject_attendance_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "domains.User": {
-            "type": "object",
-            "required": [
-                "email",
-                "id",
-                "name",
-                "password",
-                "role",
-                "school_id"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "school_id": {
                     "type": "integer"
                 }
             }
@@ -2442,7 +2457,7 @@ const docTemplate = `{
                 "users": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domains.User"
+                        "$ref": "#/definitions/User"
                     }
                 }
             }
@@ -2455,17 +2470,6 @@ const docTemplate = `{
             "properties": {
                 "general_attendance": {
                     "$ref": "#/definitions/GeneralAttendance"
-                }
-            }
-        },
-        "responses.GetSubjectAttendance": {
-            "type": "object",
-            "required": [
-                "subject_attendance"
-            ],
-            "properties": {
-                "subject_attendance": {
-                    "$ref": "#/definitions/SubjectAttendance"
                 }
             }
         },
@@ -2498,7 +2502,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "user": {
-                    "$ref": "#/definitions/domains.User"
+                    "$ref": "#/definitions/User"
                 }
             }
         },
@@ -2509,7 +2513,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "user": {
-                    "$ref": "#/definitions/domains.User"
+                    "$ref": "#/definitions/User"
                 }
             }
         },

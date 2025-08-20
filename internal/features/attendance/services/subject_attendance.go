@@ -251,13 +251,26 @@ func (s *SubjectAttendance) GetAllSubjectAttendanceRecords(
 }
 
 func (s *SubjectAttendance) GetSubjectAttendance(subjectAttendanceId uint) (
-	*responses.GetSubjectAttendance, error,
+	*responses.GetSubjectAttendance, *failure.App,
 ) {
-	if result, err := s.subjectAttendanceRepo.Get(subjectAttendanceId); err != nil {
-		return nil, err
+
+	if subjectAttendance, err := s.subjectAttendanceRepo.Get(subjectAttendanceId); err != nil {
+		return nil, failure.NewInternal(err)
 	} else {
-		return &responses.GetSubjectAttendance{
-			SubjectAttendance: *result,
-		}, nil
+		response := responses.GetSubjectAttendance{
+			SubjectAttendance: *subjectAttendance,
+			Creator:           userDomain.User{},
+		}
+
+		// mendapatkan creator
+		if subjectAttendance.CreatorId != 0 {
+			if creator, err := s.userRepo.GetByID(subjectAttendance.CreatorId); err != nil {
+				return nil, failure.NewInternal(err)
+			} else {
+				response.Creator = *creator
+			}
+		}
+
+		return &response, nil
 	}
 }
