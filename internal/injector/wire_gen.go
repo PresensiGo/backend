@@ -100,7 +100,8 @@ func InitClassroomHandlers() *injector4.ClassroomHandlers {
 	batch := repositories4.NewBatch(db)
 	major := repositories5.NewMajor(db)
 	classroom := repositories6.NewClassroom(db)
-	servicesClassroom := services4.NewClassroom(batch, major, classroom)
+	student := repositories2.NewStudent(db)
+	servicesClassroom := services4.NewClassroom(batch, major, classroom, student)
 	handlersClassroom := handlers4.NewClassroom(servicesClassroom)
 	classroomHandlers := injector4.NewClassroomHandlers(handlersClassroom)
 	return classroomHandlers

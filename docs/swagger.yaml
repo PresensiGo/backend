@@ -71,6 +71,25 @@ definitions:
     required:
     - items
     type: object
+  GetAllClassroomsByMajorIdItem:
+    properties:
+      classroom:
+        $ref: '#/definitions/classroom'
+      student_count:
+        type: integer
+    required:
+    - classroom
+    - student_count
+    type: object
+  GetAllClassroomsByMajorIdRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/GetAllClassroomsByMajorIdItem'
+        type: array
+    required:
+    - items
+    type: object
   GetAllGeneralAttendanceRecordsItem:
     properties:
       record:
@@ -590,15 +609,6 @@ definitions:
     required:
     - data
     type: object
-  responses.GetAllClassroomsByMajorId:
-    properties:
-      classrooms:
-        items:
-          $ref: '#/definitions/classroom'
-        type: array
-    required:
-    - classrooms
-    type: object
   responses.GetAllGeneralAttendanceRecords:
     properties:
       items:
@@ -1111,7 +1121,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllClassroomsByMajorId'
+            $ref: '#/definitions/GetAllClassroomsByMajorIdRes'
       tags:
       - classroom
     post:

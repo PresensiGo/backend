@@ -3,11 +3,13 @@ package services
 import (
 	batchRepo "api/internal/features/batch/repositories"
 	"api/internal/features/classroom/domains"
+	"api/internal/features/classroom/dto"
 	"api/internal/features/classroom/dto/requests"
 	"api/internal/features/classroom/dto/responses"
 	"api/internal/features/classroom/repositories"
 	majorDomain "api/internal/features/major/domains"
 	majorRepo "api/internal/features/major/repositories"
+	studentRepo "api/internal/features/student/repositories"
 	"api/pkg/http/failure"
 )
 
@@ -15,17 +17,20 @@ type Classroom struct {
 	batchRepo     *batchRepo.Batch
 	majorRepo     *majorRepo.Major
 	classroomRepo *repositories.Classroom
+	studentRepo   *studentRepo.Student
 }
 
 func NewClassroom(
 	batchRepo *batchRepo.Batch,
 	majorRepo *majorRepo.Major,
 	classroomRepo *repositories.Classroom,
+	studentRepo *studentRepo.Student,
 ) *Classroom {
 	return &Classroom{
-		batchRepo,
-		majorRepo,
-		classroomRepo,
+		batchRepo:     batchRepo,
+		majorRepo:     majorRepo,
+		classroomRepo: classroomRepo,
+		studentRepo:   studentRepo,
 	}
 }
 
@@ -84,8 +89,21 @@ func (s *Classroom) GetAllClassroomsByMajorId(majorId uint) (
 	if classrooms, err := s.classroomRepo.GetAllByMajorId(majorId); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {
+		result := make([]dto.GetAllClassroomsByMajorIdItem, len(*classrooms))
+
+		for i, classroom := range *classrooms {
+			if count, err := s.studentRepo.GetCountByClassroomId(classroom.Id); err != nil {
+				return nil, failure.NewInternal(err)
+			} else {
+				result[i] = dto.GetAllClassroomsByMajorIdItem{
+					Classroom:    classroom,
+					StudentCount: count,
+				}
+			}
+		}
+
 		return &responses.GetAllClassroomsByMajorId{
-			Classrooms: *classrooms,
+			Items: result,
 		}, nil
 	}
 }

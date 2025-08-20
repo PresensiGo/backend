@@ -141,3 +141,14 @@ func (r *Student) Get(studentId uint) (*domains.Student, error) {
 		return domains.FromStudentModel(&student), nil
 	}
 }
+
+func (r *Student) GetCountByClassroomId(classroomId uint) (int64, error) {
+	var count int64
+	if err := r.db.Model(&models.Student{}).
+		Where("classroom_id = ?", classroomId).
+		Count(&count).Error; err != nil {
+		return 0, err
+	} else {
+		return count, nil
+	}
+}

@@ -608,7 +608,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllClassroomsByMajorId"
+                            "$ref": "#/definitions/GetAllClassroomsByMajorIdRes"
                         }
                     }
                 }
@@ -1478,6 +1478,35 @@ const docTemplate = `{
                 }
             }
         },
+        "GetAllClassroomsByMajorIdItem": {
+            "type": "object",
+            "required": [
+                "classroom",
+                "student_count"
+            ],
+            "properties": {
+                "classroom": {
+                    "$ref": "#/definitions/classroom"
+                },
+                "student_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "GetAllClassroomsByMajorIdRes": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAllClassroomsByMajorIdItem"
+                    }
+                }
+            }
+        },
         "GetAllGeneralAttendanceRecordsItem": {
             "type": "object",
             "required": [
@@ -2256,20 +2285,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/responses.ClassroomMajor"
-                    }
-                }
-            }
-        },
-        "responses.GetAllClassroomsByMajorId": {
-            "type": "object",
-            "required": [
-                "classrooms"
-            ],
-            "properties": {
-                "classrooms": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/classroom"
                     }
                 }
             }

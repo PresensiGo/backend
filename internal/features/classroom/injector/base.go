@@ -1,11 +1,12 @@
 package injector
 
 import (
-	repositories3 "api/internal/features/batch/repositories"
+	batchRepo "api/internal/features/batch/repositories"
 	"api/internal/features/classroom/handlers"
-	repositories2 "api/internal/features/classroom/repositories"
+	classroomRepo "api/internal/features/classroom/repositories"
 	"api/internal/features/classroom/services"
 	"api/internal/features/major/repositories"
+	studentRepo "api/internal/features/student/repositories"
 	"api/pkg/database"
 	"github.com/google/wire"
 )
@@ -24,9 +25,10 @@ var (
 	ClassroomSet = wire.NewSet(
 		handlers.NewClassroom,
 		services.NewClassroom,
-		repositories3.NewBatch,
+		batchRepo.NewBatch,
 		repositories.NewMajor,
-		repositories2.NewClassroom,
+		classroomRepo.NewClassroom,
+		studentRepo.NewStudent,
 		database.New,
 	)
 )

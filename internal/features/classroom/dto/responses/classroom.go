@@ -2,6 +2,7 @@ package responses
 
 import (
 	"api/internal/features/classroom/domains"
+	"api/internal/features/classroom/dto"
 	majorDomain "api/internal/features/major/domains"
 )
 
@@ -19,8 +20,8 @@ type GetAll struct {
 }
 
 type GetAllClassroomsByMajorId struct {
-	Classrooms []domains.Classroom `json:"classrooms" validate:"required"`
-}
+	Items []dto.GetAllClassroomsByMajorIdItem `json:"items" validate:"required"`
+} // @name GetAllClassroomsByMajorIdRes
 
 type GetAllClassroomWithMajors struct {
 	Data []ClassroomMajor `json:"data" validate:"required"`
