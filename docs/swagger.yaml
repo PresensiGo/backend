@@ -157,6 +157,15 @@ definitions:
     - subject
     - subject_attendance
     type: object
+  GetAllSubjectAttendancesRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/GetAllSubjectAttendancesItem'
+        type: array
+    required:
+    - items
+    type: object
   GetBatchRes:
     properties:
       batch:
@@ -648,15 +657,6 @@ definitions:
       items:
         items:
           $ref: '#/definitions/GetAllSubjectAttendanceRecordsItem'
-        type: array
-    required:
-    - items
-    type: object
-  responses.GetAllSubjectAttendances:
-    properties:
-      items:
-        items:
-          $ref: '#/definitions/GetAllSubjectAttendancesItem'
         type: array
     required:
     - items
@@ -1296,7 +1296,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllSubjectAttendances'
+            $ref: '#/definitions/GetAllSubjectAttendancesRes'
       tags:
       - attendance
     post:

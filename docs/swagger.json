@@ -851,7 +851,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllSubjectAttendances"
+                            "$ref": "#/definitions/GetAllSubjectAttendancesRes"
                         }
                     }
                 }
@@ -1637,6 +1637,20 @@
                 }
             }
         },
+        "GetAllSubjectAttendancesRes": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAllSubjectAttendancesItem"
+                    }
+                }
+            }
+        },
         "GetBatchRes": {
             "type": "object",
             "required": [
@@ -2380,20 +2394,6 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/GetAllSubjectAttendanceRecordsItem"
-                    }
-                }
-            }
-        },
-        "responses.GetAllSubjectAttendances": {
-            "type": "object",
-            "required": [
-                "items"
-            ],
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/GetAllSubjectAttendancesItem"
                     }
                 }
             }

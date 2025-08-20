@@ -7,7 +7,7 @@ import (
 
 type GetAllSubjectAttendances struct {
 	Items []dto.GetAllSubjectAttendancesItem `json:"items" validate:"required"`
-}
+} // @name GetAllSubjectAttendancesRes
 
 type GetAllSubjectAttendanceRecords struct {
 	Items []dto.GetAllSubjectAttendanceRecordsItem `json:"items" validate:"required"`

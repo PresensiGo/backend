@@ -860,7 +860,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllSubjectAttendances"
+                            "$ref": "#/definitions/GetAllSubjectAttendancesRes"
                         }
                     }
                 }
@@ -1646,6 +1646,20 @@ const docTemplate = `{
                 }
             }
         },
+        "GetAllSubjectAttendancesRes": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAllSubjectAttendancesItem"
+                    }
+                }
+            }
+        },
         "GetBatchRes": {
             "type": "object",
             "required": [
@@ -2389,20 +2403,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/GetAllSubjectAttendanceRecordsItem"
-                    }
-                }
-            }
-        },
-        "responses.GetAllSubjectAttendances": {
-            "type": "object",
-            "required": [
-                "items"
-            ],
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/GetAllSubjectAttendancesItem"
                     }
                 }
             }
