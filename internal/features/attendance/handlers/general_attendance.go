@@ -37,7 +37,7 @@ func (h *GeneralAttendance) CreateGeneralAttendance(c *gin.Context) {
 		return
 	}
 
-	if response, err := h.service.CreateGeneralAttendance(authUser.SchoolId, req); err != nil {
+	if response, err := h.service.CreateGeneralAttendance(c, authUser.SchoolId, req); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,

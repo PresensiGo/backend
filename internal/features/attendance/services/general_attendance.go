@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"net/http"
 
 	"api/internal/features/attendance/domains"
@@ -11,8 +10,10 @@ import (
 	"api/internal/features/attendance/repositories"
 	studentDomain "api/internal/features/student/domains"
 	studentRepo "api/internal/features/student/repositories"
+	"api/pkg/authentication"
 	"api/pkg/http/failure"
 	"api/pkg/utils"
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -39,9 +40,13 @@ func NewGeneralAttendance(
 }
 
 func (s *GeneralAttendance) CreateGeneralAttendance(
-	schoolId uint, req requests.CreateGeneralAttendance,
+	c *gin.Context, schoolId uint, req requests.CreateGeneralAttendance,
 ) (*responses.CreateGeneralAttendance, *failure.App) {
-	fmt.Println("datetime", req.DateTime)
+	user := authentication.GetAuthenticatedUser(c)
+	if user.ID == 0 {
+		return nil, failure.NewApp(http.StatusForbidden, "Anda tidak memiliki akses!", nil)
+	}
+
 	parsedDateTime, err := utils.GetParsedDateTime(req.DateTime)
 	if err != nil {
 		return nil, failure.NewApp(
@@ -52,10 +57,11 @@ func (s *GeneralAttendance) CreateGeneralAttendance(
 	}
 
 	generalAttendance := domains.GeneralAttendance{
-		DateTime: *parsedDateTime,
-		Note:     req.Note,
-		SchoolId: schoolId,
-		Code:     uuid.NewString(),
+		DateTime:  *parsedDateTime,
+		Note:      req.Note,
+		SchoolId:  schoolId,
+		Code:      uuid.NewString(),
+		CreatorId: user.ID,
 	}
 
 	if result, err := s.generalAttendanceRepo.Create(generalAttendance); err != nil {
