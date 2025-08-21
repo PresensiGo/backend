@@ -1282,7 +1282,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetGeneralAttendance"
+                            "$ref": "#/definitions/GetGeneralAttendanceRes"
                         }
                     }
                 }
@@ -1879,6 +1879,17 @@ const docTemplate = `{
             "properties": {
                 "classroom": {
                     "$ref": "#/definitions/classroom"
+                }
+            }
+        },
+        "GetGeneralAttendanceRes": {
+            "type": "object",
+            "required": [
+                "general_attendance"
+            ],
+            "properties": {
+                "general_attendance": {
+                    "$ref": "#/definitions/GeneralAttendance"
                 }
             }
         },
@@ -2714,17 +2725,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/User"
                     }
-                }
-            }
-        },
-        "responses.GetGeneralAttendance": {
-            "type": "object",
-            "required": [
-                "general_attendance"
-            ],
-            "properties": {
-                "general_attendance": {
-                    "$ref": "#/definitions/GeneralAttendance"
                 }
             }
         },

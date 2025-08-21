@@ -10,6 +10,8 @@ import (
 	"api/internal/features/attendance/repositories"
 	studentDomain "api/internal/features/student/domains"
 	studentRepo "api/internal/features/student/repositories"
+	userDomain "api/internal/features/user/domains"
+	userRepo "api/internal/features/user/repositories"
 	"api/pkg/authentication"
 	"api/pkg/http/failure"
 	"api/pkg/utils"
@@ -23,6 +25,7 @@ type GeneralAttendance struct {
 	studentRepo                 *studentRepo.Student
 	generalAttendanceRepo       *repositories.GeneralAttendance
 	generalAttendanceRecordRepo *repositories.GeneralAttendanceRecord
+	userRepo                    *userRepo.User
 }
 
 func NewGeneralAttendance(
@@ -30,12 +33,14 @@ func NewGeneralAttendance(
 	studentRepo *studentRepo.Student,
 	generalAttendanceRepo *repositories.GeneralAttendance,
 	generalAttendanceRecordRepo *repositories.GeneralAttendanceRecord,
+	userRepo *userRepo.User,
 ) *GeneralAttendance {
 	return &GeneralAttendance{
 		db:                          db,
 		studentRepo:                 studentRepo,
 		generalAttendanceRepo:       generalAttendanceRepo,
 		generalAttendanceRecordRepo: generalAttendanceRecordRepo,
+		userRepo:                    userRepo,
 	}
 }
 
@@ -163,12 +168,24 @@ func (s *GeneralAttendance) GetAllGeneralAttendanceRecords(generalAttendanceId u
 func (s *GeneralAttendance) GetGeneralAttendance(generalAttendanceId uint) (
 	*responses.GetGeneralAttendance, *failure.App,
 ) {
-	if result, err := s.generalAttendanceRepo.Get(generalAttendanceId); err != nil {
+	if generalAttendance, err := s.generalAttendanceRepo.Get(generalAttendanceId); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {
-		return &responses.GetGeneralAttendance{
-			GeneralAttendance: *result,
-		}, nil
+		response := responses.GetGeneralAttendance{
+			GeneralAttendance: *generalAttendance,
+			Creator:           userDomain.User{},
+		}
+
+		// mendapatkan creator
+		if generalAttendance.CreatorId != 0 {
+			if creator, err := s.userRepo.GetByID(generalAttendance.CreatorId); err != nil {
+				return nil, failure.NewInternal(err)
+			} else {
+				response.Creator = *creator
+			}
+		}
+
+		return &response, nil
 	}
 }
 

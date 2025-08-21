@@ -199,6 +199,13 @@ definitions:
     required:
     - classroom
     type: object
+  GetGeneralAttendanceRes:
+    properties:
+      general_attendance:
+        $ref: '#/definitions/GeneralAttendance'
+    required:
+    - general_attendance
+    type: object
   GetMajorRes:
     properties:
       major:
@@ -753,13 +760,6 @@ definitions:
         type: array
     required:
     - users
-    type: object
-  responses.GetGeneralAttendance:
-    properties:
-      general_attendance:
-        $ref: '#/definitions/GeneralAttendance'
-    required:
-    - general_attendance
     type: object
   responses.ImportAccounts:
     properties:
@@ -1642,7 +1642,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetGeneralAttendance'
+            $ref: '#/definitions/GetGeneralAttendanceRes'
       tags:
       - attendance
   /api/v1/general-attendances/{general_attendance_id}/records:

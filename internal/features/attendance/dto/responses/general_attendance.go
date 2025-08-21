@@ -3,6 +3,7 @@ package responses
 import (
 	"api/internal/features/attendance/domains"
 	"api/internal/features/attendance/dto"
+	user "api/internal/features/user/domains"
 )
 
 type CreateGeneralAttendance struct {
@@ -19,7 +20,8 @@ type GetAllGeneralAttendances struct {
 
 type GetGeneralAttendance struct {
 	GeneralAttendance domains.GeneralAttendance `json:"general_attendance" validate:"required"`
-}
+	Creator           user.User                 `json:"creator" validate:"required"`
+} // @name GetGeneralAttendanceRes
 
 type GetAllGeneralAttendanceRecords struct {
 	Items []dto.GetAllGeneralAttendanceRecordsItem `json:"items" validate:"required"`
