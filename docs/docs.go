@@ -1205,7 +1205,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.GetAllGeneralAttendances"
+                            "$ref": "#/definitions/GetAllGeneralAttendancesRes"
                         }
                     }
                 }
@@ -1896,6 +1896,35 @@ const docTemplate = `{
                 },
                 "student": {
                     "$ref": "#/definitions/Student"
+                }
+            }
+        },
+        "GetAllGeneralAttendancesItem": {
+            "type": "object",
+            "required": [
+                "creator",
+                "general_attendance"
+            ],
+            "properties": {
+                "creator": {
+                    "$ref": "#/definitions/User"
+                },
+                "general_attendance": {
+                    "$ref": "#/definitions/GeneralAttendance"
+                }
+            }
+        },
+        "GetAllGeneralAttendancesRes": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAllGeneralAttendancesItem"
+                    }
                 }
             }
         },
@@ -2825,20 +2854,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/GetAllGeneralAttendanceRecordsItem"
-                    }
-                }
-            }
-        },
-        "responses.GetAllGeneralAttendances": {
-            "type": "object",
-            "required": [
-                "general_attendances"
-            ],
-            "properties": {
-                "general_attendances": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/GeneralAttendance"
                     }
                 }
             }

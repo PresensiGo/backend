@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"api/internal/features/attendance/domains"
@@ -207,8 +206,6 @@ func (s *SubjectAttendance) GetAllSubjectAttendances(classroomId uint) (
 		for _, v := range *creators {
 			mapCreators[v.Id] = &v
 		}
-
-		fmt.Println("mapCreators:", mapCreators)
 	}
 
 	result := make([]dto.GetAllSubjectAttendancesItem, len(*subjectAttendances))

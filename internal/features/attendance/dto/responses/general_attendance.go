@@ -19,8 +19,8 @@ type CreateGeneralAttendanceRecord struct {
 }
 
 type GetAllGeneralAttendances struct {
-	GeneralAttendances []domains.GeneralAttendance `json:"general_attendances" validate:"required"`
-}
+	Items []dto.GetAllGeneralAttendancesItem `json:"items" validate:"required"`
+} // @name GetAllGeneralAttendancesRes
 
 type GetGeneralAttendance struct {
 	GeneralAttendance domains.GeneralAttendance `json:"general_attendance" validate:"required"`

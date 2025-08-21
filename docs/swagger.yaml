@@ -148,6 +148,25 @@ definitions:
     - record
     - student
     type: object
+  GetAllGeneralAttendancesItem:
+    properties:
+      creator:
+        $ref: '#/definitions/User'
+      general_attendance:
+        $ref: '#/definitions/GeneralAttendance'
+    required:
+    - creator
+    - general_attendance
+    type: object
+  GetAllGeneralAttendancesRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/GetAllGeneralAttendancesItem'
+        type: array
+    required:
+    - items
+    type: object
   GetAllMajorsByBatchIdItem:
     properties:
       classroom_count:
@@ -765,15 +784,6 @@ definitions:
         type: array
     required:
     - items
-    type: object
-  responses.GetAllGeneralAttendances:
-    properties:
-      general_attendances:
-        items:
-          $ref: '#/definitions/GeneralAttendance'
-        type: array
-    required:
-    - general_attendances
     type: object
   responses.GetAllStudentAccountsByClassroomId:
     properties:
@@ -1645,7 +1655,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.GetAllGeneralAttendances'
+            $ref: '#/definitions/GetAllGeneralAttendancesRes'
       tags:
       - attendance
     post:

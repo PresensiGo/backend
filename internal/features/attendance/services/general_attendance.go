@@ -144,11 +144,41 @@ func (s *GeneralAttendance) CreateGeneralAttendanceRecordStudent(
 func (s *GeneralAttendance) GetAllGeneralAttendances(schoolId uint) (
 	*responses.GetAllGeneralAttendances, *failure.App,
 ) {
-	if result, err := s.generalAttendanceRepo.GetAllBySchoolId(schoolId); err != nil {
+	if generalAttendances, err := s.generalAttendanceRepo.GetAllBySchoolId(schoolId); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {
+		creatorIds := make([]uint, len(*generalAttendances))
+		for i, v := range *generalAttendances {
+			creatorIds[i] = v.CreatorId
+		}
+
+		mapCreators := make(map[uint]*userDomain.User)
+
+		if creators, err := s.userRepo.GetMany(creatorIds); err != nil {
+			return nil, failure.NewInternal(err)
+		} else {
+			for _, v := range *creators {
+				mapCreators[v.Id] = &v
+			}
+		}
+
+		result := make([]dto.GetAllGeneralAttendancesItem, len(*generalAttendances))
+		for i, v := range *generalAttendances {
+			var creator userDomain.User
+			if v, ok := mapCreators[v.CreatorId]; ok {
+				creator = *v
+			} else {
+				creator = userDomain.User{}
+			}
+
+			result[i] = dto.GetAllGeneralAttendancesItem{
+				GeneralAttendance: v,
+				Creator:           creator,
+			}
+		}
+
 		return &responses.GetAllGeneralAttendances{
-			GeneralAttendances: *result,
+			Items: result,
 		}, nil
 	}
 }
