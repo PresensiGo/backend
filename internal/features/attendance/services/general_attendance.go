@@ -165,6 +165,51 @@ func (s *GeneralAttendance) GetAllGeneralAttendanceRecords(generalAttendanceId u
 	}, nil
 }
 
+func (s *GeneralAttendance) GetAllGeneralAttendanceRecordsByClassroomId(
+	generalAttendanceId uint, classroomId uint,
+) (
+	*responses.GetAllGeneralAttendanceRecordsByClassroomId, *failure.App,
+) {
+	students, err := s.studentRepo.GetAllByClassroomId(classroomId)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	studentIds := make([]uint, len(students))
+	for i, v := range students {
+		studentIds[i] = v.Id
+	}
+
+	records, err := s.generalAttendanceRecordRepo.GetManyByAttendanceIdStudentIds(
+		generalAttendanceId, studentIds,
+	)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	mapRecords := make(map[uint]*domains.GeneralAttendanceRecord)
+	for _, record := range *records {
+		mapRecords[record.StudentId] = &record
+	}
+
+	result := make([]dto.GetAllGeneralAttendanceRecordsByClassroomIdItem, len(students))
+	for i, student := range students {
+		record := domains.GeneralAttendanceRecord{}
+		if r, ok := mapRecords[student.Id]; ok {
+			record = *r
+		}
+
+		result[i] = dto.GetAllGeneralAttendanceRecordsByClassroomIdItem{
+			Student: student,
+			Record:  record,
+		}
+	}
+
+	return &responses.GetAllGeneralAttendanceRecordsByClassroomId{
+		Items: result,
+	}, nil
+}
+
 func (s *GeneralAttendance) GetGeneralAttendance(generalAttendanceId uint) (
 	*responses.GetGeneralAttendance, *failure.App,
 ) {

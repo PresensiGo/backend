@@ -9,3 +9,8 @@ type GetAllGeneralAttendanceRecordsItem struct {
 	Student studentDomain.Student           `json:"student" validate:"required"`
 	Record  domains.GeneralAttendanceRecord `json:"record" validate:"required"`
 } // @name GetAllGeneralAttendanceRecordsItem
+
+type GetAllGeneralAttendanceRecordsByClassroomIdItem struct {
+	Student studentDomain.Student           `json:"student" validate:"required"`
+	Record  domains.GeneralAttendanceRecord `json:"record" validate:"required"`
+} // @name GetAllGeneralAttendanceRecordsByClassroomIdItem

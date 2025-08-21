@@ -15,6 +15,10 @@ func RegisterGeneralAttendance(g *gin.RouterGroup, handler *handlers.GeneralAtte
 
 		group.GET("", handler.GetAllGeneralAttendances)
 		group.GET("/:general_attendance_id/records", handler.GetAllGeneralAttendanceRecords)
+		group.GET(
+			"/:general_attendance_id/classrooms/:classroom_id/records",
+			handler.GetAllGeneralAttendanceRecordsByClassroomId,
+		)
 		group.GET("/:general_attendance_id", handler.GetGeneralAttendance)
 
 		group.PUT("/:general_attendance_id", handler.Update)

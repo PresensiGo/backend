@@ -106,6 +106,25 @@ definitions:
     required:
     - items
     type: object
+  GetAllGeneralAttendanceRecordsByClassroomIdItem:
+    properties:
+      record:
+        $ref: '#/definitions/domains.GeneralAttendanceRecord'
+      student:
+        $ref: '#/definitions/Student'
+    required:
+    - record
+    - student
+    type: object
+  GetAllGeneralAttendanceRecordsByClassroomIdRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/GetAllGeneralAttendanceRecordsByClassroomIdItem'
+        type: array
+    required:
+    - items
+    type: object
   GetAllGeneralAttendanceRecordsItem:
     properties:
       record:
@@ -432,18 +451,21 @@ definitions:
     - AttendanceStatusPermission
   domains.GeneralAttendanceRecord:
     properties:
-      created_at:
+      date_time:
         type: string
       general_attendance_id:
         type: integer
       id:
         type: integer
+      status:
+        $ref: '#/definitions/constants.AttendanceStatus'
       student_id:
         type: integer
     required:
-    - created_at
+    - date_time
     - general_attendance_id
     - id
+    - status
     - student_id
     type: object
   domains.StudentMajorClassroom:
@@ -1646,6 +1668,27 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/GetGeneralAttendanceRes'
+      tags:
+      - attendance
+  /api/v1/general-attendances/{general_attendance_id}/classrooms/{classroom_id}/records:
+    get:
+      operationId: GetAllGeneralAttendanceRecordsByClassroomId
+      parameters:
+      - description: general attendance id
+        in: path
+        name: general_attendance_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAllGeneralAttendanceRecordsByClassroomIdRes'
       tags:
       - attendance
   /api/v1/general-attendances/{general_attendance_id}/records:

@@ -1311,6 +1311,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/general-attendances/{general_attendance_id}/classrooms/{classroom_id}/records": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "GetAllGeneralAttendanceRecordsByClassroomId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "general attendance id",
+                        "name": "general_attendance_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetAllGeneralAttendanceRecordsByClassroomIdRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/general-attendances/{general_attendance_id}/records": {
             "get": {
                 "tags": [
@@ -1736,6 +1768,35 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/GetAllClassroomsByMajorIdItem"
+                    }
+                }
+            }
+        },
+        "GetAllGeneralAttendanceRecordsByClassroomIdItem": {
+            "type": "object",
+            "required": [
+                "record",
+                "student"
+            ],
+            "properties": {
+                "record": {
+                    "$ref": "#/definitions/domains.GeneralAttendanceRecord"
+                },
+                "student": {
+                    "$ref": "#/definitions/Student"
+                }
+            }
+        },
+        "GetAllGeneralAttendanceRecordsByClassroomIdRes": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAllGeneralAttendanceRecordsByClassroomIdItem"
                     }
                 }
             }
@@ -2223,13 +2284,14 @@ const docTemplate = `{
         "domains.GeneralAttendanceRecord": {
             "type": "object",
             "required": [
-                "created_at",
+                "date_time",
                 "general_attendance_id",
                 "id",
+                "status",
                 "student_id"
             ],
             "properties": {
-                "created_at": {
+                "date_time": {
                     "type": "string"
                 },
                 "general_attendance_id": {
@@ -2237,6 +2299,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/constants.AttendanceStatus"
                 },
                 "student_id": {
                     "type": "integer"

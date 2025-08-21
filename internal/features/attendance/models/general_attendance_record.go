@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"api/internal/features/student/models"
+	"api/pkg/constants"
 	"gorm.io/gorm"
 )
 
@@ -15,4 +16,5 @@ type GeneralAttendanceRecord struct {
 	GeneralAttendance   GeneralAttendance `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	StudentId           uint
 	Student             models.Student `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Status              constants.AttendanceStatus
 }
