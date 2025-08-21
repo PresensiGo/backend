@@ -1366,6 +1366,38 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "CreateGeneralAttendanceRecord",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "general attendance id",
+                        "name": "general_attendance_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateGeneralAttendanceRecordReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.CreateGeneralAttendanceRecord"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/general_attendances/{general_attendance_id}": {
@@ -1612,6 +1644,25 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "CreateGeneralAttendanceRecordReq": {
+            "type": "object",
+            "required": [
+                "datetime",
+                "status",
+                "student_id"
+            ],
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/constants.AttendanceStatus"
+                },
+                "student_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "CreateGeneralAttendanceRecordStudentReq": {
             "type": "object",
             "required": [
@@ -2564,6 +2615,17 @@ const docTemplate = `{
             "properties": {
                 "general_attendance": {
                     "$ref": "#/definitions/GeneralAttendance"
+                }
+            }
+        },
+        "responses.CreateGeneralAttendanceRecord": {
+            "type": "object",
+            "required": [
+                "general_attendance_record"
+            ],
+            "properties": {
+                "general_attendance_record": {
+                    "$ref": "#/definitions/domains.GeneralAttendanceRecord"
                 }
             }
         },

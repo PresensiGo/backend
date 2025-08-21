@@ -1,9 +1,17 @@
 package requests
 
+import "api/pkg/constants"
+
 type CreateGeneralAttendance struct {
 	DateTime string `json:"datetime"`
 	Note     string `json:"note"`
 } // @name CreateGeneralAttendanceReq
+
+type CreateGeneralAttendanceRecord struct {
+	StudentId uint                       `json:"student_id" validate:"required"`
+	DateTime  string                     `json:"datetime" validate:"required"`
+	Status    constants.AttendanceStatus `json:"status" validate:"required"`
+} // @name CreateGeneralAttendanceRecordReq
 
 type UpdateGeneralAttendance struct {
 	DateTime string `json:"datetime"`

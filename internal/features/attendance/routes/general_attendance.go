@@ -12,6 +12,7 @@ func RegisterGeneralAttendance(g *gin.RouterGroup, handler *handlers.GeneralAtte
 		group := g.Group(relativePath).Use(middlewares.AuthMiddleware())
 
 		group.POST("", handler.CreateGeneralAttendance)
+		group.POST("/:general_attendance_id/records", handler.CreateGeneralAttendanceRecord)
 
 		group.GET("", handler.GetAllGeneralAttendances)
 		group.GET("/:general_attendance_id/records", handler.GetAllGeneralAttendanceRecords)

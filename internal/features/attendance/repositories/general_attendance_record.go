@@ -16,6 +16,27 @@ func NewGeneralAttendanceRecord(db *gorm.DB) *GeneralAttendanceRecord {
 	}
 }
 
+func (r *GeneralAttendanceRecord) FirstOrCreate(data domains.GeneralAttendanceRecord) (
+	*domains.GeneralAttendanceRecord, error,
+) {
+	var generalAttendanceRecord models.GeneralAttendanceRecord
+	if err := r.db.Where(
+		models.GeneralAttendanceRecord{
+			GeneralAttendanceId: data.GeneralAttendanceId,
+			StudentId:           data.StudentId,
+		},
+	).Assign(
+		models.GeneralAttendanceRecord{
+			DateTime: data.DateTime,
+			Status:   data.Status,
+		},
+	).FirstOrCreate(&generalAttendanceRecord).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromGeneralAttendanceRecordModel(&generalAttendanceRecord), nil
+	}
+}
+
 func (r *GeneralAttendanceRecord) CreateInTx(tx *gorm.DB, data domains.GeneralAttendanceRecord) (
 	*domains.GeneralAttendanceRecord, error,
 ) {

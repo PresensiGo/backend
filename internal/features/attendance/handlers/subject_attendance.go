@@ -76,7 +76,7 @@ func (h *SubjectAttendance) CreateSubjectAttendanceRecord(c *gin.Context) {
 	}
 
 	if response, err := h.service.CreateSubjectAttendanceRecord(
-		c, uint(subjectAttendanceId), req,
+		uint(subjectAttendanceId), req,
 	); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{

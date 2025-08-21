@@ -1,4 +1,17 @@
 definitions:
+  CreateGeneralAttendanceRecordReq:
+    properties:
+      datetime:
+        type: string
+      status:
+        $ref: '#/definitions/constants.AttendanceStatus'
+      student_id:
+        type: integer
+    required:
+    - datetime
+    - status
+    - student_id
+    type: object
   CreateGeneralAttendanceRecordStudentReq:
     properties:
       code:
@@ -638,6 +651,13 @@ definitions:
         $ref: '#/definitions/GeneralAttendance'
     required:
     - general_attendance
+    type: object
+  responses.CreateGeneralAttendanceRecord:
+    properties:
+      general_attendance_record:
+        $ref: '#/definitions/domains.GeneralAttendanceRecord'
+    required:
+    - general_attendance_record
     type: object
   responses.CreateGeneralAttendanceRecordStudent:
     properties:
@@ -1705,6 +1725,27 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.GetAllGeneralAttendanceRecords'
+      tags:
+      - attendance
+    post:
+      operationId: CreateGeneralAttendanceRecord
+      parameters:
+      - description: general attendance id
+        in: path
+        name: general_attendance_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGeneralAttendanceRecordReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.CreateGeneralAttendanceRecord'
       tags:
       - attendance
   /api/v1/general-attendances/records/student:

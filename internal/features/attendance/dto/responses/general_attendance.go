@@ -14,6 +14,10 @@ type CreateGeneralAttendanceRecordStudent struct {
 	Message string `json:"message" validate:"required"`
 }
 
+type CreateGeneralAttendanceRecord struct {
+	GeneralAttendanceRecord domains.GeneralAttendanceRecord `json:"general_attendance_record" validate:"required"`
+}
+
 type GetAllGeneralAttendances struct {
 	GeneralAttendances []domains.GeneralAttendance `json:"general_attendances" validate:"required"`
 }

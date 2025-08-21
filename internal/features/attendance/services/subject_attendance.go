@@ -96,14 +96,8 @@ func (s *SubjectAttendance) CreateSubjectAttendance(
 }
 
 func (s *SubjectAttendance) CreateSubjectAttendanceRecord(
-	c *gin.Context, subjectAttendanceId uint, req requests.CreateSubjectAttendanceRecord,
-) (
-	*responses.CreateSubjectAttendanceRecord, *failure.App,
-) {
-	if err := authentication.ValidateAdmin(c); err != nil {
-		return nil, err
-	}
-
+	subjectAttendanceId uint, req requests.CreateSubjectAttendanceRecord,
+) (*responses.CreateSubjectAttendanceRecord, *failure.App) {
 	parsedDateTime, err := utils.GetParsedDateTime(req.DateTime)
 	if err != nil {
 		return nil, failure.NewApp(http.StatusBadRequest, "Tanggal dan waktu tidak valid!", err)
