@@ -10,6 +10,10 @@ type GetAllUsers struct {
 	Users []domains.User `json:"users" validate:"required"`
 }
 
+type GetAccount struct {
+	User domains.User `json:"user" validate:"required"`
+} // @name GetAccountRes
+
 type UpdateAccountPassword struct {
 	User domains.User `json:"user" validate:"required"`
 }

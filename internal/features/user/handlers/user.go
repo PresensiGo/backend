@@ -41,6 +41,22 @@ func (h *User) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// @id 			GetAccount
+// @tags 		account
+// @success 	200 {object} responses.GetAccount
+// @router 		/api/v1/accounts/profile [get]
+func (h *User) GetAccount(c *gin.Context) {
+	if response, err := h.service.GetAccount(c); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 // @accept 		multipart/form-data
 // @param 		file formData file true "file"
 // @success 	200 {object} responses.ImportAccounts

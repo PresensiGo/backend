@@ -11,6 +11,7 @@ func RegisterUser(g *gin.RouterGroup, handler *handlers.User) {
 
 	group.POST("/import", handler.ImportAccounts)
 	group.GET("", handler.GetAll)
+	group.GET("/profile", handler.GetAccount)
 	group.PUT("/:account_id/password", handler.UpdateAccountPassword)
 	group.PUT("/:account_id/role", handler.UpdateAccountRole)
 	group.DELETE("/:account_id", handler.DeleteAccount)

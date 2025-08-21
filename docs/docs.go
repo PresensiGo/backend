@@ -54,6 +54,22 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/accounts/profile": {
+            "get": {
+                "tags": [
+                    "account"
+                ],
+                "operationId": "GetAccount",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetAccountRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/accounts/{account_id}": {
             "delete": {
                 "tags": [
@@ -1810,6 +1826,17 @@ const docTemplate = `{
                 },
                 "school_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "GetAccountRes": {
+            "type": "object",
+            "required": [
+                "user"
+            ],
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/User"
                 }
             }
         },

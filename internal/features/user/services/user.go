@@ -108,6 +108,21 @@ func (s *User) GetAll(schoolId uint) (*responses.GetAllUsers, error) {
 	}
 }
 
+func (s *User) GetAccount(c *gin.Context) (*responses.GetAccount, *failure.App) {
+	user := authentication.GetAuthenticatedUser(c)
+	if user.ID == 0 {
+		return nil, failure.NewApp(http.StatusForbidden, "Anda tidak memiliki akses!", nil)
+	}
+
+	if result, err := s.userRepo.GetByID(user.ID); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetAccount{
+			User: *result,
+		}, nil
+	}
+}
+
 func (s *User) UpdateAccountPassword(
 	c *gin.Context, userId uint, req requests.UpdateAccountPassword,
 ) (

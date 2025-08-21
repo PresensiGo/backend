@@ -81,6 +81,13 @@ definitions:
     - note
     - school_id
     type: object
+  GetAccountRes:
+    properties:
+      user:
+        $ref: '#/definitions/User'
+    required:
+    - user
+    type: object
   GetAllBatchesItem:
     properties:
       batch:
@@ -976,6 +983,16 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.ImportAccounts'
+  /api/v1/accounts/profile:
+    get:
+      operationId: GetAccount
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAccountRes'
+      tags:
+      - account
   /api/v1/auth/login:
     post:
       operationId: login
