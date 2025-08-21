@@ -7,6 +7,7 @@ import (
 	"api/internal/features/classroom"
 	"api/internal/features/data"
 	"api/internal/features/major"
+	"api/internal/features/school"
 	"api/internal/features/student"
 	"api/internal/features/subject"
 	"api/internal/features/user"
@@ -39,6 +40,7 @@ func NewServer() {
 	user.RegisterUser(v1)
 	student.RegisterStudent(v1)
 	subject.RegisterSubject(v1)
+	school.RegisterModule(v1)
 
 	// protected routes
 	authorized := v1.Group("/")

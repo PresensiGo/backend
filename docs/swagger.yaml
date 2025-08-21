@@ -267,6 +267,13 @@ definitions:
     required:
     - major
     type: object
+  GetSchoolRes:
+    properties:
+      school:
+        $ref: '#/definitions/School'
+    required:
+    - school
+    type: object
   GetSubjectAttendanceRes:
     properties:
       creator:
@@ -363,6 +370,19 @@ definitions:
     required:
     - access_token
     - refresh_token
+    type: object
+  School:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - code
+    - id
+    - name
     type: object
   Student:
     properties:
@@ -1845,6 +1865,16 @@ paths:
             type: string
       tags:
       - reset
+  /api/v1/schools/profile:
+    get:
+      operationId: GetSchool
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetSchoolRes'
+      tags:
+      - school
   /api/v1/students:
     get:
       operationId: getAllStudents

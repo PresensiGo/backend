@@ -1501,6 +1501,22 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/schools/profile": {
+            "get": {
+                "tags": [
+                    "school"
+                ],
+                "operationId": "GetSchool",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetSchoolRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/students": {
             "get": {
                 "tags": [
@@ -2081,6 +2097,17 @@ const docTemplate = `{
                 }
             }
         },
+        "GetSchoolRes": {
+            "type": "object",
+            "required": [
+                "school"
+            ],
+            "properties": {
+                "school": {
+                    "$ref": "#/definitions/School"
+                }
+            }
+        },
         "GetSubjectAttendanceRes": {
             "type": "object",
             "required": [
@@ -2224,6 +2251,25 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "School": {
+            "type": "object",
+            "required": [
+                "code",
+                "id",
+                "name"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }

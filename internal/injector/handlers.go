@@ -9,6 +9,7 @@ import (
 	classroom "api/internal/features/classroom/injector"
 	data "api/internal/features/data/injector"
 	major "api/internal/features/major/injector"
+	school "api/internal/features/school/injector"
 	student "api/internal/features/student/injector"
 	subject "api/internal/features/subject/injector"
 	user "api/internal/features/user/injector"
@@ -75,6 +76,14 @@ func InitSubjectHandlers() *subject.SubjectHandlers {
 	wire.Build(
 		subject.NewSubjectHandlers,
 		subject.SubjectSet,
+	)
+	return nil
+}
+
+func InitSchoolHandlers() *school.SchoolHandler {
+	wire.Build(
+		school.NewSchoolHandler,
+		school.Set,
 	)
 	return nil
 }

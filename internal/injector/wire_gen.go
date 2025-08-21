@@ -27,7 +27,10 @@ import (
 	injector3 "api/internal/features/major/injector"
 	repositories5 "api/internal/features/major/repositories"
 	services3 "api/internal/features/major/services"
+	handlers9 "api/internal/features/school/handlers"
+	injector9 "api/internal/features/school/injector"
 	repositories8 "api/internal/features/school/repositories"
+	services9 "api/internal/features/school/services"
 	handlers5 "api/internal/features/student/handlers"
 	injector5 "api/internal/features/student/injector"
 	repositories2 "api/internal/features/student/repositories"
@@ -159,4 +162,13 @@ func InitSubjectHandlers() *injector8.SubjectHandlers {
 	handlersSubject := handlers8.NewSubject(servicesSubject)
 	subjectHandlers := injector8.NewSubjectHandlers(handlersSubject)
 	return subjectHandlers
+}
+
+func InitSchoolHandlers() *injector9.SchoolHandler {
+	db := database.New()
+	school := repositories8.NewSchool(db)
+	servicesSchool := services9.NewSchool(school)
+	handlersSchool := handlers9.NewSchool(servicesSchool)
+	schoolHandler := injector9.NewSchoolHandler(handlersSchool)
+	return schoolHandler
 }

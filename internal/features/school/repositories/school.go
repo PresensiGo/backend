@@ -24,7 +24,7 @@ func (r *School) CreateInTx(tx *gorm.DB, data domains.School) (*domains.School, 
 	}
 }
 
-func (r *School) GetById(id uint) (*domains.School, error) {
+func (r *School) Get(id uint) (*domains.School, error) {
 	var school models.School
 	if err := r.db.Where("id = ?", id).First(&school).Error; err != nil {
 		return nil, err

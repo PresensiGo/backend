@@ -59,7 +59,7 @@ func (s *Auth) Login(email string, password string) (*responses.Login, *failure.
 		)
 	}
 
-	school, err := s.schoolRepo.GetById(currentUser.SchoolId)
+	school, err := s.schoolRepo.Get(currentUser.SchoolId)
 	if err != nil {
 		return nil, failure.NewInternal(err)
 	}
@@ -121,7 +121,7 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, *f
 		return nil, failure.NewInternal(err)
 	}
 
-	school, err := s.schoolRepo.GetById(currentUser.SchoolId)
+	school, err := s.schoolRepo.Get(currentUser.SchoolId)
 	if err != nil {
 		return nil, failure.NewInternal(err)
 	}
