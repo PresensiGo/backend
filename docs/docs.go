@@ -1885,9 +1885,13 @@ const docTemplate = `{
         "GetGeneralAttendanceRes": {
             "type": "object",
             "required": [
+                "creator",
                 "general_attendance"
             ],
             "properties": {
+                "creator": {
+                    "$ref": "#/definitions/User"
+                },
                 "general_attendance": {
                     "$ref": "#/definitions/GeneralAttendance"
                 }

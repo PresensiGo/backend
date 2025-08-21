@@ -201,9 +201,12 @@ definitions:
     type: object
   GetGeneralAttendanceRes:
     properties:
+      creator:
+        $ref: '#/definitions/User'
       general_attendance:
         $ref: '#/definitions/GeneralAttendance'
     required:
+    - creator
     - general_attendance
     type: object
   GetMajorRes:
