@@ -18,3 +18,9 @@ type GetAllSubjectAttendancesItem struct {
 	Subject           subject.Subject              `json:"subject" validate:"required"`
 	Creator           user.User                    `json:"creator" validate:"required"`
 } // @name GetAllSubjectAttendancesItem
+
+type GetAllSubjectAttendancesStudentItem struct {
+	SubjectAttendance       attendance.SubjectAttendance       `json:"subject_attendance" validate:"required"`
+	SubjectAttendanceRecord attendance.SubjectAttendanceRecord `json:"subject_attendance_record" validate:"required"`
+	Subject                 subject.Subject                    `json:"subject" validate:"required"`
+} // @name GetAllSubjectAttendancesStudentItem

@@ -29,5 +29,6 @@ func RegisterSubjectAttendance(g *gin.RouterGroup, handler *handlers.SubjectAtte
 		group := g.Group(relativePath).Use(middlewares.StudentMiddleware())
 
 		group.POST("/records/student", handler.CreateSubjectAttendanceRecordStudent)
+		group.GET("/student", handler.GetAllSubjectAttendancesStudent)
 	}
 }

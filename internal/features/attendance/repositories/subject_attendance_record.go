@@ -65,6 +65,26 @@ func (r *SubjectAttendanceRecord) GetAllByAttendanceId(subjectAttendanceId uint)
 	}
 }
 
+func (r *SubjectAttendanceRecord) GetManyByAttendanceIdsStudentId(
+	attendanceIds []uint, studentId uint,
+) (
+	*[]domains.SubjectAttendanceRecord, error,
+) {
+	var records []models.SubjectAttendanceRecord
+	if err := r.db.Where(
+		"subject_attendance_id IN ? AND student_id = ?",
+		attendanceIds, studentId,
+	).Find(&records).Error; err != nil {
+		return nil, err
+	} else {
+		result := make([]domains.SubjectAttendanceRecord, len(records))
+		for i, v := range records {
+			result[i] = *domains.FromSubjectAttendanceRecordModel(&v)
+		}
+		return &result, nil
+	}
+}
+
 func (r *SubjectAttendanceRecord) DeleteByAttendanceIdStudentIdInTx(
 	tx *gorm.DB, attendanceId, studentId uint,
 ) error {

@@ -229,6 +229,75 @@ func (s *SubjectAttendance) GetAllSubjectAttendances(classroomId uint) (
 	}, nil
 }
 
+func (s *SubjectAttendance) GetAllSubjectAttendancesStudent(c *gin.Context) (
+	*responses.GetAllSubjectAttendancesStudent, *failure.App,
+) {
+	auth := authentication.GetAuthenticatedStudent(c)
+	if auth.Id == 0 || auth.SchoolId == 0 {
+		return nil, failure.NewApp(http.StatusForbidden, "Anda tidak memiliki akses!", nil)
+	}
+
+	student, err := s.studentRepo.Get(auth.Id)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	attendances, err := s.subjectAttendanceRepo.GetAllTodayByClassroomId(student.ClassroomId)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	attendanceIds := make([]uint, len(*attendances))
+	subjectIds := make([]uint, len(*attendances))
+	for i, v := range *attendances {
+		attendanceIds[i] = v.Id
+		subjectIds[i] = v.SubjectId
+	}
+
+	mapRecords := make(map[uint]*domains.SubjectAttendanceRecord)
+	if records, err := s.subjectAttendanceRecordRepo.GetManyByAttendanceIdsStudentId(
+		attendanceIds, auth.Id,
+	); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		for _, record := range *records {
+			mapRecords[record.SubjectAttendanceId] = &record
+		}
+	}
+
+	mapSubjects := make(map[uint]*subjectDomain.Subject)
+	if subjects, err := s.subjectRepo.GetMany(subjectIds); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		for _, subject := range *subjects {
+			mapSubjects[subject.Id] = &subject
+		}
+	}
+
+	result := make([]dto.GetAllSubjectAttendancesStudentItem, len(*attendances))
+	for i, v := range *attendances {
+		record := domains.SubjectAttendanceRecord{}
+		if r, ok := mapRecords[v.Id]; ok {
+			record = *r
+		}
+
+		subject := subjectDomain.Subject{}
+		if s, ok := mapSubjects[v.SubjectId]; ok {
+			subject = *s
+		}
+
+		result[i] = dto.GetAllSubjectAttendancesStudentItem{
+			SubjectAttendance:       v,
+			SubjectAttendanceRecord: record,
+			Subject:                 subject,
+		}
+	}
+
+	return &responses.GetAllSubjectAttendancesStudent{
+		Items: result,
+	}, nil
+}
+
 func (s *SubjectAttendance) GetAllSubjectAttendanceRecords(
 	classroomId uint, subjectAttendanceId uint,
 ) (

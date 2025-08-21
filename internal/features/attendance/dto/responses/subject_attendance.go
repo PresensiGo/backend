@@ -10,6 +10,10 @@ type GetAllSubjectAttendances struct {
 	Items []dto.GetAllSubjectAttendancesItem `json:"items" validate:"required"`
 } // @name GetAllSubjectAttendancesRes
 
+type GetAllSubjectAttendancesStudent struct {
+	Items []dto.GetAllSubjectAttendancesStudentItem `json:"items" validate:"required"`
+} // @name GetAllSubjectAttendancesStudentRes
+
 type GetAllSubjectAttendanceRecords struct {
 	Items []dto.GetAllSubjectAttendanceRecordsItem `json:"items" validate:"required"`
 }

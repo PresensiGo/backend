@@ -144,6 +144,22 @@ func (h *SubjectAttendance) GetAllSubjectAttendances(c *gin.Context) {
 	}
 }
 
+// @id 			GetAllSubjectAttendancesStudent
+// @tags 		attendance
+// @success 	200 {object} responses.GetAllSubjectAttendancesStudent
+// @router 		/api/v1/subject-attendances/student [get]
+func (h *SubjectAttendance) GetAllSubjectAttendancesStudent(c *gin.Context) {
+	if response, err := h.service.GetAllSubjectAttendancesStudent(c); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 // @id 			GetAllSubjectAttendanceRecords
 // @tags 		attendance
 // @param 		batch_id path int true "batch id"
