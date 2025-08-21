@@ -1279,6 +1279,22 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/general-attendances/student": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "GetAllGeneralAttendancesStudent",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetAllGeneralAttendancesStudentRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/general-attendances/{general_attendance_id}": {
             "get": {
                 "tags": [
@@ -1580,6 +1596,22 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.CreateSubjectAttendanceRecordStudent"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/subject-attendances/student": {
+            "get": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "GetAllSubjectAttendancesStudent",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/GetAllSubjectAttendancesStudentRes"
                         }
                     }
                 }
@@ -1971,6 +2003,35 @@ const docTemplate = `{
                 }
             }
         },
+        "GetAllGeneralAttendancesStudentItem": {
+            "type": "object",
+            "required": [
+                "general_attendance",
+                "general_attendance_record"
+            ],
+            "properties": {
+                "general_attendance": {
+                    "$ref": "#/definitions/GeneralAttendance"
+                },
+                "general_attendance_record": {
+                    "$ref": "#/definitions/domains.GeneralAttendanceRecord"
+                }
+            }
+        },
+        "GetAllGeneralAttendancesStudentRes": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAllGeneralAttendancesStudentItem"
+                    }
+                }
+            }
+        },
         "GetAllMajorsByBatchIdItem": {
             "type": "object",
             "required": [
@@ -2072,6 +2133,43 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/GetAllSubjectAttendancesItem"
+                    }
+                }
+            }
+        },
+        "GetAllSubjectAttendancesStudentItem": {
+            "type": "object",
+            "required": [
+                "creator",
+                "subject",
+                "subject_attendance",
+                "subject_attendance_record"
+            ],
+            "properties": {
+                "creator": {
+                    "$ref": "#/definitions/User"
+                },
+                "subject": {
+                    "$ref": "#/definitions/Subject"
+                },
+                "subject_attendance": {
+                    "$ref": "#/definitions/SubjectAttendance"
+                },
+                "subject_attendance_record": {
+                    "$ref": "#/definitions/domains.SubjectAttendanceRecord"
+                }
+            }
+        },
+        "GetAllSubjectAttendancesStudentRes": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GetAllSubjectAttendancesStudentItem"
                     }
                 }
             }

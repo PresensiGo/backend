@@ -249,9 +249,11 @@ func (s *SubjectAttendance) GetAllSubjectAttendancesStudent(c *gin.Context) (
 
 	attendanceIds := make([]uint, len(*attendances))
 	subjectIds := make([]uint, len(*attendances))
+	creatorIds := make([]uint, len(*attendances))
 	for i, v := range *attendances {
 		attendanceIds[i] = v.Id
 		subjectIds[i] = v.SubjectId
+		creatorIds[i] = v.CreatorId
 	}
 
 	mapRecords := make(map[uint]*domains.SubjectAttendanceRecord)
@@ -274,6 +276,15 @@ func (s *SubjectAttendance) GetAllSubjectAttendancesStudent(c *gin.Context) (
 		}
 	}
 
+	mapCreators := make(map[uint]*userDomain.User)
+	if creators, err := s.userRepo.GetMany(creatorIds); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		for _, v := range *creators {
+			mapCreators[v.Id] = &v
+		}
+	}
+
 	result := make([]dto.GetAllSubjectAttendancesStudentItem, len(*attendances))
 	for i, v := range *attendances {
 		record := domains.SubjectAttendanceRecord{}
@@ -286,10 +297,16 @@ func (s *SubjectAttendance) GetAllSubjectAttendancesStudent(c *gin.Context) (
 			subject = *s
 		}
 
+		creator := userDomain.User{}
+		if c, ok := mapCreators[v.CreatorId]; ok {
+			creator = *c
+		}
+
 		result[i] = dto.GetAllSubjectAttendancesStudentItem{
 			SubjectAttendance:       v,
 			SubjectAttendanceRecord: record,
 			Subject:                 subject,
+			Creator:                 creator,
 		}
 	}
 

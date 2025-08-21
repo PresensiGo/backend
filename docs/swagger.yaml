@@ -174,6 +174,25 @@ definitions:
     required:
     - items
     type: object
+  GetAllGeneralAttendancesStudentItem:
+    properties:
+      general_attendance:
+        $ref: '#/definitions/GeneralAttendance'
+      general_attendance_record:
+        $ref: '#/definitions/domains.GeneralAttendanceRecord'
+    required:
+    - general_attendance
+    - general_attendance_record
+    type: object
+  GetAllGeneralAttendancesStudentRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/GetAllGeneralAttendancesStudentItem'
+        type: array
+    required:
+    - items
+    type: object
   GetAllMajorsByBatchIdItem:
     properties:
       classroom_count:
@@ -239,6 +258,31 @@ definitions:
       items:
         items:
           $ref: '#/definitions/GetAllSubjectAttendancesItem'
+        type: array
+    required:
+    - items
+    type: object
+  GetAllSubjectAttendancesStudentItem:
+    properties:
+      creator:
+        $ref: '#/definitions/User'
+      subject:
+        $ref: '#/definitions/Subject'
+      subject_attendance:
+        $ref: '#/definitions/SubjectAttendance'
+      subject_attendance_record:
+        $ref: '#/definitions/domains.SubjectAttendanceRecord'
+    required:
+    - creator
+    - subject
+    - subject_attendance
+    - subject_attendance_record
+    type: object
+  GetAllSubjectAttendancesStudentRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/GetAllSubjectAttendancesStudentItem'
         type: array
     required:
     - items
@@ -1838,6 +1882,16 @@ paths:
             $ref: '#/definitions/responses.CreateGeneralAttendanceRecordStudent'
       tags:
       - attendance
+  /api/v1/general-attendances/student:
+    get:
+      operationId: GetAllGeneralAttendancesStudent
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAllGeneralAttendancesStudentRes'
+      tags:
+      - attendance
   /api/v1/general_attendances/{general_attendance_id}:
     put:
       operationId: updateGeneralAttendance
@@ -1923,6 +1977,16 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.CreateSubjectAttendanceRecordStudent'
+      tags:
+      - attendance
+  /api/v1/subject-attendances/student:
+    get:
+      operationId: GetAllSubjectAttendancesStudent
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetAllSubjectAttendancesStudentRes'
       tags:
       - attendance
   /api/v1/subjects:
