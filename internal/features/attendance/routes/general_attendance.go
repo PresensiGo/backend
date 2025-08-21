@@ -31,8 +31,10 @@ func RegisterGeneralAttendance(g *gin.RouterGroup, handler *handlers.GeneralAtte
 	}
 
 	{
-		group := g.Group("/general-attendances").Use(middlewares.StudentMiddleware())
+		group := g.Group(relativePath).Use(middlewares.StudentMiddleware())
 
 		group.POST("/records/student", handler.CreateRecordStudent)
+
+		group.GET("/student", handler.GetAllGeneralAttendancesStudent)
 	}
 }

@@ -22,6 +22,10 @@ type GetAllGeneralAttendances struct {
 	Items []dto.GetAllGeneralAttendancesItem `json:"items" validate:"required"`
 } // @name GetAllGeneralAttendancesRes
 
+type GetAllGeneralAttendancesStudent struct {
+	Items []dto.GetAllGeneralAttendancesStudentItem `json:"items" validate:"required"`
+} // @name GetAllGeneralAttendancesStudentRes
+
 type GetGeneralAttendance struct {
 	GeneralAttendance domains.GeneralAttendance `json:"general_attendance" validate:"required"`
 	Creator           user.User                 `json:"creator" validate:"required"`

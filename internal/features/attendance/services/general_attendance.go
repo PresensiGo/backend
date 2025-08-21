@@ -183,6 +183,54 @@ func (s *GeneralAttendance) GetAllGeneralAttendances(schoolId uint) (
 	}
 }
 
+func (s *GeneralAttendance) GetAllGeneralAttendancesStudent(c *gin.Context) (
+	*responses.GetAllGeneralAttendancesStudent, *failure.App,
+) {
+	student := authentication.GetAuthenticatedStudent(c)
+	if student.Id == 0 || student.SchoolId == 0 {
+		return nil, failure.NewApp(http.StatusForbidden, "Anda tidak memiliki akses!", nil)
+	}
+
+	generalAttendances, err := s.generalAttendanceRepo.GetAllTodayBySchoolId(student.SchoolId)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	generalAttendanceIds := make([]uint, len(*generalAttendances))
+	for i, v := range *generalAttendances {
+		generalAttendanceIds[i] = v.Id
+	}
+
+	mapGeneralAttendanceRecords := make(map[uint]*domains.GeneralAttendanceRecord)
+
+	if generalAttendanceRecords, err := s.generalAttendanceRecordRepo.GetManyByAttendanceIdsStudentId(
+		generalAttendanceIds, student.Id,
+	); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		for _, record := range *generalAttendanceRecords {
+			mapGeneralAttendanceRecords[record.GeneralAttendanceId] = &record
+		}
+	}
+
+	result := make([]dto.GetAllGeneralAttendancesStudentItem, len(*generalAttendances))
+	for i, v := range *generalAttendances {
+		record := domains.GeneralAttendanceRecord{}
+		if r, ok := mapGeneralAttendanceRecords[v.Id]; ok {
+			record = *r
+		}
+
+		result[i] = dto.GetAllGeneralAttendancesStudentItem{
+			GeneralAttendance:       v,
+			GeneralAttendanceRecord: record,
+		}
+	}
+
+	return &responses.GetAllGeneralAttendancesStudent{
+		Items: result,
+	}, nil
+}
+
 func (s *GeneralAttendance) GetAllGeneralAttendanceRecords(generalAttendanceId uint) (
 	*responses.GetAllGeneralAttendanceRecords, *failure.App,
 ) {

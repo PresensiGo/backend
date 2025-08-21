@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"time"
+
 	"api/internal/features/attendance/domains"
 	"api/internal/features/attendance/models"
 	"gorm.io/gorm"
@@ -29,6 +31,25 @@ func (r *GeneralAttendance) GetAllBySchoolId(schoolId uint) (*[]domains.GeneralA
 	var generalAttendances []models.GeneralAttendance
 	if err := r.db.Model(&models.GeneralAttendance{}).Where(
 		"school_id = ?", schoolId,
+	).Order("date_time desc").Find(&generalAttendances).Error; err != nil {
+		return nil, err
+	}
+
+	result := make([]domains.GeneralAttendance, len(generalAttendances))
+	for i, v := range generalAttendances {
+		result[i] = *domains.FromGeneralAttendanceModel(&v)
+	}
+
+	return &result, nil
+}
+
+func (r *GeneralAttendance) GetAllTodayBySchoolId(schoolId uint) (
+	*[]domains.GeneralAttendance, error,
+) {
+	var generalAttendances []models.GeneralAttendance
+	if err := r.db.Model(&models.GeneralAttendance{}).Where(
+		"school_id = ? and date(date_time) = ?",
+		schoolId, time.Now().Format("2006-01-02"),
 	).Order("date_time desc").Find(&generalAttendances).Error; err != nil {
 		return nil, err
 	}
