@@ -93,6 +93,11 @@ func (s *Auth) Login(email string, password string) (*responses.Login, *failure.
 
 func (s *Auth) Logout(refreshToken string) (*responses.Logout, *failure.App) {
 	if err := s.userTokenRepo.DeleteByRefreshToken(refreshToken); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return &responses.Logout{
+				Message: "ok",
+			}, nil
+		}
 		return nil, failure.NewInternal(err)
 	} else {
 		return &responses.Logout{
