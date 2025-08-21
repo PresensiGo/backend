@@ -42,3 +42,7 @@ type UpdateGeneralAttendance struct {
 type DeleteGeneralAttendance struct {
 	Message string `json:"message"`
 }
+
+type DeleteGeneralAttendanceRecord struct {
+	Message string `json:"message"`
+}

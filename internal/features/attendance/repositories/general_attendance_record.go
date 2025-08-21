@@ -92,3 +92,9 @@ func (r *GeneralAttendanceRecord) DeleteByAttendanceIdStudentIdInTx(
 		"general_attendance_id = ? AND student_id = ?", attendanceId, studentId,
 	).Unscoped().Delete(&models.GeneralAttendanceRecord{}).Error
 }
+
+func (r *GeneralAttendanceRecord) Delete(generalAttendanceRecordId uint) error {
+	return r.db.Where(
+		"id = ?", generalAttendanceRecordId,
+	).Unscoped().Delete(&models.GeneralAttendanceRecord{}).Error
+}

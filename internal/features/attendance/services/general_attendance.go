@@ -292,3 +292,15 @@ func (s *GeneralAttendance) DeleteGeneralAttendance(generalAttendanceId uint) (
 		}, nil
 	}
 }
+
+func (s *GeneralAttendance) DeleteGeneralAttendanceRecord(recordId uint) (
+	*responses.DeleteGeneralAttendanceRecord, *failure.App,
+) {
+	if err := s.generalAttendanceRecordRepo.Delete(recordId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.DeleteGeneralAttendanceRecord{
+			Message: "ok",
+		}, nil
+	}
+}

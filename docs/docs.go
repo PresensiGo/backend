@@ -1400,6 +1400,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/general-attendances/{general_attendance_id}/records/{record_id}": {
+            "delete": {
+                "tags": [
+                    "attendance"
+                ],
+                "operationId": "DeleteGeneralAttendanceRecord",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "general attendance id",
+                        "name": "general_attendance_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "record id",
+                        "name": "record_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.DeleteGeneralAttendanceRecord"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/general_attendances/{general_attendance_id}": {
             "put": {
                 "tags": [
@@ -2696,6 +2728,14 @@ const docTemplate = `{
             }
         },
         "responses.DeleteGeneralAttendance": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.DeleteGeneralAttendanceRecord": {
             "type": "object",
             "properties": {
                 "message": {

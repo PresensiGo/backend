@@ -706,6 +706,11 @@ definitions:
       message:
         type: string
     type: object
+  responses.DeleteGeneralAttendanceRecord:
+    properties:
+      message:
+        type: string
+    type: object
   responses.DeleteSubject:
     properties:
       message:
@@ -1746,6 +1751,27 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.CreateGeneralAttendanceRecord'
+      tags:
+      - attendance
+  /api/v1/general-attendances/{general_attendance_id}/records/{record_id}:
+    delete:
+      operationId: DeleteGeneralAttendanceRecord
+      parameters:
+      - description: general attendance id
+        in: path
+        name: general_attendance_id
+        required: true
+        type: integer
+      - description: record id
+        in: path
+        name: record_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DeleteGeneralAttendanceRecord'
       tags:
       - attendance
   /api/v1/general-attendances/records/student:

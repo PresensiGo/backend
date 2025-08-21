@@ -190,8 +190,6 @@ func (s *SubjectAttendance) GetAllSubjectAttendances(classroomId uint) (
 		creatorIds[i] = v.CreatorId
 	}
 
-	fmt.Println("creatorIds:", creatorIds)
-
 	mapSubjects := make(map[uint]*subjectDomain.Subject)
 	mapCreators := make(map[uint]*userDomain.User)
 
@@ -277,7 +275,6 @@ func (s *SubjectAttendance) GetAllSubjectAttendanceRecords(
 func (s *SubjectAttendance) GetSubjectAttendance(subjectAttendanceId uint) (
 	*responses.GetSubjectAttendance, *failure.App,
 ) {
-
 	if subjectAttendance, err := s.subjectAttendanceRepo.Get(subjectAttendanceId); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {
@@ -299,13 +296,9 @@ func (s *SubjectAttendance) GetSubjectAttendance(subjectAttendanceId uint) (
 	}
 }
 
-func (s *SubjectAttendance) DeleteSubjectAttendance(
-	c *gin.Context, attendanceId uint,
-) (*responses.DeleteSubjectAttendance, *failure.App) {
-	if err := authentication.ValidateAdmin(c); err != nil {
-		return nil, err
-	}
-
+func (s *SubjectAttendance) DeleteSubjectAttendance(attendanceId uint) (
+	*responses.DeleteSubjectAttendance, *failure.App,
+) {
 	if err := s.subjectAttendanceRepo.Delete(attendanceId); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {
@@ -315,13 +308,9 @@ func (s *SubjectAttendance) DeleteSubjectAttendance(
 	}
 }
 
-func (s *SubjectAttendance) DeleteSubjectAttendanceRecord(
-	c *gin.Context, recordId uint,
-) (*responses.DeleteSubjectAttendanceRecord, *failure.App) {
-	if err := authentication.ValidateAdmin(c); err != nil {
-		return nil, err
-	}
-
+func (s *SubjectAttendance) DeleteSubjectAttendanceRecord(recordId uint) (
+	*responses.DeleteSubjectAttendanceRecord, *failure.App,
+) {
 	if err := s.subjectAttendanceRecordRepo.Delete(recordId); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {

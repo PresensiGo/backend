@@ -25,6 +25,9 @@ func RegisterGeneralAttendance(g *gin.RouterGroup, handler *handlers.GeneralAtte
 		group.PUT("/:general_attendance_id", handler.Update)
 
 		group.DELETE("/:general_attendance_id", handler.DeleteGeneralAttendance)
+		group.DELETE(
+			"/:general_attendance_id/records/:record_id", handler.DeleteGeneralAttendanceRecord,
+		)
 	}
 
 	{

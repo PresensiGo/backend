@@ -219,9 +219,7 @@ func (h *SubjectAttendance) DeleteSubjectAttendance(c *gin.Context) {
 		return
 	}
 
-	if response, err := h.service.DeleteSubjectAttendance(
-		c, uint(subjectAttendanceId),
-	); err != nil {
+	if response, err := h.service.DeleteSubjectAttendance(uint(subjectAttendanceId)); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,
@@ -248,9 +246,7 @@ func (h *SubjectAttendance) DeleteSubjectAttendanceRecord(c *gin.Context) {
 		return
 	}
 
-	if response, err := h.service.DeleteSubjectAttendanceRecord(
-		c, uint(recordId),
-	); err != nil {
+	if response, err := h.service.DeleteSubjectAttendanceRecord(uint(recordId)); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,
