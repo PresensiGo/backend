@@ -88,7 +88,7 @@ func (h *SubjectAttendance) CreateSubjectAttendanceRecord(c *gin.Context) {
 	}
 }
 
-// @id 			createSubjectAttendanceRecordStudent
+// @id 			CreateSubjectAttendanceRecordStudent
 // @tags 		attendance
 // @param 		body body requests.CreateSubjectAttendanceRecordStudent true "body"
 // @success 	200 {object} responses.CreateSubjectAttendanceRecordStudent

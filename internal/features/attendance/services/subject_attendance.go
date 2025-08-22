@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	"api/internal/features/attendance/domains"
 	"api/internal/features/attendance/dto"
@@ -18,6 +19,7 @@ import (
 	userDomain "api/internal/features/user/domains"
 	userRepo "api/internal/features/user/repositories"
 	"api/pkg/authentication"
+	"api/pkg/constants"
 	"api/pkg/http/failure"
 	"api/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -138,32 +140,19 @@ func (s *SubjectAttendance) CreateSubjectAttendanceRecordStudent(
 	} else {
 		if student.ClassroomId != subjectAttendance.ClassroomId {
 			return nil, failure.NewApp(
-				http.StatusForbidden, "Anda tidak terdaftar di kelas ini!", err,
+				http.StatusForbidden,
+				"Anda tidak terdaftar di kelas ini!",
+				err,
 			)
 		}
 	}
 
-	if err := s.db.Transaction(
-		func(tx *gorm.DB) error {
-			// hapus semua record yang sudah ada
-			if err := s.subjectAttendanceRecordRepo.DeleteByAttendanceIdStudentIdInTx(
-				tx, subjectAttendance.Id, studentId,
-			); err != nil {
-				return err
-			}
-
-			// buat record baru untuk student
-			subjectAttendanceRecord := domains.SubjectAttendanceRecord{
-				SubjectAttendanceId: subjectAttendance.Id,
-				StudentId:           studentId,
-			}
-			if _, err := s.subjectAttendanceRecordRepo.CreateInTx(
-				tx, subjectAttendanceRecord,
-			); err != nil {
-				return err
-			}
-
-			return nil
+	if _, err := s.subjectAttendanceRecordRepo.FirstOrCreate(
+		domains.SubjectAttendanceRecord{
+			DateTime:            time.Now(),
+			SubjectAttendanceId: subjectAttendance.Id,
+			StudentId:           studentId,
+			Status:              constants.AttendanceStatusPresent,
 		},
 	); err != nil {
 		return nil, failure.NewInternal(err)
