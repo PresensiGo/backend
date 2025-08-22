@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -131,21 +130,24 @@ func (s *StudentAuth) Login(req requests.LoginStudent) (*responses.LoginStudent,
 	}
 }
 
-func (s *StudentAuth) RefreshToken(req requests.RefreshTokenStudent) (
-	*responses.RefreshTokenStudent, error,
+func (s *StudentAuth) RefreshTokenStudent(req requests.RefreshTokenStudent) (
+	*responses.RefreshTokenStudent, *failure.App,
 ) {
 	oldStudentToken, err := s.studentTokenRepo.GetByRefreshToken(req.RefreshToken)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewApp(http.StatusForbidden, "Refresh token tidak ditemukan!", err)
+		}
+		return nil, failure.NewInternal(err)
 	}
 
 	if time.Now().After(oldStudentToken.TTL) {
-		return nil, fmt.Errorf("refresh token expired")
+		return nil, failure.NewApp(http.StatusForbidden, "Refresh token expired!", nil)
 	}
 
 	currentStudent, err := s.studentRepo.Get(oldStudentToken.StudentId)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 
 	// generate user token
@@ -153,7 +155,7 @@ func (s *StudentAuth) RefreshToken(req requests.RefreshTokenStudent) (
 		currentStudent.Id, currentStudent.Name, currentStudent.NIS, currentStudent.SchoolId,
 	)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 	refreshToken := uuid.New().String()
 
@@ -163,7 +165,7 @@ func (s *StudentAuth) RefreshToken(req requests.RefreshTokenStudent) (
 			RefreshToken: refreshToken,
 		},
 	); err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 
 	return &responses.RefreshTokenStudent{

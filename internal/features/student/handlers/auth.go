@@ -9,6 +9,7 @@ import (
 	"api/internal/features/student/services"
 	"api/internal/shared/dto/responses"
 	_ "api/internal/shared/dto/responses"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -47,19 +48,19 @@ func (h *StudentAuth) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-// @id			refreshTokenStudent
+// @id			RefreshTokenStudent
 // @tags 		student
 // @param 		body body requests.RefreshTokenStudent true "body"
 // @success 	200 {object} responses.RefreshTokenStudent
 // @router 		/api/v1/auth/students/refresh-token [post]
-func (h *StudentAuth) RefreshToken(c *gin.Context) {
+func (h *StudentAuth) RefreshTokenStudent(c *gin.Context) {
 	var req requests.RefreshTokenStudent
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	result, err := h.service.RefreshToken(req)
+	result, err := h.service.RefreshTokenStudent(req)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

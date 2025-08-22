@@ -111,14 +111,14 @@ func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, *f
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, failure.NewApp(
-				http.StatusNotFound, "Refresh token tidak ditemukan!", nil,
+				http.StatusForbidden, "Refresh token tidak ditemukan!", nil,
 			)
 		}
 		return nil, failure.NewInternal(err)
 	}
 
 	if time.Now().After(oldUserToken.TTL) {
-		return nil, failure.NewApp(http.StatusNotFound, "Token sudah kadaluarsa", nil)
+		return nil, failure.NewApp(http.StatusForbidden, "Token sudah kadaluarsa", nil)
 	}
 
 	currentUser, err := s.userRepo.GetByID(oldUserToken.UserId)
