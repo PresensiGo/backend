@@ -33,7 +33,7 @@ func RegisterGeneralAttendance(g *gin.RouterGroup, handler *handlers.GeneralAtte
 	{
 		group := g.Group(relativePath).Use(middlewares.StudentMiddleware())
 
-		group.POST("/records/student", handler.CreateRecordStudent)
+		group.POST("/records/student", handler.CreateGeneralAttendanceRecordStudent)
 
 		group.GET("/student", handler.GetAllGeneralAttendancesStudent)
 	}

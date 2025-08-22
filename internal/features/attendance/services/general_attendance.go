@@ -1,7 +1,9 @@
 package services
 
 import (
+	"errors"
 	"net/http"
+	"time"
 
 	"api/internal/features/attendance/domains"
 	"api/internal/features/attendance/dto"
@@ -13,6 +15,7 @@ import (
 	userDomain "api/internal/features/user/domains"
 	userRepo "api/internal/features/user/repositories"
 	"api/pkg/authentication"
+	"api/pkg/constants"
 	"api/pkg/http/failure"
 	"api/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -104,41 +107,29 @@ func (s *GeneralAttendance) CreateGeneralAttendanceRecord(
 
 func (s *GeneralAttendance) CreateGeneralAttendanceRecordStudent(
 	studentId uint, req requests.CreateGeneralAttendanceRecordStudent,
-) (*responses.CreateGeneralAttendanceRecordStudent, error) {
+) (*responses.CreateGeneralAttendanceRecordStudent, *failure.App) {
 	generalAttendance, err := s.generalAttendanceRepo.GetByCode(req.Code)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewApp(http.StatusNotFound, "Kode presensi tidak ditemukan!", nil)
+		}
+		return nil, failure.NewInternal(err)
 	}
 
-	if err := s.db.Transaction(
-		func(tx *gorm.DB) error {
-			// hapus record lama jika sudah ada
-			if err := s.generalAttendanceRecordRepo.DeleteByAttendanceIdStudentIdInTx(
-				tx, generalAttendance.Id, studentId,
-			); err != nil {
-				return err
-			}
-
-			// create record baru
-			generalAttendanceRecord := domains.GeneralAttendanceRecord{
-				GeneralAttendanceId: generalAttendance.Id,
-				StudentId:           studentId,
-			}
-			if _, err := s.generalAttendanceRecordRepo.CreateInTx(
-				tx, generalAttendanceRecord,
-			); err != nil {
-				return err
-			}
-
-			return nil
+	if _, err := s.generalAttendanceRecordRepo.FirstOrCreate(
+		domains.GeneralAttendanceRecord{
+			GeneralAttendanceId: generalAttendance.Id,
+			StudentId:           studentId,
+			DateTime:            time.Now(),
+			Status:              constants.AttendanceStatusPresent,
 		},
 	); err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.CreateGeneralAttendanceRecordStudent{
+			Message: "ok",
+		}, nil
 	}
-
-	return &responses.CreateGeneralAttendanceRecordStudent{
-		Message: "ok",
-	}, nil
 }
 
 func (s *GeneralAttendance) GetAllGeneralAttendances(schoolId uint) (
