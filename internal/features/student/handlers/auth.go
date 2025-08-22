@@ -60,13 +60,13 @@ func (h *StudentAuth) RefreshTokenStudent(c *gin.Context) {
 		return
 	}
 
-	result, err := h.service.RefreshTokenStudent(req)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.RefreshTokenStudent(req); err != nil {
+		c.AbortWithStatusJSON(err.Code, responses.Error{
+			Message: err.Message,
+		})
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }
 
 // @tags 		student
