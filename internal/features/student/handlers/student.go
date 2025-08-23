@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"api/internal/features/student/dto/responses"
 	"api/internal/features/student/services"
-	"api/internal/shared/domains"
+	"api/internal/shared/dto/responses"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -69,22 +69,38 @@ func (h *Student) GetAllAccountsByClassroomId(c *gin.Context) {
 // @success 	200 {object} responses.GetAllStudents
 // @router 		/api/v1/students [get]
 // deprecated
-func (h *Student) GetAll(c *gin.Context) {
-	keyword := c.Query("keyword")
-	if len(keyword) == 0 {
-		c.JSON(
-			http.StatusOK, responses.GetAllStudents{
-				Students: make([]domains.StudentMajorClassroom, 0),
+// func (h *Student) GetAll(c *gin.Context) {
+// 	keyword := c.Query("keyword")
+// 	if len(keyword) == 0 {
+// 		c.JSON(
+// 			http.StatusOK, responses.GetAllStudents{
+// 				Students: make([]domains.StudentMajorClassroom, 0),
+// 			},
+// 		)
+// 		return
+// 	}
+
+// 	response, err := h.service.GetAll(keyword)
+// 	if err != nil {
+// 		c.AbortWithStatus(http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, response)
+// }
+
+// @id 			GetProfileStudent
+// @tags 		student
+// @success 	200 {object} responses.GetProfileStudent
+// @router 		/api/v1/students/profile [get]
+func (h *Student) GetProfileStudent(c *gin.Context) {
+	if response, err := h.service.GetProfileStudent(c); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
 			},
 		)
-		return
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	response, err := h.service.GetAll(keyword)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-
-	c.JSON(http.StatusOK, response)
 }

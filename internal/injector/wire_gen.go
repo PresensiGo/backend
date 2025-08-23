@@ -113,13 +113,14 @@ func InitClassroomHandlers() *injector4.ClassroomHandlers {
 
 func InitStudentHandlers() *injector5.StudentHandlers {
 	db := database.New()
+	school := repositories8.NewSchool(db)
+	batch := repositories4.NewBatch(db)
 	major := repositories5.NewMajor(db)
 	classroom := repositories6.NewClassroom(db)
 	student := repositories2.NewStudent(db)
 	studentToken := repositories2.NewStudentToken(db)
-	servicesStudent := services5.NewStudent(major, classroom, student, studentToken)
+	servicesStudent := services5.NewStudent(school, batch, major, classroom, student, studentToken)
 	handlersStudent := handlers5.NewStudent(servicesStudent)
-	school := repositories8.NewSchool(db)
 	studentAuth := services5.NewStudentAuth(db, school, student, studentToken)
 	handlersStudentAuth := handlers5.NewStudentAuth(studentAuth)
 	studentHandlers := injector5.NewStudentHandlers(handlersStudent, handlersStudentAuth)

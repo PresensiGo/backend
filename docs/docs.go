@@ -297,7 +297,7 @@ const docTemplate = `{
                 "tags": [
                     "student"
                 ],
-                "operationId": "refreshTokenStudent",
+                "operationId": "RefreshTokenStudent",
                 "parameters": [
                     {
                         "description": "body",
@@ -1257,7 +1257,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
-                "operationId": "createGeneralAttendanceRecordStudent",
+                "operationId": "CreateGeneralAttendanceRecordStudent",
                 "parameters": [
                     {
                         "description": "body",
@@ -1549,26 +1549,17 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/students": {
+        "/api/v1/students/profile": {
             "get": {
                 "tags": [
                     "student"
                 ],
-                "operationId": "getAllStudents",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Keyword",
-                        "name": "keyword",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
+                "operationId": "GetProfileStudent",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetAllStudentsRes"
+                            "$ref": "#/definitions/GetProfileStudentRes"
                         }
                     }
                 }
@@ -1579,7 +1570,7 @@ const docTemplate = `{
                 "tags": [
                     "attendance"
                 ],
-                "operationId": "createSubjectAttendanceRecordStudent",
+                "operationId": "CreateSubjectAttendanceRecordStudent",
                 "parameters": [
                     {
                         "description": "body",
@@ -2075,20 +2066,6 @@ const docTemplate = `{
                 }
             }
         },
-        "GetAllStudentsRes": {
-            "type": "object",
-            "required": [
-                "students"
-            ],
-            "properties": {
-                "students": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domains.StudentMajorClassroom"
-                    }
-                }
-            }
-        },
         "GetAllSubjectAttendanceRecordsItem": {
             "type": "object",
             "required": [
@@ -2219,6 +2196,33 @@ const docTemplate = `{
             "properties": {
                 "major": {
                     "$ref": "#/definitions/major"
+                }
+            }
+        },
+        "GetProfileStudentRes": {
+            "type": "object",
+            "required": [
+                "batch",
+                "classroom",
+                "major",
+                "school",
+                "student"
+            ],
+            "properties": {
+                "batch": {
+                    "$ref": "#/definitions/batch"
+                },
+                "classroom": {
+                    "$ref": "#/definitions/classroom"
+                },
+                "major": {
+                    "$ref": "#/definitions/major"
+                },
+                "school": {
+                    "$ref": "#/definitions/School"
+                },
+                "student": {
+                    "$ref": "#/definitions/Student"
                 }
             }
         },
@@ -2588,25 +2592,6 @@ const docTemplate = `{
                 },
                 "student_id": {
                     "type": "integer"
-                }
-            }
-        },
-        "domains.StudentMajorClassroom": {
-            "type": "object",
-            "required": [
-                "classroom",
-                "major",
-                "student"
-            ],
-            "properties": {
-                "classroom": {
-                    "$ref": "#/definitions/classroom"
-                },
-                "major": {
-                    "$ref": "#/definitions/major"
-                },
-                "student": {
-                    "$ref": "#/definitions/Student"
                 }
             }
         },

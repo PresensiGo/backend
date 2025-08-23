@@ -1,9 +1,10 @@
 package injector
 
 import (
-	classroomRepo "api/internal/features/classroom/repositories"
-	majorRepo "api/internal/features/major/repositories"
-	schoolRepo "api/internal/features/school/repositories"
+	batch "api/internal/features/batch/repositories"
+	classroom "api/internal/features/classroom/repositories"
+	major "api/internal/features/major/repositories"
+	school "api/internal/features/school/repositories"
 	"api/internal/features/student/handlers"
 	"api/internal/features/student/repositories"
 	"api/internal/features/student/services"
@@ -33,11 +34,12 @@ var (
 		services.NewStudent,
 		services.NewStudentAuth,
 
-		majorRepo.NewMajor,
-		classroomRepo.NewClassroom,
+		batch.NewBatch,
+		major.NewMajor,
+		classroom.NewClassroom,
 		repositories.NewStudent,
 		repositories.NewStudentToken,
-		schoolRepo.NewSchool,
+		school.NewSchool,
 
 		database.New,
 	)

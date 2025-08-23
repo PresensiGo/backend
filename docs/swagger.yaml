@@ -221,15 +221,6 @@ definitions:
     required:
     - students
     type: object
-  GetAllStudentsRes:
-    properties:
-      students:
-        items:
-          $ref: '#/definitions/domains.StudentMajorClassroom'
-        type: array
-    required:
-    - students
-    type: object
   GetAllSubjectAttendanceRecordsItem:
     properties:
       record:
@@ -317,6 +308,25 @@ definitions:
         $ref: '#/definitions/major'
     required:
     - major
+    type: object
+  GetProfileStudentRes:
+    properties:
+      batch:
+        $ref: '#/definitions/batch'
+      classroom:
+        $ref: '#/definitions/classroom'
+      major:
+        $ref: '#/definitions/major'
+      school:
+        $ref: '#/definitions/School'
+      student:
+        $ref: '#/definitions/Student'
+    required:
+    - batch
+    - classroom
+    - major
+    - school
+    - student
     type: object
   GetSchoolRes:
     properties:
@@ -570,19 +580,6 @@ definitions:
     - id
     - status
     - student_id
-    type: object
-  domains.StudentMajorClassroom:
-    properties:
-      classroom:
-        $ref: '#/definitions/classroom'
-      major:
-        $ref: '#/definitions/major'
-      student:
-        $ref: '#/definitions/Student'
-    required:
-    - classroom
-    - major
-    - student
     type: object
   domains.StudentToken:
     properties:
@@ -1122,7 +1119,7 @@ paths:
       - student
   /api/v1/auth/students/refresh-token:
     post:
-      operationId: refreshTokenStudent
+      operationId: RefreshTokenStudent
       parameters:
       - description: body
         in: body
@@ -1867,7 +1864,7 @@ paths:
       - attendance
   /api/v1/general-attendances/records/student:
     post:
-      operationId: createGeneralAttendanceRecordStudent
+      operationId: CreateGeneralAttendanceRecordStudent
       parameters:
       - description: body
         in: body
@@ -1946,25 +1943,19 @@ paths:
             $ref: '#/definitions/GetSchoolRes'
       tags:
       - school
-  /api/v1/students:
+  /api/v1/students/profile:
     get:
-      operationId: getAllStudents
-      parameters:
-      - description: Keyword
-        in: query
-        name: keyword
-        required: true
-        type: string
+      operationId: GetProfileStudent
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetAllStudentsRes'
+            $ref: '#/definitions/GetProfileStudentRes'
       tags:
       - student
   /api/v1/subject-attendances/records/student:
     post:
-      operationId: createSubjectAttendanceRecordStudent
+      operationId: CreateSubjectAttendanceRecordStudent
       parameters:
       - description: body
         in: body
