@@ -5,3 +5,7 @@ import "api/internal/features/school/domains"
 type GetSchool struct {
 	School domains.School `json:"school" validate:"required"`
 } // @name GetSchoolRes
+
+type UpdateSchool struct {
+	School domains.School `json:"school" validate:"required"`
+}

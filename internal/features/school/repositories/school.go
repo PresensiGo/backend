@@ -50,3 +50,14 @@ func (r *School) GetByCodeInTx(tx *gorm.DB, code string) (*domains.School, error
 		return domains.FromSchoolModel(&school), nil
 	}
 }
+
+func (r *School) Update(schoolId uint, data domains.School) (*domains.School, error) {
+	school := data.ToModel()
+	if err := r.db.Model(&models.School{}).Where(
+		"id = ?", schoolId,
+	).Updates(&school).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromSchoolModel(school), nil
+	}
+}

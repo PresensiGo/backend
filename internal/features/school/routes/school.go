@@ -10,4 +10,5 @@ func RegisterSchool(g *gin.RouterGroup, handler *handlers.School) {
 	group := g.Group("/schools").Use(middlewares.AuthMiddleware())
 
 	group.GET("/profile", handler.GetSchool)
+	group.PUT("/profile", handler.UpdateSchool)
 }

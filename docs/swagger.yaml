@@ -708,6 +708,16 @@ definitions:
     required:
     - name
     type: object
+  requests.UpdateSchool:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    required:
+    - code
+    - name
+    type: object
   requests.UpdateSubject:
     properties:
       name:
@@ -930,6 +940,13 @@ definitions:
         $ref: '#/definitions/GeneralAttendance'
     required:
     - general_attendance
+    type: object
+  responses.UpdateSchool:
+    properties:
+      school:
+        $ref: '#/definitions/School'
+    required:
+    - school
     type: object
   responses.UpdateSubject:
     properties:
@@ -1941,6 +1958,21 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/GetSchoolRes'
+      tags:
+      - school
+    put:
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateSchool'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UpdateSchool'
       tags:
       - school
   /api/v1/students/profile:

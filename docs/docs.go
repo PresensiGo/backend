@@ -1547,6 +1547,30 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "school"
+                ],
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateSchool"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.UpdateSchool"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/students/profile": {
@@ -2787,6 +2811,21 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.UpdateSchool": {
+            "type": "object",
+            "required": [
+                "code",
+                "name"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.UpdateSubject": {
             "type": "object",
             "required": [
@@ -3133,6 +3172,17 @@ const docTemplate = `{
             "properties": {
                 "general_attendance": {
                     "$ref": "#/definitions/GeneralAttendance"
+                }
+            }
+        },
+        "responses.UpdateSchool": {
+            "type": "object",
+            "required": [
+                "school"
+            ],
+            "properties": {
+                "school": {
+                    "$ref": "#/definitions/School"
                 }
             }
         },

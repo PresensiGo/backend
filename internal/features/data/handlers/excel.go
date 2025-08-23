@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"path/filepath"
 
@@ -46,6 +47,7 @@ func (h *Excel) ImportDataV3(c *gin.Context) {
 	result, err := h.service.ImportDataV3(user.SchoolId, src)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
+		fmt.Println(err.Error())
 		return
 	}
 
