@@ -42,3 +42,7 @@ type DeleteSubjectAttendance struct {
 type DeleteSubjectAttendanceRecord struct {
 	Message string `json:"message" validate:"required"`
 }
+
+type ExportSubjectAttendance struct {
+	Message string `json:"message" validate:"required"`
+}

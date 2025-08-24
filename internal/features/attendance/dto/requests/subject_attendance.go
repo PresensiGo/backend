@@ -16,3 +16,9 @@ type CreateSubjectAttendanceRecord struct {
 type CreateSubjectAttendanceRecordStudent struct {
 	Code string `json:"code" validate:"required"`
 } // @name CreateSubjectAttendanceRecordStudentReq
+
+type ExportSubjectAttendance struct {
+	Year      int  `json:"year" validate:"required"`
+	Month     int  `json:"month" validate:"required"`
+	SubjectId uint `json:"subject_id" validate:"required"`
+}

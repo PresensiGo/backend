@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"time"
+
 	"api/internal/features/attendance/domains"
 	"api/internal/features/attendance/models"
 	"gorm.io/gorm"
@@ -65,6 +67,24 @@ func (r *SubjectAttendanceRecord) GetAllByAttendanceId(subjectAttendanceId uint)
 	}
 }
 
+func (r *SubjectAttendanceRecord) GetAllByAttendanceIdStudentIdBetween(
+	attendanceId uint, studentId uint, startDate time.Time, endDate time.Time,
+) (*[]domains.SubjectAttendanceRecord, error) {
+	var records []models.SubjectAttendanceRecord
+	if err := r.db.Where(
+		"subject_attendance_id = ? AND student_id = ? AND date_time BETWEEN ? AND ?",
+		attendanceId, studentId, startDate, endDate,
+	).Order("date_time asc").Find(&records).Error; err != nil {
+		return nil, err
+	} else {
+		result := make([]domains.SubjectAttendanceRecord, len(records))
+		for i, v := range records {
+			result[i] = *domains.FromSubjectAttendanceRecordModel(&v)
+		}
+		return &result, nil
+	}
+}
+
 func (r *SubjectAttendanceRecord) GetManyByAttendanceIdsStudentId(
 	attendanceIds []uint, studentId uint,
 ) (
@@ -82,6 +102,20 @@ func (r *SubjectAttendanceRecord) GetManyByAttendanceIdsStudentId(
 			result[i] = *domains.FromSubjectAttendanceRecordModel(&v)
 		}
 		return &result, nil
+	}
+}
+
+func (r *SubjectAttendanceRecord) GetByAttendanceIdStudentId(
+	attendanceId, studentId uint,
+) (*domains.SubjectAttendanceRecord, error) {
+	var record models.SubjectAttendanceRecord
+	if err := r.db.Where(
+		"subject_attendance_id = ? AND student_id = ?",
+		attendanceId, studentId,
+	).First(&record).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromSubjectAttendanceRecordModel(&record), nil
 	}
 }
 

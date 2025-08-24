@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -24,6 +25,7 @@ import (
 	"api/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
 )
 
@@ -395,4 +397,229 @@ func (s *SubjectAttendance) DeleteSubjectAttendanceRecord(recordId uint) (
 			Message: "ok",
 		}, nil
 	}
+}
+
+func (s *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) (*excelize.File, *failure.App) {
+	auth := authentication.GetAuthenticatedUser(c)
+	if auth.SchoolId == 0 {
+		return nil, failure.NewApp(http.StatusForbidden, "Anda tidak memiliki akses!", nil)
+	}
+
+	f := excelize.NewFile()
+	if err := f.DeleteSheet("Sheet1"); err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	startDate := time.Date(2025, 7, 1, 0, 0, 0, 0, time.Local)
+	endDate := time.Date(2025, 9, 8, 0, 0, 0, 0, time.Local)
+
+	attendances, err := s.subjectAttendanceRepo.GetAllBySubjectIdBetween(4, startDate, endDate)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	mapClassroomIdAttendances := make(map[uint][]domains.SubjectAttendance)
+	classroomIds := make([]uint, len(*attendances))
+	for i, v := range *attendances {
+		classroomIds[i] = v.ClassroomId
+		mapClassroomIdAttendances[v.ClassroomId] = append(
+			mapClassroomIdAttendances[v.ClassroomId], v,
+		)
+	}
+
+	classrooms, err := s.classroomRepo.GetManyByIds(classroomIds)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
+	for _, c := range *classrooms {
+		sheetIndex, err := f.NewSheet(c.Name)
+		if err != nil {
+			return nil, failure.NewInternal(err)
+		}
+
+		f.SetActiveSheet(sheetIndex)
+
+		// header table
+		f.SetCellValue(c.Name, "A1", "No")
+		f.MergeCell(c.Name, "A1", "A2")
+		f.SetColWidth(c.Name, "A", "A", 4)
+
+		f.SetCellValue(c.Name, "B1", "NIS")
+		f.MergeCell(c.Name, "B1", "B2")
+		f.SetColWidth(c.Name, "B", "B", 8)
+
+		f.SetCellValue(c.Name, "C1", "Nama")
+		f.MergeCell(c.Name, "C1", "C2")
+		f.SetColWidth(c.Name, "C", "C", 32)
+
+		f.SetCellValue(c.Name, "D1", "JK")
+		f.MergeCell(c.Name, "D1", "D2")
+		f.SetColWidth(c.Name, "D", "D", 4)
+
+		attendances := mapClassroomIdAttendances[c.Id]
+		mapMonths := make(map[string]int)
+
+		for i, attendance := range attendances {
+			columnName, err := utils.ColumnToName(i + 5)
+			if err != nil {
+				return nil, failure.NewInternal(err)
+			}
+			monthName := attendance.DateTime.Format("January")
+			if _, ok := mapMonths[monthName]; !ok {
+				mapMonths[monthName] = 1
+			} else {
+				mapMonths[monthName]++
+			}
+
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("%s1", columnName),
+				monthName,
+			)
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("%s2", columnName),
+				attendance.DateTime.Format("2"),
+			)
+			f.SetColWidth(c.Name, columnName, columnName, 4)
+		}
+
+		// rekap
+		presentColumn, err := utils.ColumnToName(len(attendances) + 5)
+		if err != nil {
+			return nil, failure.NewInternal(err)
+		}
+		sickColumn, err := utils.ColumnToName(len(attendances) + 6)
+		if err != nil {
+			return nil, failure.NewInternal(err)
+		}
+		permissionColumn, err := utils.ColumnToName(len(attendances) + 7)
+		if err != nil {
+			return nil, failure.NewInternal(err)
+		}
+		alphaColumn, err := utils.ColumnToName(len(attendances) + 8)
+		if err != nil {
+			return nil, failure.NewInternal(err)
+		}
+		f.SetCellValue(c.Name, fmt.Sprintf("%s2", presentColumn), "H")
+		f.SetColWidth(c.Name, presentColumn, presentColumn, 4)
+
+		f.SetCellValue(c.Name, fmt.Sprintf("%s2", sickColumn), "S")
+		f.SetColWidth(c.Name, sickColumn, sickColumn, 4)
+
+		f.SetCellValue(c.Name, fmt.Sprintf("%s2", permissionColumn), "I")
+		f.SetColWidth(c.Name, permissionColumn, permissionColumn, 4)
+
+		f.SetCellValue(c.Name, fmt.Sprintf("%s2", alphaColumn), "A")
+		f.SetColWidth(c.Name, alphaColumn, alphaColumn, 4)
+
+		f.SetCellValue(c.Name, fmt.Sprintf("%s1", presentColumn), "Rekap")
+		f.MergeCell(c.Name, fmt.Sprintf("%s1", presentColumn), fmt.Sprintf("%s1", alphaColumn))
+
+		// merge month cells
+		currentIndex := 5
+		for _, v := range mapMonths {
+			if v > 1 {
+				startColumn, err := utils.ColumnToName(currentIndex)
+				if err != nil {
+					return nil, failure.NewInternal(err)
+				}
+				endColumn, err := utils.ColumnToName(currentIndex + v - 1)
+				if err != nil {
+					return nil, failure.NewInternal(err)
+				}
+				if err := f.MergeCell(
+					c.Name, fmt.Sprintf("%s1", startColumn),
+					fmt.Sprintf("%s1", endColumn),
+				); err != nil {
+					return nil, failure.NewInternal(err)
+				}
+			}
+			currentIndex += v
+		}
+
+		students, err := s.studentRepo.GetAllByClassroomId(c.Id)
+		if err != nil {
+			return nil, failure.NewInternal(err)
+		}
+
+		for i, student := range students {
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("A%d", i+3), i+1,
+			)
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("B%d", i+3), student.NIS,
+			)
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("C%d", i+3), student.Name,
+			)
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("D%d", i+3), "-",
+			)
+
+			recap := make(map[string]int)
+			for j, attendance := range attendances {
+				var status string
+
+				if record, err := s.subjectAttendanceRecordRepo.GetByAttendanceIdStudentId(
+					attendance.Id, student.Id,
+				); err != nil {
+					if errors.Is(err, gorm.ErrRecordNotFound) {
+						status = "A"
+					} else {
+						return nil, failure.NewInternal(err)
+					}
+				} else {
+					switch record.Status {
+					case constants.AttendanceStatusPresent:
+						status = "H"
+					case constants.AttendanceStatusSick:
+						status = "S"
+					case constants.AttendanceStatusPermission:
+						status = "I"
+					default:
+						status = "A"
+					}
+				}
+
+				columnName, err := utils.ColumnToName(j + 5)
+				if err != nil {
+					return nil, failure.NewInternal(err)
+				}
+
+				f.SetCellValue(
+					c.Name, fmt.Sprintf("%s%d", columnName, i+3), status,
+				)
+
+				if _, ok := recap[status]; !ok {
+					recap[status] = 1
+				} else {
+					recap[status]++
+				}
+			}
+
+			// rekap
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("%s%d", presentColumn, i+3),
+				recap["H"],
+			)
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("%s%d", sickColumn, i+3),
+				recap["S"],
+			)
+			f.SetCellValue(
+				c.Name,
+				fmt.Sprintf("%s%d", permissionColumn, i+3),
+				recap["I"],
+			)
+			f.SetCellValue(
+				c.Name,
+				fmt.Sprintf("%s%d", alphaColumn, i+3),
+				recap["A"],
+			)
+
+		}
+
+	}
+
+	return f, nil
 }
