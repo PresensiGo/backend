@@ -15,6 +15,6 @@ type SubjectAttendanceRecord struct {
 	SubjectAttendanceId uint
 	SubjectAttendance   SubjectAttendance `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	StudentId           uint
-	Student             student.Student
+	Student             student.Student `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Status              constants.AttendanceStatus
 }

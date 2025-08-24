@@ -99,17 +99,22 @@ func (s *SubjectAttendance) CreateSubjectAttendance(
 func (s *SubjectAttendance) CreateSubjectAttendanceRecord(
 	subjectAttendanceId uint, req requests.CreateSubjectAttendanceRecord,
 ) (*responses.CreateSubjectAttendanceRecord, *failure.App) {
-	parsedDateTime, err := utils.GetParsedDateTime(req.DateTime)
-	if err != nil {
-		return nil, failure.NewApp(http.StatusBadRequest, "Tanggal dan waktu tidak valid!", err)
+	status := req.Status.ToAttendanceStatus()
+	dateTime := time.Now()
+	if req.Status == constants.AttendanceStatusTypePresentOnTime {
+		if subjectAttendance, err := s.subjectAttendanceRepo.Get(subjectAttendanceId); err != nil {
+			return nil, failure.NewInternal(err)
+		} else {
+			dateTime = subjectAttendance.DateTime
+		}
 	}
 
 	if result, err := s.subjectAttendanceRecordRepo.FirstOrCreate(
 		domains.SubjectAttendanceRecord{
-			DateTime:            *parsedDateTime,
+			DateTime:            dateTime,
 			SubjectAttendanceId: subjectAttendanceId,
 			StudentId:           req.StudentId,
-			Status:              req.Status,
+			Status:              status,
 		},
 	); err != nil {
 		return nil, failure.NewInternal(err)

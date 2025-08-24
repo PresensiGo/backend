@@ -1799,16 +1799,12 @@ const docTemplate = `{
         "CreateSubjectAttendanceRecordReq": {
             "type": "object",
             "required": [
-                "datetime",
                 "status",
                 "student_id"
             ],
             "properties": {
-                "datetime": {
-                    "type": "string"
-                },
                 "status": {
-                    "$ref": "#/definitions/constants.AttendanceStatus"
+                    "$ref": "#/definitions/constants.AttendanceStatusType"
                 },
                 "student_id": {
                     "type": "integer"
@@ -2590,6 +2586,23 @@ const docTemplate = `{
                 "AttendanceStatusAlpha",
                 "AttendanceStatusSick",
                 "AttendanceStatusPermission"
+            ]
+        },
+        "constants.AttendanceStatusType": {
+            "type": "string",
+            "enum": [
+                "present-on-time",
+                "present-late",
+                "sick",
+                "permission",
+                "alpha"
+            ],
+            "x-enum-varnames": [
+                "AttendanceStatusTypePresentOnTime",
+                "AttendanceStatusTypePresentLate",
+                "AttendanceStatusTypeSick",
+                "AttendanceStatusTypePermission",
+                "AttendanceStatusTypeAlpha"
             ]
         },
         "domains.GeneralAttendanceRecord": {

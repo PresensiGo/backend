@@ -9,9 +9,8 @@ type CreateSubjectAttendance struct {
 } // @name CreateSubjectAttendanceReq
 
 type CreateSubjectAttendanceRecord struct {
-	StudentId uint                       `json:"student_id" validate:"required"`
-	DateTime  string                     `json:"datetime" validate:"required"`
-	Status    constants.AttendanceStatus `json:"status" validate:"required"`
+	StudentId uint                           `json:"student_id" validate:"required"`
+	Status    constants.AttendanceStatusType `json:"status" validate:"required"`
 } // @name CreateSubjectAttendanceRecordReq
 
 type CreateSubjectAttendanceRecordStudent struct {

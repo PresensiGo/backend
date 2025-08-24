@@ -28,14 +28,11 @@ definitions:
     type: object
   CreateSubjectAttendanceRecordReq:
     properties:
-      datetime:
-        type: string
       status:
-        $ref: '#/definitions/constants.AttendanceStatus'
+        $ref: '#/definitions/constants.AttendanceStatusType'
       student_id:
         type: integer
     required:
-    - datetime
     - status
     - student_id
     type: object
@@ -562,6 +559,20 @@ definitions:
     - AttendanceStatusAlpha
     - AttendanceStatusSick
     - AttendanceStatusPermission
+  constants.AttendanceStatusType:
+    enum:
+    - present-on-time
+    - present-late
+    - sick
+    - permission
+    - alpha
+    type: string
+    x-enum-varnames:
+    - AttendanceStatusTypePresentOnTime
+    - AttendanceStatusTypePresentLate
+    - AttendanceStatusTypeSick
+    - AttendanceStatusTypePermission
+    - AttendanceStatusTypeAlpha
   domains.GeneralAttendanceRecord:
     properties:
       date_time:
