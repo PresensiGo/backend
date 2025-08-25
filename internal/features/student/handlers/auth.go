@@ -60,10 +60,17 @@ func (h *StudentAuth) RefreshTokenStudent(c *gin.Context) {
 		return
 	}
 
+	if len(req.RefreshToken) == 0 {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
 	if response, err := h.service.RefreshTokenStudent(req); err != nil {
-		c.AbortWithStatusJSON(err.Code, responses.Error{
-			Message: err.Message,
-		})
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
 	} else {
 		c.JSON(http.StatusOK, response)
 	}

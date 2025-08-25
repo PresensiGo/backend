@@ -79,6 +79,11 @@ func (h *Auth) RefreshToken(c *gin.Context) {
 		return
 	}
 
+	if len(request.RefreshToken) == 0 {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
 	if response, err := h.service.RefreshToken(request.RefreshToken); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
