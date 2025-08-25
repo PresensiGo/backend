@@ -10,22 +10,22 @@ import (
 	"api/internal/cron"
 	"api/internal/features/attendance/handlers"
 	"api/internal/features/attendance/injector"
-	repositories3 "api/internal/features/attendance/repositories"
+	repositories6 "api/internal/features/attendance/repositories"
 	"api/internal/features/attendance/services"
 	handlers2 "api/internal/features/batch/handlers"
 	injector2 "api/internal/features/batch/injector"
-	repositories4 "api/internal/features/batch/repositories"
+	repositories2 "api/internal/features/batch/repositories"
 	services2 "api/internal/features/batch/services"
 	handlers4 "api/internal/features/classroom/handlers"
 	injector4 "api/internal/features/classroom/injector"
-	repositories6 "api/internal/features/classroom/repositories"
+	repositories4 "api/internal/features/classroom/repositories"
 	services4 "api/internal/features/classroom/services"
 	handlers6 "api/internal/features/data/handlers"
 	injector6 "api/internal/features/data/injector"
 	services6 "api/internal/features/data/services"
 	handlers3 "api/internal/features/major/handlers"
 	injector3 "api/internal/features/major/injector"
-	repositories5 "api/internal/features/major/repositories"
+	repositories3 "api/internal/features/major/repositories"
 	services3 "api/internal/features/major/services"
 	handlers9 "api/internal/features/school/handlers"
 	injector9 "api/internal/features/school/injector"
@@ -33,7 +33,7 @@ import (
 	services9 "api/internal/features/school/services"
 	handlers5 "api/internal/features/student/handlers"
 	injector5 "api/internal/features/student/injector"
-	repositories2 "api/internal/features/student/repositories"
+	repositories5 "api/internal/features/student/repositories"
 	services5 "api/internal/features/student/services"
 	handlers8 "api/internal/features/subject/handlers"
 	injector8 "api/internal/features/subject/injector"
@@ -59,17 +59,17 @@ func InitUserTokenCron() *cron.UserTokenCron {
 
 func InitAttendanceHandlers() *injector.AttendanceHandlers {
 	db := database.New()
-	student := repositories2.NewStudent(db)
-	generalAttendance := repositories3.NewGeneralAttendance(db)
-	generalAttendanceRecord := repositories3.NewGeneralAttendanceRecord(db)
+	batch := repositories2.NewBatch(db)
+	major := repositories3.NewMajor(db)
+	classroom := repositories4.NewClassroom(db)
+	student := repositories5.NewStudent(db)
+	generalAttendance := repositories6.NewGeneralAttendance(db)
+	generalAttendanceRecord := repositories6.NewGeneralAttendanceRecord(db)
 	user := repositories.NewUser(db)
-	servicesGeneralAttendance := services.NewGeneralAttendance(db, student, generalAttendance, generalAttendanceRecord, user)
+	servicesGeneralAttendance := services.NewGeneralAttendance(db, batch, major, classroom, student, generalAttendance, generalAttendanceRecord, user)
 	handlersGeneralAttendance := handlers.NewGeneralAttendance(servicesGeneralAttendance)
-	batch := repositories4.NewBatch(db)
-	major := repositories5.NewMajor(db)
-	classroom := repositories6.NewClassroom(db)
-	subjectAttendance := repositories3.NewSubjectAttendance(db)
-	subjectAttendanceRecord := repositories3.NewSubjectAttendanceRecord(db)
+	subjectAttendance := repositories6.NewSubjectAttendance(db)
+	subjectAttendanceRecord := repositories6.NewSubjectAttendanceRecord(db)
 	subject := repositories7.NewSubject(db)
 	servicesSubjectAttendance := services.NewSubjectAttendance(db, batch, major, classroom, student, subjectAttendance, subjectAttendanceRecord, subject, user)
 	handlersSubjectAttendance := handlers.NewSubjectAttendance(servicesSubjectAttendance)
@@ -79,9 +79,9 @@ func InitAttendanceHandlers() *injector.AttendanceHandlers {
 
 func InitBatchHandlers() *injector2.BatchHandlers {
 	db := database.New()
-	batch := repositories4.NewBatch(db)
-	major := repositories5.NewMajor(db)
-	classroom := repositories6.NewClassroom(db)
+	batch := repositories2.NewBatch(db)
+	major := repositories3.NewMajor(db)
+	classroom := repositories4.NewClassroom(db)
 	servicesBatch := services2.NewBatch(db, batch, major, classroom)
 	handlersBatch := handlers2.NewBatch(servicesBatch)
 	batchHandlers := injector2.NewBatchHandlers(handlersBatch)
@@ -90,9 +90,9 @@ func InitBatchHandlers() *injector2.BatchHandlers {
 
 func InitMajorHandlers() *injector3.MajorHandlers {
 	db := database.New()
-	batch := repositories4.NewBatch(db)
-	major := repositories5.NewMajor(db)
-	classroom := repositories6.NewClassroom(db)
+	batch := repositories2.NewBatch(db)
+	major := repositories3.NewMajor(db)
+	classroom := repositories4.NewClassroom(db)
 	servicesMajor := services3.NewMajor(db, batch, major, classroom)
 	handlersMajor := handlers3.NewMajor(servicesMajor)
 	majorHandlers := injector3.NewMajorHandlers(handlersMajor)
@@ -101,10 +101,10 @@ func InitMajorHandlers() *injector3.MajorHandlers {
 
 func InitClassroomHandlers() *injector4.ClassroomHandlers {
 	db := database.New()
-	batch := repositories4.NewBatch(db)
-	major := repositories5.NewMajor(db)
-	classroom := repositories6.NewClassroom(db)
-	student := repositories2.NewStudent(db)
+	batch := repositories2.NewBatch(db)
+	major := repositories3.NewMajor(db)
+	classroom := repositories4.NewClassroom(db)
+	student := repositories5.NewStudent(db)
 	servicesClassroom := services4.NewClassroom(batch, major, classroom, student)
 	handlersClassroom := handlers4.NewClassroom(servicesClassroom)
 	classroomHandlers := injector4.NewClassroomHandlers(handlersClassroom)
@@ -114,11 +114,11 @@ func InitClassroomHandlers() *injector4.ClassroomHandlers {
 func InitStudentHandlers() *injector5.StudentHandlers {
 	db := database.New()
 	school := repositories8.NewSchool(db)
-	batch := repositories4.NewBatch(db)
-	major := repositories5.NewMajor(db)
-	classroom := repositories6.NewClassroom(db)
-	student := repositories2.NewStudent(db)
-	studentToken := repositories2.NewStudentToken(db)
+	batch := repositories2.NewBatch(db)
+	major := repositories3.NewMajor(db)
+	classroom := repositories4.NewClassroom(db)
+	student := repositories5.NewStudent(db)
+	studentToken := repositories5.NewStudentToken(db)
 	servicesStudent := services5.NewStudent(school, batch, major, classroom, student, studentToken)
 	handlersStudent := handlers5.NewStudent(servicesStudent)
 	studentAuth := services5.NewStudentAuth(db, school, student, studentToken)
@@ -129,10 +129,10 @@ func InitStudentHandlers() *injector5.StudentHandlers {
 
 func InitDataHandlers() *injector6.DataHandlers {
 	db := database.New()
-	batch := repositories4.NewBatch(db)
-	major := repositories5.NewMajor(db)
-	classroom := repositories6.NewClassroom(db)
-	student := repositories2.NewStudent(db)
+	batch := repositories2.NewBatch(db)
+	major := repositories3.NewMajor(db)
+	classroom := repositories4.NewClassroom(db)
+	student := repositories5.NewStudent(db)
 	excel := services6.NewExcel(batch, major, classroom, student, db)
 	handlersExcel := handlers6.NewExcel(excel)
 	reset := services6.NewReset(db, batch)

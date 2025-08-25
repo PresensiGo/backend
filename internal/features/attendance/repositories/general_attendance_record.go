@@ -105,6 +105,19 @@ func (r *GeneralAttendanceRecord) GetManyByAttendanceIdsStudentId(
 	}
 }
 
+func (r *GeneralAttendanceRecord) GetByAttendanceIdStudentId(
+	attendanceId uint, studentId uint,
+) (*domains.GeneralAttendanceRecord, error) {
+	var record models.GeneralAttendanceRecord
+	if err := r.db.Where(
+		"general_attendance_id = ? AND student_id = ?", attendanceId, studentId,
+	).First(&record).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromGeneralAttendanceRecordModel(&record), nil
+	}
+}
+
 func (r *GeneralAttendanceRecord) DeleteByAttendanceIdStudentIdInTx(
 	tx *gorm.DB, attendanceId uint, studentId uint,
 ) error {

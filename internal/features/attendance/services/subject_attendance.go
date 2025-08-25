@@ -431,9 +431,6 @@ func (s *SubjectAttendance) ExportSubjectAttendance(
 	}
 
 	f := excelize.NewFile()
-	if err := f.DeleteSheet("Sheet1"); err != nil {
-		return nil, failure.NewInternal(err)
-	}
 
 	subject, err := s.subjectRepo.Get(req.SubjectId)
 	if err != nil {

@@ -278,7 +278,6 @@ func (h *SubjectAttendance) DeleteSubjectAttendanceRecord(c *gin.Context) {
 // @param 		major_id path int true "major id"
 // @param 		classroom_id path int true "classroom id"
 // @param 		body body requests.ExportSubjectAttendance true "body"
-// @produce     application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 // @success 	200 {object} responses.ExportSubjectAttendance
 // @router 		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/export [post]
 func (h *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) {

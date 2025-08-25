@@ -13,6 +13,7 @@ func RegisterGeneralAttendance(g *gin.RouterGroup, handler *handlers.GeneralAtte
 
 		group.POST("", handler.CreateGeneralAttendance)
 		group.POST("/:general_attendance_id/records", handler.CreateGeneralAttendanceRecord)
+		group.POST("/export", handler.ExportGeneralAttendance)
 
 		group.GET("", handler.GetAllGeneralAttendances)
 		group.GET("/:general_attendance_id/records", handler.GetAllGeneralAttendanceRecords)

@@ -302,3 +302,25 @@ func (h *GeneralAttendance) DeleteGeneralAttendanceRecord(c *gin.Context) {
 		c.JSON(http.StatusOK, response)
 	}
 }
+
+// @tags 		attendance
+// @param 		body body requests.ExportGeneralAttendance true "body"
+// @success 	200 {object} responses.ExportGeneralAttendance
+// @router 		/api/v1/general-attendances/export [post]
+func (h *GeneralAttendance) ExportGeneralAttendance(c *gin.Context) {
+	var req requests.ExportGeneralAttendance
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.ExportGeneralAttendance(c, req); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}

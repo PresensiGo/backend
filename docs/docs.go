@@ -930,9 +930,6 @@ const docTemplate = `{
         },
         "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/export": {
             "post": {
-                "produces": [
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                ],
                 "tags": [
                     "attendance"
                 ],
@@ -1297,6 +1294,32 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.CreateGeneralAttendance"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/general-attendances/export": {
+            "post": {
+                "tags": [
+                    "attendance"
+                ],
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.ExportGeneralAttendance"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ExportGeneralAttendance"
                         }
                     }
                 }
@@ -2811,6 +2834,21 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.ExportGeneralAttendance": {
+            "type": "object",
+            "required": [
+                "end_date",
+                "start_date"
+            ],
+            "properties": {
+                "end_date": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.ExportSubjectAttendance": {
             "type": "object",
             "required": [
@@ -3089,6 +3127,21 @@ const docTemplate = `{
             ],
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ExportGeneralAttendance": {
+            "type": "object",
+            "required": [
+                "file",
+                "file_name"
+            ],
+            "properties": {
+                "file": {
+                    "type": "string"
+                },
+                "file_name": {
                     "type": "string"
                 }
             }

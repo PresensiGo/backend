@@ -82,7 +82,7 @@ func (r *Classroom) GetAllByMajorId(majorId uint) (*[]domains.Classroom, error) 
 	}
 }
 
-func (r *Classroom) GetManyByMajorId(majorIds []uint) ([]domains.Classroom, error) {
+func (r *Classroom) GetManyByMajorIds(majorIds []uint) ([]domains.Classroom, error) {
 	var classes []models.Classroom
 	if err := r.db.Where("major_id in ?", majorIds).
 		Order("name asc").

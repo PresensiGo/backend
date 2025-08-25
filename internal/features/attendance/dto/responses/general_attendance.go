@@ -50,3 +50,8 @@ type DeleteGeneralAttendance struct {
 type DeleteGeneralAttendanceRecord struct {
 	Message string `json:"message"`
 }
+
+type ExportGeneralAttendance struct {
+	File     string `json:"file" validate:"required"`
+	FileName string `json:"file_name" validate:"required"`
+}

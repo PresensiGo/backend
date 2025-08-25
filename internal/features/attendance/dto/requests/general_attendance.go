@@ -21,3 +21,8 @@ type UpdateGeneralAttendance struct {
 type CreateGeneralAttendanceRecordStudent struct {
 	Code string `json:"code" validate:"required"`
 } // @name CreateGeneralAttendanceRecordStudentReq
+
+type ExportGeneralAttendance struct {
+	StartDate string `json:"start_date" validate:"required"`
+	EndDate   string `json:"end_date" validate:"required"`
+}

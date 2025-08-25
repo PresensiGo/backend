@@ -73,7 +73,7 @@ func (s *Classroom) GetAll(schoolId uint) (*responses.GetAll, error) {
 		majorIds[i] = v.Id
 	}
 
-	classrooms, err := s.classroomRepo.GetManyByMajorId(majorIds)
+	classrooms, err := s.classroomRepo.GetManyByMajorIds(majorIds)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +124,7 @@ func (s *Classroom) GetAllWithMajor(batchId uint) (*responses.GetAllClassroomWit
 		majorIds = append(majorIds, major.Id)
 	}
 
-	classes, err := s.classroomRepo.GetManyByMajorId(majorIds)
+	classes, err := s.classroomRepo.GetManyByMajorIds(majorIds)
 	if err != nil {
 		return nil, err
 	}

@@ -679,6 +679,16 @@ definitions:
     required:
     - name
     type: object
+  requests.ExportGeneralAttendance:
+    properties:
+      end_date:
+        type: string
+      start_date:
+        type: string
+    required:
+    - end_date
+    - start_date
+    type: object
   requests.ExportSubjectAttendance:
     properties:
       end_date:
@@ -859,6 +869,16 @@ definitions:
         type: string
     required:
     - message
+    type: object
+  responses.ExportGeneralAttendance:
+    properties:
+      file:
+        type: string
+      file_name:
+        type: string
+    required:
+    - file
+    - file_name
     type: object
   responses.ExportSubjectAttendance:
     properties:
@@ -1775,8 +1795,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/requests.ExportSubjectAttendance'
-      produces:
-      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
       responses:
         "200":
           description: OK
@@ -1944,6 +1962,22 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.DeleteGeneralAttendanceRecord'
+      tags:
+      - attendance
+  /api/v1/general-attendances/export:
+    post:
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ExportGeneralAttendance'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ExportGeneralAttendance'
       tags:
       - attendance
   /api/v1/general-attendances/records/student:

@@ -43,6 +43,25 @@ func (r *GeneralAttendance) GetAllBySchoolId(schoolId uint) (*[]domains.GeneralA
 	return &result, nil
 }
 
+func (r *GeneralAttendance) GetAllBySchoolIdBetween(
+	schoolId uint, startDate time.Time, endDate time.Time,
+) (*[]domains.GeneralAttendance, error) {
+	var generalAttendances []models.GeneralAttendance
+	if err := r.db.Model(&models.GeneralAttendance{}).Where(
+		"school_id = ? and date_time between ? and ?",
+		schoolId, startDate, endDate,
+	).Order("date_time asc").Find(&generalAttendances).Error; err != nil {
+		return nil, err
+	}
+
+	result := make([]domains.GeneralAttendance, len(generalAttendances))
+	for i, v := range generalAttendances {
+		result[i] = *domains.FromGeneralAttendanceModel(&v)
+	}
+
+	return &result, nil
+}
+
 func (r *GeneralAttendance) GetAllTodayBySchoolId(schoolId uint) (
 	*[]domains.GeneralAttendance, error,
 ) {
