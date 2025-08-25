@@ -1,6 +1,8 @@
 package requests
 
-import "api/pkg/constants"
+import (
+	"api/pkg/constants"
+)
 
 type CreateSubjectAttendance struct {
 	SubjectId uint   `json:"subject_id" validate:"required"`
@@ -18,7 +20,7 @@ type CreateSubjectAttendanceRecordStudent struct {
 } // @name CreateSubjectAttendanceRecordStudentReq
 
 type ExportSubjectAttendance struct {
-	Year      int  `json:"year" validate:"required"`
-	Month     int  `json:"month" validate:"required"`
-	SubjectId uint `json:"subject_id" validate:"required"`
+	SubjectId uint   `json:"subject_id" validate:"required"`
+	StartDate string `json:"start_date" validate:"required"`
+	EndDate   string `json:"end_date" validate:"required"`
 }

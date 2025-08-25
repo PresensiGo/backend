@@ -44,5 +44,6 @@ type DeleteSubjectAttendanceRecord struct {
 }
 
 type ExportSubjectAttendance struct {
-	Message string `json:"message" validate:"required"`
+	File     string `json:"file" validate:"required"`
+	FileName string `json:"file_name" validate:"required"`
 }

@@ -1,9 +1,12 @@
 package services
 
 import (
+	"bytes"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"api/internal/features/attendance/domains"
@@ -399,7 +402,21 @@ func (s *SubjectAttendance) DeleteSubjectAttendanceRecord(recordId uint) (
 	}
 }
 
-func (s *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) (*excelize.File, *failure.App) {
+func (s *SubjectAttendance) ExportSubjectAttendance(
+	c *gin.Context, req requests.ExportSubjectAttendance,
+) (
+	*responses.ExportSubjectAttendance, *failure.App,
+) {
+	parsedStartDate, err := utils.GetParsedDate(req.StartDate)
+	if err != nil {
+		return nil, failure.NewApp(http.StatusBadRequest, "Tanggal mulai tidak valid!", err)
+	}
+
+	parsedEndDate, err := utils.GetParsedDate(req.EndDate)
+	if err != nil {
+		return nil, failure.NewApp(http.StatusBadRequest, "Tanggal akhir tidak valid!", err)
+	}
+
 	auth := authentication.GetAuthenticatedUser(c)
 	if auth.SchoolId == 0 {
 		return nil, failure.NewApp(http.StatusForbidden, "Anda tidak memiliki akses!", nil)
@@ -410,10 +427,14 @@ func (s *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) (*excelize.F
 		return nil, failure.NewInternal(err)
 	}
 
-	startDate := time.Date(2025, 7, 1, 0, 0, 0, 0, time.Local)
-	endDate := time.Date(2025, 9, 8, 0, 0, 0, 0, time.Local)
+	subject, err := s.subjectRepo.Get(req.SubjectId)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
 
-	attendances, err := s.subjectAttendanceRepo.GetAllBySubjectIdBetween(4, startDate, endDate)
+	attendances, err := s.subjectAttendanceRepo.GetAllBySubjectIdBetween(
+		req.SubjectId, *parsedStartDate, *parsedEndDate,
+	)
 	if err != nil {
 		return nil, failure.NewInternal(err)
 	}
@@ -432,6 +453,18 @@ func (s *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) (*excelize.F
 		return nil, failure.NewInternal(err)
 	}
 
+	centerStyle, err := f.NewStyle(
+		&excelize.Style{
+			Alignment: &excelize.Alignment{
+				Horizontal: "center",
+				Vertical:   "center",
+			},
+		},
+	)
+	if err != nil {
+		return nil, failure.NewInternal(err)
+	}
+
 	for _, c := range *classrooms {
 		sheetIndex, err := f.NewSheet(c.Name)
 		if err != nil {
@@ -444,18 +477,22 @@ func (s *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) (*excelize.F
 		f.SetCellValue(c.Name, "A1", "No")
 		f.MergeCell(c.Name, "A1", "A2")
 		f.SetColWidth(c.Name, "A", "A", 4)
+		f.SetCellStyle(c.Name, "A1", "A2", centerStyle)
 
 		f.SetCellValue(c.Name, "B1", "NIS")
 		f.MergeCell(c.Name, "B1", "B2")
 		f.SetColWidth(c.Name, "B", "B", 8)
+		f.SetCellStyle(c.Name, "B1", "B2", centerStyle)
 
 		f.SetCellValue(c.Name, "C1", "Nama")
 		f.MergeCell(c.Name, "C1", "C2")
 		f.SetColWidth(c.Name, "C", "C", 32)
+		f.SetCellStyle(c.Name, "C1", "C2", centerStyle)
 
 		f.SetCellValue(c.Name, "D1", "JK")
 		f.MergeCell(c.Name, "D1", "D2")
 		f.SetColWidth(c.Name, "D", "D", 4)
+		f.SetCellStyle(c.Name, "D1", "D2", centerStyle)
 
 		attendances := mapClassroomIdAttendances[c.Id]
 		mapMonths := make(map[string]int)
@@ -465,7 +502,7 @@ func (s *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) (*excelize.F
 			if err != nil {
 				return nil, failure.NewInternal(err)
 			}
-			monthName := attendance.DateTime.Format("January")
+			monthName := utils.MapMonths[attendance.DateTime.Format("January")]
 			if _, ok := mapMonths[monthName]; !ok {
 				mapMonths[monthName] = 1
 			} else {
@@ -473,14 +510,54 @@ func (s *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) (*excelize.F
 			}
 
 			f.SetCellValue(
-				c.Name, fmt.Sprintf("%s1", columnName),
+				c.Name,
+				fmt.Sprintf("%s1", columnName),
 				monthName,
 			)
 			f.SetCellValue(
-				c.Name, fmt.Sprintf("%s2", columnName),
+				c.Name,
+				fmt.Sprintf("%s2", columnName),
 				attendance.DateTime.Format("2"),
 			)
+			f.SetCellStyle(
+				c.Name,
+				fmt.Sprintf("%s2", columnName),
+				fmt.Sprintf("%s2", columnName),
+				centerStyle,
+			)
 			f.SetColWidth(c.Name, columnName, columnName, 4)
+		}
+
+		// merge month cells
+		currentIndex := 5
+		for _, v := range mapMonths {
+			if v > 1 {
+				startColumn, err := utils.ColumnToName(currentIndex)
+				if err != nil {
+					return nil, failure.NewInternal(err)
+				}
+
+				endColumn, err := utils.ColumnToName(currentIndex + v - 1)
+				if err != nil {
+					return nil, failure.NewInternal(err)
+				}
+
+				if err := f.MergeCell(
+					c.Name,
+					fmt.Sprintf("%s1", startColumn),
+					fmt.Sprintf("%s1", endColumn),
+				); err != nil {
+					return nil, failure.NewInternal(err)
+				}
+
+				f.SetCellStyle(
+					c.Name,
+					fmt.Sprintf("%s1", startColumn),
+					fmt.Sprintf("%s1", endColumn),
+					centerStyle,
+				)
+			}
+			currentIndex += v
 		}
 
 		// rekap
@@ -500,64 +577,98 @@ func (s *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) (*excelize.F
 		if err != nil {
 			return nil, failure.NewInternal(err)
 		}
-		f.SetCellValue(c.Name, fmt.Sprintf("%s2", presentColumn), "H")
-		f.SetColWidth(c.Name, presentColumn, presentColumn, 4)
-
-		f.SetCellValue(c.Name, fmt.Sprintf("%s2", sickColumn), "S")
-		f.SetColWidth(c.Name, sickColumn, sickColumn, 4)
-
-		f.SetCellValue(c.Name, fmt.Sprintf("%s2", permissionColumn), "I")
-		f.SetColWidth(c.Name, permissionColumn, permissionColumn, 4)
-
-		f.SetCellValue(c.Name, fmt.Sprintf("%s2", alphaColumn), "A")
-		f.SetColWidth(c.Name, alphaColumn, alphaColumn, 4)
 
 		f.SetCellValue(c.Name, fmt.Sprintf("%s1", presentColumn), "Rekap")
-		f.MergeCell(c.Name, fmt.Sprintf("%s1", presentColumn), fmt.Sprintf("%s1", alphaColumn))
+		f.MergeCell(
+			c.Name,
+			fmt.Sprintf("%s1", presentColumn),
+			fmt.Sprintf("%s1", alphaColumn),
+		)
+		f.SetCellStyle(
+			c.Name,
+			fmt.Sprintf("%s1", presentColumn),
+			fmt.Sprintf("%s1", alphaColumn),
+			centerStyle,
+		)
 
-		// merge month cells
-		currentIndex := 5
-		for _, v := range mapMonths {
-			if v > 1 {
-				startColumn, err := utils.ColumnToName(currentIndex)
-				if err != nil {
-					return nil, failure.NewInternal(err)
-				}
-				endColumn, err := utils.ColumnToName(currentIndex + v - 1)
-				if err != nil {
-					return nil, failure.NewInternal(err)
-				}
-				if err := f.MergeCell(
-					c.Name, fmt.Sprintf("%s1", startColumn),
-					fmt.Sprintf("%s1", endColumn),
-				); err != nil {
-					return nil, failure.NewInternal(err)
-				}
-			}
-			currentIndex += v
-		}
+		f.SetCellValue(c.Name, fmt.Sprintf("%s2", presentColumn), "H")
+		f.SetColWidth(c.Name, presentColumn, presentColumn, 6)
+		f.SetCellStyle(
+			c.Name,
+			fmt.Sprintf("%s2", presentColumn),
+			fmt.Sprintf("%s2", presentColumn),
+			centerStyle,
+		)
+
+		f.SetCellValue(c.Name, fmt.Sprintf("%s2", sickColumn), "S")
+		f.SetColWidth(c.Name, sickColumn, sickColumn, 6)
+		f.SetCellStyle(
+			c.Name,
+			fmt.Sprintf("%s2", sickColumn),
+			fmt.Sprintf("%s2", sickColumn),
+			centerStyle,
+		)
+
+		f.SetCellValue(c.Name, fmt.Sprintf("%s2", permissionColumn), "I")
+		f.SetColWidth(c.Name, permissionColumn, permissionColumn, 6)
+		f.SetCellStyle(
+			c.Name,
+			fmt.Sprintf("%s2", permissionColumn),
+			fmt.Sprintf("%s2", permissionColumn),
+			centerStyle,
+		)
+
+		f.SetCellValue(c.Name, fmt.Sprintf("%s2", alphaColumn), "A")
+		f.SetColWidth(c.Name, alphaColumn, alphaColumn, 6)
+		f.SetCellStyle(
+			c.Name,
+			fmt.Sprintf("%s2", alphaColumn),
+			fmt.Sprintf("%s2", alphaColumn),
+			centerStyle,
+		)
 
 		students, err := s.studentRepo.GetAllByClassroomId(c.Id)
 		if err != nil {
 			return nil, failure.NewInternal(err)
 		}
 
-		for i, student := range students {
+		for studentIndex, student := range students {
 			f.SetCellValue(
-				c.Name, fmt.Sprintf("A%d", i+3), i+1,
+				c.Name, fmt.Sprintf("A%d", studentIndex+3), studentIndex+1,
 			)
-			f.SetCellValue(
-				c.Name, fmt.Sprintf("B%d", i+3), student.NIS,
-			)
-			f.SetCellValue(
-				c.Name, fmt.Sprintf("C%d", i+3), student.Name,
-			)
-			f.SetCellValue(
-				c.Name, fmt.Sprintf("D%d", i+3), "-",
+			f.SetCellStyle(
+				c.Name,
+				fmt.Sprintf("A%d", studentIndex+3),
+				fmt.Sprintf("A%d", studentIndex+3),
+				centerStyle,
 			)
 
-			recap := make(map[string]int)
-			for j, attendance := range attendances {
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("B%d", studentIndex+3), student.NIS,
+			)
+			f.SetCellStyle(
+				c.Name,
+				fmt.Sprintf("B%d", studentIndex+3),
+				fmt.Sprintf("B%d", studentIndex+3),
+				centerStyle,
+			)
+
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("C%d", studentIndex+3), student.Name,
+			)
+
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("D%d", studentIndex+3), "-",
+			)
+			f.SetCellStyle(
+				c.Name,
+				fmt.Sprintf("D%d", studentIndex+3),
+				fmt.Sprintf("D%d", studentIndex+3),
+				centerStyle,
+			)
+
+			mapRecap := make(map[string]int)
+			for attendanceIndex, attendance := range attendances {
 				var status string
 
 				if record, err := s.subjectAttendanceRecordRepo.GetByAttendanceIdStudentId(
@@ -581,45 +692,98 @@ func (s *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) (*excelize.F
 					}
 				}
 
-				columnName, err := utils.ColumnToName(j + 5)
+				columnName, err := utils.ColumnToName(attendanceIndex + 5)
 				if err != nil {
 					return nil, failure.NewInternal(err)
 				}
 
 				f.SetCellValue(
-					c.Name, fmt.Sprintf("%s%d", columnName, i+3), status,
+					c.Name, fmt.Sprintf("%s%d", columnName, studentIndex+3), status,
+				)
+				f.SetCellStyle(
+					c.Name,
+					fmt.Sprintf("%s%d", columnName, studentIndex+3),
+					fmt.Sprintf("%s%d", columnName, studentIndex+3),
+					centerStyle,
 				)
 
-				if _, ok := recap[status]; !ok {
-					recap[status] = 1
+				if _, ok := mapRecap[status]; !ok {
+					mapRecap[status] = 1
 				} else {
-					recap[status]++
+					mapRecap[status]++
 				}
 			}
 
 			// rekap
+			getCount := func(key string) string {
+				count := mapRecap[key]
+				if count == 0 {
+					return "-"
+				}
+				return strconv.Itoa(count)
+			}
+
 			f.SetCellValue(
-				c.Name, fmt.Sprintf("%s%d", presentColumn, i+3),
-				recap["H"],
+				c.Name, fmt.Sprintf("%s%d", presentColumn, studentIndex+3),
+				getCount("H"),
 			)
-			f.SetCellValue(
-				c.Name, fmt.Sprintf("%s%d", sickColumn, i+3),
-				recap["S"],
-			)
-			f.SetCellValue(
+			f.SetCellStyle(
 				c.Name,
-				fmt.Sprintf("%s%d", permissionColumn, i+3),
-				recap["I"],
-			)
-			f.SetCellValue(
-				c.Name,
-				fmt.Sprintf("%s%d", alphaColumn, i+3),
-				recap["A"],
+				fmt.Sprintf("%s%d", presentColumn, studentIndex+3),
+				fmt.Sprintf("%s%d", presentColumn, studentIndex+3),
+				centerStyle,
 			)
 
+			f.SetCellValue(
+				c.Name, fmt.Sprintf("%s%d", sickColumn, studentIndex+3),
+				getCount("S"),
+			)
+			f.SetCellStyle(
+				c.Name,
+				fmt.Sprintf("%s%d", sickColumn, studentIndex+3),
+				fmt.Sprintf("%s%d", sickColumn, studentIndex+3),
+				centerStyle,
+			)
+
+			f.SetCellValue(
+				c.Name,
+				fmt.Sprintf("%s%d", permissionColumn, studentIndex+3),
+				getCount("I"),
+			)
+			f.SetCellStyle(
+				c.Name,
+				fmt.Sprintf("%s%d", permissionColumn, studentIndex+3),
+				fmt.Sprintf("%s%d", permissionColumn, studentIndex+3),
+				centerStyle,
+			)
+
+			f.SetCellValue(
+				c.Name,
+				fmt.Sprintf("%s%d", alphaColumn, studentIndex+3),
+				getCount("A"),
+			)
+			f.SetCellStyle(
+				c.Name,
+				fmt.Sprintf("%s%d", alphaColumn, studentIndex+3),
+				fmt.Sprintf("%s%d", alphaColumn, studentIndex+3),
+				centerStyle,
+			)
 		}
-
 	}
 
-	return f, nil
+	// ubah file menjadi base64
+	var b bytes.Buffer
+	if err := f.Write(&b); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		encodedStr := base64.StdEncoding.EncodeToString(b.Bytes())
+		return &responses.ExportSubjectAttendance{
+			File: encodedStr,
+			FileName: fmt.Sprintf(
+				"[%s] Rekap Presensi %s - %s.xlsx", subject.Name,
+				parsedStartDate.Format("Monday, 2 January 2006"),
+				parsedStartDate.Format("Monday, 2 January 2006"),
+			),
+		}, nil
+	}
 }

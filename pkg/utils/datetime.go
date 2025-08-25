@@ -2,6 +2,23 @@ package utils
 
 import "time"
 
+var (
+	MapMonths = map[string]string{
+		"January":   "Januari",
+		"February":  "Februari",
+		"March":     "Maret",
+		"April":     "April",
+		"May":       "Mei",
+		"June":      "Juni",
+		"July":      "Juli",
+		"August":    "Agustus",
+		"September": "September",
+		"October":   "Oktober",
+		"November":  "November",
+		"December":  "Desember",
+	}
+)
+
 func GetParsedDate(str string) (*time.Time, error) {
 	timezone, err := time.LoadLocation("Asia/Jakarta")
 	if err != nil {

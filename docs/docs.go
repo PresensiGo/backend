@@ -928,6 +928,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/export": {
+            "post": {
+                "produces": [
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ],
+                "tags": [
+                    "attendance"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.ExportSubjectAttendance"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ExportSubjectAttendance"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}": {
             "get": {
                 "tags": [
@@ -1013,63 +1063,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.DeleteSubjectAttendance"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}/export": {
-            "post": {
-                "produces": [
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                ],
-                "tags": [
-                    "attendance"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "batch id",
-                        "name": "batch_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "major id",
-                        "name": "major_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "classroom id",
-                        "name": "classroom_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "subject attendance id",
-                        "name": "subject_attendance_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.ExportSubjectAttendance"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "file"
                         }
                     }
                 }
@@ -2821,18 +2814,18 @@ const docTemplate = `{
         "requests.ExportSubjectAttendance": {
             "type": "object",
             "required": [
-                "month",
-                "subject_id",
-                "year"
+                "end_date",
+                "start_date",
+                "subject_id"
             ],
             "properties": {
-                "month": {
-                    "type": "integer"
+                "end_date": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
                 },
                 "subject_id": {
-                    "type": "integer"
-                },
-                "year": {
                     "type": "integer"
                 }
             }
@@ -3096,6 +3089,21 @@ const docTemplate = `{
             ],
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ExportSubjectAttendance": {
+            "type": "object",
+            "required": [
+                "file",
+                "file_name"
+            ],
+            "properties": {
+                "file": {
+                    "type": "string"
+                },
+                "file_name": {
                     "type": "string"
                 }
             }

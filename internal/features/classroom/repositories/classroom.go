@@ -109,6 +109,7 @@ func (r *Classroom) GetManyByIds(classroomIds []uint) (*[]domains.Classroom, err
 	var classrooms []models.Classroom
 	if err := r.db.Model(&models.Classroom{}).
 		Where("id in (?)", classroomIds).
+		Order("lower(name) asc").
 		Find(&classrooms).
 		Error; err != nil {
 		return nil, err

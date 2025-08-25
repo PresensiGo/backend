@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"bytes"
-	"encoding/base64"
 	"net/http"
 	"strconv"
 
@@ -279,11 +277,10 @@ func (h *SubjectAttendance) DeleteSubjectAttendanceRecord(c *gin.Context) {
 // @param 		batch_id path int true "batch id"
 // @param 		major_id path int true "major id"
 // @param 		classroom_id path int true "classroom id"
-// @param 		subject_attendance_id path int true "subject attendance id"
 // @param 		body body requests.ExportSubjectAttendance true "body"
 // @produce     application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-// @success 	200 {file} file
-// @router 		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/{subject_attendance_id}/export [post]
+// @success 	200 {object} responses.ExportSubjectAttendance
+// @router 		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances/export [post]
 func (h *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) {
 	var req requests.ExportSubjectAttendance
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -291,36 +288,13 @@ func (h *SubjectAttendance) ExportSubjectAttendance(c *gin.Context) {
 		return
 	}
 
-	if f, err := h.service.ExportSubjectAttendance(c); err != nil {
+	if response, err := h.service.ExportSubjectAttendance(c, req); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,
 			},
 		)
 	} else {
-		var b bytes.Buffer
-		if err := f.Write(&b); err != nil {
-			c.AbortWithStatus(http.StatusInternalServerError)
-			return
-		}
-
-		encodedStr := base64.StdEncoding.EncodeToString(b.Bytes())
-		c.JSON(
-			http.StatusOK, gin.H{
-				"file":      encodedStr,
-				"file_name": "data_siswa.xlsx",
-			},
-		)
-
-		// fileName := "data_siswa.xlsx"
-		// c.Header("Content-Disposition", "attachment; filename="+fileName)
-		// c.Header(
-		// 	"Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-		// )
-		// c.Header("Content-Transfer-Encoding", "binary")
-		//
-		// if err := f.Write(c.Writer); err != nil {
-		// 	c.AbortWithStatus(http.StatusInternalServerError)
-		// }
+		c.JSON(http.StatusOK, response)
 	}
 }
