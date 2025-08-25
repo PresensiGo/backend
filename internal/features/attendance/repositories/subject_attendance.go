@@ -86,24 +86,24 @@ func (r *SubjectAttendance) GetAllBySubjectIdBetween(
 	}
 }
 
-func (r *SubjectAttendance) GetAllByClassroomIdSubjectIdBetween(
-	classroomId uint, subjectId uint,
-	startDate time.Time, endDate time.Time,
-) (*[]domains.SubjectAttendance, error) {
-	var attendances []models.SubjectAttendance
-	if err := r.db.Where(
-		"classroom_id = ? and subject_id = ? and date_time BETWEEN ? AND ?",
-		classroomId, subjectId, startDate, endDate,
-	).Order("date_time asc").Find(&attendances).Error; err != nil {
-		return nil, err
-	} else {
-		result := make([]domains.SubjectAttendance, len(attendances))
-		for i, v := range attendances {
-			result[i] = *domains.FromSubjectAttendanceModel(&v)
-		}
-		return &result, nil
-	}
-}
+// func (r *SubjectAttendance) GetAllByClassroomIdSubjectIdBetween(
+// 	classroomId uint, subjectId uint,
+// 	startDate time.Time, endDate time.Time,
+// ) (*[]domains.SubjectAttendance, error) {
+// 	var attendances []models.SubjectAttendance
+// 	if err := r.db.Where(
+// 		"classroom_id = ? and subject_id = ? and date_time BETWEEN ? AND ?",
+// 		classroomId, subjectId, startDate, endDate,
+// 	).Order("date_time asc").Find(&attendances).Error; err != nil {
+// 		return nil, err
+// 	} else {
+// 		result := make([]domains.SubjectAttendance, len(attendances))
+// 		for i, v := range attendances {
+// 			result[i] = *domains.FromSubjectAttendanceModel(&v)
+// 		}
+// 		return &result, nil
+// 	}
+// }
 
 func (r *SubjectAttendance) Get(subjectAttendanceId uint) (
 	*domains.SubjectAttendance, error,

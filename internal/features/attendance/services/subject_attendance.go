@@ -417,6 +417,14 @@ func (s *SubjectAttendance) ExportSubjectAttendance(
 		return nil, failure.NewApp(http.StatusBadRequest, "Tanggal akhir tidak valid!", err)
 	}
 
+	endDate := time.Date(
+		parsedEndDate.Year(),
+		parsedEndDate.Month(),
+		parsedEndDate.Day(),
+		23, 59, 59, 999_999_999,
+		parsedEndDate.Location(),
+	)
+
 	auth := authentication.GetAuthenticatedUser(c)
 	if auth.SchoolId == 0 {
 		return nil, failure.NewApp(http.StatusForbidden, "Anda tidak memiliki akses!", nil)
@@ -433,7 +441,7 @@ func (s *SubjectAttendance) ExportSubjectAttendance(
 	}
 
 	attendances, err := s.subjectAttendanceRepo.GetAllBySubjectIdBetween(
-		req.SubjectId, *parsedStartDate, *parsedEndDate,
+		req.SubjectId, *parsedStartDate, endDate,
 	)
 	if err != nil {
 		return nil, failure.NewInternal(err)
@@ -782,7 +790,7 @@ func (s *SubjectAttendance) ExportSubjectAttendance(
 			FileName: fmt.Sprintf(
 				"[%s] Rekap Presensi %s - %s.xlsx", subject.Name,
 				parsedStartDate.Format("Monday, 2 January 2006"),
-				parsedStartDate.Format("Monday, 2 January 2006"),
+				parsedEndDate.Format("Monday, 2 January 2006"),
 			),
 		}, nil
 	}
