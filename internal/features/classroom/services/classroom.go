@@ -10,7 +10,9 @@ import (
 	majorDomain "api/internal/features/major/domains"
 	majorRepo "api/internal/features/major/repositories"
 	studentRepo "api/internal/features/student/repositories"
+	"api/pkg/authentication"
 	"api/pkg/http/failure"
+	"github.com/gin-gonic/gin"
 )
 
 type Classroom struct {
@@ -169,4 +171,20 @@ func (s *Classroom) Update(
 	return &responses.UpdateClassroom{
 		Classroom: *result,
 	}, nil
+}
+
+func (s *Classroom) DeleteClassroom(
+	c *gin.Context, classroomId uint,
+) (*responses.DeleteClassroom, *failure.App) {
+	if err := authentication.ValidateAdmin(c); err != nil {
+		return nil, err
+	}
+
+	if err := s.classroomRepo.Delete(classroomId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.DeleteClassroom{
+			Message: "ok",
+		}, nil
+	}
 }

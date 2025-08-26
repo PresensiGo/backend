@@ -835,6 +835,13 @@ definitions:
     required:
     - message
     type: object
+  responses.DeleteClassroom:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
   responses.DeleteGeneralAttendance:
     properties:
       message:
@@ -1449,6 +1456,35 @@ paths:
       tags:
       - classroom
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}:
+    delete:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DeleteClassroom'
+      tags:
+      - classroom
     get:
       operationId: getClassroom
       parameters:
@@ -1842,7 +1878,6 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      operationId: ImportData
       parameters:
       - description: file
         in: formData
@@ -1854,8 +1889,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.ImportData'
-      tags:
-      - excel
   /api/v1/general-attendances:
     get:
       operationId: GetAllGeneralAttendances

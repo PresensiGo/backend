@@ -15,6 +15,7 @@ func RegisterClassroom(g *gin.RouterGroup, handler *handlers.Classroom) {
 		group.GET("", handler.GetAllClassroomsByMajorId)
 		group.GET("/:classroom_id", handler.GetClassroom)
 		group.PUT("/:classroom_id", handler.Update)
+		group.DELETE("/:classroom_id", handler.DeleteClassroom)
 	}
 	{
 		group := g.Group("/classrooms").Use(middlewares.AuthMiddleware())

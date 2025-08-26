@@ -140,3 +140,7 @@ func (r *Classroom) Update(classroomId uint, data domains.Classroom) (*domains.C
 
 	return domains.FromClassroomModel(classroom), nil
 }
+
+func (r *Classroom) Delete(classroomId uint) error {
+	return r.db.Where("id = ?", classroomId).Unscoped().Delete(&models.Classroom{}).Error
+}

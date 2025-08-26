@@ -764,6 +764,49 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "classroom"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.DeleteClassroom"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/student-accounts": {
@@ -1263,10 +1306,6 @@ const docTemplate = `{
                 "consumes": [
                     "multipart/form-data"
                 ],
-                "tags": [
-                    "excel"
-                ],
-                "operationId": "ImportData",
                 "parameters": [
                     {
                         "type": "file",
@@ -3093,6 +3132,17 @@ const docTemplate = `{
             }
         },
         "responses.DeleteAccount": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.DeleteClassroom": {
             "type": "object",
             "required": [
                 "message"

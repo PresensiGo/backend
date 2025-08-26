@@ -34,3 +34,7 @@ type GetClassroom struct {
 type UpdateClassroom struct {
 	Classroom domains.Classroom `json:"classroom" validate:"required"`
 }
+
+type DeleteClassroom struct {
+	Message string `json:"message" validate:"required"`
+}
