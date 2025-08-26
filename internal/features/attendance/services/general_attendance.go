@@ -577,12 +577,16 @@ func (s *GeneralAttendance) ExportGeneralAttendance(
 		if err != nil {
 			return nil, failure.NewInternal(err)
 		}
+		lateColumn, err := utils.ColumnToName(len(*attendances) + 9)
+		if err != nil {
+			return nil, failure.NewInternal(err)
+		}
 
 		f.SetCellValue(sheetName, fmt.Sprintf("%s1", presentColumn), "Rekap")
 		f.MergeCell(
 			sheetName,
 			fmt.Sprintf("%s1", presentColumn),
-			fmt.Sprintf("%s1", alphaColumn),
+			fmt.Sprintf("%s1", lateColumn),
 		)
 		f.SetCellStyle(
 			sheetName,
@@ -624,6 +628,15 @@ func (s *GeneralAttendance) ExportGeneralAttendance(
 			sheetName,
 			fmt.Sprintf("%s2", alphaColumn),
 			fmt.Sprintf("%s2", alphaColumn),
+			centerStyle,
+		)
+
+		f.SetCellValue(sheetName, fmt.Sprintf("%s2", lateColumn), "T")
+		f.SetColWidth(sheetName, lateColumn, lateColumn, 6)
+		f.SetCellStyle(
+			sheetName,
+			fmt.Sprintf("%s2", lateColumn),
+			fmt.Sprintf("%s2", lateColumn),
 			centerStyle,
 		)
 
@@ -683,7 +696,20 @@ func (s *GeneralAttendance) ExportGeneralAttendance(
 				} else {
 					switch record.Status {
 					case constants.AttendanceStatusPresent:
-						status = "H"
+						recordTimeOnly := time.Date(
+							0, 1, 1, record.DateTime.Hour(), record.DateTime.Minute(), 0, 0,
+							record.DateTime.Location(),
+						)
+						attendanceTimeOnly := time.Date(
+							0, 1, 1, attendance.DateTime.Hour(), attendance.DateTime.Minute(), 0, 0,
+							attendance.DateTime.Location(),
+						)
+
+						if recordTimeOnly.After(attendanceTimeOnly) {
+							status = "T"
+						} else {
+							status = "H"
+						}
 					case constants.AttendanceStatusSick:
 						status = "S"
 					case constants.AttendanceStatusPermission:
@@ -767,6 +793,18 @@ func (s *GeneralAttendance) ExportGeneralAttendance(
 				sheetName,
 				fmt.Sprintf("%s%d", alphaColumn, studentIndex+3),
 				fmt.Sprintf("%s%d", alphaColumn, studentIndex+3),
+				centerStyle,
+			)
+
+			f.SetCellValue(
+				sheetName,
+				fmt.Sprintf("%s%d", lateColumn, studentIndex+3),
+				getCount("T"),
+			)
+			f.SetCellStyle(
+				sheetName,
+				fmt.Sprintf("%s%d", lateColumn, studentIndex+3),
+				fmt.Sprintf("%s%d", lateColumn, studentIndex+3),
 				centerStyle,
 			)
 		}
