@@ -45,16 +45,15 @@ func NewStudent(
 }
 
 func (s *Student) GetAllStudentsByClassroomId(classroomId uint) (
-	*responses.GetAllStudentsByClassroomId, error,
+	*responses.GetAllStudentsByClassroomId, *failure.App,
 ) {
-	students, err := s.studentRepo.GetAllByClassroomId(classroomId)
-	if err != nil {
-		return nil, err
+	if students, err := s.studentRepo.GetAllByClassroomId(classroomId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.GetAllStudentsByClassroomId{
+			Students: students,
+		}, nil
 	}
-
-	return &responses.GetAllStudentsByClassroomId{
-		Students: students,
-	}, nil
 }
 
 func (s *Student) GetAllAccountsByClassroomId(classroomId uint) (

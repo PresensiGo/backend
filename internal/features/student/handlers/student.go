@@ -33,13 +33,15 @@ func (h *Student) GetAllStudentsByClassroomId(c *gin.Context) {
 		return
 	}
 
-	response, err := h.service.GetAllStudentsByClassroomId(uint(classroomId))
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
+	if response, err := h.service.GetAllStudentsByClassroomId(uint(classroomId)); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, response)
 }
 
 // @tags		student

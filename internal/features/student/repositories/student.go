@@ -101,19 +101,13 @@ func (r *Student) GetAllByClassroomId(classroomId uint) ([]domains.Student, erro
 		Order("name asc").
 		Find(&students).Error; err != nil {
 		return nil, err
-	}
-
-	mappedStudents := make([]domains.Student, len(students))
-	for index, student := range students {
-		mappedStudents[index] = domains.Student{
-			Id:          student.ID,
-			NIS:         student.NIS,
-			Name:        student.Name,
-			ClassroomId: student.ClassroomId,
+	} else {
+		result := make([]domains.Student, len(students))
+		for i, student := range students {
+			result[i] = *domains.FromStudentModel(&student)
 		}
+		return result, nil
 	}
-
-	return mappedStudents, nil
 }
 
 func (r *Student) GetManyById(studentIds []uint) (*[]domains.Student, error) {
