@@ -15,4 +15,5 @@ type Student struct {
 	School      school.School `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	ClassroomId uint
 	Classroom   classroom.Classroom `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Gender      string
 }

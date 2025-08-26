@@ -2,13 +2,12 @@ package routes
 
 import (
 	"api/internal/features/data/handlers"
+	"api/pkg/http/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterExcel(g *gin.RouterGroup, handler *handlers.Excel) {
-	group := g.Group("/excel")
+	group := g.Group("/excel").Use(middlewares.AuthMiddleware())
 
-	// group.POST("/import", handler.ImportData)
-	// group.POST("/import-v2", handler.ImportDataV2)
-	group.POST("/import-data", handler.ImportDataV3)
+	group.POST("/import-data", handler.ImportData)
 }

@@ -14,7 +14,7 @@ func NewClassroom(db *gorm.DB) *Classroom {
 	return &Classroom{db}
 }
 
-func (r *Classroom) GetOrCreateInTx(tx *gorm.DB, data domains.Classroom) (
+func (r *Classroom) FirstOrCreateInTx(tx *gorm.DB, data domains.Classroom) (
 	*domains.Classroom, error,
 ) {
 	var classroom models.Classroom

@@ -19,7 +19,18 @@ func NewStudent(db *gorm.DB) *Student {
 
 func (r *Student) GetOrCreateInTx(tx *gorm.DB, data domains.Student) (*domains.Student, error) {
 	var student models.Student
-	if err := tx.FirstOrCreate(&student, data.ToModel()).Error; err != nil {
+	if err := tx.Where(
+		&models.Student{
+			NIS:      data.NIS,
+			Name:     data.Name,
+			SchoolId: data.SchoolId,
+			Gender:   data.Gender,
+		},
+	).Assign(
+		&models.Student{
+			ClassroomId: data.ClassroomId,
+		},
+	).FirstOrCreate(&student).Error; err != nil {
 		return nil, err
 	} else {
 		return domains.FromStudentModel(&student), nil

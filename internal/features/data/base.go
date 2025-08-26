@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterData(g *gin.RouterGroup) {
+func RegisterModule(g *gin.RouterGroup) {
 	handlers := injector.InitDataHandlers()
 
 	routes.RegisterExcel(g, handlers.Excel)
-	routes.RegisterReset(g, handlers.Reset)
+	// routes.RegisterReset(g, handlers.Reset)
 }

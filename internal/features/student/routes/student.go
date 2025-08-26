@@ -22,8 +22,4 @@ func RegisterStudent(g *gin.RouterGroup, handler *handlers.Student) {
 
 		group.GET("/profile", handler.GetProfileStudent)
 	}
-
-	// old
-	// oldGroup := g.Group("/students")
-	// oldGroup.GET("", handler.GetAll)
 }

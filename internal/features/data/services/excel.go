@@ -3,20 +3,18 @@ package services
 import (
 	"fmt"
 	"io"
+	"net/http"
 
 	"api/internal/features/batch/domains"
-	"api/internal/features/batch/models"
 	batchRepo "api/internal/features/batch/repositories"
 	classroomDomain "api/internal/features/classroom/domains"
-	classroomModel "api/internal/features/classroom/models"
 	classroomRepo "api/internal/features/classroom/repositories"
 	"api/internal/features/data/dto/responses"
 	majorDomain "api/internal/features/major/domains"
-	majorModel "api/internal/features/major/models"
 	majorRepo "api/internal/features/major/repositories"
 	studentDomain "api/internal/features/student/domains"
-	studentModel "api/internal/features/student/models"
 	"api/internal/features/student/repositories"
+	"api/pkg/http/failure"
 	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
 )
@@ -46,15 +44,19 @@ func NewExcel(
 	}
 }
 
-func (s *Excel) ImportDataV3(schoolId uint, reader io.Reader) (*responses.ImportData, error) {
+func (s *Excel) ImportData(schoolId uint, reader io.Reader) (
+	*responses.ImportData, *failure.App,
+) {
 	file, err := excelize.OpenReader(reader)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewInternal(err)
 	}
 	defer file.Close()
 
 	sheets := file.GetSheetList()
 
+	customErrorCode := 0
+	customErrorMessage := ""
 	if err := s.db.Transaction(
 		func(tx *gorm.DB) error {
 			for _, sheet := range sheets {
@@ -64,11 +66,13 @@ func (s *Excel) ImportDataV3(schoolId uint, reader io.Reader) (*responses.Import
 				}
 
 				if len(rows) < 5 {
+					customErrorCode = http.StatusBadRequest
+					customErrorMessage = fmt.Sprintf("Sheet %s memiliki jumlah baris < 5!", sheet)
 					return fmt.Errorf("rows length less than 5")
 				}
 
 				var batch domains.Batch
-				if result, err := s.batchRepo.GetOrCreateInTx(
+				if result, err := s.batchRepo.FirstOrCreateInTx(
 					tx, domains.Batch{
 						Name:     rows[0][1],
 						SchoolId: schoolId,
@@ -80,7 +84,7 @@ func (s *Excel) ImportDataV3(schoolId uint, reader io.Reader) (*responses.Import
 				}
 
 				var major majorDomain.Major
-				if result, err := s.majorRepo.GetOrCreateInTx(
+				if result, err := s.majorRepo.FirstOrCreateInTx(
 					tx, majorDomain.Major{
 						Name:    rows[1][1],
 						BatchId: batch.Id,
@@ -92,7 +96,7 @@ func (s *Excel) ImportDataV3(schoolId uint, reader io.Reader) (*responses.Import
 				}
 
 				var classroom classroomDomain.Classroom
-				if result, err := s.classroomRepo.GetOrCreateInTx(
+				if result, err := s.classroomRepo.FirstOrCreateInTx(
 					tx, classroomDomain.Classroom{
 						Name:    rows[2][1],
 						MajorId: major.Id,
@@ -110,6 +114,7 @@ func (s *Excel) ImportDataV3(schoolId uint, reader io.Reader) (*responses.Import
 							Name:        row[1],
 							SchoolId:    schoolId,
 							ClassroomId: classroom.Id,
+							Gender:      row[2],
 						},
 					); err != nil {
 						return err
@@ -120,227 +125,17 @@ func (s *Excel) ImportDataV3(schoolId uint, reader io.Reader) (*responses.Import
 			return nil
 		},
 	); err != nil {
-		return nil, err
+		if customErrorCode != 0 {
+			return nil, failure.NewApp(
+				customErrorCode,
+				customErrorMessage,
+				err,
+			)
+		}
+		return nil, failure.NewInternal(err)
 	} else {
 		return &responses.ImportData{
 			Message: "ok",
 		}, nil
 	}
-}
-
-// deprecated
-func (s *Excel) ImportData(schoolId uint, reader io.Reader) error {
-	file, err := excelize.OpenReader(reader)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	sheets := file.GetSheetList()
-
-	return s.db.Transaction(
-		func(tx *gorm.DB) error {
-			mapBatch := make(map[string]uint)
-			mapMajor := make(map[string]uint)
-			mapClassroom := make(map[string]uint)
-
-			for _, sheet := range sheets {
-				// batch
-				batchName, err := file.GetCellValue(sheet, "B1")
-				if err != nil {
-					return err
-				}
-
-				batchKey := batchName
-				var batchId uint
-
-				if value, ok := mapBatch[batchKey]; ok {
-					batchId = value
-				} else {
-					newBatchId, err := s.batchRepo.CreateInTx(
-						tx, domains.Batch{
-							Name:     batchName,
-							SchoolId: schoolId,
-						},
-					)
-					if err != nil {
-						return err
-					}
-
-					mapBatch[batchKey] = *newBatchId
-					batchId = *newBatchId
-				}
-
-				// major
-				majorName, err := file.GetCellValue(sheet, "B2")
-				if err != nil {
-					return err
-				}
-
-				majorKey := fmt.Sprintf("%s-%s", batchName, majorName)
-				var majorId uint
-
-				if value, ok := mapMajor[majorKey]; ok {
-					majorId = value
-				} else {
-					newMajorId, err := s.majorRepo.CreateInTx(
-						tx, majorDomain.Major{
-							Name:    majorName,
-							BatchId: batchId,
-						},
-					)
-					if err != nil {
-						return err
-					}
-					mapMajor[majorKey] = *newMajorId
-					majorId = *newMajorId
-				}
-
-				// classroom
-				classroomName, err := file.GetCellValue(sheet, "B3")
-				if err != nil {
-					return err
-				}
-
-				classroomKey := fmt.Sprintf("%s-%s-%s", batchName, majorName, classroomName)
-				var classroomId uint
-
-				if value, ok := mapClassroom[classroomKey]; ok {
-					classroomId = value
-				} else {
-					newClassroomId, err := s.classroomRepo.CreateInTx(
-						tx, classroomDomain.Classroom{
-							Name:    classroomName,
-							MajorId: majorId,
-						},
-					)
-					if err != nil {
-						return err
-					}
-					mapClassroom[classroomKey] = *newClassroomId
-					classroomId = *newClassroomId
-				}
-
-				// students
-				rows, err := file.GetRows(sheet)
-				if err != nil {
-					return err
-				}
-
-				if len(rows) < 5 {
-					return fmt.Errorf("rows length less than 5")
-				}
-
-				var students []studentDomain.Student
-				for _, row := range rows[5:] {
-					studentNIS := row[0]
-					studentName := row[1]
-
-					students = append(
-						students, studentDomain.Student{
-							NIS:         studentNIS,
-							Name:        studentName,
-							ClassroomId: classroomId,
-						},
-					)
-				}
-				if err := s.studentRepo.CreateBatchInTx(tx, students); err != nil {
-					return err
-				}
-			}
-
-			return nil
-		},
-	)
-}
-
-// deprecated
-func (s *Excel) Import(reader io.Reader) (any, error) {
-	file, err := excelize.OpenReader(reader)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	sheets := file.GetSheetList()
-	fmt.Println("sheets", sheets)
-
-	if err := s.db.Transaction(
-		func(tx *gorm.DB) error {
-			for _, sheet := range sheets {
-				// mendapatkan data angkatan, jurusan, kelas
-				batchName, err := file.GetCellValue(sheet, "B1")
-				if err != nil {
-					return err
-				}
-
-				batch := models.Batch{
-					Name: batchName,
-				}
-				if err := tx.Create(&batch).Error; err != nil {
-					return err
-				}
-
-				majorName, err := file.GetCellValue(sheet, "B2")
-				if err != nil {
-					return err
-				}
-
-				major := majorModel.Major{
-					Name:    majorName,
-					BatchId: batch.ID,
-				}
-				if err := tx.Create(&major).Error; err != nil {
-					return err
-				}
-
-				className, err := file.GetCellValue(sheet, "B3")
-				if err != nil {
-					return err
-				}
-
-				class := classroomModel.Classroom{
-					Name:    className,
-					MajorId: major.ID,
-				}
-				if err := tx.Create(&class).Error; err != nil {
-					return err
-				}
-
-				// mendapatkan data siswa
-				rows, err := file.GetRows(sheet)
-				if err != nil {
-					return err
-				}
-
-				if len(rows) < 5 {
-					return fmt.Errorf("rows length less than 5")
-				}
-
-				var students []studentModel.Student
-				for _, row := range rows[5:] {
-					studentNIS := row[0]
-					studentName := row[1]
-
-					students = append(
-						students, studentModel.Student{
-							NIS:         studentNIS,
-							Name:        studentName,
-							ClassroomId: class.ID,
-						},
-					)
-				}
-
-				if err := tx.CreateInBatches(students, len(students)).Error; err != nil {
-					return err
-				}
-			}
-
-			return nil
-		},
-	); err != nil {
-		return nil, err
-	}
-
-	return nil, nil
 }

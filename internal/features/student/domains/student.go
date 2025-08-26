@@ -10,15 +10,17 @@ type Student struct {
 	Name        string `json:"name" validate:"required"`
 	SchoolId    uint   `json:"school_id" validate:"required"`
 	ClassroomId uint   `json:"classroom_id" validate:"required"`
+	Gender      string `json:"gender" validate:"required"`
 } // @name Student
 
-func FromStudentModel(model *models.Student) *Student {
+func FromStudentModel(m *models.Student) *Student {
 	return &Student{
-		Id:          model.ID,
-		NIS:         model.NIS,
-		Name:        model.Name,
-		SchoolId:    model.SchoolId,
-		ClassroomId: model.ClassroomId,
+		Id:          m.ID,
+		NIS:         m.NIS,
+		Name:        m.Name,
+		SchoolId:    m.SchoolId,
+		ClassroomId: m.ClassroomId,
+		Gender:      m.Gender,
 	}
 }
 
@@ -28,5 +30,6 @@ func (s *Student) ToModel() *models.Student {
 		Name:        s.Name,
 		SchoolId:    s.SchoolId,
 		ClassroomId: s.ClassroomId,
+		Gender:      s.Gender,
 	}
 }

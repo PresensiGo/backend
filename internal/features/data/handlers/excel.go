@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"path/filepath"
 
 	"api/internal/features/data/services"
+	"api/internal/shared/dto/responses"
 	"api/pkg/authentication"
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +18,11 @@ func NewExcel(service *services.Excel) *Excel {
 	return &Excel{service}
 }
 
-func (h *Excel) ImportDataV3(c *gin.Context) {
+// @accept 		multipart/form-data
+// @param 		file formData file true "file"
+// @success 	200 {object} responses.ImportData
+// @router 		/api/v1/excel/import-data [post]
+func (h *Excel) ImportData(c *gin.Context) {
 	user := authentication.GetAuthenticatedUser(c)
 	if user.SchoolId == 0 {
 		c.AbortWithStatus(http.StatusForbidden)
@@ -44,94 +48,13 @@ func (h *Excel) ImportDataV3(c *gin.Context) {
 	}
 	defer src.Close()
 
-	result, err := h.service.ImportDataV3(user.SchoolId, src)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		fmt.Println(err.Error())
-		return
+	if response, err := h.service.ImportData(user.SchoolId, src); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
 	}
-
-	c.JSON(http.StatusOK, result)
 }
-
-// func (h *Excel) ImportDataV2(c *gin.Context) {
-// 	authUser := authentication.GetAuthenticatedUser(c)
-// 	if authUser.SchoolId == 0 {
-// 		c.AbortWithStatus(http.StatusForbidden)
-// 		return
-// 	}
-//
-// 	file, err := c.FormFile("data")
-// 	if file == nil || err != nil {
-// 		c.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
-//
-// 	ext := filepath.Ext(file.Filename)
-// 	if ext != ".xlsx" && ext != ".xls" {
-// 		c.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
-//
-// 	src, err := file.Open()
-// 	if err != nil {
-// 		c.AbortWithStatus(http.StatusInternalServerError)
-// 		return
-// 	}
-// 	defer src.Close()
-//
-// 	if err := h.service.ImportData(authUser.SchoolId, src); err != nil {
-// 		c.AbortWithStatusJSON(
-// 			http.StatusInternalServerError, gin.H{
-// 				"message": err.Error(),
-// 			},
-// 		)
-// 		return
-// 	}
-//
-// 	c.JSON(
-// 		http.StatusOK, gin.H{
-// 			"message": "success",
-// 		},
-// 	)
-// }
-
-// @Id			importData
-// @Tags		excel
-// @Success	200	{string}	string
-// @Router		/api/v1/excel/import [post]
-// func (h *Excel) ImportData(c *gin.Context) {
-// 	file, err := c.FormFile("data")
-// 	if file == nil || err != nil {
-// 		c.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
-//
-// 	ext := filepath.Ext(file.Filename)
-// 	if ext != ".xlsx" && ext != ".xls" {
-// 		c.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
-//
-// 	src, err := file.Open()
-// 	if err != nil {
-// 		c.AbortWithStatus(http.StatusInternalServerError)
-// 		return
-// 	}
-// 	defer src.Close()
-//
-// 	if _, err := h.service.ImportAccounts(src); err != nil {
-// 		c.AbortWithStatusJSON(
-// 			http.StatusInternalServerError, gin.H{
-// 				"message": err.Error(),
-// 			},
-// 		)
-// 		return
-// 	}
-//
-// 	c.JSON(
-// 		http.StatusOK, gin.H{
-// 			"message": "success",
-// 		},
-// 	)
-// }

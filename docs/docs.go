@@ -1258,6 +1258,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/excel/import-data": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "excel"
+                ],
+                "operationId": "ImportData",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ImportData"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/general-attendances": {
             "get": {
                 "tags": [
@@ -2500,6 +2528,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "classroom_id",
+                "gender",
                 "id",
                 "name",
                 "nis",
@@ -2508,6 +2537,9 @@ const docTemplate = `{
             "properties": {
                 "classroom_id": {
                     "type": "integer"
+                },
+                "gender": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -3260,6 +3292,17 @@ const docTemplate = `{
             }
         },
         "responses.ImportAccounts": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ImportData": {
             "type": "object",
             "required": [
                 "message"

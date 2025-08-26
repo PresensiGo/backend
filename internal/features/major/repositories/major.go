@@ -14,7 +14,7 @@ func NewMajor(db *gorm.DB) *Major {
 	return &Major{db}
 }
 
-func (r *Major) GetOrCreateInTx(tx *gorm.DB, data domains.Major) (*domains.Major, error) {
+func (r *Major) FirstOrCreateInTx(tx *gorm.DB, data domains.Major) (*domains.Major, error) {
 	var major models.Major
 	if err := tx.FirstOrCreate(&major, data.ToModel()).Error; err != nil {
 		return nil, err

@@ -446,6 +446,8 @@ definitions:
     properties:
       classroom_id:
         type: integer
+      gender:
+        type: string
       id:
         type: integer
       name:
@@ -456,6 +458,7 @@ definitions:
         type: integer
     required:
     - classroom_id
+    - gender
     - id
     - name
     - nis
@@ -954,6 +957,13 @@ definitions:
     - users
     type: object
   responses.ImportAccounts:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
+  responses.ImportData:
     properties:
       message:
         type: string
@@ -1828,6 +1838,24 @@ paths:
             $ref: '#/definitions/responses.GetAllClassroomWithMajors'
       tags:
       - classroom
+  /api/v1/excel/import-data:
+    post:
+      consumes:
+      - multipart/form-data
+      operationId: ImportData
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ImportData'
+      tags:
+      - excel
   /api/v1/general-attendances:
     get:
       operationId: GetAllGeneralAttendances
