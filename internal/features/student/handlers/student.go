@@ -18,14 +18,14 @@ func NewStudent(service *services.Student) *Student {
 	return &Student{service}
 }
 
-// @id			getAllStudentsByClassroomId
+// @id			GetAllStudentsByClassroomId
 // @tags		student
 // @param		batch_id path int true "batch id"
 // @param		major_id path int true "major id"
 // @param		classroom_id path int true "classroom id"
 // @success		200	{object} responses.GetAllStudentsByClassroomId
 // @router		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students [get]
-func (h *Student) GetAllByClassroomId(c *gin.Context) {
+func (h *Student) GetAllStudentsByClassroomId(c *gin.Context) {
 	classroomId, err := strconv.Atoi(c.Param("classroom_id"))
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
@@ -95,6 +95,30 @@ func (h *Student) GetAllAccountsByClassroomId(c *gin.Context) {
 // @router 		/api/v1/students/profile [get]
 func (h *Student) GetProfileStudent(c *gin.Context) {
 	if response, err := h.service.GetProfileStudent(c); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
+// @param		batch_id path int true "batch id"
+// @param		major_id path int true "major id"
+// @param		classroom_id path int true "classroom id"
+// @param		student_id path int true "student id"
+// @success		200	{object} responses.DeleteStudent
+// @router		/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students/{student_id} [delete]
+func (h *Student) DeleteStudent(c *gin.Context) {
+	studentId, err := strconv.Atoi(c.Param("student_id"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if response, err := h.service.DeleteStudent(uint(studentId)); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,

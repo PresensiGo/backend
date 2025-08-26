@@ -189,3 +189,15 @@ func (s *Student) GetProfileStudent(c *gin.Context) (*responses.GetProfileStuden
 		Batch:     *batch,
 	}, nil
 }
+
+func (s *Student) DeleteStudent(studentId uint) (
+	*responses.DeleteStudent, *failure.App,
+) {
+	if err := s.studentRepo.Delete(studentId); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.DeleteStudent{
+			Message: "ok",
+		}, nil
+	}
+}

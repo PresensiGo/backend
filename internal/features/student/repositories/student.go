@@ -163,3 +163,7 @@ func (r *Student) GetCountByClassroomId(classroomId uint) (int64, error) {
 		return count, nil
 	}
 }
+
+func (r *Student) Delete(studentId uint) error {
+	return r.db.Where("id = ?", studentId).Unscoped().Delete().Error
+}

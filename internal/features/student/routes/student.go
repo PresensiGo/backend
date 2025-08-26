@@ -12,8 +12,9 @@ func RegisterStudent(g *gin.RouterGroup, handler *handlers.Student) {
 		relativePath := "/batches/:batch_id/majors/:major_id/classrooms/:classroom_id"
 		group := g.Group(relativePath).Use(middlewares.AuthMiddleware())
 
-		group.GET("/students", handler.GetAllByClassroomId)
+		group.GET("/students", handler.GetAllStudentsByClassroomId)
 		group.GET("/student-accounts", handler.GetAllAccountsByClassroomId)
+		group.DELETE("/students/:student_id", handler.DeleteStudent)
 	}
 
 	{

@@ -28,3 +28,7 @@ type GetProfileStudent struct {
 	Major     major.Major         `json:"major" validate:"required"`
 	Batch     batch.Batch         `json:"batch" validate:"required"`
 } // @name GetProfileStudentRes
+
+type DeleteStudent struct {
+	Message string `json:"message" validate:"required"`
+}
