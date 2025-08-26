@@ -7,8 +7,9 @@ import (
 	classroomRepo "api/internal/features/classroom/repositories"
 	majorRepo "api/internal/features/major/repositories"
 	schoolRepo "api/internal/features/school/repositories"
-	domains4 "api/internal/features/student/domains"
+	"api/internal/features/student/domains"
 	"api/internal/features/student/dto"
+	"api/internal/features/student/dto/requests"
 	"api/internal/features/student/dto/responses"
 	"api/internal/features/student/repositories"
 	"api/pkg/authentication"
@@ -74,7 +75,7 @@ func (s *Student) GetAllAccountsByClassroomId(classroomId uint) (
 		return nil, err
 	}
 
-	mapStudentTokens := make(map[uint]*domains4.StudentToken)
+	mapStudentTokens := make(map[uint]*domains.StudentToken)
 	for _, v := range *studentTokens {
 		mapStudentTokens[v.StudentId] = &v
 	}
@@ -83,7 +84,7 @@ func (s *Student) GetAllAccountsByClassroomId(classroomId uint) (
 	for i, v := range students {
 		studentToken, ok := mapStudentTokens[v.Id]
 		if !ok {
-			studentToken = &domains4.StudentToken{}
+			studentToken = &domains.StudentToken{}
 		}
 
 		result[i] = dto.StudentAccount{
@@ -188,6 +189,24 @@ func (s *Student) GetProfileStudent(c *gin.Context) (*responses.GetProfileStuden
 		Major:     *major,
 		Batch:     *batch,
 	}, nil
+}
+
+func (s *Student) UpdateStudent(studentId uint, req requests.UpdateStudent) (
+	*responses.UpdateStudent, *failure.App,
+) {
+	if result, err := s.studentRepo.Update(
+		studentId, domains.Student{
+			NIS:    req.NIS,
+			Name:   req.Name,
+			Gender: req.Gender,
+		},
+	); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.UpdateStudent{
+			Student: *result,
+		}, nil
+	}
 }
 
 func (s *Student) DeleteStudent(studentId uint) (

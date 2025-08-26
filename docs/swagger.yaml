@@ -755,6 +755,19 @@ definitions:
     - code
     - name
     type: object
+  requests.UpdateStudent:
+    properties:
+      gender:
+        type: string
+      name:
+        type: string
+      nis:
+        type: string
+    required:
+    - gender
+    - name
+    - nis
+    type: object
   requests.UpdateSubject:
     properties:
       name:
@@ -851,6 +864,13 @@ definitions:
     properties:
       message:
         type: string
+    type: object
+  responses.DeleteStudent:
+    properties:
+      message:
+        type: string
+    required:
+    - message
     type: object
   responses.DeleteSubject:
     properties:
@@ -1018,6 +1038,13 @@ definitions:
         $ref: '#/definitions/School'
     required:
     - school
+    type: object
+  responses.UpdateStudent:
+    properties:
+      student:
+        $ref: '#/definitions/Student'
+    required:
+    - student
     type: object
   responses.UpdateSubject:
     properties:
@@ -1572,7 +1599,7 @@ paths:
       - student
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students:
     get:
-      operationId: getAllStudentsByClassroomId
+      operationId: GetAllStudentsByClassroomId
       parameters:
       - description: batch id
         in: path
@@ -1596,6 +1623,67 @@ paths:
             $ref: '#/definitions/GetAllStudentsByClassroomIdRes'
       tags:
       - student
+  /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students/{student_id}:
+    delete:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      - description: student id
+        in: path
+        name: student_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DeleteStudent'
+    put:
+      parameters:
+      - description: batch id
+        in: path
+        name: batch_id
+        required: true
+        type: integer
+      - description: major id
+        in: path
+        name: major_id
+        required: true
+        type: integer
+      - description: classroom id
+        in: path
+        name: classroom_id
+        required: true
+        type: integer
+      - description: student id
+        in: path
+        name: student_id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateStudent'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UpdateStudent'
   /api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/subject-attendances:
     get:
       operationId: GetAllSubjectAttendances

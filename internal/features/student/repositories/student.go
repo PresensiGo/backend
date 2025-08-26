@@ -164,6 +164,15 @@ func (r *Student) GetCountByClassroomId(classroomId uint) (int64, error) {
 	}
 }
 
+func (r *Student) Update(studentId uint, data domains.Student) (*domains.Student, error) {
+	student := data.ToModel()
+	if err := r.db.Where("id = ?", studentId).Updates(&student).Error; err != nil {
+		return nil, err
+	} else {
+		return domains.FromStudentModel(student), nil
+	}
+}
+
 func (r *Student) Delete(studentId uint) error {
-	return r.db.Where("id = ?", studentId).Unscoped().Delete().Error
+	return r.db.Where("id = ?", studentId).Unscoped().Delete(&models.Student{}).Error
 }

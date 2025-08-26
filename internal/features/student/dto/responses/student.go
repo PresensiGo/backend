@@ -29,6 +29,10 @@ type GetProfileStudent struct {
 	Batch     batch.Batch         `json:"batch" validate:"required"`
 } // @name GetProfileStudentRes
 
+type UpdateStudent struct {
+	Student domains.Student `json:"student" validate:"required"`
+}
+
 type DeleteStudent struct {
 	Message string `json:"message" validate:"required"`
 }

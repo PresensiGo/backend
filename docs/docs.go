@@ -852,7 +852,7 @@ const docTemplate = `{
                 "tags": [
                     "student"
                 ],
-                "operationId": "getAllStudentsByClassroomId",
+                "operationId": "GetAllStudentsByClassroomId",
                 "parameters": [
                     {
                         "type": "integer",
@@ -881,6 +881,97 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/GetAllStudentsByClassroomIdRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/batches/{batch_id}/majors/{major_id}/classrooms/{classroom_id}/students/{student_id}": {
+            "put": {
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "student id",
+                        "name": "student_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateStudent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.UpdateStudent"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "batch id",
+                        "name": "batch_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "major id",
+                        "name": "major_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "classroom id",
+                        "name": "classroom_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "student id",
+                        "name": "student_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.DeleteStudent"
                         }
                     }
                 }
@@ -3017,6 +3108,25 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.UpdateStudent": {
+            "type": "object",
+            "required": [
+                "gender",
+                "name",
+                "nis"
+            ],
+            "properties": {
+                "gender": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nis": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.UpdateSubject": {
             "type": "object",
             "required": [
@@ -3163,6 +3273,17 @@ const docTemplate = `{
         },
         "responses.DeleteGeneralAttendanceRecord": {
             "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.DeleteStudent": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
             "properties": {
                 "message": {
                     "type": "string"
@@ -3426,6 +3547,17 @@ const docTemplate = `{
             "properties": {
                 "school": {
                     "$ref": "#/definitions/School"
+                }
+            }
+        },
+        "responses.UpdateStudent": {
+            "type": "object",
+            "required": [
+                "student"
+            ],
+            "properties": {
+                "student": {
+                    "$ref": "#/definitions/Student"
                 }
             }
         },

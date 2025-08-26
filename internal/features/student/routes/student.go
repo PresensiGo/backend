@@ -14,6 +14,7 @@ func RegisterStudent(g *gin.RouterGroup, handler *handlers.Student) {
 
 		group.GET("/students", handler.GetAllStudentsByClassroomId)
 		group.GET("/student-accounts", handler.GetAllAccountsByClassroomId)
+		group.PUT("/students/:student_id", handler.UpdateStudent)
 		group.DELETE("/students/:student_id", handler.DeleteStudent)
 	}
 
