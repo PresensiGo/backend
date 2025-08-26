@@ -101,17 +101,22 @@ func (s *GeneralAttendance) CreateGeneralAttendance(
 func (s *GeneralAttendance) CreateGeneralAttendanceRecord(
 	generalAttendanceId uint, req requests.CreateGeneralAttendanceRecord,
 ) (*responses.CreateGeneralAttendanceRecord, *failure.App) {
-	parsedDateTime, err := utils.GetParsedDateTime(req.DateTime)
-	if err != nil {
-		return nil, failure.NewApp(http.StatusBadRequest, "Tanggal dan waktu tidak valid!", err)
+	status := req.Status.ToAttendanceStatus()
+	dateTime := time.Now()
+	if req.Status == constants.AttendanceStatusTypePresentOnTime {
+		if subjectAttendance, err := s.generalAttendanceRepo.Get(generalAttendanceId); err != nil {
+			return nil, failure.NewInternal(err)
+		} else {
+			dateTime = subjectAttendance.DateTime
+		}
 	}
 
 	if result, err := s.generalAttendanceRecordRepo.FirstOrCreate(
 		domains.GeneralAttendanceRecord{
-			DateTime:            *parsedDateTime,
+			DateTime:            dateTime,
 			GeneralAttendanceId: generalAttendanceId,
 			StudentId:           req.StudentId,
-			Status:              req.Status,
+			Status:              status,
 		},
 	); err != nil {
 		return nil, failure.NewInternal(err)

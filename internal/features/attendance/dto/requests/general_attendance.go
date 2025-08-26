@@ -8,9 +8,8 @@ type CreateGeneralAttendance struct {
 } // @name CreateGeneralAttendanceReq
 
 type CreateGeneralAttendanceRecord struct {
-	StudentId uint                       `json:"student_id" validate:"required"`
-	DateTime  string                     `json:"datetime" validate:"required"`
-	Status    constants.AttendanceStatus `json:"status" validate:"required"`
+	StudentId uint                           `json:"student_id" validate:"required"`
+	Status    constants.AttendanceStatusType `json:"status" validate:"required"`
 } // @name CreateGeneralAttendanceRecordReq
 
 type UpdateGeneralAttendance struct {

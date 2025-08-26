@@ -1989,16 +1989,12 @@ const docTemplate = `{
         "CreateGeneralAttendanceRecordReq": {
             "type": "object",
             "required": [
-                "datetime",
                 "status",
                 "student_id"
             ],
             "properties": {
-                "datetime": {
-                    "type": "string"
-                },
                 "status": {
-                    "$ref": "#/definitions/constants.AttendanceStatus"
+                    "$ref": "#/definitions/constants.AttendanceStatusType"
                 },
                 "student_id": {
                     "type": "integer"
