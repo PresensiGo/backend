@@ -28,3 +28,16 @@ jobs:
           push: true
           tags: rizalanggoro/backend-presensigo:latest
           # tags: backend-presensigo:latest
+
+  trigger-swarm-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          
+      - name: Post to Webhook
+        run: curl -X POST "${{ vars.WEBHOOK_API }}"
