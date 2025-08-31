@@ -31,6 +31,7 @@ jobs:
 
   trigger-swarm-update:
     runs-on: ubuntu-latest
+    needs: build-and-push-docker-image
     steps:
       - name: Tailscale
         uses: tailscale/github-action@v3
@@ -40,4 +41,4 @@ jobs:
           tags: tag:ci
           
       - name: Post to Webhook
-        run: curl -X POST "${{ vars.WEBHOOK_API }}"
+        run: curl -k -X POST "${{ vars.WEBHOOK_API }}"
