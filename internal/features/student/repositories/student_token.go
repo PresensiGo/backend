@@ -75,7 +75,7 @@ func (r *StudentToken) GetByRefreshToken(refreshToken string) (*domains.StudentT
 // 	studentTokenId uint, deviceId string,
 // ) (*domains.StudentToken, error) {
 // 	var studentToken models.StudentToken
-// 	if err := r.db.Model(&studentToken).Where("id = ?", studentTokenId).Update(
+// 	if err := r.db.Model(&studentToken).Where("id = ?", studentTokenId).UpdateByToken(
 // 		"device_id", deviceId,
 // 	).Error; err != nil {
 // 		return nil, err

@@ -13,6 +13,7 @@ func RegisterAuth(g *gin.RouterGroup, handler *handlers.Auth) {
 		group := g.Group(relativePath)
 
 		group.POST("/login", handler.Login)
+		group.POST("/login-2", handler.Login2)
 		group.POST("/refresh-token", handler.RefreshToken)
 	}
 	{

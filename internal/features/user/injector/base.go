@@ -1,7 +1,7 @@
 package injector
 
 import (
-	repositories2 "api/internal/features/school/repositories"
+	schoolRepo "api/internal/features/school/repositories"
 	"api/internal/features/user/handlers"
 	"api/internal/features/user/repositories"
 	"api/internal/features/user/services"
@@ -37,7 +37,8 @@ var (
 
 		repositories.NewUser,
 		repositories.NewUserToken,
-		repositories2.NewSchool,
+		repositories.NewUserSession,
+		schoolRepo.NewSchool,
 
 		database.New,
 	)

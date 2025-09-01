@@ -5,10 +5,11 @@ import (
 	"net/http"
 	"time"
 
-	repositories2 "api/internal/features/school/repositories"
+	schoolRepo "api/internal/features/school/repositories"
 	"api/internal/features/user/domains"
+	"api/internal/features/user/dto/requests"
 	"api/internal/features/user/dto/responses"
-	repositories3 "api/internal/features/user/repositories"
+	"api/internal/features/user/repositories"
 	"api/pkg/authentication"
 	"api/pkg/http/failure"
 
@@ -18,23 +19,26 @@ import (
 )
 
 type Auth struct {
-	userRepo      *repositories3.User
-	userTokenRepo *repositories3.UserToken
-	schoolRepo    *repositories2.School
-	db            *gorm.DB
+	userRepo        *repositories.User
+	userTokenRepo   *repositories.UserToken
+	userSessionRepo *repositories.UserSession
+	schoolRepo      *schoolRepo.School
+	db              *gorm.DB
 }
 
 func NewAuth(
-	userRepo *repositories3.User,
-	userTokenRepo *repositories3.UserToken,
-	schoolRepo *repositories2.School,
+	userRepo *repositories.User,
+	userTokenRepo *repositories.UserToken,
+	userSessionRepo *repositories.UserSession,
+	schoolRepo *schoolRepo.School,
 	db *gorm.DB,
 ) *Auth {
 	return &Auth{
-		userRepo,
-		userTokenRepo,
-		schoolRepo,
-		db,
+		userRepo:        userRepo,
+		userTokenRepo:   userTokenRepo,
+		userSessionRepo: userSessionRepo,
+		schoolRepo:      schoolRepo,
+		db:              db,
 	}
 }
 
@@ -87,6 +91,43 @@ func (s *Auth) Login(email string, password string) (*responses.Login, *failure.
 		return &responses.Login{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
+		}, nil
+	}
+}
+
+func (s *Auth) Login2(req requests.Login2) (*responses.Login2, *failure.App) {
+	user, err := s.userRepo.GetByEmail(req.Email)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, failure.NewApp(
+				http.StatusNotFound, "Alamat email atau kata sandi tidak valid", err,
+			)
+		}
+		return nil, failure.NewInternal(err)
+	}
+
+	// password validation
+	if err := bcrypt.CompareHashAndPassword(
+		[]byte(user.Password),
+		[]byte(req.Password),
+	); err != nil {
+		return nil, failure.NewApp(
+			http.StatusNotFound, "Alamat email atau kata sandi tidak valid", err,
+		)
+	}
+
+	// simpan session ke database
+	if session, err := s.userSessionRepo.Create(
+		domains.UserSession{
+			UserId:    user.Id,
+			Token:     uuid.NewString(),
+			ExpiresAt: time.Now().Add(time.Hour * 24 * 7),
+		},
+	); err != nil {
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.Login2{
+			Token: session.Token,
 		}, nil
 	}
 }

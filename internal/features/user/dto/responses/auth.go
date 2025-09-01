@@ -5,6 +5,10 @@ type Login struct {
 	RefreshToken string `json:"refresh_token" validate:"required"`
 } // @name LoginRes
 
+type Login2 struct {
+	Token string `json:"token" validate:"required"`
+} // @name Login2Res
+
 type Register struct {
 	AccessToken  string `json:"access_token" validate:"required"`
 	RefreshToken string `json:"refresh_token" validate:"required"`

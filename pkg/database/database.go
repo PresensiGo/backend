@@ -51,6 +51,7 @@ func New() *gorm.DB {
 			_ = db.AutoMigrate(
 				&user.User{},
 				&user.UserToken{},
+				&user.UserSession{},
 				&school.School{},
 				&batch.Batch{},
 				&major.Major{},

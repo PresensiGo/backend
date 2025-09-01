@@ -44,6 +44,29 @@ func (h *Auth) Login(c *gin.Context) {
 	}
 }
 
+// @id			login2
+// @tags		account
+// @param		body body requests.Login2 true "body"
+// @success		200 {object} responses.Login2
+// @router		/api/v1/auth/login-2 [post]
+func (h *Auth) Login2(c *gin.Context) {
+	var req requests.Login2
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+
+	if response, err := h.service.Login2(req); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 // @id			logout
 // @tags		account
 // @param		body body requests.Logout true "Logout Request"
