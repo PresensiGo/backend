@@ -90,6 +90,29 @@ func (h *Auth) Logout(c *gin.Context) {
 	}
 }
 
+// @id			logout2
+// @tags		account
+// @param		body body requests.Logout2 true "Logout Request"
+// @success		200	{object} responses.Logout2
+// @router		/api/v1/auth/logout-2 [post]
+func (h *Auth) Logout2(c *gin.Context) {
+	var req requests.Logout2
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+
+	if response, err := h.service.Logout2(req); err != nil {
+		c.AbortWithStatusJSON(
+			err.Code, responses.Error{
+				Message: err.Message,
+			},
+		)
+	} else {
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 // @id			refreshToken
 // @tags		account
 // @param		body body requests.RefreshToken true "body"

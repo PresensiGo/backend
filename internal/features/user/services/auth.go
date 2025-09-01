@@ -147,6 +147,21 @@ func (s *Auth) Logout(refreshToken string) (*responses.Logout, *failure.App) {
 	}
 }
 
+func (s *Auth) Logout2(req requests.Logout2) (*responses.Logout2, *failure.App) {
+	if err := s.userSessionRepo.DeleteByToken(req.Token); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return &responses.Logout2{
+				Message: "ok",
+			}, nil
+		}
+		return nil, failure.NewInternal(err)
+	} else {
+		return &responses.Logout2{
+			Message: "ok",
+		}, nil
+	}
+}
+
 func (s *Auth) RefreshToken(oldRefreshToken string) (*responses.RefreshToken, *failure.App) {
 	oldUserToken, err := s.userTokenRepo.GetByRefreshToken(oldRefreshToken)
 	if err != nil {

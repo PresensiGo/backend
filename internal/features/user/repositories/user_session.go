@@ -27,7 +27,7 @@ func (r *UserSession) Create(data domains.UserSession) (*domains.UserSession, er
 	}
 }
 
-func (r *UserSession) GetByToken(token uint) (*domains.UserSession, error) {
+func (r *UserSession) GetByToken(token string) (*domains.UserSession, error) {
 	var userSession models.UserSession
 	if err := r.db.Where("token = ?", token).First(&userSession).Error; err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (r *UserSession) GetByToken(token uint) (*domains.UserSession, error) {
 	}
 }
 
-func (r *UserSession) UpdateByToken(token uint, data domains.UserSession) (
+func (r *UserSession) UpdateByToken(token string, data domains.UserSession) (
 	*domains.UserSession, error,
 ) {
 	userSession := data.ToModel()
@@ -47,6 +47,6 @@ func (r *UserSession) UpdateByToken(token uint, data domains.UserSession) (
 	}
 }
 
-func (r *UserSession) DeleteByToken(token uint) error {
+func (r *UserSession) DeleteByToken(token string) error {
 	return r.db.Where("token = ?", token).Unscoped().Delete(&models.UserSession{}).Error
 }

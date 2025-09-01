@@ -20,5 +20,6 @@ func RegisterAuth(g *gin.RouterGroup, handler *handlers.Auth) {
 		group := g.Group(relativePath).Use(middlewares.AuthMiddleware())
 
 		group.POST("/logout", handler.Logout)
+		group.POST("/logout-2", handler.Logout2)
 	}
 }

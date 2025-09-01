@@ -21,6 +21,10 @@ type Logout struct {
 	RefreshToken string `json:"refresh_token" validate:"required"`
 } // @name LogoutReq
 
+type Logout2 struct {
+	Token string `json:"token" validate:"required"`
+} // @name Logout2Req
+
 type RefreshToken struct {
 	RefreshToken string `json:"refresh_token"`
 } // @name RefreshTokenReq
