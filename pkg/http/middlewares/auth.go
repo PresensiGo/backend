@@ -48,7 +48,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("user", user)
+		ctx.Set("user", *user)
 		ctx.Next()
 
 		// claims, err := authentication.VerifyJWT(token)
