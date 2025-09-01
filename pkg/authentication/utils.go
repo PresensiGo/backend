@@ -4,7 +4,9 @@ import (
 	"context"
 	"time"
 
+	"api/internal/features/user/domains"
 	"api/pkg/authentication/claims"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -99,6 +101,7 @@ func VerifyStudentJWT(token string) (*claims.Student, error) {
 	return data, nil
 }
 
+// deprecated
 func GetAuthenticatedUser(ctx context.Context) JWTClaim {
 	authenticatedUser, exists := ctx.Value("token").(JWTClaim)
 	if exists {
@@ -106,6 +109,15 @@ func GetAuthenticatedUser(ctx context.Context) JWTClaim {
 	}
 
 	return JWTClaim{}
+}
+
+func GetAuthenticatedUser2(c *gin.Context) *domains.User {
+	user, exists := c.Value("user").(domains.User)
+	if exists {
+		return &user
+	} else {
+		return nil
+	}
 }
 
 func GetAuthenticatedStudent(ctx context.Context) claims.Student {
