@@ -111,7 +111,7 @@ func (s *User) GetAll(schoolId uint) (*responses.GetAllUsers, error) {
 func (s *User) GetAccount(c *gin.Context) (*responses.GetAccount, *failure.App) {
 	user := authentication.GetAuthenticatedUser(c)
 	if user.ID == 0 {
-		return nil, failure.NewApp(http.StatusForbidden, "Anda tidak memiliki akses!", nil)
+		return nil, failure.NewForbidden()
 	}
 
 	if result, err := s.userRepo.GetByID(user.ID); err != nil {

@@ -16,6 +16,13 @@ func NewApp(code int, message string, err error) *App {
 	}
 }
 
+func NewForbidden() *App {
+	return &App{
+		Code:    http.StatusForbidden,
+		Message: "Anda tidak memiliki akses!",
+	}
+}
+
 func NewInternal(err error) *App {
 	return &App{
 		Code:    http.StatusInternalServerError,

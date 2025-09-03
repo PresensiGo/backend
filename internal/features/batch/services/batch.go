@@ -8,7 +8,9 @@ import (
 	"api/internal/features/batch/repositories"
 	classroomRepo "api/internal/features/classroom/repositories"
 	majorRepo "api/internal/features/major/repositories"
+	"api/pkg/authentication"
 	"api/pkg/http/failure"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -40,8 +42,13 @@ func (s *Batch) Create(schoolId uint, req requests.CreateBatch) (*domains.Batch,
 	return result, nil
 }
 
-func (s *Batch) GetAllBatches(schoolId uint) (*responses.GetAllBatches, *failure.App) {
-	if batches, err := s.batchRepo.GetAllBySchoolId(schoolId); err != nil {
+func (s *Batch) GetAllBatches(c *gin.Context) (*responses.GetAllBatches, *failure.App) {
+	user := authentication.GetAuthenticatedUser(c)
+	if user.SchoolId == 0 {
+		return nil, failure.NewForbidden()
+	}
+
+	if batches, err := s.batchRepo.GetAllBySchoolId(user.SchoolId); err != nil {
 		return nil, failure.NewInternal(err)
 	} else {
 		result := make([]dto.GetAllBatchesItem, len(*batches))

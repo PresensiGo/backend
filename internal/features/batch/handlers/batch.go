@@ -51,13 +51,7 @@ func (h *Batch) Create(c *gin.Context) {
 // @success		200	{object} responses.GetAllBatches
 // @router		/api/v1/batches [get]
 func (h *Batch) GetAllBatches(c *gin.Context) {
-	user := authentication.GetAuthenticatedUser(c)
-	if user.SchoolId == 0 {
-		c.AbortWithStatus(http.StatusForbidden)
-		return
-	}
-
-	if response, err := h.service.GetAllBatches(user.SchoolId); err != nil {
+	if response, err := h.service.GetAllBatches(c); err != nil {
 		c.AbortWithStatusJSON(
 			err.Code, responses.Error{
 				Message: err.Message,

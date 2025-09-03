@@ -7,7 +7,6 @@ import (
 
 	schoolRepo "api/internal/features/school/repositories"
 	"api/internal/features/user/domains"
-	"api/internal/features/user/dto/requests"
 	"api/internal/features/user/dto/responses"
 	"api/internal/features/user/repositories"
 	"api/pkg/authentication"
@@ -95,43 +94,6 @@ func (s *Auth) Login(email string, password string) (*responses.Login, *failure.
 	}
 }
 
-func (s *Auth) Login2(req requests.Login2) (*responses.Login2, *failure.App) {
-	user, err := s.userRepo.GetByEmail(req.Email)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, failure.NewApp(
-				http.StatusNotFound, "Alamat email atau kata sandi tidak valid", err,
-			)
-		}
-		return nil, failure.NewInternal(err)
-	}
-
-	// password validation
-	if err := bcrypt.CompareHashAndPassword(
-		[]byte(user.Password),
-		[]byte(req.Password),
-	); err != nil {
-		return nil, failure.NewApp(
-			http.StatusNotFound, "Alamat email atau kata sandi tidak valid", err,
-		)
-	}
-
-	// simpan session ke database
-	if session, err := s.userSessionRepo.Create(
-		domains.UserSession{
-			UserId:    user.Id,
-			Token:     uuid.NewString(),
-			ExpiresAt: time.Now().Add(time.Hour * 24 * 7),
-		},
-	); err != nil {
-		return nil, failure.NewInternal(err)
-	} else {
-		return &responses.Login2{
-			Token: session.Token,
-		}, nil
-	}
-}
-
 func (s *Auth) Logout(refreshToken string) (*responses.Logout, *failure.App) {
 	if err := s.userTokenRepo.DeleteByRefreshToken(refreshToken); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -142,21 +104,6 @@ func (s *Auth) Logout(refreshToken string) (*responses.Logout, *failure.App) {
 		return nil, failure.NewInternal(err)
 	} else {
 		return &responses.Logout{
-			Message: "ok",
-		}, nil
-	}
-}
-
-func (s *Auth) Logout2(req requests.Logout2) (*responses.Logout2, *failure.App) {
-	if err := s.userSessionRepo.DeleteByToken(req.Token); err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return &responses.Logout2{
-				Message: "ok",
-			}, nil
-		}
-		return nil, failure.NewInternal(err)
-	} else {
-		return &responses.Logout2{
 			Message: "ok",
 		}, nil
 	}

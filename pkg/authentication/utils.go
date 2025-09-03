@@ -2,15 +2,20 @@ package authentication
 
 import (
 	"context"
+	"os"
+	"strconv"
 	"time"
 
-	"api/internal/features/user/domains"
 	"api/pkg/authentication/claims"
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 func GenerateJWT(user JWTClaim) (string, error) {
+	jwtDurationInSeconds, err := strconv.Atoi(os.Getenv("JWT_DURATION_IN_SECONDS"))
+	if err != nil {
+		return "", err
+	}
+
 	token := jwt.NewWithClaims(
 		jwt.SigningMethodHS256, JWTClaim{
 			ID:         user.ID,
@@ -23,12 +28,12 @@ func GenerateJWT(user JWTClaim) (string, error) {
 			RegisteredClaims: jwt.RegisteredClaims{
 				Issuer:    "API Presensi Sekolah",
 				IssuedAt:  jwt.NewNumericDate(time.Now()),
-				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 1)),
+				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Second * time.Duration(jwtDurationInSeconds))),
 			},
 		},
 	)
 
-	tokenString, err := token.SignedString([]byte("password-sementara"))
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		return "", err
 	}
@@ -37,6 +42,11 @@ func GenerateJWT(user JWTClaim) (string, error) {
 }
 
 func GenerateStudentJWT(claim claims.Student) (string, error) {
+	jwtDurationInSeconds, err := strconv.Atoi(os.Getenv("JWT_DURATION_IN_SECONDS"))
+	if err != nil {
+		return "", err
+	}
+
 	token := jwt.NewWithClaims(
 		jwt.SigningMethodHS256, claims.Student{
 			Id:       claim.Id,
@@ -46,12 +56,12 @@ func GenerateStudentJWT(claim claims.Student) (string, error) {
 			RegisteredClaims: jwt.RegisteredClaims{
 				Issuer:    "API Presensi Sekolah",
 				IssuedAt:  jwt.NewNumericDate(time.Now()),
-				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 1)),
+				ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Second * time.Duration(jwtDurationInSeconds))),
 			},
 		},
 	)
 
-	tokenString, err := token.SignedString([]byte("password-sementara"))
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		return "", err
 	}
@@ -64,7 +74,7 @@ func VerifyJWT(token string) (*JWTClaim, error) {
 		token,
 		&JWTClaim{},
 		func(t *jwt.Token) (any, error) {
-			return []byte("password-sementara"), nil
+			return []byte(os.Getenv("JWT_SECRET")), nil
 		},
 		jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Name}),
 	)
@@ -85,7 +95,7 @@ func VerifyStudentJWT(token string) (*claims.Student, error) {
 		token,
 		&claims.Student{},
 		func(t *jwt.Token) (any, error) {
-			return []byte("password-sementara"), nil
+			return []byte(os.Getenv("JWT_SECRET")), nil
 		},
 		jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Name}),
 	)
@@ -101,7 +111,6 @@ func VerifyStudentJWT(token string) (*claims.Student, error) {
 	return data, nil
 }
 
-// deprecated
 func GetAuthenticatedUser(ctx context.Context) JWTClaim {
 	authenticatedUser, exists := ctx.Value("token").(JWTClaim)
 	if exists {
@@ -111,14 +120,15 @@ func GetAuthenticatedUser(ctx context.Context) JWTClaim {
 	return JWTClaim{}
 }
 
-func GetAuthenticatedUser2(c *gin.Context) *domains.User {
-	user, exists := c.Value("user").(domains.User)
-	if exists {
-		return &user
-	} else {
-		return nil
-	}
-}
+// todo: hapus
+// func GetAuthenticatedUser2(c *gin.Context) *domains.User {
+// 	user, exists := c.Value("user").(domains.User)
+// 	if exists {
+// 		return &user
+// 	} else {
+// 		return nil
+// 	}
+// }
 
 func GetAuthenticatedStudent(ctx context.Context) claims.Student {
 	data, exists := ctx.Value("token").(claims.Student)
