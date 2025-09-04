@@ -346,21 +346,6 @@ definitions:
     required:
     - subject
     type: object
-  Login2Req:
-    properties:
-      email:
-        default: email@email.com
-        type: string
-      password:
-        type: string
-    type: object
-  Login2Res:
-    properties:
-      token:
-        type: string
-    required:
-    - token
-    type: object
   LoginReq:
     properties:
       email:
@@ -401,13 +386,6 @@ definitions:
     required:
     - access_token
     - refresh_token
-    type: object
-  Logout2Req:
-    properties:
-      token:
-        type: string
-    required:
-    - token
     type: object
   LogoutReq:
     properties:
@@ -1023,13 +1001,6 @@ definitions:
     required:
     - message
     type: object
-  responses.Logout2:
-    properties:
-      message:
-        type: string
-    required:
-    - message
-    type: object
   responses.UpdateAccountPassword:
     properties:
       user:
@@ -1192,23 +1163,6 @@ paths:
             $ref: '#/definitions/LoginRes'
       tags:
       - account
-  /api/v1/auth/login-2:
-    post:
-      operationId: login2
-      parameters:
-      - description: body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/Login2Req'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/Login2Res'
-      tags:
-      - account
   /api/v1/auth/logout:
     post:
       operationId: logout
@@ -1224,23 +1178,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.Logout'
-      tags:
-      - account
-  /api/v1/auth/logout-2:
-    post:
-      operationId: logout2
-      parameters:
-      - description: Logout Request
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/Logout2Req'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.Logout2'
       tags:
       - account
   /api/v1/auth/refresh-token:

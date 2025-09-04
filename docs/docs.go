@@ -187,33 +187,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/auth/login-2": {
-            "post": {
-                "tags": [
-                    "account"
-                ],
-                "operationId": "login2",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Login2Req"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Login2Res"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/auth/logout": {
             "post": {
                 "tags": [
@@ -236,33 +209,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.Logout"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/auth/logout-2": {
-            "post": {
-                "tags": [
-                    "account"
-                ],
-                "operationId": "logout2",
-                "parameters": [
-                    {
-                        "description": "Logout Request",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Logout2Req"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.Logout2"
                         }
                     }
                 }
@@ -2564,29 +2510,6 @@ const docTemplate = `{
                 }
             }
         },
-        "Login2Req": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "default": "email@email.com"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "Login2Res": {
-            "type": "object",
-            "required": [
-                "token"
-            ],
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
         "LoginReq": {
             "type": "object",
             "properties": {
@@ -2644,17 +2567,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "Logout2Req": {
-            "type": "object",
-            "required": [
-                "token"
-            ],
-            "properties": {
-                "token": {
                     "type": "string"
                 }
             }
@@ -3569,17 +3481,6 @@ const docTemplate = `{
             }
         },
         "responses.Logout": {
-            "type": "object",
-            "required": [
-                "message"
-            ],
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.Logout2": {
             "type": "object",
             "required": [
                 "message"
